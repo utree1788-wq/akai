@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPK mini plus トレーナー</title>
+<style>
+:root{
+  --bg:#0f0f11; --panel:#1a1a1e; --panel2:#232328; --line:#2f2f36;
+  --text:#ececef; --sub:#9a9aa5; --red:#e8322b; --red2:#ff5a4f;
+  --ok:#3ecf8e; --warn:#f5b942; --blue:#4fa3ff; --scale:#2b5d8a; --root:#e8322b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,"Hiragino Sans","Noto Sans JP","Segoe UI",sans-serif;font-size:15px}
+button,select,input{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:#141417;position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.logo{font-weight:800;letter-spacing:.02em}
+.logo b{color:var(--red)}
+.status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);margin-left:auto}
+.dot{width:10px;height:10px;border-radius:50%;background:#555}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.dot.err{background:var(--red)}
+nav{display:flex;gap:4px;padding:8px 16px;background:#141417;border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{background:none;border:0;padding:8px 14px;border-radius:8px;color:var(--sub);cursor:pointer;white-space:nowrap;font-weight:600}
+nav button.active{background:var(--panel2);color:var(--text)}
+main{padding:16px;max-width:1200px;margin:0 auto;padding-bottom:20px}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px}
+.card h3{margin:14px 0 6px;font-size:14px}
+.sub{color:var(--sub);font-size:13px;line-height:1.6}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:stretch}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 14px;cursor:pointer}
+.btn:hover{border-color:#555}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+.btn.small{padding:5px 10px;font-size:13px}
+select,input[type=number]{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+label.inline{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--sub);margin-right:12px}
+
+/* controller */
+.ctrl{display:grid;grid-template-columns:auto 1fr 1.2fr;gap:18px;align-items:start}
+@media (max-width:860px){.ctrl{grid-template-columns:1fr}}
+.wheels{display:flex;gap:14px}
+.wheel{width:44px;text-align:center;font-size:11px;color:var(--sub)}
+.wheel .track{height:150px;background:#0b0b0d;border:1px solid var(--line);border-radius:8px;position:relative;overflow:hidden;margin-bottom:6px}
+.wheel .fill{position:absolute;left:0;right:0;background:linear-gradient(var(--red2),var(--red))}
+.wheel .mid{position:absolute;left:0;right:0;top:50%;height:1px;background:#555}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pad{aspect-ratio:1;background:#0b0b0d;border:1px solid #333;border-radius:10px;display:flex;flex-direction:column;justify-content:space-between;padding:7px;font-size:11px;color:var(--sub);cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;transition:background .08s}
+.pad b{color:var(--text);font-size:12px}
+.pad.hit{background:var(--red);color:#fff}
+.pad.hit b{color:#fff}
+.bankinfo{font-size:12px;color:var(--sub);margin-top:6px}
+.knobs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.knob{text-align:center;font-size:11px;color:var(--sub);user-select:none;-webkit-user-select:none;touch-action:none;cursor:ns-resize}
+.knob svg{width:100%;max-width:74px;display:block;margin:0 auto}
+.knob .kname{color:var(--text);font-weight:700;font-size:12px}
+.knob.flash svg circle.bgc{stroke:#555}
+.chordbox{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.chord{font-size:40px;font-weight:800;min-width:120px;color:var(--text)}
+.notes{font-size:13px;color:var(--sub)}
+
+/* keyboard */
+.kbwrap{overflow-x:auto;padding-bottom:4px}
+.kb{position:relative;height:150px;min-width:700px;user-select:none;-webkit-user-select:none;touch-action:none}
+.wk,.bk{position:absolute;top:0;border-radius:0 0 6px 6px;cursor:pointer}
+.wk{height:100%;background:#f3f3f3;border:1px solid #999;z-index:1}
+.bk{height:62%;background:#161616;border:1px solid #000;z-index:2}
+.wk .lbl{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:10px;color:#777}
+.wk.inscale{background:#cfe3f7}
+.bk.inscale{background:#22507a}
+.wk.root{background:#ffc9c5}
+.bk.root{background:#9a2520}
+.wk.hint{box-shadow:inset 0 -14px 0 var(--warn)}
+.bk.hint{box-shadow:inset 0 -10px 0 var(--warn)}
+.wk.on{background:var(--red2)!important}
+.bk.on{background:var(--red)!important}
+.kbbar{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+
+.log{font-family:ui-monospace,Menlo,monospace;font-size:12px;height:160px;overflow:auto;background:#0b0b0d;border:1px solid var(--line);border-radius:8px;padding:8px;color:#b8b8c2;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.big{font-size:34px;font-weight:800}
+.result{font-size:16px;font-weight:700;min-height:24px}
+.result.ok{color:var(--ok)}.result.ng{color:var(--red2)}
+.meter{height:12px;background:#0b0b0d;border:1px solid var(--line);border-radius:6px;position:relative;overflow:hidden}
+.meter .c{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#666}
+.meter .m{position:absolute;top:0;bottom:0;width:6px;margin-left:-3px;background:var(--ok);border-radius:3px}
+.hist{display:flex;gap:3px;align-items:center;height:60px;margin-top:8px}
+.hist span{flex:1;background:var(--blue);border-radius:2px;min-height:2px}
+.beatdots{display:flex;gap:8px;margin:8px 0}
+.beatdots span{width:16px;height:16px;border-radius:50%;background:#333}
+.beatdots span.on{background:var(--red)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 16px}
+details summary{cursor:pointer;padding:14px 0;font-weight:700;list-style:none}
+details summary::before{content:"▸ ";color:var(--red)}
+details[open] summary::before{content:"▾ "}
+details .body{padding-bottom:14px;line-height:1.75;font-size:14px}
+details .body table{border-collapse:collapse;width:100%;font-size:13px}
+details .body td,details .body th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+details .body th{color:var(--sub);font-weight:600}
+kbd{background:#2a2a30;border:1px solid #444;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12px;font-family:inherit}
+.note{background:#24201a;border-left:3px solid var(--warn);padding:8px 12px;border-radius:6px;font-size:13px;color:#e6d6b8;margin:8px 0}
+#overlay{position:fixed;inset:0;background:rgba(10,10,12,.92);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+#overlay .box{max-width:440px;text-align:center}
+#overlay h1{font-size:22px;margin:0 0 10px}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;background:var(--panel2);font-size:12px;color:var(--sub);margin:2px}
+.seq{display:flex;gap:6px;margin:10px 0;min-height:36px;flex-wrap:wrap}
+.seq span{min-width:44px;padding:6px 8px;border-radius:8px;background:var(--panel2);text-align:center;font-weight:700}
+.seq span.ok{background:#1f4d38;color:var(--ok)}
+.seq span.ng{background:#4d1f1f;color:var(--red2)}
+</style>
+</head>
+<body>
+
+<div id="overlay">
+  <div class="box">
+    <h1>MPK mini plus トレーナー</h1>
+    <p class="sub">MPK mini plus をUSBでつないでから「はじめる」を押してください。音の再生とMIDI接続を有効にします。<br>キーボードが無くても、画面の鍵盤・パッド・ノブで試せます。</p>
+    <p><button class="btn primary" id="startBtn">はじめる</button></p>
+  </div>
+</div>
+
+<header>
+  <div class="logo"><b>MPK</b> mini plus トレーナー</div>
+  <div class="status"><span class="dot" id="midiDot"></span><span id="midiStatus">未接続</span></div>
+</header>
+<nav id="nav">
+  <button data-tab="monitor" class="active">モニター＆シンセ</button>
+  <button data-tab="practice">練習</button>
+  <button data-tab="guide">機能ガイド</button>
+  <button data-tab="settings">設定</button>
+</nav>
+
+<main>
+<!-- MONITOR -->
+<section class="tab active" id="tab-monitor">
+  <div class="card" id="diagCard" style="border-color:#5a3a1a">
+    <h2>接続チェック</h2>
+    <div id="diag" class="sub" style="line-height:1.9"></div>
+    <p style="margin:10px 0 0"><button class="btn primary" id="testSound">🔊 テスト音を鳴らす</button> <button class="btn" id="diagRe">再チェック</button> <button class="btn" id="diagHide">隠す</button></p>
+  </div>
+  <div class="card">
+    <div class="ctrl">
+      <div>
+        <h2>ホイール</h2>
+        <div class="wheels">
+          <div class="wheel"><div class="track"><div class="mid"></div><div class="fill" id="pbFill"></div></div>PITCH<br><span id="pbVal">0</span></div>
+          <div class="wheel"><div class="track"><div class="fill" id="modFill" style="bottom:0;height:0"></div></div>MOD<br><span id="modVal">0</span></div>
+        </div>
+      </div>
+      <div>
+        <h2>パッド <span class="pill" id="bankPill">BANK A</span></h2>
+        <div class="pads" id="pads"></div>
+        <div class="bankinfo" id="padInfo">パッドを叩くと音名・ベロシティを表示</div>
+      </div>
+      <div>
+        <h2>ノブ（K1〜K8）</h2>
+        <div class="knobs" id="knobs"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chordbox">
+      <div class="chord" id="chordName">—</div>
+      <div>
+        <div class="notes" id="heldNotes">鍵盤を押すとコード名を自動判定します</div>
+        <div class="notes" id="velInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>音色</h2>
+      <label class="inline">波形 <select id="waveSel"><option value="sawtooth">ノコギリ</option><option value="square">矩形</option><option value="triangle">三角</option><option value="sine">サイン</option></select></label>
+      <label class="inline">ポリ数 <select id="polySel"><option>4</option><option selected>8</option><option>16</option></select></label>
+      <p class="sub">ノブでシンセを操作できます：K1 カットオフ / K2 レゾナンス / K3 アタック / K4 リリース / K5 デチューン / K6 ディレイ / K7 ベンド幅 / K8 音量。MODホイールでビブラート、PITCHホイールでピッチベンド。サステインペダル（CC64）にも対応。</p>
+    </div>
+    <div class="card">
+      <h2>MIDIログ <button class="btn small" id="clearLog" style="float:right">クリア</button></h2>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section class="tab" id="tab-practice">
+  <div class="card">
+    <h2>練習メニュー</h2>
+    <label class="inline"><select id="practiceSel">
+      <option value="chord">コード練習（表示されたコードを弾く）</option>
+      <option value="scale">スケールガイド（鍵盤に音階を表示）</option>
+      <option value="ear">耳コピ（鳴った音を弾き返す）</option>
+      <option value="timing">パッドのリズム練習（メトロノームに合わせる）</option>
+    </select></label>
+  </div>
+
+  <div class="card pr" id="pr-chord">
+    <h2>コード練習</h2>
+    <label class="inline">レベル <select id="chordLevel">
+      <option value="1">1: メジャー / マイナー</option>
+      <option value="2">2: ＋ セブンス (7, M7, m7)</option>
+      <option value="3">3: ＋ sus4, dim, aug, m7♭5</option>
+    </select></label>
+    <label class="inline">ルート <select id="chordRoots"><option value="white">白鍵のみ</option><option value="all">全12音</option></select></label>
+    <div style="margin:14px 0">
+      <div class="sub">このコードを弾いてください（転回形・どのオクターブでもOK）</div>
+      <div class="big" id="chordTarget">C</div>
+      <div class="result" id="chordResult"></div>
+    </div>
+    <button class="btn" id="chordHint">ヒント（鍵盤に表示）</button>
+    <button class="btn" id="chordSkip">スキップ</button>
+    <span class="sub" style="margin-left:10px">正解 <b id="chordScore">0</b> ／ 連続 <b id="chordStreak">0</b></span>
+  </div>
+
+  <div class="card pr" id="pr-scale" style="display:none">
+    <h2>スケールガイド</h2>
+    <label class="inline">ルート <select id="scaleRoot"></select></label>
+    <label class="inline">スケール <select id="scaleType"></select></label>
+    <p class="sub">青い鍵盤がスケールの音、赤がルート音です。スケール外の音を弾くと下に表示されます。MPK mini plus 本体の <b>SCALES</b> 機能（スケール外の音を出さない機能）を使う前の、指の形の練習に。</p>
+    <div class="result" id="scaleResult"></div>
+  </div>
+
+  <div class="card pr" id="pr-ear" style="display:none">
+    <h2>耳コピ</h2>
+    <label class="inline">音数 <select id="earLen"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
+    <label class="inline">音域 <select id="earRange"><option value="c">Cメジャー（白鍵）</option><option value="chr">全12音</option></select></label>
+    <div style="margin:12px 0">
+      <button class="btn primary" id="earPlay">▶ 新しい問題</button>
+      <button class="btn" id="earReplay">もう一度聞く</button>
+      <button class="btn" id="earReveal">答えを見る</button>
+    </div>
+    <div class="sub">最初の音は「ド（C）」から始まるとは限りません。鳴った順に鍵盤で弾いてください。</div>
+    <div class="seq" id="earSeq"></div>
+    <div class="result" id="earResult"></div>
+  </div>
+
+  <div class="card pr" id="pr-timing" style="display:none">
+    <h2>パッドのリズム練習</h2>
+    <label class="inline">BPM <input type="number" id="bpm" value="90" min="40" max="220" style="width:70px"></label>
+    <label class="inline">判定グリッド <select id="grid"><option value="1">4分音符</option><option value="2" selected>8分音符</option><option value="4">16分音符</option></select></label>
+    <button class="btn primary" id="metroBtn">▶ スタート</button>
+    <div class="beatdots" id="beatDots"><span></span><span></span><span></span><span></span></div>
+    <p class="sub">メトロノームに合わせてパッド（どれでも可）を叩くと、ズレをミリ秒で表示します。中央より左が早い（走り）、右が遅い（もたり）。±20ms以内を目指しましょう。</p>
+    <div class="meter"><div class="c"></div><div class="m" id="tmMark" style="left:50%"></div></div>
+    <div class="result" id="tmResult" style="margin-top:8px"></div>
+    <div class="sub">直近の平均ズレ: <b id="tmAvg">—</b> ／ ばらつき: <b id="tmSd">—</b></div>
+    <div class="hist" id="tmHist"></div>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<section class="tab" id="tab-guide">
+  <div class="note">本体ボタンの組み合わせはファームウェアのバージョンで変わることがあります。動きが違うときは Akai 公式の MPK mini plus ユーザーガイドを確認してください。このアプリの「モニター」タブで、操作したときに実際にどんなMIDIが出ているか確かめられます。</div>
+
+  <details open><summary>まずはここから：接続と動作確認</summary><div class="body">
+    <ol>
+      <li>付属のUSBケーブルでパソコン（またはAndroid）につなぐ。電源もUSBから取れます。</li>
+      <li>このページを <b>Chrome か Edge</b> で開く（iPhone/iPad の Safari は Web MIDI に非対応です）。</li>
+      <li>「モニター」タブで鍵盤・パッド・ノブ・ホイールを順に触って、画面が反応するか確認。</li>
+      <li>反応しないときは：ケーブルを挿し直す → ページを再読み込み → 他のDAWがMIDIを占有していないか確認（Windowsは1つのアプリしかMIDI機器を掴めないことがあります）。</li>
+    </ol>
+  </div></details>
+
+  <details><summary>各部の名前と役割</summary><div class="body">
+    <table>
+      <tr><th>部位</th><th>役割</th></tr>
+      <tr><td>ピッチホイール（左）</td><td>音程を上下に揺らす。手を離すと中央に戻る。ギターのチョーキング風の表現に。</td></tr>
+      <tr><td>モジュレーションホイール（右）</td><td>CC1 を送る。多くの音源でビブラートの深さ。このアプリでもビブラートになります。</td></tr>
+      <tr><td>37鍵の鍵盤</td><td>ベロシティ対応のミニ鍵盤。OCT −/＋ で音域を移動。</td></tr>
+      <tr><td>パッド1〜8</td><td>ドラムを叩く用。強さ（ベロシティ）に反応。BANK A/B で16個分の音を切り替え。</td></tr>
+      <tr><td>ノブ K1〜K8</td><td>CC（コントロールチェンジ）を送る。DAWのフィルターや音量に割り当てて使う。</td></tr>
+      <tr><td>ディスプレイ＋エンコーダー</td><td>回して値を選び、押して決定（PUSH TO ENTER）。プログラムや設定の変更に使う。</td></tr>
+      <tr><td>トランスポート（◀◀ ▶▶ STOP PLAY REC ほか）</td><td>内蔵シーケンサーやDAWの再生・停止・録音。</td></tr>
+    </table>
+  </div></details>
+
+  <details><summary>SHIFT ボタンと「枠付き文字」のルール</summary><div class="body">
+    <p>ボタンの下に<b>枠で囲まれた文字</b>（CONFIG、CLEAR DRUM、STEP EDIT、LIVE SEQ、CV SETUP、SAVE、EDIT、GLOBAL など）があります。これは <kbd>SHIFT</kbd> を押しながらそのボタンを押したときの機能です。</p>
+    <table>
+      <tr><th>ボタン</th><th>そのまま</th><th>SHIFT＋</th></tr>
+      <tr><td>ARP</td><td>アルペジエーター オン/オフ</td><td>CONFIG（アルペジオ設定）</td></tr>
+      <tr><td>TAP TEMPO</td><td>叩いてテンポを決める</td><td>CLEAR DRUM（ドラム録音の消去）</td></tr>
+      <tr><td>NOTE REPEAT</td><td>パッドの連打</td><td>CONFIG（連打の設定）</td></tr>
+      <tr><td>FULL LEVEL</td><td>パッドを常に最大音量</td><td>CLEAR KEY（鍵盤録音の消去）</td></tr>
+      <tr><td>OCT − / OCT ＋</td><td>オクターブ移動</td><td>STEP EDIT / LIVE SEQ（シーケンサー）</td></tr>
+      <tr><td>BANK A/B</td><td>パッドのバンク切替</td><td>CV SETUP（CV/Gate出力の設定）</td></tr>
+      <tr><td>SCALES / CHORDS</td><td>スケール / コード機能</td><td>CONFIG（それぞれの設定）</td></tr>
+      <tr><td>HOME / PROG SELECT</td><td>ホーム画面 / プログラム選択</td><td>SAVE / EDIT</td></tr>
+      <tr><td>STOP</td><td>停止</td><td>GLOBAL（全体設定）</td></tr>
+    </table>
+  </div></details>
+
+  <details><summary>アルペジエーター（ARP）</summary><div class="body">
+    <p>和音を押さえるだけで、その音を順番に自動で弾いてくれる機能。シンセのフレーズ作りに一番効きます。</p>
+    <ol>
+      <li><kbd>ARP</kbd> を押してオン（点灯）。</li>
+      <li>コード（例：C・E・G）を押さえる → 分散和音が流れる。</li>
+      <li><kbd>TAP TEMPO</kbd> を数回叩いて速さを決める。</li>
+    </ol>
+    <h3>設定（鍵盤の上の印字）</h3>
+    <p>鍵盤の上に印字された項目は、アルペジオ設定中に鍵盤を押して選べます（SHIFT＋ARP で設定画面）。ノブの下の枠付き文字（DIVISION / SWING / MODE / OCT / LATCH / SYNC / GATE / BPM）も同じ設定をノブで変えるためのものです。</p>
+    <table>
+      <tr><th>項目</th><th>意味</th></tr>
+      <tr><td>1/4 〜 1/32T</td><td>音の細かさ。T は3連符。まずは 1/8 か 1/16 から。</td></tr>
+      <tr><td>UP / DOWN / INCL / EXCL / ORDER / RAND</td><td>弾く順番。上がる・下がる・往復（端の音を重ねる/重ねない）・押した順・ランダム。</td></tr>
+      <tr><td>LATCH</td><td>手を離してもアルペジオが鳴り続ける。ラッチ中に別のコードを押すと切り替わる。</td></tr>
+      <tr><td>ARP OCT 1〜4</td><td>何オクターブにわたって展開するか。</td></tr>
+      <tr><td>SWING 50%〜64%</td><td>ハネ具合。50% はまっすぐ、57% 前後でヒップホップっぽい揺れ。</td></tr>
+      <tr><td>SYNC</td><td>DAWなど外部のテンポに合わせる。</td></tr>
+      <tr><td>GATE（ノブ）</td><td>1音の長さ。短いとスタッカート、長いとレガート。</td></tr>
+    </table>
+    <div class="note">このアプリの内蔵シンセは本体のアルペジオ出力もそのまま鳴らせます。ARPをオンにして「モニター」タブで音を出してみてください。</div>
+  </div></details>
+
+  <details><summary>パッドの使い方：NOTE REPEAT・FULL LEVEL・BANK</summary><div class="body">
+    <ul>
+      <li><b>NOTE REPEAT</b>：オンにしてパッドを押し続けると、テンポに合わせて自動で連打。ハイハットの16分刻みやトラップのロールに。押す強さで音量も変わります。</li>
+      <li><b>FULL LEVEL</b>：叩く強さに関係なく最大ベロシティ（127）で鳴る。打ち込みの音量をそろえたいときに。</li>
+      <li><b>BANK A/B</b>：パッド8個を2バンク＝16音として使える。A にキック・スネア・ハット、B にパーカッションなど。</li>
+    </ul>
+    <p>パッドは通常 <b>MIDIチャンネル10</b> で送られます（ドラム用の慣例）。このアプリもチャンネル10のノートをパッドとして扱います。</p>
+  </div></details>
+
+  <details><summary>SCALES と CHORDS（音楽理論の補助輪）</summary><div class="body">
+    <ul>
+      <li><b>SCALES</b>：選んだスケール（例：Cマイナー）以外の音が出ないようにする。適当に弾いても外れないので、メロディ作りの入り口に最適。</li>
+      <li><b>CHORDS</b>：鍵盤1つでコード（和音）全体が鳴る。コードを知らなくても伴奏が作れる。</li>
+    </ul>
+    <p>おすすめは「本体の機能で鳴らしてみる → このアプリの<b>コード練習</b>や<b>スケールガイド</b>で自分の指でも弾けるようにする」の往復。モニター画面では本体から出たノートをそのままコード判定するので、CHORDS が何を鳴らしているかも分かります。</p>
+  </div></details>
+
+  <details><summary>内蔵シーケンサー（STEP EDIT / LIVE SEQ）</summary><div class="body">
+    <ul>
+      <li><b>LIVE SEQ</b>（SHIFT＋OCT＋）：<kbd>REC</kbd> → <kbd>PLAY</kbd> で演奏をそのまま録音。ループしながら重ね録りができます。</li>
+      <li><b>STEP EDIT</b>（SHIFT＋OCT−）：1ステップずつ音を入力。<kbd>◀◀</kbd> PREV STEP / <kbd>▶▶</kbd> NEXT STEP でステップを移動。</li>
+      <li>消すときは SHIFT＋TAP TEMPO（CLEAR DRUM）、SHIFT＋FULL LEVEL（CLEAR KEY）。</li>
+      <li>パソコンなしでもフレーズのスケッチができ、MIDI OUT や CV/Gate 出力からハードウェアのシンセも鳴らせます。</li>
+    </ul>
+  </div></details>
+
+  <details><summary>DAW・アプリと組み合わせるコツ</summary><div class="body">
+    <ul>
+      <li>ノブの送るCC番号はプログラム（PROG SELECT）ごとに違うことがあります。「設定」タブの<b>ノブ学習</b>で、このアプリにも実際の番号を覚えさせられます。</li>
+      <li>DAWでは「MIDIラーン」機能でノブをフィルター・リバーブ量・音量に割り当てるのが定番。</li>
+      <li>PITCH ホイールの幅は音源側で決まります（このアプリは K7 で変更）。</li>
+      <li>レイテンシー（遅れ）を感じたら、DAWのオーディオバッファを小さく（128〜256）するのが効果的。</li>
+    </ul>
+  </div></details>
+
+  <details><summary>1週間の練習プラン例</summary><div class="body">
+    <table>
+      <tr><th>日</th><th>内容</th></tr>
+      <tr><td>1日目</td><td>モニターで全部のパーツを触り、ノブ・ホイールが何を変えるか体感。</td></tr>
+      <tr><td>2日目</td><td>コード練習レベル1を20問。Cメジャーのスケールガイドで上り下り。</td></tr>
+      <tr><td>3日目</td><td>パッドのリズム練習 BPM 80・8分で、平均ズレ ±20ms 以内を目指す。</td></tr>
+      <tr><td>4日目</td><td>ARP をオン。C → Am → F → G を LATCH で切り替えて1曲分のループを作る。</td></tr>
+      <tr><td>5日目</td><td>耳コピ2音→3音。SCALES を使ってAマイナーで即興メロディ。</td></tr>
+      <tr><td>6日目</td><td>NOTE REPEAT でハイハット、パッドでキック・スネアを叩いてビートを作る。</td></tr>
+      <tr><td>7日目</td><td>LIVE SEQ でドラム→コード→メロディを重ね録りして8小節を完成。</td></tr>
+    </table>
+  </div></details>
+
+  <details><summary>パソコンのキーボードでも操作できます</summary><div class="body">
+    <p>鍵盤：<kbd>A</kbd><kbd>W</kbd><kbd>S</kbd><kbd>E</kbd><kbd>D</kbd><kbd>F</kbd><kbd>T</kbd><kbd>G</kbd><kbd>Y</kbd><kbd>H</kbd><kbd>U</kbd><kbd>J</kbd><kbd>K</kbd>（ド〜ド）、<kbd>Z</kbd>/<kbd>X</kbd> でオクターブ移動。<br>パッド：<kbd>1</kbd>〜<kbd>8</kbd>。</p>
+  </div></details>
+</section>
+
+<!-- SETTINGS -->
+<section class="tab" id="tab-settings">
+  <div class="card">
+    <h2>MIDI入力</h2>
+    <div class="sub" id="inputList">—</div>
+    <p><button class="btn" id="reconnect">再接続</button></p>
+  </div>
+  <div class="card">
+    <h2>ノブ学習</h2>
+    <p class="sub">「学習スタート」を押してから、本体の K1 → K2 → … → K8 の順に1つずつ少し回してください。送られてきたCC番号を順番に覚えます。</p>
+    <button class="btn primary" id="learnBtn">学習スタート</button>
+    <button class="btn" id="resetCC">初期値（CC70〜77）に戻す</button>
+    <p class="sub" id="ccMap"></p>
+  </div>
+  <div class="card">
+    <h2>パッドの認識</h2>
+    <label class="inline"><input type="checkbox" id="padAnyCh"> チャンネル10以外でも、ノート36〜51をパッドとして扱う</label>
+    <p class="sub">パッドが鍵盤として認識されてしまうときにオンにしてください（その音域の鍵盤の音もドラムになります）。</p>
+  </div>
+</section>
+
+<div class="card" style="max-width:1200px;margin:0 16px 16px;margin-left:auto;margin-right:auto">
+  <div class="kbbar">
+    <b>鍵盤</b><span class="sub" id="kbRange"></span>
+    <button class="btn small" id="octDown">◀ オクターブ</button><button class="btn small" id="octUp">オクターブ ▶</button>
+    <label class="inline"><input type="checkbox" id="autoRange" checked> 弾いた音域に自動で追従</label>
+  </div>
+  <div class="kbwrap"><div class="kb" id="kb"></div></div>
+</div>
+</main>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const NAMES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const JP=['ド','ド#','レ','レ#','ミ','ファ','ファ#','ソ','ソ#','ラ','ラ#','シ'];
+const nn=n=>NAMES[n%12]+(Math.floor(n/12)-1);
+const store={get(k,d){try{const v=localStorage.getItem('mpk_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('mpk_'+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- Audio ---------- */
+let ctx=null, master, delay, delayFb, delayWet, lfo, lfoGain, noiseBuf;
+const P={cutoff:90,res:20,attack:2,release:30,detune:15,delay:20,bendRange:2,volume:90}; // 0-127
+const knobDefs=[
+  {k:'cutoff',name:'CUTOFF'},{k:'res',name:'RESO'},{k:'attack',name:'ATTACK'},{k:'release',name:'RELEASE'},
+  {k:'detune',name:'DETUNE'},{k:'delay',name:'DELAY'},{k:'bendRange',name:'BEND幅',fmt:v=>Math.round(1+v/127*11)+'半音'},{k:'volume',name:'VOLUME'}];
+P.bendRange=Math.round(1/11*127); // 2 semis
+let ccMap=store.get('ccmap',[70,71,72,73,74,75,76,77]);
+let bend=0, modv=0, sustain=false;
+const voices=new Map(); // note -> voice
+const sustained=new Set();
+
+function initAudio(){
+  if(ctx) return;
+  ctx=new (window.AudioContext||window.webkitAudioContext)();
+  master=ctx.createGain(); master.connect(ctx.destination);
+  delay=ctx.createDelay(1); delay.delayTime.value=0.33;
+  delayFb=ctx.createGain(); delayFb.gain.value=0.35;
+  delayWet=ctx.createGain();
+  master.connect(delay); delay.connect(delayFb); delayFb.connect(delay); delay.connect(delayWet); delayWet.connect(ctx.destination);
+  lfo=ctx.createOscillator(); lfo.frequency.value=5.5; lfoGain=ctx.createGain(); lfoGain.gain.value=0; lfo.connect(lfoGain); lfo.start();
+  noiseBuf=ctx.createBuffer(1,ctx.sampleRate*1,ctx.sampleRate);
+  const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  applyParams();
+}
+const cutHz=()=>60*Math.pow(2,P.cutoff/127*8.3);
+const atk=()=>0.002+Math.pow(P.attack/127,2)*2;
+const rel=()=>0.03+Math.pow(P.release/127,2)*3;
+function applyParams(){
+  if(!ctx) return;
+  const t=ctx.currentTime;
+  master.gain.setTargetAtTime(Math.pow(P.volume/127,1.5)*0.6,t,0.02);
+  delayWet.gain.setTargetAtTime(P.delay/127*0.6,t,0.02);
+  lfoGain.gain.setTargetAtTime(modv/127*40,t,0.02);
+  voices.forEach(v=>{v.f.frequency.setTargetAtTime(cutHz(),t,0.02);v.f.Q.setTargetAtTime(P.res/127*18,t,0.02);setVoicePitch(v)});
+}
+function setVoicePitch(v){
+  const t=ctx.currentTime, br=1+P.bendRange/127*11, b=bend*br*100, dt=P.detune/127*30;
+  v.o1.detune.setTargetAtTime(b-dt,t,0.01); v.o2.detune.setTargetAtTime(b+dt,t,0.01);
+}
+function noteOn(note,vel){
+  if(!ctx) return;
+  if(voices.has(note)) killVoice(voices.get(note),0.02);
+  const poly=+$('#polySel').value;
+  if(voices.size>=poly){const first=voices.keys().next().value;killVoice(voices.get(first),0.02);voices.delete(first)}
+  const t=ctx.currentTime, f=440*Math.pow(2,(note-69)/12), type=$('#waveSel').value;
+  const o1=ctx.createOscillator(), o2=ctx.createOscillator(), fl=ctx.createBiquadFilter(), g=ctx.createGain();
+  o1.type=o2.type=type; o1.frequency.value=o2.frequency.value=f;
+  lfoGain.connect(o1.detune); lfoGain.connect(o2.detune);
+  fl.type='lowpass'; fl.frequency.value=cutHz(); fl.Q.value=P.res/127*18;
+  const peak=0.15+0.35*(vel/127);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(peak*0.5,t+atk());
+  o1.connect(fl); o2.connect(fl); fl.connect(g); g.connect(master);
+  const v={o1,o2,f:fl,g}; setVoicePitch(v);
+  o1.start(t); o2.start(t);
+  voices.set(note,v);
+}
+function killVoice(v,r){
+  const t=ctx.currentTime;
+  v.g.gain.cancelScheduledValues(t); v.g.gain.setValueAtTime(v.g.gain.value,t); v.g.gain.setTargetAtTime(0,t,r/4);
+  v.o1.stop(t+r+0.1); v.o2.stop(t+r+0.1);
+}
+function noteOff(note){
+  if(!ctx||!voices.has(note)) return;
+  if(sustain){sustained.add(note);return}
+  killVoice(voices.get(note),rel()); voices.delete(note);
+}
+function releaseSustain(){sustained.forEach(n=>{if(!held.has(n)&&voices.has(n)){killVoice(voices.get(n),rel());voices.delete(n)}});sustained.clear()}
+
+/* drums */
+const DRUMS=['KICK','SNARE','C.HAT','O.HAT','CLAP','TOM L','TOM H','RIM'];
+function drum(i,vel){
+  if(!ctx) return;
+  const t=ctx.currentTime, a=0.25+0.75*vel/127, out=ctx.createGain(); out.gain.value=a*Math.pow(P.volume/127,1.2); out.connect(ctx.destination);
+  const env=(node,start,dec,peak=1)=>{const g=ctx.createGain();g.gain.setValueAtTime(peak,start);g.gain.exponentialRampToValueAtTime(0.001,start+dec);node.connect(g);g.connect(out);return g};
+  const noise=(start,dur)=>{const s=ctx.createBufferSource();s.buffer=noiseBuf;s.start(start);s.stop(start+dur);return s};
+  const tone=(f0,f1,dec,type='sine',pk=1)=>{const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dec);env(o,t,dec,pk);o.start(t);o.stop(t+dec+.05)};
+  const filt=(src,type,f,q=1)=>{const b=ctx.createBiquadFilter();b.type=type;b.frequency.value=f;b.Q.value=q;src.connect(b);return b};
+  switch(i){
+    case 0: tone(160,42,0.45,'sine',1.2); break;
+    case 1: tone(200,120,0.12,'triangle',.6); env(filt(noise(t,.25),'highpass',1200),t,.2,.8); break;
+    case 2: env(filt(noise(t,.08),'highpass',7500),t,.05,.6); break;
+    case 3: env(filt(noise(t,.4),'highpass',7000),t,.35,.5); break;
+    case 4: for(let k=0;k<3;k++) env(filt(noise(t+k*.011,.05),'bandpass',1400,1.5),t+k*.011,k<2?.03:.18,.9); break;
+    case 5: tone(130,70,0.35,'sine',.9); break;
+    case 6: tone(220,120,0.28,'sine',.9); break;
+    case 7: env(filt((()=>{const o=ctx.createOscillator();o.type='square';o.frequency.value=820;o.start(t);o.stop(t+.06);return o})(),'bandpass',1800,3),t,.05,.7); break;
+  }
+}
+function click(time,accent){
+  const o=ctx.createOscillator(), g=ctx.createGain(); o.frequency.value=accent?1600:1000;
+  g.gain.setValueAtTime(0.35,time); g.gain.exponentialRampToValueAtTime(0.001,time+0.05);
+  o.connect(g); g.connect(ctx.destination); o.start(time); o.stop(time+0.06);
+}
+
+/* ---------- UI build ---------- */
+// pads: top row 5-8, bottom row 1-4
+const padEls=[];
+const padOrder=[4,5,6,7,0,1,2,3];
+padOrder.forEach(i=>{
+  const d=document.createElement('div'); d.className='pad'; d.innerHTML=`<span>PAD ${i+1}</span><b>${DRUMS[i]}</b>`;
+  d.addEventListener('pointerdown',e=>{e.preventDefault();ensure();padHit(i,100,'A',36+i)});
+  $('#pads').appendChild(d); padEls[i]=d;
+});
+// knobs
+const knobEls=[];
+knobDefs.forEach((kd,i)=>{
+  const d=document.createElement('div'); d.className='knob';
+  d.innerHTML=`<svg viewBox="0 0 60 60"><circle class="bgc" cx="30" cy="30" r="22" fill="none" stroke="#333" stroke-width="6" stroke-dasharray="103.7 138.2" transform="rotate(135 30 30)"/><circle class="val" cx="30" cy="30" r="22" fill="none" stroke="#e8322b" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 138.2" transform="rotate(135 30 30)"/><text x="30" y="35" text-anchor="middle" fill="#ececef" font-size="13" font-weight="700">0</text></svg><div class="kname">K${i+1} ${kd.name}</div><div class="kcc">CC${ccMap[i]}</div>`;
+  let sy=null, sv=0;
+  d.addEventListener('pointerdown',e=>{ensure();sy=e.clientY;sv=P[kd.k];d.setPointerCapture(e.pointerId)});
+  d.addEventListener('pointermove',e=>{if(sy==null)return;setKnob(i,Math.max(0,Math.min(127,Math.round(sv+(sy-e.clientY)*0.8))))});
+  d.addEventListener('pointerup',()=>sy=null);
+  $('#knobs').appendChild(d); knobEls.push(d);
+});
+function drawKnob(i){
+  const kd=knobDefs[i], v=P[kd.k], el=knobEls[i];
+  el.querySelector('.val').setAttribute('stroke-dasharray',`${(v/127*103.7).toFixed(1)} 138.2`);
+  el.querySelector('text').textContent=kd.fmt?kd.fmt(v):v;
+  el.querySelector('.kcc').textContent='CC'+ccMap[i];
+}
+function setKnob(i,v){P[knobDefs[i].k]=v;drawKnob(i);applyParams()}
+knobDefs.forEach((_,i)=>drawKnob(i));
+
+// keyboard
+let base=store.get('base',48);
+const kb=$('#kb'); const keyEls={};
+const isBlack=pc=>[1,3,6,8,10].includes(pc);
+function buildKb(){
+  kb.innerHTML=''; for(const k in keyEls) delete keyEls[k];
+  const whites=22, w=100/whites; let wi=0;
+  for(let n=base;n<=base+36;n++){
+    const pc=n%12, el=document.createElement('div');
+    if(!isBlack(pc)){
+      el.className='wk'; el.style.left=(wi*w)+'%'; el.style.width=w+'%';
+      el.innerHTML=`<span class="lbl">${pc===0?nn(n):''}</span>`; wi++;
+    }else{
+      el.className='bk'; el.style.left=(wi*w-w*0.3)+'%'; el.style.width=(w*0.6)+'%';
+    }
+    el.dataset.n=n;
+    el.addEventListener('pointerdown',e=>{e.preventDefault();ensure();kb.setPointerCapture?.(e.pointerId);ptrNote[e.pointerId]=n;handleNoteOn(n,95,'screen')});
+    kb.appendChild(el); keyEls[n]=el;
+  }
+  $('#kbRange').textContent=`${nn(base)} 〜 ${nn(base+36)}`;
+  refreshKeys();
+}
+const ptrNote={};
+kb.addEventListener('pointermove',e=>{
+  if(!(e.pointerId in ptrNote)) return;
+  const el=document.elementFromPoint(e.clientX,e.clientY); if(!el||!el.dataset||!el.dataset.n) return;
+  const n=+el.dataset.n; if(n!==ptrNote[e.pointerId]){handleNoteOff(ptrNote[e.pointerId]);ptrNote[e.pointerId]=n;handleNoteOn(n,95,'screen')}
+});
+const endPtr=e=>{if(e.pointerId in ptrNote){handleNoteOff(ptrNote[e.pointerId]);delete ptrNote[e.pointerId]}};
+kb.addEventListener('pointerup',endPtr); kb.addEventListener('pointercancel',endPtr);
+$('#octDown').onclick=()=>{base=Math.max(0,base-12);store.set('base',base);buildKb()};
+$('#octUp').onclick=()=>{base=Math.min(84,base+12);store.set('base',base);buildKb()};
+
+/* ---------- state ---------- */
+const held=new Set();
+let scaleSet=null, scaleRootPc=null, hintSet=null;
+function refreshKeys(){
+  for(const k in keyEls){
+    const n=+k, pc=n%12, el=keyEls[k];
+    el.classList.toggle('on',held.has(n));
+    el.classList.toggle('inscale',!!scaleSet&&scaleSet.has(pc));
+    el.classList.toggle('root',scaleRootPc===pc&&!!scaleSet);
+    el.classList.toggle('hint',!!hintSet&&hintSet.has(pc));
+  }
+}
+
+/* ---------- chord detection ---------- */
+const CHORDS=[
+  ['',[0,4,7]],['m',[0,3,7]],['dim',[0,3,6]],['aug',[0,4,8]],['sus4',[0,5,7]],['sus2',[0,2,7]],
+  ['7',[0,4,7,10]],['M7',[0,4,7,11]],['m7',[0,3,7,10]],['mM7',[0,3,7,11]],['m7♭5',[0,3,6,10]],['dim7',[0,3,6,9]],
+  ['6',[0,4,7,9]],['m6',[0,3,7,9]],['7sus4',[0,5,7,10]],['add9',[0,2,4,7]],['madd9',[0,2,3,7]],
+  ['9',[0,2,4,7,10]],['M9',[0,2,4,7,11]],['m9',[0,2,3,7,10]],['7(omit5)',[0,4,10]],['M7(omit5)',[0,4,11]],['5',[0,7]]];
+const INTERVALS=['同音','短2度','長2度','短3度','長3度','完全4度','増4度/減5度','完全5度','短6度','長6度','短7度','長7度'];
+function detect(notes){
+  const arr=[...notes].sort((a,b)=>a-b); if(!arr.length) return null;
+  const pcs=[...new Set(arr.map(n=>n%12))]; const bass=arr[0]%12;
+  if(pcs.length===1) return {name:NAMES[pcs[0]],desc:'単音'};
+  let best=null;
+  for(const r of pcs){
+    const set=pcs.map(p=>(p-r+12)%12).sort((a,b)=>a-b).join(',');
+    for(const [suf,iv] of CHORDS){
+      if(iv.slice().sort((a,b)=>a-b).join(',')===set){
+        const score=(r===bass?0:1)+(suf.length>4?0.5:0);
+        if(!best||score<best.score) best={score,name:NAMES[r]+suf+(r!==bass?'/'+NAMES[bass]:'')};
+      }
+    }
+  }
+  if(pcs.length===2 && (!best || best.name.endsWith('5')===false)){
+    const iv=(arr[arr.length-1]-arr[0])%12;
+    return {name:best?best.name:'—',desc:INTERVALS[iv]+'（'+NAMES[arr[0]%12]+'→'+NAMES[arr[arr.length-1]%12]+'）'};
+  }
+  return best?{name:best.name}:{name:'?',desc:'該当なし'};
+}
+function updateChord(){
+  const d=detect(held);
+  $('#chordName').textContent=d?d.name:'—';
+  const arr=[...held].sort((a,b)=>a-b);
+  $('#heldNotes').textContent=arr.length?arr.map(n=>`${nn(n)}(${JP[n%12]})`).join('  ')+(d&&d.desc?'  ・'+d.desc:''):'鍵盤を押すとコード名を自動判定します';
+}
+
+/* ---------- note handlers ---------- */
+let autoRange=true;
+$('#autoRange').onchange=e=>autoRange=e.target.checked;
+function handleNoteOn(n,vel,src){
+  if(vel===0) return handleNoteOff(n);
+  held.add(n); noteOn(n,vel);
+  if(autoRange && (n<base||n>base+36)){base=Math.max(0,Math.min(84,Math.floor(n/12)*12-12));store.set('base',base);buildKb()}
+  refreshKeys(); updateChord();
+  $('#velInfo').textContent=`最後の音: ${nn(n)}  ベロシティ ${vel}`;
+  practiceNote(n);
+}
+function handleNoteOff(n){
+  held.delete(n); noteOff(n); refreshKeys(); updateChord();
+}
+let bank='A';
+function padHit(i,vel,b,note){
+  drum(i,vel);
+  const el=padEls[i]; el.classList.add('hit'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('hit'),120);
+  $('#padInfo').textContent=`PAD ${i+1}（BANK ${b}）  ノート ${note}  ベロシティ ${vel}`;
+  if(b!==bank){bank=b;$('#bankPill').textContent='BANK '+b}
+  timingHit();
+}
+
+/* ---------- MIDI ---------- */
+const logEl=$('#log'); const logLines=[];
+function log(s){logLines.push(s); if(logLines.length>200) logLines.shift(); logEl.textContent=logLines.join('\n'); logEl.scrollTop=1e9}
+$('#clearLog').onclick=()=>{logLines.length=0;logEl.textContent=''};
+let learning=-1; const learnSeen=[];
+let midiCount=0, midiErr='';
+function onMidi(data){
+  const [st,d1,d2]=data, type=st&0xf0, ch=(st&0x0f)+1;
+  if(st>=0xf8) return; // clock etc
+  midiCount++; if(midiCount===1) diag();
+  if(ctx&&ctx.state!=='running') ctx.resume();
+  if(type===0x90||type===0x80){
+    const on=type===0x90&&d2>0;
+    const isPad = ch===10 || ($('#padAnyCh').checked && d1>=36 && d1<=51);
+    log(`ch${ch} ${on?'NoteOn ':'NoteOff'} ${nn(d1)}(${d1})${on?' vel '+d2:''}${isPad?'  [PAD]':''}`);
+    if(isPad){ if(on){const i=((d1-36)%8+8)%8; padHit(i,d2,(d1-36)>=8&&(d1-36)<16?'B':'A',d1)} return }
+    on?handleNoteOn(d1,d2,'midi'):handleNoteOff(d1);
+  }else if(type===0xb0){
+    log(`ch${ch} CC${d1} = ${d2}`);
+    if(learning>=0 && d1!==1 && d1!==64 && !learnSeen.includes(d1)){
+      learnSeen.push(d1); ccMap[learning]=d1; drawKnob(learning); learning++;
+      if(learning>=8){learning=-1;store.set('ccmap',ccMap);$('#learnBtn').textContent='学習スタート'}
+      showCC(); return;
+    }
+    if(d1===1){modv=d2;$('#modFill').style.height=(d2/127*100)+'%';$('#modVal').textContent=d2;applyParams();return}
+    if(d1===64){sustain=d2>=64;if(!sustain)releaseSustain();return}
+    const idx=ccMap.indexOf(d1);
+    if(idx>=0){setKnob(idx,d2);knobEls[idx].classList.add('flash');clearTimeout(knobEls[idx]._t);knobEls[idx]._t=setTimeout(()=>knobEls[idx].classList.remove('flash'),150)}
+  }else if(type===0xe0){
+    const v=((d2<<7)|d1)-8192; bend=v/8192;
+    const f=$('#pbFill'), pct=Math.abs(bend)*50;
+    if(bend>=0){f.style.bottom='50%';f.style.top='';f.style.height=pct+'%'}else{f.style.top='50%';f.style.bottom='';f.style.height=pct+'%'}
+    $('#pbVal').textContent=v; voices.forEach(setVoicePitch);
+    log(`ch${ch} PitchBend ${v}`);
+  }else if(type===0xc0){log(`ch${ch} ProgramChange ${d1}`)}
+  else{log(`${[...data].map(x=>x.toString(16).padStart(2,'0')).join(' ')}`)}
+}
+window.__sim=onMidi;
+let midiAccess=null;
+function setStatus(s,cls){$('#midiStatus').textContent=s;$('#midiDot').className='dot '+(cls||'')}
+function bindInputs(){
+  const names=[];
+  midiAccess.inputs.forEach(inp=>{inp.onmidimessage=e=>onMidi(e.data);names.push(inp.name)});
+  if(names.length){setStatus(names.find(n=>/mpk/i.test(n))||names[0],'on');$('#inputList').textContent=names.join(' / ')}
+  else{setStatus('MIDI機器が見つかりません','');$('#inputList').textContent='入力なし（ケーブルを挿して「再接続」）'}
+  diag();
+}
+async function connectMidi(){
+  if(!navigator.requestMIDIAccess){setStatus('このブラウザはWeb MIDI非対応','err');$('#inputList').innerHTML='このブラウザは Web MIDI に対応していません。パソコンかAndroidの <b>Chrome / Edge</b> で開いてください。画面の鍵盤・パッド・ノブは使えます。';diag();return}
+  try{
+    midiAccess=await navigator.requestMIDIAccess({sysex:false});
+    midiErr=''; bindInputs(); midiAccess.onstatechange=bindInputs;
+  }catch(e){midiErr=e.name||'error';setStatus('MIDIがブロックされています','err');$('#inputList').innerHTML='MIDIの利用がブロックされました（'+midiErr+'）。下の「接続チェック」の案内を見てください。';diag()}
+}
+function framed(){try{return window.self!==window.top}catch(e){return true}}
+function policyBlocked(){try{const fp=document.permissionsPolicy||document.featurePolicy;return fp&&fp.allowsFeature?!fp.allowsFeature('midi'):false}catch(e){return false}}
+function diag(){
+  const ok='✅', ng='❌', wn='⚠️', L=[];
+  const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document);
+  const hasMidi=!!navigator.requestMIDIAccess;
+  if(ios) L.push(`${ng} <b>iPhone / iPad では本体をつないでも音が鳴りません</b>（iOSのブラウザはWeb MIDIに非対応）。パソコンかAndroidの Chrome で開いてください。`);
+  else L.push(hasMidi?`${ok} このブラウザはWeb MIDIに対応`:`${ng} このブラウザはWeb MIDI非対応 → パソコン/Androidの Chrome か Edge で開いてください`);
+  if(hasMidi){
+    if(midiErr||policyBlocked()) L.push(`${ng} <b>このページの表示枠がMIDIをブロックしています</b>${framed()?'（claude.ai の中で開いているため）':''}。チャットで送ったファイル版 <b>mpk-trainer.html</b> をダウンロードし、パソコンの Chrome で直接開いてください。`);
+    else if(!midiAccess) L.push(`${wn} まだMIDIに接続していません（「はじめる」または設定タブの「再接続」）`);
+    else{
+      const n=midiAccess.inputs.size;
+      L.push(n?`${ok} MIDI機器を検出: ${[...midiAccess.inputs.values()].map(i=>i.name).join(' / ')}`:`${ng} MIDI機器が見つかりません → USBを挿し直して「再チェック」。DAWなど他のアプリを閉じてみてください`);
+      if(n) L.push(midiCount?`${ok} 本体からの信号を受信中（${midiCount}件）`:`${wn} まだ信号が届いていません → 鍵盤を押してみてください。届かない場合は他のアプリ（DAW等）がMPKを使っていないか確認`);
+    }
+  }
+  L.push(ctx?(ctx.state==='running'?`${ok} 音声出力 ON`:`${wn} 音声が停止中（${ctx.state}）→「テスト音」を押してください`):`${wn} 音声がまだ有効になっていません →「テスト音」を押してください`);
+  L.push(`💡 テスト音が聞こえない場合は、端末の音量・消音モード（マナーモード）・出力先（Bluetoothイヤホン等）を確認。MPK本体にはスピーカーがないので、音はパソコン/スマホから出ます。`);
+  $('#diag').innerHTML=L.join('<br>');
+}
+$('#testSound').onclick=()=>{ensure();ctx.resume().then(()=>{[60,64,67].forEach((n,i)=>setTimeout(()=>{noteOn(n,100);setTimeout(()=>noteOff(n),350)},i*150));drum(0,110);diag()})};
+$('#diagRe').onclick=()=>{connectMidi();diag()};
+$('#diagHide').onclick=()=>$('#diagCard').style.display='none';
+$('#reconnect').onclick=connectMidi;
+function showCC(){$('#ccMap').textContent=ccMap.map((c,i)=>`K${i+1}=CC${c}`).join('  ')+(learning>=0?`  … K${learning+1} を回してください`:'')}
+$('#learnBtn').onclick=()=>{learning=0;learnSeen.length=0;$('#learnBtn').textContent='学習中…';showCC()};
+$('#resetCC').onclick=()=>{ccMap=[70,71,72,73,74,75,76,77];store.set('ccmap',ccMap);learning=-1;$('#learnBtn').textContent='学習スタート';knobDefs.forEach((_,i)=>drawKnob(i));showCC()};
+showCC();
+$('#padAnyCh').checked=store.get('padany',false); $('#padAnyCh').onchange=e=>store.set('padany',e.target.checked);
+
+/* ---------- start ---------- */
+function ensure(){initAudio(); if(ctx.state==='suspended') ctx.resume()}
+$('#startBtn').onclick=()=>{ensure();$('#overlay').style.display='none';connectMidi()};
+document.addEventListener('pointerdown',()=>{if(ctx&&ctx.state==='suspended')ctx.resume()});
+
+/* tabs */
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+b.dataset.tab));
+  store.set('tab',b.dataset.tab); updatePracticeView();
+});
+
+/* PC keyboard */
+const KEYMAP='awsedftgyhujk'; let pcOct=0; const pcHeld={};
+document.addEventListener('keydown',e=>{
+  if(e.repeat||e.target.tagName==='INPUT'||e.target.tagName==='SELECT') return;
+  const k=e.key.toLowerCase();
+  if(k==='z'){pcOct--;return} if(k==='x'){pcOct++;return}
+  const i=KEYMAP.indexOf(k);
+  if(i>=0){ensure();const n=60+i+pcOct*12;pcHeld[k]=n;handleNoteOn(n,95,'pc');return}
+  if(k>='1'&&k<='8'){ensure();padHit(+k-1,100,'A',35+ +k)}
+});
+document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k in pcHeld){handleNoteOff(pcHeld[k]);delete pcHeld[k]}});
+
+buildKb();
+diag();
+
+/* ---------- PRACTICE ---------- */
+const prSel=$('#practiceSel');
+function updatePracticeView(){
+  const tabActive=$('#tab-practice').classList.contains('active');
+  const m=prSel.value;
+  document.querySelectorAll('.pr').forEach(p=>p.style.display=p.id==='pr-'+m?'block':'none');
+  scaleSet=null; scaleRootPc=null; hintSet=null;
+  if(tabActive && m==='scale') applyScale();
+  if(tabActive && m==='chord' && chordHintOn) hintSet=new Set(curChord.pcs);
+  if(!(tabActive&&m==='timing')) stopMetro();
+  refreshKeys();
+}
+prSel.onchange=()=>{store.set('pr',prSel.value);updatePracticeView()};
+
+// chord quiz
+const LV=[[['',''],['m','m']],[['7','7'],['M7','M7'],['m7','m7']],[['sus4','sus4'],['dim','dim'],['aug','aug'],['m7♭5','m7♭5']]];
+const CH=Object.fromEntries(CHORDS);
+let curChord=null, chordHintOn=false, score=0, streak=0, chordLock=false;
+function newChord(){
+  const lv=+$('#chordLevel').value; let pool=[]; for(let i=0;i<lv;i++) pool=pool.concat(LV[i]);
+  const roots=$('#chordRoots').value==='white'?[0,2,4,5,7,9,11]:[...Array(12).keys()];
+  let r,s; do{r=roots[Math.floor(Math.random()*roots.length)];s=pool[Math.floor(Math.random()*pool.length)][0]}while(curChord&&curChord.r===r&&curChord.s===s);
+  curChord={r,s,pcs:CH[s].map(x=>(x+r)%12)};
+  $('#chordTarget').textContent=NAMES[r]+s; $('#chordResult').textContent=''; $('#chordResult').className='result';
+  chordHintOn=false; hintSet=null; refreshKeys(); chordLock=false;
+}
+$('#chordHint').onclick=()=>{chordHintOn=!chordHintOn;hintSet=chordHintOn?new Set(curChord.pcs):null;refreshKeys()};
+$('#chordSkip').onclick=()=>{streak=0;$('#chordStreak').textContent=0;newChord()};
+$('#chordLevel').onchange=newChord; $('#chordRoots').onchange=newChord;
+newChord();
+function checkChord(){
+  if(chordLock||!curChord) return;
+  const pcs=new Set([...held].map(n=>n%12));
+  if(pcs.size<curChord.pcs.length) return;
+  const ok=pcs.size===curChord.pcs.length && curChord.pcs.every(p=>pcs.has(p));
+  const r=$('#chordResult');
+  if(ok){chordLock=true;score++;if(!chordHintOn)streak++;$('#chordScore').textContent=score;$('#chordStreak').textContent=streak;r.textContent='正解！ 🎉';r.className='result ok';setTimeout(newChord,900)}
+  else{const d=detect(held);r.textContent=`いま弾いているのは ${d?d.name:'?'} です`;r.className='result ng';streak=0;$('#chordStreak').textContent=0}
+}
+
+// scale guide
+const SCALES={'メジャー（長音階）':[0,2,4,5,7,9,11],'ナチュラルマイナー':[0,2,3,5,7,8,10],'ハーモニックマイナー':[0,2,3,5,7,8,11],'メジャーペンタトニック':[0,2,4,7,9],'マイナーペンタトニック':[0,3,5,7,10],'ブルース':[0,3,5,6,7,10],'ドリアン':[0,2,3,5,7,9,10],'ミクソリディアン':[0,2,4,5,7,9,10]};
+NAMES.forEach((n,i)=>$('#scaleRoot').insertAdjacentHTML('beforeend',`<option value="${i}">${n}（${JP[i]}）</option>`));
+Object.keys(SCALES).forEach(k=>$('#scaleType').insertAdjacentHTML('beforeend',`<option>${k}</option>`));
+function applyScale(){const r=+$('#scaleRoot').value;scaleRootPc=r;scaleSet=new Set(SCALES[$('#scaleType').value].map(x=>(x+r)%12));$('#scaleResult').textContent=''}
+$('#scaleRoot').onchange=()=>{applyScale();refreshKeys()}; $('#scaleType').onchange=()=>{applyScale();refreshKeys()};
+
+// ear
+let earSeq=[], earPos=0, earDone=true;
+function genEar(){
+  const len=+$('#earLen').value, chr=$('#earRange').value==='chr';
+  const pool=[]; for(let n=55;n<=79;n++){if(chr||!isBlack(n%12))pool.push(n)}
+  earSeq=[]; let prev=pool[Math.floor(pool.length/2)];
+  for(let i=0;i<len;i++){let c;do{c=pool[Math.floor(Math.random()*pool.length)]}while(Math.abs(c-prev)>9||(i>0&&c===prev&&Math.random()<.7));earSeq.push(c);prev=c}
+  earPos=0; earDone=false; drawEar(); playEar();
+}
+function playEar(){
+  ensure(); const t0=ctx.currentTime+0.1;
+  earSeq.forEach((n,i)=>{setTimeout(()=>{noteOn(n,90);setTimeout(()=>{if(!held.has(n)&&voices.has(n)){killVoice(voices.get(n),0.15);voices.delete(n)}},420)},i*550)});
+}
+function drawEar(reveal){
+  $('#earSeq').innerHTML=earSeq.map((n,i)=>`<span class="${i<earPos?'ok':''}">${i<earPos||reveal?nn(n):'?'}</span>`).join('');
+}
+$('#earPlay').onclick=()=>{$('#earResult').textContent='';genEar()};
+$('#earReplay').onclick=()=>{if(earSeq.length)playEar()};
+$('#earReveal').onclick=()=>{drawEar(true);earDone=true};
+function checkEar(n){
+  if(earDone||!earSeq.length) return;
+  const r=$('#earResult');
+  if(n===earSeq[earPos]){earPos++;drawEar();if(earPos===earSeq.length){earDone=true;r.textContent='正解！ 次の問題へ';r.className='result ok';setTimeout(()=>{if(prSel.value==='ear')genEar();r.textContent=''},1300)}else{r.textContent='';}}
+  else{
+    const off=n-earSeq[earPos]; const same=n%12===earSeq[earPos]%12;
+    r.textContent=same?`音名は合っています（${NAMES[n%12]}）がオクターブ違い。最初から`:`${nn(n)} ではありません（${off>0?'もっと低い':'もっと高い'}）。最初から`; r.className='result ng'; earPos=0; drawEar();
+  }
+}
+
+function practiceNote(n){
+  if(!$('#tab-practice').classList.contains('active')) return;
+  const m=prSel.value;
+  if(m==='chord') setTimeout(checkChord,60);
+  else if(m==='ear') checkEar(n);
+  else if(m==='scale'&&scaleSet){const r=$('#scaleResult');if(!scaleSet.has(n%12)){r.textContent=`${nn(n)} はスケール外の音です`;r.className='result ng'}else{r.textContent=`${nn(n)} OK`;r.className='result ok'}}
+}
+
+// metronome / timing
+let metroOn=false, metroStart=0, nextBeat=0, beatIdx=0, metroTimer=null; const devs=[];
+function stopMetro(){metroOn=false;clearInterval(metroTimer);$('#metroBtn').textContent='▶ スタート';document.querySelectorAll('#beatDots span').forEach(s=>s.classList.remove('on'))}
+$('#metroBtn').onclick=()=>{
+  ensure();
+  if(metroOn) return stopMetro();
+  metroOn=true; $('#metroBtn').textContent='■ ストップ'; devs.length=0; drawHist();
+  metroStart=ctx.currentTime+0.15; nextBeat=metroStart; beatIdx=0;
+  metroTimer=setInterval(()=>{
+    const spb=60/(+$('#bpm').value||90);
+    while(nextBeat<ctx.currentTime+0.12){
+      const b=beatIdx%4, when=nextBeat; click(when,b===0);
+      setTimeout(()=>{document.querySelectorAll('#beatDots span').forEach((s,i)=>s.classList.toggle('on',i===b))},Math.max(0,(when-ctx.currentTime)*1000));
+      nextBeat+=spb; beatIdx++;
+    }
+  },25);
+};
+$('#bpm').onchange=()=>{if(metroOn){stopMetro();$('#metroBtn').click()}};
+function timingHit(){
+  if(!metroOn||!$('#tab-practice').classList.contains('active')||prSel.value!=='timing') return;
+  const spb=60/(+$('#bpm').value||90), div=spb/(+$('#grid').value);
+  const t=ctx.currentTime-metroStart; if(t<-div/2) return;
+  const k=Math.round(t/div), dev=(t-k*div)*1000;
+  devs.push(dev); if(devs.length>24) devs.shift();
+  const pct=Math.max(0,Math.min(100,50+dev/(div*1000/2)*50));
+  $('#tmMark').style.left=pct+'%';
+  const a=Math.abs(dev), r=$('#tmResult');
+  r.textContent=(a<20?'Perfect':a<45?'Good':'ズレ大')+`  ${dev>0?'+':''}${dev.toFixed(0)} ms ${dev<-5?'（早い）':dev>5?'（遅い）':''}`;
+  r.className='result '+(a<45?'ok':'ng');
+  $('#tmMark').style.background=a<20?'var(--ok)':a<45?'var(--warn)':'var(--red2)';
+  const avg=devs.reduce((s,x)=>s+x,0)/devs.length, sd=Math.sqrt(devs.reduce((s,x)=>s+(x-avg)**2,0)/devs.length);
+  $('#tmAvg').textContent=`${avg>0?'+':''}${avg.toFixed(0)} ms`; $('#tmSd').textContent=`${sd.toFixed(0)} ms`;
+  drawHist();
+}
+function drawHist(){$('#tmHist').innerHTML=devs.map(d=>`<span style="height:${Math.min(100,Math.abs(d)/60*100)}%;background:${Math.abs(d)<20?'var(--ok)':Math.abs(d)<45?'var(--warn)':'var(--red2)'}"></span>`).join('')}
+
+// restore
+const savedTab=store.get('tab','monitor'); const tb=document.querySelector(`#nav button[data-tab="${savedTab}"]`);
+prSel.value=store.get('pr','chord');
+if(tb) tb.click(); else updatePracticeView();
+})();
+</script>
+</body>
+</html>
