@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>愛・恋・友情の哲学 — タロットの比喩で読む</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#13111a; --panel:#1c1925; --panel2:#24202f; --line:#332d42;
+  --ink:#ece6da; --mute:#a29cae; --gold:#d9b86c; --rose:#e39aa8; --amour:#c99be8; --amitie:#8fc7b8;
+  --mincho:"Shippori Mincho",serif; --sans:"Zen Kaku Gothic New",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;-webkit-text-size-adjust:100%}
+body{background-image:radial-gradient(circle at 20% -10%,rgba(217,184,108,.08),transparent 45%),radial-gradient(circle at 110% 20%,rgba(201,155,232,.07),transparent 40%)}
+button{font:inherit}
+header{padding:28px 18px 6px;max-width:960px;margin:0 auto}
+h1{font-family:var(--mincho);font-weight:800;font-size:1.6rem;margin:0 0 4px;letter-spacing:.04em}
+h1 small{display:block;font-size:.8rem;color:var(--gold);letter-spacing:.2em;font-weight:500;margin-bottom:4px}
+.sub{color:var(--mute);font-size:.86rem;margin:0}
+.sticky{position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 86%,transparent);padding:10px 18px 14px}
+.wrap{max-width:960px;margin:0 auto}
+.search{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.search svg{flex:none;opacity:.6}
+.search input{flex:1;background:none;border:0;outline:0;color:var(--ink);font:inherit;font-size:16px}
+.search button{background:none;border:0;color:var(--mute);font-size:1.1rem;cursor:pointer;display:none}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:9px;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.lbl{flex:none;font-size:.72rem;color:var(--mute);align-self:center;width:3.4em}
+.chip{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 12px;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.chip .n{opacity:.6;margin-left:4px;font-size:.75em}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#1d1708;font-weight:700}
+.chip.c-愛.on{background:var(--amour);border-color:var(--amour)}
+.chip.c-恋.on{background:var(--rose);border-color:var(--rose)}
+.chip.c-友情.on{background:var(--amitie);border-color:var(--amitie)}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:.8rem;color:var(--mute)}
+.meta button{background:none;border:0;color:var(--gold);cursor:pointer;padding:0}
+main{max-width:960px;margin:0 auto;padding:0 18px 60px}
+
+/* カード一覧の帯 */
+.deck{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:6px 0 14px;margin:6px 0 4px}
+.deck::-webkit-scrollbar{display:none}
+.mini{flex:none;width:58px;height:92px;border-radius:7px;border:1px solid #5a4a2c;background:linear-gradient(160deg,#2b2436,#1a1622);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5px 2px;cursor:pointer;color:var(--gold)}
+.mini .r{font-family:var(--mincho);font-size:.66rem;letter-spacing:.05em}
+.mini .g{font-size:1.25rem;line-height:1}
+.mini .nm{font-size:.56rem;color:var(--ink);text-align:center;line-height:1.2}
+.mini.on{outline:2px solid var(--gold);background:linear-gradient(160deg,#4a3c22,#2a2112)}
+.mini.minor{border-color:#3d4a5a;color:#9fc0dc}
+
+h2{font-family:var(--mincho);font-size:1.05rem;color:var(--gold);margin:22px 0 10px;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.entry{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.top{display:flex;gap:14px;padding:14px;background:linear-gradient(135deg,rgba(217,184,108,.10),rgba(201,155,232,.05));border-bottom:1px solid var(--line)}
+.tcard{flex:none;width:74px;height:118px;border-radius:9px;border:1.5px solid var(--gold);background:linear-gradient(165deg,#30283d,#17131f);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7px 3px;color:var(--gold);position:relative}
+.tcard::after{content:"";position:absolute;inset:4px;border:1px solid rgba(217,184,108,.35);border-radius:6px;pointer-events:none}
+.tcard.minor{border-color:#7fa6c6;color:#a9cbe6}
+.tcard.minor::after{border-color:rgba(127,166,198,.35)}
+.tcard.rev .g{transform:rotate(180deg)}
+.tcard .r{font-family:var(--mincho);font-size:.72rem}
+.tcard .g{font-size:1.7rem;line-height:1}
+.tcard .nm{font-family:var(--mincho);font-size:.7rem;color:var(--ink);text-align:center;line-height:1.25}
+.tinfo{flex:1;min-width:0}
+.tname{font-family:var(--mincho);font-weight:700;font-size:.98rem}
+.pos{font-size:.7rem;color:var(--gold);border:1px solid rgba(217,184,108,.45);border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.tmean{font-size:.74rem;color:var(--mute);margin-top:1px}
+.metaphor{font-family:var(--mincho);font-weight:700;font-size:1.12rem;line-height:1.55;margin-top:6px}
+.body{padding:12px 14px 14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.cat{font-size:.7rem;border-radius:5px;padding:0 7px;border:1px solid}
+.cat.愛{color:var(--amour);border-color:rgba(201,155,232,.45)}
+.cat.恋{color:var(--rose);border-color:rgba(227,154,168,.45)}
+.cat.友情{color:var(--amitie);border-color:rgba(143,199,184,.45)}
+.who{font-size:.86rem;font-weight:700}
+.who span{font-weight:400;color:var(--mute);font-size:.78rem;margin-left:4px}
+.idea{font-size:.88rem;color:#d8d2c6;margin:4px 0 0}
+.lyric{margin-top:10px;padding:8px 12px;border-left:2px solid var(--rose);background:var(--panel2);border-radius:0 8px 8px 0;font-family:var(--mincho);font-size:.92rem;white-space:pre-wrap}
+.lyric b{display:block;font-family:var(--sans);font-weight:400;font-size:.68rem;color:var(--mute);margin-bottom:2px}
+mark{background:rgba(217,184,108,.32);color:inherit;border-radius:3px;padding:0 1px}
+.empty{text-align:center;color:var(--mute);padding:40px 0;display:none}
+.note{color:var(--mute);font-size:.74rem;max-width:960px;margin:0 auto;padding:0 18px 40px}
+</style>
+</head>
+<body>
+<header>
+  <h1><small>PHILOSOPHY × TAROT</small>愛・恋・友情の哲学</h1>
+  <p class="sub">哲学者や思想の言葉を、タロットカード一枚ずつの比喩に置き換えた一覧。歌詞・物語のモチーフ探しに。</p>
+</header>
+
+<div class="sticky"><div class="wrap">
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="検索（例：月、プラトン、片割れ、待つ）" autocomplete="off">
+    <button id="clr" aria-label="クリア">×</button>
+  </div>
+  <div class="row" id="catRow"><span class="lbl">テーマ</span></div>
+  <div class="row" id="arcRow"><span class="lbl">カード</span></div>
+  <div class="meta"><span id="count"></span><button id="reset">絞り込み解除</button></div>
+</div></div>
+
+<main>
+  <div class="deck" id="deck"></div>
+  <div id="list"></div>
+  <div class="empty" id="empty">該当する項目がありません</div>
+</main>
+<p class="note">※タロットの意味はライダー版の一般的な解釈にもとづく要約です。哲学者の考えは要約・意訳で、比喩と歌詞の種はこのページのための創作です。</p>
+
+<script>
+/* カード定義：key, ローマ数字/表記, 名前, 記号, 正位置の意味, 並び順, 大/小 */
+const CARDS = {
+ "愚者":["0","愚者","○","自由・始まり・無垢",0,"大"],
+ "魔術師":["I","魔術師","∞","創造・意志・始まり",1,"大"],
+ "女教皇":["II","女教皇","☽","直観・神秘・秘められた知",2,"大"],
+ "女帝":["III","女帝","♀","豊かさ・育む愛",3,"大"],
+ "皇帝":["IV","皇帝","♔","秩序・安定・責任",4,"大"],
+ "教皇":["V","教皇","✠","教え・信頼・導き",5,"大"],
+ "恋人":["VI","恋人","♡","結びつき・選択・調和",6,"大"],
+ "戦車":["VII","戦車","⚑","前進・意志・勝利",7,"大"],
+ "力":["VIII","力","❦","内なる強さ・忍耐・慈しみ",8,"大"],
+ "隠者":["IX","隠者","✧","内省・孤独・導きの光",9,"大"],
+ "運命の輪":["X","運命の輪","☸","巡り合わせ・転機",10,"大"],
+ "正義":["XI","正義","⚖","公正・均衡・誠実",11,"大"],
+ "吊るされた男":["XII","吊るされた男","⟂","試練・視点の転換・献身",12,"大"],
+ "死神":["XIII","死神","✝","終わりと再生・変容",13,"大"],
+ "節制":["XIV","節制","⚱","調和・中庸・混ざり合い",14,"大"],
+ "悪魔":["XV","悪魔","⛓","執着・束縛・誘惑",15,"大"],
+ "塔":["XVI","塔","⚡","崩壊・突然の変化・啓示",16,"大"],
+ "星":["XVII","星","★","希望・理想・癒し",17,"大"],
+ "月":["XVIII","月","☾","幻想・不安・揺らぎ",18,"大"],
+ "太陽":["XIX","太陽","☀","喜び・祝福・純粋さ",19,"大"],
+ "審判":["XX","審判","♫","目覚め・呼び声・復活",20,"大"],
+ "世界":["XXI","世界","◎","完成・統合・調和",21,"大"],
+ "カップのエース":["A","カップのエース","♥","新しい感情・愛の始まり",30,"小"],
+ "カップの2":["2","カップの2","♥","結びつき・相互の愛",31,"小"],
+ "カップの3":["3","カップの3","♥","友情・祝福・分かち合う喜び",32,"小"],
+ "カップの4":["4","カップの4","♥","倦怠・内向き・差し出されたものに気づかない",33,"小"],
+ "カップの7":["7","カップの7","♥","幻想・夢見がちな選択",34,"小"],
+ "カップの10":["10","カップの10","♥","家族・満ち足りた絆",35,"小"],
+ "カップのクイーン":["Q","カップのクイーン","♥","共感・深い感受性",36,"小"],
+ "ソードの2":["2","ソードの2","♠","拮抗・均衡した対立",40,"小"],
+ "ソードの3":["3","ソードの3","♠","心痛・別れ・悲しみ",41,"小"],
+ "ペンタクルの6":["6","ペンタクルの6","✦","分かち合い・施し",50,"小"],
+ "ペンタクルの10":["10","ペンタクルの10","✦","共同体・受け継がれる豊かさ",51,"小"]
+};
+
+/* 項目：カード, 正逆, テーマ, タロットの比喩, 哲学者, 出典, 考え, 歌詞の種 */
+const E = [
+ ["恋人","正位置","恋","恋人のカードは、一枚の絵を二つに裂いた跡","プラトン","『饗宴』（アリストファネスの話）","人間はもともと二人で一体の存在だったが、神々に半分に裂かれた。恋とは、失った片割れを探して一つに戻ろうとする欲望だという神話。","僕らは同じ絵の切れ端で\n継ぎ目だけが光っている"],
+ ["恋人","逆位置","恋","恋人を逆さにすると、選ばなかった方の道が見える","キルケゴール","『あれか、これか』","瞬間の快楽を追い続ける「美的」な生き方と、約束と持続を選ぶ「倫理的」な生き方。誘惑者は瞬間を、結婚する者は続いていく時間を選ぶ。","選ばなかった方の君が\n今も別の道で笑ってる"],
+ ["星","正位置","愛","星は、最初の一人から星空全体へ登る梯子","プラトン","『饗宴』（ディオティマの教え）","愛は一人の美しい人から始まり、美しいもの全般へ、魂の美しさへ、最後には「美そのもの」へと階段を登っていく（エロスの階梯）。","君を好きになったから\n夜空の全部が読めるようになった"],
+ ["女帝","正位置","愛","女帝の庭は勝手に実らない。手入れそのものが愛","エーリッヒ・フロム","『愛するということ』","愛は「落ちる」ものではなく、学んで身につける技術。受け取ることより与えることが中心で、配慮・責任・尊重・理解の四つから成り立つ。","水をやるのを忘れた日も\n花は僕を責めなかった"],
+ ["節制","正位置","友情","二つの杯を行き来する水。与えすぎも、受け取りすぎもない","アリストテレス","『ニコマコス倫理学』","友愛には「役に立つから」「楽しいから」「相手の人柄そのものが善いから」の三種類がある。相手のために相手の善を願う三つ目の友愛だけが長く続く。","注ぎすぎないように\n君のグラスの縁を見てる"],
+ ["運命の輪","正位置","友情","輪が回れば、利益で結ばれた友は振り落とされる","アリストテレス","『ニコマコス倫理学』","役に立つことや楽しいことで結ばれた友愛は、その理由が消えれば終わる。偶然の巡り合わせに左右される関係。","晴れの日だけの友達は\n季節と一緒に去っていった"],
+ ["カップの3","正位置","友情","三つの杯が掲げられるとき、魂の数は体の数より少ない","アリストテレス","（ディオゲネス・ラエルティオスが伝える言葉）","友とは何かと問われ、「二つの身体に宿る一つの魂」と答えたと伝えられる。","体は二つで足りないけど\n笑い声は一つでいい"],
+ ["ペンタクルの10","正位置","友情","庭に集う友こそ、受け継がれる一番の財産","エピクロス","『主要教説』","人生全体の幸福のために知恵が用意するもののうち、最も大きいのは友情を持つことだ。エピクロスは「庭園」で友と暮らしながら哲学した。","金貨は数えきれないけど\n名前を呼べる人を数えてた"],
+ ["カップの2","正位置","友情","二つの杯が触れた音に、理由はいらない","モンテーニュ","『エセー』「友情について」","親友ラ・ボエシをなぜ愛したのかと問われれば、「それが彼だったから、それが私だったから」としか答えられない。理由を超えた友情。","どうしてって聞かれても\n君だったからとしか言えない"],
+ ["戦車","正位置","友情","二頭のスフィンクスは、向かい合わずに同じ方向へ走る","C.S.ルイス","『四つの愛』","恋人たちは向かい合って互いを見つめるが、友は肩を並べて同じものを見つめる。友情は「君もそれが好きなの？」から始まる。","向かい合わなくていい\n同じ地平線を見てれば"],
+ ["ソードの3","正位置","愛","剣が三本刺さった心臓は、まだ脈を打っている証","C.S.ルイス","『四つの愛』","何かを愛するとは、傷つきうる存在になること。心を誰にも渡さず安全に閉じ込めれば、やがてその心は壊れなくなる代わりに、何も感じなくなる。","傷つかない場所に\n心をしまっておいたら\n鍵ごと錆びてしまった"],
+ ["カップの10","正位置","愛","虹の下の家族は、選ばずに一緒になった人たち","C.S.ルイス","『四つの愛』","四つの愛のうち「愛情（ストルゲー）」は、家族やなじみの相手への慣れ親しんだ愛。いちばん控えめで、いちばん日常に溶けている。","当たり前すぎて\nありがとうを言いそびれる"],
+ ["力","正位置","愛","獅子をなだめる手は、気分ではなく決意でできている","キルケゴール","『愛のわざ』","「隣人を愛せよ」は命令＝義務だからこそ、気分や好みに左右されず変わらない。好みから生まれる恋は移ろうが、義務としての愛は揺るがない。","好きじゃない日も\n君の手を離さないと決めた"],
+ ["悪魔","正位置","恋","悪魔の鎖は、自分で選んだと思っている首輪","ショーペンハウアー","『意志と表象としての世界』","恋は個人の幸せのためではなく、種（生への意志）が次の世代を生むために個人をだます策略。だから恋は思い通りにならず、成就しても幻滅しやすい。","選んだつもりの恋だった\n鎖の先は見えなかった"],
+ ["月","正位置","恋","月明かりは、枯れ枝もダイヤモンドに見せる","スタンダール","『恋愛論』","塩坑に投げ込んだ枯れ枝が、数か月で輝く結晶に覆われる。恋する人も同じように、相手のあらゆる点に完璧さを「結晶」させていく（結晶作用）。","君の欠点まで光ってた\nあれは月のせいだった"],
+ ["吊るされた男","正位置","恋","自由ごと抱きしめようとして、逆さに吊られたまま","サルトル","『存在と無』","愛する人は、相手を物として所有したいのではなく、相手の「自由な心」そのものに自分を選ばせ続けたい。自由を所有しようとする矛盾が、愛を不安定にする。","縛ったら君じゃなくなる\nほどいたら君は行ってしまう"],
+ ["世界","正位置","愛","世界の輪は、閉じ込める檻ではなく、二人が踊る余白","ボーヴォワール","『第二の性』","真正な愛とは、二つの自由が互いを認め合うこと。どちらかが相手に自分を捧げきって依存するのではなく、それぞれが自分の人生の主人のまま並び立つ。","君の円の中じゃなく\n隣の円で踊っていたい"],
+ ["女教皇","正位置","愛","女教皇の膝の巻物は、最後まで開かれない","レヴィナス","『全体性と無限』","他者の「顔」は、どれだけ知ろうとしても理解し尽くせない。その分からなさを尊重し、自分のものにしないことが、他者に向き合う倫理の始まり。","全部わかったと思った日に\n君を一番見失っていた"],
+ ["魔術師","正位置","恋","魔術師の机の上で、偶然が必然に書き換えられる","アラン・バディウ","『愛の礼賛』","愛は偶然の「出会い」という出来事から始まり、「一人」ではなく「二人」の視点から世界を作り直していく、粘り強い持続の営み。","たまたま隣にいた君を\n運命と呼ぶまで続けよう"],
+ ["カップの4","正位置","恋","差し出された杯に気づかないほど、来ない一杯を待っている","ロラン・バルト","『恋愛のディスクール・断章』","恋する者とは「待つ者」だ。電話や約束の時間を待つあいだ、恋人は勝手に不安と想像を膨らませ、相手がいない場所で恋を演じ続ける。","既読がつくまでの時間で\n僕は君を三回失った"],
+ ["太陽","正位置","愛","太陽の下の子どもは、もう規則を見ていない","アウグスティヌス","『ヨハネの手紙一講解』","「愛せ、そして汝の欲することをなせ」。本当に愛しているなら、その愛から出る行いは規則で縛らなくても正しくなる。","正しさの地図はいらない\n君を照らす方へ行けばいい"],
+ ["審判","正位置","恋","審判のラッパは、理屈より先に鳴る","パスカル","『パンセ』","「心には、理性の知らないそれ自身の理由がある」。人を好きになる理由は、論理では説明しきれない。","理由を並べる前に\n胸の奥で何かが起きた"],
+ ["塔","正位置","愛","雷は、いちばん高く積み上げたところに落ちる","仏教","四苦八苦「愛別離苦」","生きる苦しみの一つに「愛する者と別れる苦しみ」がある。深く愛するほど、別れの痛みも大きくなる。","高く積んだ思い出ほど\n崩れる音が大きかった"],
+ ["死神","正位置","恋","死神は終わりではない。散るから美しいと教えるだけ","本居宣長","「もののあはれ」論","移ろいゆくものに触れて心が深く動くこと。とりわけ恋は、人の心を最も強く動かす「もののあはれ」だとされる。","散ると知ってたから\nあの春を覚えてる"],
+ ["皇帝","正位置","友情","皇帝の玉座は、近づきすぎない距離で守られている","カント","『人倫の形而上学』","友情は、相手に近づこうとする「愛」と、相手との距離を保とうとする「尊敬」の均衡で成り立つ。近すぎても遠すぎても壊れる理想の関係。","肩が触れない距離で\nずっと隣を歩いてる"],
+ ["教皇","正位置","友情","教皇の前に立つ弟子のように、まっすぐ言ってくれる友を持て","孔子","『論語』季氏篇","ためになる友は三種類（正直な友、誠実な友、物知りな友）。損になる友も三種類（体裁ばかりの友、こびへつらう友、口先だけの友）。","耳の痛いことを言う君が\n一番の味方だった"],
+ ["愚者","正位置","友情","愚者の水筒には、甘い酒ではなく水が入っている","荘子","『荘子』山木篇","「君子の交わりは淡きこと水のごとし、小人の交わりは甘きこと醴（甘酒）のごとし」。淡い付き合いほど長く続き、甘すぎる付き合いはすぐ飽きて終わる。","甘くないから飽きなかった\n水みたいな僕らの話"],
+ ["ソードの2","正位置","友情","交差した二本の剣は、互いを研ぐためにある","ニーチェ","『ツァラトゥストラはこう言った』「友について」","友の中に、最良の敵を持つべきだ。慰め合うだけでなく、互いを超えさせようとぶつかり合うのが本当の友。","君に負けたくなくて\n僕はここまで来られた"],
+ ["正義","正位置","友情","正義の天秤は、友のためでも傾けない","キケロ","『友情について』","友情は徳（善さ）なしには成り立たない。恥ずべきことを友に頼まず、頼まれても行わないことが、友情の第一の掟。","君の味方だからこそ\nその嘘には乗らない"],
+ ["カップの7","正位置","恋","雲の上の七つの杯。どれが本物の恋か、誰も見たことがない","ラ・ロシュフコー","『箴言集』","「真の恋は幽霊のようなものだ。誰もがその話をするが、見た者はほとんどいない」。","みんなが語る本物の恋を\n僕はまだ見たことがない"],
+ ["カップのクイーン","正位置","恋","杯をなみなみと満たさず、少しだけ余白を残して差し出す女王","九鬼周造","『「いき」の構造』","「いき」は、相手に近づこうとする「媚態」、張りのある「意気地」、執着しない「諦め」の三つでできている。近づきすぎない距離にこそ色気が宿る。","全部は言わないでおく\nその余白に君がいる"],
+ ["カップのエース","正位置","愛","杯からあふれた水は、「それ」ではなく「あなた」に注がれる","マルティン・ブーバー","『我と汝』","人は他者を、利用する「それ」として扱うこともできるし、全存在で向き合う「汝（あなた）」として出会うこともできる。本当の関係は「我と汝」の出会いの中にある。","役に立つかなんて忘れて\nただ君と目が合った"],
+ ["隠者","正位置","愛","二つのランプは、互いの孤独を照らし合うだけで消し合わない","リルケ","『若き詩人への手紙』","愛とは、二つの孤独が互いを守り、境界を接し、挨拶を交わし合うこと。相手の孤独を消すのではなく、見守り合うのが愛。","君の孤独に触れないまま\n隣で灯りをともしてる"],
+ ["ペンタクルの6","正位置","友情","天秤で量らずに分け与える手。友のように、すべての人へ","仏教","「慈悲」の思想","「慈」は、友のような親しみの心で相手の幸せを願うこと（サンスクリットでは「友」と同じ語源をもつ）。見返りを求めずに分け与える愛。","返してもらうつもりなんて\nはじめからなかった"]
+];
+
+const CATS=["愛","恋","友情"];
+const state={q:"",cat:null,arc:null,card:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hl=s=>{const t=esc(s);if(!state.q)return t;const q=esc(state.q).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return t.replace(new RegExp(q,"gi"),m=>`<mark>${m}</mark>`)};
+const ord=e=>CARDS[e[0]][4]*2+(e[1]==="逆位置"?1:0);
+const DATA=[...E].sort((a,b)=>ord(a)-ord(b));
+
+function cardSvg(key,rev){
+  const c=CARDS[key];
+  return `<div class="tcard ${c[5]==="小"?"minor":""} ${rev?"rev":""}"><span class="r">${esc(c[0])}</span><span class="g">${c[2]}</span><span class="nm">${esc(c[1])}</span></div>`;
+}
+function match(e){
+  if(state.cat&&e[2]!==state.cat)return false;
+  if(state.arc&&CARDS[e[0]][5]!==state.arc)return false;
+  if(state.card&&e[0]!==state.card)return false;
+  if(state.q){const c=CARDS[e[0]];const hay=[...e,c[1],c[3]].join(" ").toLowerCase();if(!hay.includes(state.q.toLowerCase()))return false}
+  return true;
+}
+function chips(){
+  const mk=(row,label,on,fn,n,cls)=>{const b=document.createElement("button");b.className="chip"+(cls?" "+cls:"")+(on?" on":"");b.innerHTML=esc(label)+(n!=null?`<span class="n">${n}</span>`:"");b.onclick=fn;row.appendChild(b)};
+  const cr=$("#catRow"),ar=$("#arcRow");
+  cr.querySelectorAll(".chip").forEach(x=>x.remove());ar.querySelectorAll(".chip").forEach(x=>x.remove());
+  CATS.forEach(c=>mk(cr,c,state.cat===c,()=>{state.cat=state.cat===c?null:c;render()},E.filter(e=>e[2]===c).length,"c-"+c));
+  [["大","大アルカナ"],["小","小アルカナ"]].forEach(([k,l])=>mk(ar,l,state.arc===k,()=>{state.arc=state.arc===k?null:k;state.card=null;render()},E.filter(e=>CARDS[e[0]][5]===k).length));
+}
+function deck(){
+  const used=[...new Set(DATA.map(e=>e[0]))];
+  $("#deck").innerHTML=used.filter(k=>!state.arc||CARDS[k][5]===state.arc).map(k=>{const c=CARDS[k];return `<div class="mini ${c[5]==="小"?"minor":""} ${state.card===k?"on":""}" data-card="${esc(k)}"><span class="r">${esc(c[0])}</span><span class="g">${c[2]}</span><span class="nm">${esc(c[1])}</span></div>`}).join("");
+}
+function render(){
+  chips(); deck();
+  $("#clr").style.display=state.q?"block":"none";
+  const filtered=!!(state.q||state.cat||state.arc||state.card);
+  $("#reset").style.display=filtered?"inline":"none";
+  const rows=DATA.filter(match);
+  const groups=[["大","大アルカナ"],["小","小アルカナ"]];
+  let html="";
+  for(const [k,l] of groups){
+    const g=rows.filter(e=>CARDS[e[0]][5]===k); if(!g.length) continue;
+    html+=`<h2>${l}</h2><div class="grid">`+g.map(e=>{const c=CARDS[e[0]];return `<article class="entry">
+      <div class="top">${cardSvg(e[0],e[1]==="逆位置")}<div class="tinfo"><div class="tname">${hl(c[1])}<span class="pos">${esc(e[1])}</span></div><div class="tmean">${hl(c[3])}</div><div class="metaphor">${hl(e[3])}</div></div></div>
+      <div class="body"><div class="tags"><span class="cat ${e[2]}">${esc(e[2])}</span></div>
+      <div class="who">${hl(e[4])}<span>${hl(e[5])}</span></div>
+      <p class="idea">${hl(e[6])}</p>
+      <div class="lyric"><b>歌詞の種</b>${hl(e[7])}</div></div></article>`}).join("")+`</div>`;
+  }
+  $("#list").innerHTML=html;
+  $("#empty").style.display=html?"none":"block";
+  $("#count").textContent=filtered?`${rows.length} 件`:`全 ${E.length} 件・カード ${new Set(E.map(e=>e[0])).size} 枚`;
+}
+$("#deck").addEventListener("click",e=>{const m=e.target.closest("[data-card]");if(!m)return;state.card=state.card===m.dataset.card?null:m.dataset.card;render();window.scrollTo({top:$("#list").offsetTop-200,behavior:"smooth"})});
+$("#q").addEventListener("input",e=>{state.q=e.target.value.trim();render()});
+$("#clr").onclick=()=>{$("#q").value="";state.q="";render()};
+$("#reset").onclick=()=>{$("#q").value="";Object.assign(state,{q:"",cat:null,arc:null,card:null});render()};
+render();
+</script>
+</body>
+</html>

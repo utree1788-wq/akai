@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>哲学用語ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f2; --paper:#fff; --ink:#2a2530; --mute:#7c7584; --line:#e8e1d8;
+  --pink:#d63a86; --pinkSoft:#fbe3ef; --anc:#c2622d; --mod:#3a7bb8; --con:#7b4fc0; --jp:#2f8f6d;
+  --mincho:"Shippori Mincho",serif; --sans:"Zen Kaku Gothic New",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.8;-webkit-text-size-adjust:100%}
+button{font:inherit}
+header{padding:28px 18px 6px;max-width:900px;margin:0 auto}
+h1{font-family:var(--mincho);font-weight:800;font-size:1.65rem;margin:0 0 2px;letter-spacing:.05em}
+h1 em{font-style:normal;color:var(--pink)}
+.sub{color:var(--mute);font-size:.86rem;margin:0}
+.sticky{position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 86%,rgba(250,247,242,0));padding:10px 18px 14px}
+.wrap{max-width:900px;margin:0 auto}
+.search{display:flex;gap:8px;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.search:focus-within{border-color:var(--pink)}
+.search svg{flex:none;opacity:.5}
+.search input{flex:1;background:none;border:0;outline:0;color:var(--ink);font:inherit;font-size:16px}
+.search button{background:none;border:0;color:var(--mute);font-size:1.1rem;cursor:pointer;display:none}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:9px;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:3px 12px;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.chip .n{opacity:.55;margin-left:4px;font-size:.75em}
+.chip.on{color:#fff;border-color:transparent;font-weight:700}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:.8rem;color:var(--mute)}
+.meta button{background:none;border:0;color:var(--pink);cursor:pointer;padding:0}
+main{max-width:900px;margin:0 auto;padding:0 18px 70px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.toc a{font-size:.8rem;color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:2px 9px}
+.toc a:hover{border-color:var(--pink)}
+h2{font-family:var(--mincho);font-size:1.05rem;margin:26px 0 10px;display:flex;align-items:center;gap:8px}
+h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:currentColor}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.term{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;scroll-margin-top:190px;transition:box-shadow .3s}
+.term.flash{box-shadow:0 0 0 3px var(--pink)}
+.thead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.tname{font-family:var(--mincho);font-weight:800;font-size:1.35rem;line-height:1.35;margin:0}
+.yomi{font-size:.72rem;color:var(--mute);letter-spacing:.08em}
+.who{flex:none;text-align:right;font-size:.78rem;font-weight:700}
+.who span{display:block;font-weight:400;color:var(--mute);font-size:.7rem}
+.one{margin:10px 0 0;padding:8px 12px;background:var(--pinkSoft);border-radius:10px;font-weight:700;font-size:.92rem;color:#7a1f4c}
+dl{margin:10px 0 0;display:grid;grid-template-columns:4.2em 1fr;gap:2px 8px;font-size:.78rem}
+dt{color:var(--mute)}
+dd{margin:0}
+.exp{font-size:.9rem;margin:10px 0 0}
+ul.pts{margin:8px 0 0;padding-left:1.2em;font-size:.84rem}
+ul.pts li{margin:2px 0}
+ul.pts b{color:var(--pink)}
+.meta2{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
+.mt{font-family:var(--mincho);font-size:.98rem}
+.mt small,.ly small{display:block;font-family:var(--sans);font-size:.68rem;color:var(--mute)}
+.ly{font-family:var(--mincho);font-size:.92rem;white-space:pre-wrap;color:#5a4a60}
+.rel{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.rel small{font-size:.68rem;color:var(--mute)}
+.rel a{font-size:.76rem;color:var(--pink);background:var(--pinkSoft);border-radius:6px;padding:0 8px;text-decoration:none}
+.pg{font-size:.68rem;color:var(--mute);margin-top:8px;text-align:right}
+mark{background:#ffe08a;color:inherit;border-radius:3px;padding:0 1px}
+.empty{text-align:center;color:var(--mute);padding:40px 0;display:none}
+.note{color:var(--mute);font-size:.72rem;max-width:900px;margin:0 auto;padding:0 18px 40px}
+</style>
+</head>
+<body>
+<header>
+  <h1>哲学用語<em>ノート</em></h1>
+  <p class="sub">ロゴスから無分別智まで。用語ごとに「ひとことで」「解説」「比喩」をまとめた自分用の辞典。</p>
+</header>
+
+<div class="sticky"><div class="wrap">
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="検索（例：愛、ニーチェ、監視、夕日）" autocomplete="off">
+    <button id="clr" aria-label="クリア">×</button>
+  </div>
+  <div class="row" id="eraRow"></div>
+  <div class="row" id="whoRow"></div>
+  <div class="meta"><span id="count"></span><button id="reset">絞り込み解除</button></div>
+</div></div>
+
+<main>
+  <div class="toc" id="toc"></div>
+  <div id="list"></div>
+  <div class="empty" id="empty">該当する用語がありません</div>
+</main>
+<p class="note">※スキャンした本の内容をもとに、要点を自分の言葉でまとめ直したものです（ページ番号は元の本の掲載ページ）。比喩と歌詞の種はこのノートのための創作です。</p>
+
+<script>
+const ERAS=[
+ {id:"anc",label:"西洋哲学・古代",color:"var(--anc)"},
+ {id:"mod",label:"西洋哲学・近代",color:"var(--mod)"},
+ {id:"con",label:"西洋哲学・現代",color:"var(--con)"},
+ {id:"jp",label:"日本哲学",color:"var(--jp)"}
+];
+/* id, era, 用語, 読み, 人物, 文献, ひとことで, 項目(dl), 解説, ポイント[], 比喩, 歌詞の種, 関連id[], ページ */
+const T=[
+ {id:"logos",era:"anc",name:"ロゴス",who:"タレスなど",book:"古代ギリシャの自然哲学",one:"世界を神話ではなく、筋道の通った理屈で理解しようとする考え方。",
+  dl:[["意味","言葉・論理・秩序・理性（ギリシャ語）"],["語源","「拾い集める」という意味の動詞 legein"],["対義語","ミュトス（神話）、パトス（情念）"]],
+  exp:"雷も季節の移り変わりも、それまでは神々の物語で説明されていた。古代ギリシャの哲学者たちはそれをやめ、自然を合理的に説明しようとした。この姿勢がロゴスで、哲学の出発点になった。",
+  pts:[],meta:"神話の絵本を閉じて、設計図を広げること",lyric:"神様のせいにしてた雷を\n今夜は数式で数えてみる",rel:["episteme-p"],pg:"P031"},
+ {id:"psyche",era:"anc",name:"魂への配慮",yomi:"プシュケー",who:"ソクラテス",book:"プラトン『ソクラテスの弁明』",one:"お金や名声より、まず自分の魂をよくすることに気を配れ。",
+  dl:[["意味","幸福のためには、優れた魂を持つことが必要だということ"],["メモ","ソクラテスにとって「善く生きる」ことと同じ意味"]],
+  exp:"富・健康・名誉だけでは心の平安は得られない。それらは優れた魂によって正しく使われたときにだけ、幸せを生む。ところが当時のアテナイの人々は、財産や評判ばかりに関心を向け、いちばん大切な魂をおろそかにしていた。ソクラテスはそれを批判した。",
+  pts:["<b>主知主義</b>：何が善で何が悪か、何が美しいかを正しく知れば、魂は優れたものになる。だから「知ること」を最も大切にする考え方。"],
+  meta:"宝石箱は毎日磨くのに、中に住む自分は埃をかぶったまま",lyric:"拍手の数を数えてた\n心の声は聞こえないまま",rel:["episteme-p","mesotes"],pg:"P046–047"},
+ {id:"doxa",era:"anc",name:"ドクサ",who:"プラトン",book:"『国家』ほか",one:"五感からの情報を、考えずにそのまま信じ込んだ思い込み。",
+  dl:[["意味","思い込み・臆見（おっけん）"],["対義語","エピステーメー（プラトンの場合）"],["メモ","ドクサとエピステーメーの区別は、パルメニデスにも見られる"]],
+  exp:"目・耳・鼻・舌・肌から入ってきた情報を、理性で吟味しないまま「そういうものだ」と受け入れてしまう。プラトンはこの状態をドクサと呼んだ。理性が居眠りしているあいだに出来上がる知識もどき。",
+  pts:[],meta:"理性が眠っているあいだに、五感が勝手に書いた日記",lyric:"見たままを信じてた\n君の笑顔の裏までは",rel:["episteme-p"],pg:"P050"},
+ {id:"episteme-p",era:"anc",name:"エピステーメー",yomi:"プラトン",who:"プラトン",book:"『国家』ほか",one:"理性で吟味して得られる、誰もが納得できる客観的な知識。",
+  dl:[["意味","客観的・学問的な知識"],["対義語","ドクサ（プラトンの場合）"],["メモ","アリストテレスでは、真なる知識を認識する能力を指す"]],
+  exp:"思い込み（ドクサ）を理性で吟味し、退けた先に手に入るのがエピステーメー。プラトンは、善く生きるにはドクサを捨ててエピステーメーを得る必要があると考えた。正しい知識があれば、根拠のない恐れにも振り回されなくなる（「人魂」も正体がわかれば怖くない）。",
+  pts:[],meta:"思い込みの雲に虫眼鏡を向けると、ただの影だったとわかる",lyric:"怖かったのは闇じゃなくて\n闇の名前を知らなかったこと",rel:["doxa","episteme-f","psyche"],pg:"P051"},
+ {id:"eros-p",era:"anc",name:"エロス",yomi:"プラトン",who:"プラトン",book:"『パイドロス』",one:"魂が、かつて見た「美そのもの」を懐かしんで求める純粋な愛。",
+  dl:[["関連","想起説"],["メモ","「プラトニック・ラブ（精神的な恋）」の語源は、プラトンのエロス論"]],
+  exp:"プラトンによれば、魂は生まれる前にイデア（ものごとの真の姿）を見ていたが、生まれるときにほとんど忘れてしまう。それでも美しい景色に心を動かされるのは、魂がかつて見た美のイデアを思い出すから。美や完全さに憧れ、善を目指そうとするこの力がエロスで、純粋な愛＝純愛を意味する。",
+  pts:["ギリシャ語で「愛」と訳される言葉は3つ：<b>エロス</b>（純愛）、<b>フィリア</b>（友愛）、<b>アガペー</b>（無償の愛）。"],
+  meta:"初めて見た夕日なのに、なぜか懐かしいと感じる理由",lyric:"初めて会った気がしないのは\n生まれる前に君を見てたから",rel:["eros-f","mesotes"],pg:"P057"},
+ {id:"mesotes",era:"anc",name:"中庸",yomi:"ちゅうよう",who:"アリストテレス",book:"『ニコマコス倫理学』",one:"やりすぎでも足りなさすぎでもない、ちょうどいいところを選ぶ精神。",
+  dl:[["関連","知性的徳・倫理的徳"],["メモ","中庸を選ぶための判断力を「思慮（フロネーシス）」と呼んだ"]],
+  exp:"アリストテレスは、幸福に生きるには「倫理的徳」が大切だと考えた。知識や技術を持つだけでは足りず、いつも中庸を選ぶ習慣（エートス）を身につけるべきだという。",
+  pts:["無謀 ↔ <b>勇気</b> ↔ 臆病","虚栄 ↔ <b>誇り</b> ↔ 卑屈","鈍感 ↔ <b>おおらか</b> ↔ 神経質"],
+  meta:"綱渡りの真ん中は、立ち止まっていては保てない",lyric:"強がりと弱音のあいだに\nちょうどいい声を探してる",rel:["psyche"],pg:"P072"},
+ {id:"nihilism",era:"mod",name:"ニヒリズム",who:"ニーチェ",book:"『力への意志』",one:"それまで信じてきた価値が崩れ、生きる目的を見失った状態（虚無主義）。",
+  dl:[["意味","既存の価値を否定する立場"],["関連","力への意志"],["メモ","日本語では「虚無主義」などと訳される"]],
+  exp:"産業革命以降、工業化は公害や過酷な労働などの問題を生み、「文明の進歩は人を幸せにする」という信念が揺らいだ。さらに近代の合理性は、道徳の土台だったキリスト教の力を弱めていく。心のよりどころを失った時代を、ニーチェは「神は死んだ」と宣言して言い表した。",
+  pts:["<b>受動的ニヒリズム</b>：価値の崩壊に打ちひしがれ、「もうどうでもいい」となる。","<b>能動的ニヒリズム</b>：これまでの価値が間違っていたなら、自分で新しい価値を作ろうとする。"],
+  meta:"地図が燃えた夜。座り込むか、星を見て歩き出すか",lyric:"正解が全部燃えたなら\n今日から僕が決めていい",rel:["eternal"],pg:"P212–213"},
+ {id:"eternal",era:"mod",name:"永劫回帰",yomi:"えいごうかいき",who:"ニーチェ",book:"『ツァラトゥストラ』",one:"世界はまったく同じ形で、永遠に何度でも繰り返される。",
+  dl:[["関連","ニヒリズム、超人"],["メモ","スイスのシルヴァプラーナ湖畔を散歩中に着想したといわれる"]],
+  exp:"いくつかの石を地面にばらまく行為を無限に繰り返せば、いつか同じ配置が何度も現れる。世界も有限の原子の組み合わせにすぎず、時間が無限に続くなら、「今とまったく同じ世界」は過去にも未来にも繰り返し現れるはず。歴史はゴールに向かってまっすぐ進むのではなく、円を描いて回り続ける。そこにあるのは進歩ではなく、繰り返される変化だけ。",
+  pts:["キリスト教やヘーゲルの歴史観：目的に向かって進歩する直線。","ニーチェの歴史観：円環運動の中でただ変化する。"],
+  meta:"同じ曲が永遠にリピートされても、この一曲をもう一度選べるか",lyric:"何度巻き戻されたって\nこの夜をまた選ぶよ",rel:["nihilism"],pg:"P220–221"},
+ {id:"id-ego",era:"mod",name:"エス｜自我｜超自我",yomi:"イド／エゴ／スーパーエゴ",who:"フロイト",book:"『自我とエス』",one:"心は「欲望」「ブレーキ」「調整役」の三つがせめぎ合ってできている。",
+  dl:[["関連","無意識、エロス｜タナトス"],["メモ","精神の安定を保つための自我の働きを「防衛機制」という"]],
+  exp:"エス（イド）は本能的な欲動（リビドー）がたまった無意識の領域、超自我はそれを抑える道徳的な心。自我はこの二つのあいだでバランスを取るために、生まれた後に育っていく。デカルトが考えたような揺るがない「私」ではなく、無意識に揺さぶられる不安定な存在だ。",
+  pts:["乳児にあるのはエスだけ。","母への愛情と父への嫉妬（<b>エディプス・コンプレックス</b>）を経て、エスを抑える<b>超自我</b>が生まれる。","両者を調整する<b>自我</b>が生まれ、エスのエネルギーを芸術などへ<b>昇華</b>させる。"],
+  meta:"暴れ馬と、厳しい御者の声。そのあいだで手綱を握るのが私",lyric:"叫びたい僕と止める僕\nそのあいだで歌ができた",rel:["eros-f"],pg:"P225"},
+ {id:"eros-f",era:"mod",name:"エロス｜タナトス",yomi:"フロイト",who:"フロイト",book:"『快感原則の彼岸』",one:"人の中には「生きようとする力」と「無に還ろうとする力」が同居している。",
+  dl:[["関連","無意識、エス｜自我｜超自我"],["メモ","快感原則と現実原則では説明できない行動を説明するために提示した"]],
+  exp:"エスは快楽だけを求める「快感原則」に、自我と超自我は社会で生きるための「現実原則」に従う。晩年のフロイトは、それだけでは説明できない行動があるとして、破壊や死、何もない状態へ向かう欲動を考えた。",
+  pts:["<b>エロス（生の欲動）</b>：性や自己保存など、生命を維持・発展させようとする欲動。","<b>タナトス（死の欲動）</b>：破壊や死、何もない状態へ向かう欲動。"],
+  meta:"花を育てる手と、積み木を崩したくなる手は、同じ一本の手",lyric:"抱きしめたい気持ちと\n壊したい気持ちが同じ温度",rel:["id-ego","eros-p"],pg:"P226"},
+ {id:"episteme-f",era:"con",name:"エピステーメー",yomi:"フーコー",who:"フーコー",book:"『言葉と物』",one:"時代ごとにまったく異なる「ものの見方の枠組み」。",
+  dl:[["意味","時代ごとに異なる知の枠組み"],["関連","人間の終焉"],["メモ","古代ギリシャでは「学問的な知識」を意味した言葉"]],
+  exp:"フーコーは、人の考え方は古代から連続して進歩してきたのではなく、時代ごとにまったく異なる枠組みに入れ替わってきたと考えた。たとえば「狂気」は、中世では常人には見えない真理を語るものとして受け入れられていたが、近代になると、労働力にならない非理性として社会から切り離され、隔離されるようになった。",
+  pts:["<b>16世紀以前</b>：ものの類似や、自然に隠された「しるし」を読み解くことが重要。","<b>17〜18世紀</b>：目に見える特徴で区別し、表のように分類することが重要。","<b>19世紀以降</b>：器官の働きや「生命」「人間」という概念が生まれ、人間について考えることが重要に。","架空の中国の百科事典の「動物の分類」は、現代の私たちには意味不明。未来の人には、今の科学がそう見えるかもしれない。"],
+  meta:"時代ごとに掛け替えられる、本人には見えない眼鏡",lyric:"百年後の誰かが笑うかな\n僕らの当たり前を",rel:["episteme-p","panopticon"],pg:"P352–353"},
+ {id:"panopticon",era:"con",name:"パノプティコン",who:"フーコー",book:"『監獄の誕生』",one:"いつも見られている気がして、自分から規律に従ってしまう仕組み。",
+  dl:[["関連","生の権力"],["メモ","功利主義の祖ベンサムが考案した監獄の設計。フーコーが権力論として読み解いた"]],
+  exp:"円形に並んだ独房の中央に監視塔がある。塔からは囚人が見えるが、囚人からは監視者が見えない。そのため囚人は、実際に見られていなくても常に監視を意識し、やがて自分から規律を守るようになる。フーコーは、民主主義が生み出した権力（生の権力）が私たちの常識を形づくる様子を、この監獄にたとえた。",
+  pts:["<b>パノプティコン効果</b>：会社・学校・病院・地域など、日常のあらゆる場所で「見られている」意識が働き、人は監視される側であると同時に監視する側にもなる。","その結果、異なる価値観を持つ人を「狂人」として排除するようになる、とフーコーは指摘した。"],
+  meta:"誰も座っていない監視塔に、毎朝お辞儀をしている",lyric:"誰にも見られてないのに\n笑い方を選んでた",rel:["episteme-f","simulacre"],pg:"P356–357"},
+ {id:"simulacre",era:"con",name:"シミュラークル",who:"ボードリヤール",book:"『シミュラークルとシミュレーション』",one:"もとになる本物（オリジナル）を持たないコピー。",
+  dl:[["意味","オリジナルとコピーの区別がなくなったもの"],["関連","ポストモダン"],["メモ","フランス語で「まがいもの」の意味"]],
+  exp:"現代は記号を消費する時代。もともと像（コピー）は現実のオリジナルをまねたものだったが、やがて現実のオリジナルを持たない像が次々と生まれるようになる。ゲームの街並みやアニメのキャラクターは、いかにも現実のようでも、もとになるオリジナルがない。こうした像がシミュラークルで、それを作り出す過程がシミュレーション。",
+  pts:["<b>ハイパーリアル</b>：オリジナルなき像が現実の中にあふれ、何が本物で何がコピーか区別がつかなくなった状態。"],
+  meta:"誰の顔も写していない肖像画が、本人より有名になる",lyric:"本物の夏を知らないまま\n画面の夏を懐かしんでる",rel:["panopticon"],pg:"P350–351"},
+ {id:"second-sex",era:"con",name:"第二の性",who:"ボーヴォワール",book:"『第二の性』",one:"「人は女に生まれるのではない、女になるのだ」という視点。",
+  dl:[["意味","女性が歴史的・社会的に「他者」として位置づけられてきたこと"],["メモ","後のジェンダー研究に大きな影響を与えた"]],
+  exp:"社会の中で「人間」として中心に置かれてきたのは男性で、女性はその相手となる他者＝「第二の性」として扱われてきた、とボーヴォワールは指摘した。「女性らしさ」は生まれつきのものではなく、周りからの言葉やしつけによって、後から文化的・社会的に作られていくという。",
+  pts:[],meta:"生まれたときは白紙の台本に、周りが役名を書き込んでいく",lyric:"誰かが書いた役のまま\n拍手をもらうのはもうやめる",rel:["gender"],pg:"P370"},
+ {id:"gender",era:"con",name:"ジェンダー",who:"バトラー",book:"『ジェンダー・トラブル』",one:"社会や文化によって作られた性差。",
+  dl:[["意味","社会的・文化的に形成された性別"],["メモ","ジェンダー研究は、本質的とされてきた性別が社会的・歴史的に作られてきたことを示した"]],
+  exp:"生物学的な性差を「セックス」、社会的・文化的に形成された性差を「ジェンダー」と呼ぶ。「女性は家事が得意」「女性は感情的」といった決めつけには、「だから〜すべき」という裏のメッセージが隠れている。バトラーはさらに、生物学的とされるセックスでさえ、すでに社会の見方が入り込んでいる（セックスはつねにすでにジェンダーである）と考えた。",
+  pts:["「男／女」という分け方そのものも、言語や文化の枠組みの影響を受けている。","例：「哺乳類」という分類名は、授乳する性を思い起こさせる言葉が選ばれている。科学の用語でさえ社会の見方の影響を受けて作られている。"],
+  meta:"自然の地形だと思っていた国境線も、誰かが引いた線だった",lyric:"生まれつきだと思ってた\nその線は誰の手書き？",rel:["second-sex"],pg:"P372–373"},
+ {id:"pure-exp",era:"jp",name:"純粋経験",yomi:"じゅんすいけいけん",who:"西田幾多郎",book:"『善の研究』",one:"「私」と「世界」に分かれる前の、ただ感じている瞬間こそが本当の実在。",
+  dl:[["関連","主客未分、善"],["メモ","美しい音楽に心を奪われて我を忘れる瞬間を、純粋経験の例としてあげている"]],
+  exp:"西洋近代哲学では、まず「私（主観）」と「世界（客観）」があり、私が世界を経験すると考える。西田は逆に、まず経験があり、そこから私と世界が分かれてくると考えた。美しい夕日を見た瞬間には、ただ「美しい」という直接の経験だけがある。後から「私は夕日を見ている」と振り返ったときに、初めて私と夕日の区別が生まれる。",
+  pts:["主観と客観、心と物の区別は、思考や言葉があとから作り出したもの。","主客が分かれる前のこの経験こそが、唯一の実在だと西田は考えた。"],
+  meta:"音楽に呑まれているあいだ、聴いている「私」はどこにもいない",lyric:"きれいだと思った瞬間\n僕も夕日も まだいなかった",rel:["zen","mufunbetsu"],pg:"P624–625"},
+ {id:"zen",era:"jp",name:"善",yomi:"ぜん",who:"西田幾多郎",book:"『善の研究』",one:"感情・知性・意志がひとつになり、我を忘れて没頭している状態。",
+  dl:[["関連","純粋経験"],["メモ","主客未分の純粋経験は、そのまま真・善・美が一致した状態とされる"]],
+  exp:"西田にとって善とは、感情（やりたい）・知性（そのために必要な知恵）・意志（実際の行動）が一体になった状態のこと。本当にやりたいことに夢中になり、自分を忘れて没頭しているときがそれにあたる。",
+  pts:["善とは「人格の実現」であり、一人ひとりが善を実現することは、人類や宇宙全体の善の実現につながる。","純粋経験は主観と客観が一体になった状態、善は感情・知性・意志が一体になった状態。"],
+  meta:"時間を忘れて曲を作っている夜は、そのまま善",lyric:"気づけば朝になっていた\nそれが答えでよかった",rel:["pure-exp"],pg:"P628–629"},
+ {id:"iki",era:"jp",name:"いき",who:"九鬼周造",book:"『「いき」の構造』",one:"近づきながらも一つにならない、張りのある色気の美学。",
+  dl:[["メモ","論文「日本的性格について」では、日本文化の性格として「意気地」「自然」「諦め」の3つをあげている"]],
+  exp:"九鬼周造は、江戸の遊郭で生まれた「いき」という日本独自の美意識を哲学的に分析した。いきは、武士道にも通じる「意気地」、異性を惹きつける「媚態」、すべては移ろうと知る「諦め」の三つからできている。",
+  pts:["<b>意気地</b>：やせがまん（宵越しの金は持たない）、異性にもたれかからない心の張り。","<b>媚態</b>：決して一つにならず、駆け引きの緊張を保つ「可能的関係」。湯上がり姿、抜き衣紋、少し崩したつぶし島田、縦縞の模様。","<b>諦め</b>：万物は移ろう。執着を手放し、いつでもすっきり別れられること。「結ばれてめでたし」で終わる話は、いきとはいえない。","九鬼はいきの中に、西洋の合理性・生産性・すべてを一つにまとめる精神とは違う、日本の美的価値を見出した。"],
+  meta:"近づくけれど、決して重ならない二本の縦縞",lyric:"結ばれないと知ってるから\nこの距離が一番きれい",rel:["mufunbetsu"],pg:"P642"},
+ {id:"mufunbetsu",era:"jp",name:"無分別智",yomi:"むふんべつち",who:"鈴木大拙",book:"『日本的霊性』",one:"言葉で区別する前の「すべてがひとつ」の世界を、直観でつかむ智慧。",
+  dl:[["メモ","「霊性は無分別智である」と述べ、それはどの民族も持つ普遍的なものだとした"]],
+  exp:"人はふだん、主観と客観、山と川、善と悪というように、言葉（概念）で区別（分別）しながら世界を理解している。大拙は、その分別の前にある、すべてが一体となった世界を直観的にとらえる智慧を「無分別智」と呼び、これこそが人間にとって本質的な認識、つまり「霊性」だと考えた。",
+  pts:["霊性は、民族や文化がある段階に達したときに開かれる。日本では鎌倉時代の仏教、特に<b>浄土系</b>と<b>禅</b>に現れた。","念仏を唱えるだけで罪深い人も救われるという教えは、「自分と仏」「善と悪」の区別を超えてすべてを受け入れる智慧の表れ。","自分と自分以外のものは本当はひとつ、という考えを仏教用語で<b>自他不二</b>という。"],
+  meta:"方眼紙を外したら、地図ではなく景色が見えた",lyric:"名前をつける前の空は\nもっと広かった気がする",rel:["pure-exp","iki"],pg:"P650–651"}
+];
+
+const state={q:"",era:null,who:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const strip=s=>String(s).replace(/<[^>]+>/g,"");
+function hl(s,raw){const t=raw?s:esc(s);if(!state.q)return t;const q=esc(state.q).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  return t.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=>tag?tag:txt.replace(new RegExp(q,"gi"),x=>`<mark>${x}</mark>`));}
+const byId=Object.fromEntries(T.map(t=>[t.id,t]));
+const label=t=>t.name+(t.yomi&&/^(プラトン|フロイト|フーコー)$/.test(t.yomi)?`（${t.yomi}）`:"");
+const hay=t=>[t.name,t.yomi,t.who,t.book,t.one,t.exp,t.meta,t.lyric,...t.dl.flat(),...t.pts.map(strip)].join(" ").toLowerCase();
+const match=t=>(!state.era||t.era===state.era)&&(!state.who||t.who===state.who)&&(!state.q||hay(t).includes(state.q.toLowerCase()));
+
+function chips(){
+  const er=$("#eraRow"),wr=$("#whoRow"); er.innerHTML="";wr.innerHTML="";
+  ERAS.forEach(e=>{const b=document.createElement("button");const on=state.era===e.id;b.className="chip"+(on?" on":"");if(on)b.style.background=e.color;b.style.borderColor=on?"transparent":"";b.innerHTML=esc(e.label)+`<span class="n">${T.filter(t=>t.era===e.id).length}</span>`;b.onclick=()=>{state.era=on?null:e.id;state.who=null;render()};er.appendChild(b)});
+  const whos=[...new Set(T.filter(t=>!state.era||t.era===state.era).map(t=>t.who))];
+  whos.forEach(w=>{const b=document.createElement("button");const on=state.who===w;b.className="chip"+(on?" on":"");if(on)b.style.background="var(--pink)";b.textContent=w;b.onclick=()=>{state.who=on?null:w;render()};wr.appendChild(b)});
+}
+function render(){
+  chips();
+  $("#clr").style.display=state.q?"block":"none";
+  const filtered=!!(state.q||state.era||state.who);
+  $("#reset").style.display=filtered?"inline":"none";
+  const rows=T.filter(match);
+  $("#toc").innerHTML=rows.map(t=>`<a href="#${t.id}" data-jump="${t.id}">${esc(label(t))}</a>`).join("");
+  let html="";
+  for(const e of ERAS){
+    const g=rows.filter(t=>t.era===e.id); if(!g.length) continue;
+    html+=`<h2 style="color:${e.color}">${e.label}</h2><div class="grid">`+g.map(t=>`<article class="term" id="${t.id}">
+      <div class="thead"><div>${t.yomi?`<div class="yomi">${hl(t.yomi)}</div>`:""}<h3 class="tname">${hl(t.name)}</h3></div><div class="who">${hl(t.who)}<span>${hl(t.book)}</span></div></div>
+      <p class="one">${hl(t.one)}</p>
+      <dl>${t.dl.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${hl(b)}</dd>`).join("")}</dl>
+      <p class="exp">${hl(t.exp)}</p>
+      ${t.pts.length?`<ul class="pts">${t.pts.map(p=>`<li>${hl(p,true)}</li>`).join("")}</ul>`:""}
+      <div class="meta2"><div class="mt"><small>比喩にすると</small>${hl(t.meta)}</div><div class="ly"><small>歌詞の種</small>${hl(t.lyric)}</div></div>
+      ${t.rel.length?`<div class="rel"><small>関連</small>${t.rel.map(r=>`<a href="#${r}" data-jump="${r}">${esc(label(byId[r]))}</a>`).join("")}</div>`:""}
+      <div class="pg">${esc(t.pg)}</div></article>`).join("")+`</div>`;
+  }
+  $("#list").innerHTML=html;
+  $("#empty").style.display=html?"none":"block";
+  $("#count").textContent=filtered?`${rows.length} 件`:`全 ${T.length} 語`;
+}
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-jump]"); if(!a) return; e.preventDefault();
+  const id=a.dataset.jump;
+  if(!document.getElementById(id)){ state.q="";state.era=null;state.who=null;$("#q").value="";render(); }
+  const el=document.getElementById(id); el.scrollIntoView({behavior:"smooth",block:"start"});
+  el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1400);
+});
+$("#q").addEventListener("input",e=>{state.q=e.target.value.trim();render()});
+$("#clr").onclick=()=>{$("#q").value="";state.q="";render()};
+$("#reset").onclick=()=>{$("#q").value="";Object.assign(state,{q:"",era:null,who:null});render()};
+render();
+</script>
+</body>
+</html>
