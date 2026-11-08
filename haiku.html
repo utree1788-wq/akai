@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>俳句の手帖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f1e7;--card:#fffdf8;--ink:#2b2622;--sub:#6f655c;--line:#e3d9c8;
+  --shu:#b5452f;--shu-soft:#f6e3dd;
+  --haru:#c9667e;--natsu:#3f8f6b;--aki:#c0712e;--fuyu:#4a6f9c;--shinnen:#a8862c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.7;-webkit-text-size-adjust:100%}
+.serif{font-family:"Noto Serif JP",serif}
+header{position:sticky;top:0;z-index:5;background:rgba(246,241,231,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 16px 0}
+header h1{margin:0;font-family:"Noto Serif JP",serif;font-size:19px;letter-spacing:.12em;display:flex;align-items:center;gap:8px}
+header h1 .seal{display:inline-grid;place-items:center;width:24px;height:24px;background:var(--shu);color:#fff;border-radius:4px;font-size:13px;letter-spacing:0}
+.season-now{font-size:12px;color:var(--sub);margin-left:auto;font-family:"Noto Sans JP";letter-spacing:0;font-weight:400}
+nav{display:flex;gap:2px;margin-top:8px;overflow-x:auto}
+nav a{flex:1;text-align:center;padding:8px 6px 10px;color:var(--sub);text-decoration:none;font-size:14px;font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav a.on{color:var(--ink);border-color:var(--shu)}
+main{max-width:760px;margin:0 auto;padding:16px 14px 80px}
+html.js section.view{display:none}
+html.js section.view.on{display:block}
+.nojs{background:#fdf0d8;border:1px solid #e8c97a;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+html.js .nojs{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-family:"Noto Serif JP",serif;font-size:18px;margin:0 0 8px;letter-spacing:.05em}
+h3{font-size:15px;margin:14px 0 6px}
+.muted{color:var(--sub);font-size:13px}
+label.lb{display:block;font-size:12px;color:var(--sub);margin:10px 0 3px;font-weight:500}
+input[type=text],textarea{width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input[type=text]:focus,textarea:focus{outline:2px solid var(--shu-soft);border-color:var(--shu)}
+textarea{min-height:60px;resize:vertical}
+.btn{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--shu);border-color:var(--shu);color:#fff;font-weight:500}
+.btn.sm{font-size:12px;padding:5px 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* 5-7-5 editor */
+.ku-line{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:#fff}
+.ku-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ku-head b{font-family:"Noto Serif JP",serif;font-size:14px}
+.cnt{margin-left:auto;font-size:13px;font-weight:700;padding:1px 9px;border-radius:20px;background:#eee;color:var(--sub);font-variant-numeric:tabular-nums}
+.cnt.ok{background:#e1efe6;color:#2f7a51}
+.cnt.over{background:var(--shu-soft);color:var(--shu)}
+.cnt.under{background:#fdf0d8;color:#9a6a12}
+.ku-line input.t{font-family:"Noto Serif JP",serif;font-size:18px}
+.ku-line input.r{font-size:14px;margin-top:6px;color:var(--sub)}
+.preview{display:flex;gap:18px;align-items:flex-start;justify-content:center;padding:6px 0}
+.tate{writing-mode:vertical-rl;font-family:"Noto Serif JP",serif;font-size:24px;letter-spacing:.18em;min-height:240px;line-height:1.5}
+.preview .yoko{flex:1;font-family:"Noto Serif JP",serif}
+.checks{list-style:none;padding:0;margin:0}
+.checks li{display:flex;gap:10px;padding:8px 0;border-top:1px dashed var(--line);font-size:14px}
+.checks li:first-child{border-top:0}
+.ic{flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;margin-top:2px}
+.ic.ok{background:#4f9a6c}.ic.warn{background:var(--shu)}.ic.tip{background:#c79a2b}.ic.info{background:#8a8076}
+.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;color:#fff;margin-right:4px;vertical-align:1px}
+.s-春{background:var(--haru)}.s-夏{background:var(--natsu)}.s-秋{background:var(--aki)}.s-冬{background:var(--fuyu)}.s-新年{background:var(--shinnen)}
+.kata{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+.kata button{text-align:left;font:inherit;font-size:13px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;color:var(--ink)}
+.kata button.on{border-color:var(--shu);background:var(--shu-soft)}
+.kata button b{display:block;font-size:14px;font-family:"Noto Serif JP",serif}
+.formula{font-family:"Noto Serif JP",serif;background:#faf6ee;border-left:3px solid var(--shu);padding:8px 12px;margin:8px 0;border-radius:0 8px 8px 0;font-size:14px}
+
+/* learn */
+details{border-bottom:1px solid var(--line);padding:4px 0}
+details:last-child{border-bottom:0}
+summary{cursor:pointer;font-weight:700;padding:8px 0;list-style:none;display:flex;gap:8px;align-items:center;font-family:"Noto Serif JP",serif;font-size:16px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"＋";color:var(--shu);font-family:"Noto Sans JP"}
+details[open] summary::before{content:"－"}
+.ex{font-family:"Noto Serif JP",serif;font-size:17px;background:#faf6ee;padding:8px 12px;border-radius:8px;margin:6px 0;letter-spacing:.05em}
+.ex small{display:block;font-family:"Noto Sans JP";font-size:12px;color:var(--sub);letter-spacing:0}
+.bad{color:var(--sub);text-decoration:line-through;text-decoration-color:var(--shu)}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:2px 0}
+.hl{background:linear-gradient(transparent 60%,#f3d9a8 60%)}
+
+/* kigo dictionary */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.seg button{font:inherit;font-size:13px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.seg button.s.on.b-春{background:var(--haru);border-color:var(--haru)}
+.seg button.s.on.b-夏{background:var(--natsu);border-color:var(--natsu)}
+.seg button.s.on.b-秋{background:var(--aki);border-color:var(--aki)}
+.seg button.s.on.b-冬{background:var(--fuyu);border-color:var(--fuyu)}
+.seg button.s.on.b-新年{background:var(--shinnen);border-color:var(--shinnen)}
+.klist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.kitem{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer;position:relative;border-left-width:4px}
+.kitem .w{font-family:"Noto Serif JP",serif;font-size:17px;font-weight:600}
+.kitem .r{font-size:12px;color:var(--sub)}
+.kitem .fav{position:absolute;top:6px;right:8px;color:var(--shu);font-size:13px}
+.b-l-春{border-left-color:var(--haru)}.b-l-夏{border-left-color:var(--natsu)}.b-l-秋{border-left-color:var(--aki)}.b-l-冬{border-left-color:var(--fuyu)}.b-l-新年{border-left-color:var(--shinnen)}
+.count-line{font-size:12px;color:var(--sub);margin:4px 0 8px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(30,25,20,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:18px 18px 26px;max-height:85vh;overflow:auto}
+.sheet .big{font-family:"Noto Serif JP",serif;font-size:30px;font-weight:700;letter-spacing:.08em}
+@media(min-width:600px){.modal{align-items:center}.sheet{border-radius:16px}}
+
+/* notebook */
+.note-item{border-top:1px solid var(--line);padding:12px 0}
+.note-item:first-child{border-top:0}
+.note-item .k{font-family:"Noto Serif JP",serif;font-size:18px;letter-spacing:.06em}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:30}
+.toast.on{opacity:1}
+
+/* ===== 縦向き：コンパクト ===== */
+@media (orientation:portrait){
+  body{font-size:14px;line-height:1.6}
+  header{padding:6px 12px 0}
+  header h1{font-size:16px}
+  header h1 .seal{width:20px;height:20px;font-size:11px}
+  nav{margin-top:4px}
+  nav a{padding:5px 4px 7px;font-size:13px}
+  main{padding:10px 10px 60px}
+  .card{padding:12px;margin-bottom:10px;border-radius:10px}
+  h2{font-size:16px;margin-bottom:4px}
+  label.lb{margin:6px 0 2px}
+  input[type=text],textarea{padding:7px 9px}
+  .ku-line{padding:8px 10px;margin-bottom:8px}
+  .ku-head{margin-bottom:4px}
+  .ku-line input.t{font-size:17px}
+  .ku-line input.r{font-size:13px;margin-top:4px}
+  .kata{grid-template-columns:1fr;gap:6px}
+  .kata button{padding:7px 10px;font-size:12px}
+  .kata button b{display:inline;margin-right:6px}
+  .tate{font-size:20px;min-height:0;height:180px;letter-spacing:.12em}
+  .checks li{padding:6px 0;font-size:13px}
+  .klist{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:6px}
+  .kitem{padding:6px 8px}
+  .kitem .w{font-size:15px}
+  .kitem .r{font-size:11px}
+  .seg{gap:4px;margin:6px 0}
+  .seg button{padding:3px 10px;font-size:12px}
+  summary{font-size:15px;padding:6px 0}
+  .ex{font-size:15px;padding:6px 10px}
+}
+/* ===== 横向き：広く見やすく ===== */
+@media (orientation:landscape){
+  header{padding:6px 20px 0;display:flex;align-items:flex-end;gap:16px}
+  header h1{padding-bottom:8px;white-space:nowrap}
+  header h1 .season-now{margin-left:10px}
+  nav{margin-top:0;flex:1;max-width:560px;margin-left:auto}
+  main{max-width:1180px;padding:16px 24px 60px}
+  .mk{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+  .col-b{position:sticky;top:64px;max-height:calc(100vh - 76px);overflow:auto}
+  .col-b .preview{min-height:0}
+  .tate{font-size:26px;min-height:200px}
+  .kata{grid-template-columns:repeat(3,1fr)}
+  #v-learn .card{columns:2 380px;column-gap:28px}
+  #v-learn .card > h2,#v-learn .card > p.muted{column-span:all}
+  #v-learn details{break-inside:avoid}
+  .klist{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  #v-note .card{max-width:860px;margin:0 auto}
+  .modal{align-items:center}
+  .sheet{border-radius:16px;max-width:720px;max-height:90vh}
+}
+/* 横向きでも高さが低いスマホ */
+@media (orientation:landscape) and (max-height:500px){
+  header{position:static}
+  .col-b{position:static;max-height:none}
+  .tate{min-height:0;height:190px;font-size:22px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="seal">句</span>俳句の手帖<span class="season-now" id="seasonNow"></span></h1>
+  <nav>
+    <a href="#make" data-v="make">作る</a>
+    <a href="#learn" data-v="learn">書き方</a>
+    <a href="#kigo" data-v="kigo">季語辞典</a>
+    <a href="#note" data-v="note">句帳</a>
+  </nav>
+</header>
+
+<main>
+<div class="nojs">この画面ではプログラムが動いていないため、ボタンが反応しません。ファイルを<b>Safari</b>や<b>Chrome</b>で開いてください。</div>
+<!-- ================= 作る ================= -->
+<section class="view" id="v-make">
+ <div class="mk">
+ <div class="col-a">
+  <div class="card">
+    <h2>① タネを集める</h2>
+    <p class="muted" style="margin:0">いきなり五七五にしないで、まず「その場で起きたこと」をメモ。説明ではなく、カメラに映るもの・耳や肌で感じたものを書く。</p>
+    <label class="lb">いつ・どこ（場面）</label>
+    <input type="text" id="m1" placeholder="例：夜行バス、サービスエリアで休憩">
+    <label class="lb">誰が・何をした（動作は一つに絞る）</label>
+    <input type="text" id="m2" placeholder="例：寝ていたら肩をたたかれて起こされた">
+    <label class="lb">何が見えた／聞こえた／匂った／触れた（発見）</label>
+    <input type="text" id="m3" placeholder="例：頬に冷たい風、見たことのない山なみ、給油の匂い">
+    <label class="lb">合いそうな季語（季語辞典から選べる）</label>
+    <div class="row"><input type="text" id="m4" placeholder="例：秋風" style="flex:1"><a class="btn sm" href="#kigo">辞典をひらく</a></div>
+  </div>
+
+  <div class="card">
+    <h2>② 型を選ぶ</h2>
+    <div class="kata" id="kata">
+      <button data-k="0"><b>取り合わせ（下五に季語）</b>十二音のフレーズ＋季語。いちばん作りやすい</button>
+      <button data-k="1"><b>切れ字「や」で始める</b>季語＋や／十二音のフレーズ</button>
+      <button data-k="2"><b>一物仕立て</b>季語そのものを観察して描く</button>
+    </div>
+    <div id="kataHelp"></div>
+  </div>
+
+  <div class="card">
+    <h2>③ 五七五にする</h2>
+    <p class="muted" style="margin-top:0">漢字があると音数を数えられないので、下の欄に<b>ひらがなのよみ</b>を入れてください（ひらがなだけの句なら自動）。「ー」「っ」「ん」は1音、「ゃゅょ」は前とまとめて1音です。</p>
+    <div id="lines"></div>
+    <div class="row">
+      <button class="btn" id="btnExample">作例を入れる</button>
+      <button class="btn" id="btnClear">クリア</button>
+      <button class="btn pri" id="btnSave" style="margin-left:auto">句帳に保存</button>
+    </div>
+  </div>
+
+  </div>
+  <div class="col-b">
+  <div class="card">
+    <h2>④ 見て、確かめる</h2>
+    <div class="preview">
+      <div class="tate" id="tate"></div>
+    </div>
+    <ul class="checks" id="checks"></ul>
+  </div>
+
+  <div class="card">
+    <h2>推敲のチェックリスト</h2>
+    <ul class="tight">
+      <li>季語は一つか（季重なりになっていないか）</li>
+      <li>「嬉しい」「寂しい」など気持ちを言っていないか → モノで見せる</li>
+      <li>動詞が多すぎないか（目安は一つ、多くて二つ）</li>
+      <li>読んだ人の頭に<b>映像</b>が浮かぶか。どの順でカメラが動くか</li>
+      <li>最後の五音に何を残すか（余韻をつくる場所）</li>
+      <li>助詞を一字変えたらどうなるか（は／が／に／の／を）</li>
+    </ul>
+  </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 書き方 ================= -->
+<section class="view" id="v-learn">
+  <div class="card">
+    <h2>俳句の書き方</h2>
+    <p class="muted" style="margin-top:0">テレビの俳句添削でもくり返し言われる基本を、自分用にまとめたガイドです。</p>
+
+    <details open>
+      <summary>基本の三つ</summary>
+      <ul class="tight">
+        <li><b>五・七・五</b>の十七音。字余りは上五ならまだ許されやすいが、<b>中七が八音になる「中八」</b>はリズムが崩れるので避けたい。</li>
+        <li><b>季語は一つ</b>。二つ入ると「季重なり」で主役がぼやける。</li>
+        <li><b>切れ</b>をつくる。「や」「かな」「けり」の切れ字や、名詞で止める（体言止め）ことで、句の中に「間」が生まれる。</li>
+      </ul>
+      <div class="formula">取り合わせの公式：<br>季語とは直接関係ない「十二音のフレーズ」＋「季語（五音）」</div>
+      <p class="muted">フレーズと季語の距離が近すぎる（秋風＋寂しい、など）とつまらない。遠すぎると意味が通じない。「ちょっと離れているけど響き合う」が狙いどころ。</p>
+    </details>
+
+    <details>
+      <summary>人の動作の書き方</summary>
+      <ul class="tight">
+        <li><b>動詞は一つに絞る</b>。「起きて・見て・思った」と並べると報告文になる。いちばん映像になる一瞬だけ切り取る。</li>
+        <li><b>大きな動作より小さな動作</b>。「旅をした」より「切符を握り直す」。手・指・頬・靴など体の一部にズームすると具体的になる。</li>
+        <li><b>主語は書かなくていい</b>。俳句は基本「作者がその場にいる」ので「私は」は不要。</li>
+        <li><b>受け身や使役は状況ごと伝わる</b>。「起こされて」なら、自分は寝ていて、誰か（運転手・家族）がいることまで一語で伝わる。</li>
+        <li>「〜している」より「〜て」「〜たる」で止めると締まる。</li>
+      </ul>
+      <div class="ex"><span class="bad">バスを降りて背伸びをしてあくびした</span><small>動詞が三つ。ぜんぶ説明になっている</small></div>
+      <div class="ex">背伸びして給油の匂ふ夜の秋<small>動作は「背伸び」一つ。あとは匂いに任せる（作例）</small></div>
+    </details>
+
+    <details>
+      <summary>状況の説明をしない（モノで見せる）</summary>
+      <ul class="tight">
+        <li><b>場所の名前を言わずに、モノで場所を伝える</b>。「サービスエリア」と書かなくても、自販機の灯・トラックの列・給油の匂いで分かる。</li>
+        <li><b>気持ちを言わない</b>。「寂しい」「嬉しい」「懐かしい」は読者が感じるもの。作者が先に言うと読者の仕事がなくなる。</li>
+        <li><b>理屈を言わない</b>。「〜なので」「〜だから」が入ると説明文になる。</li>
+        <li><b>「知らない」「不思議な」などの抽象語は、具体的な景色に置き換える</b>。「知らぬ土地」→「知らぬ山なみ」「知らぬ町の灯」。</li>
+        <li>五感を使う。視覚だけでなく、<b>音・匂い・肌ざわり・温度</b>を一つ入れると臨場感が出る。</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>時間の経過を詠む</summary>
+      <ul class="tight">
+        <li><b>「〜て」でつなぐ</b>：前の出来事と今を一句に入れられる。「起こされて」＝寝ていた時間→いま。</li>
+        <li><b>「〜間に」「いつしか」「まだ」「もう」</b>：時間の幅を一語で入れる。</li>
+        <li><b>変化の「結果」だけを見せる</b>：寝ているあいだに景色が変わった、を「起きたら知らない山」で表す。途中経過は書かない。</li>
+        <li><b>時間を含む季語を使う</b>：夜長・日永・短夜・秋の暮・行く秋・年の暮・春待つ など。季語自体が時間の流れを背負ってくれる。</li>
+        <li><b>光の変化</b>：夕焼け→灯がともる、夜明けの空など、明るさの移り変わりで時間を描く。</li>
+      </ul>
+      <div class="ex">寝てる間に県をまたいで秋の風<small>「寝てる間に」で時間、「県をまたいで」で移動距離（作例）</small></div>
+    </details>
+
+    <details>
+      <summary>語順はカメラワーク</summary>
+      <ul class="tight">
+        <li>読者は<b>書いた順に映像を見る</b>。遠景→近景（山なみ→頬）か、近景→遠景（頬→山なみ）か決める。</li>
+        <li><b>最後の五音がいちばん心に残る</b>。季語を最後に置くと余韻、モノを置くと発見の驚きが残る。</li>
+        <li>「〜の〜の〜の」と「の」が続くとダラっとする。</li>
+        <li>三つの名詞がバラバラに並ぶ「三段切れ」は、映像がまとまらないので注意。</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>作例の添削：サービスエリアでの一句</summary>
+      <div class="ex">起こされて秋風頬に知らぬ土地<small>原句</small></div>
+      <p><b>良いところ</b></p>
+      <ul class="tight">
+        <li>「起こされて」の受け身で、車やバスで眠っていた状況と時間の経過が一語で伝わる。</li>
+        <li>「頬に」で、秋風を肌で感じる触覚がある。</li>
+      </ul>
+      <p><b>気になるところ</b></p>
+      <ul class="tight">
+        <li>「起こされて／秋風頬に／知らぬ土地」と三つに切れて、映像が三枚バラバラ（三段切れ気味）。</li>
+        <li>「知らぬ土地」は気持ちの説明に近い。<b>何を見て「知らない」と思ったのか</b>を書くと映像になる。</li>
+        <li>「秋風頬に」のあとの動詞を省いていて、少し窮屈。</li>
+      </ul>
+      <p><b>添削例</b></p>
+      <div class="ex">起こされて知らぬ山なみ秋の風<small>「知らぬ」を景色で見せ、季語を最後に置いて余韻に</small></div>
+      <div class="ex">起こされて頬に秋風見知らぬ灯<small>頬の触覚を残す。夜のサービスエリアの灯で場所を伝える</small></div>
+      <div class="ex">秋風や揺り起こされて知らぬ町<small>切れ字「や」で季語を立て、動作を具体的に「揺り起こす」に</small></div>
+      <div class="ex">寝てる間に県をまたいで秋の風<small>時間経過に焦点を当てた別案</small></div>
+      <p class="muted">サービスエリアらしいモノ：自販機の灯、給油の匂い、トラックの列、売店の湯気、駐車場の白線、トイレ休憩の人だかり、遠くの高速の音。</p>
+    </details>
+
+    <details>
+      <summary>季語の使い方のコツ</summary>
+      <ul class="tight">
+        <li>季語は「その季節らしさ」を背負った言葉。<b>季語の意味を句の中で繰り返さない</b>（「秋風が冷たい」の「冷たい」は秋風に含まれている）。</li>
+        <li>旧暦なので、今の感覚とずれるものがある。<b>七夕・朝顔・西瓜・花火は秋</b>、<b>「月」だけなら秋</b>、<b>「花」だけなら桜（春）</b>。</li>
+        <li>迷ったら「季語辞典」の解説を読んで、その季語が持つ空気（明るい・寂しい・暖かい）を確かめる。</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ================= 季語辞典 ================= -->
+<section class="view" id="v-kigo">
+  <div class="card">
+    <h2>季語辞典</h2>
+    <input type="text" id="q" placeholder="季語・よみ・意味で検索（例：かぜ、夜、ひかり）">
+    <div class="seg" id="segSeason"></div>
+    <div class="seg" id="segCat"></div>
+    <div class="count-line" id="kcount"></div>
+    <div class="klist" id="klist"></div>
+  </div>
+  <p class="muted" style="text-align:center">季節の区分は立春・立夏・立秋・立冬が目安です。代表的な季語を中心に収録しています。</p>
+</section>
+
+<!-- ================= 句帳 ================= -->
+<section class="view" id="v-note">
+  <div class="card">
+    <h2>句帳</h2>
+    <p class="muted" style="margin-top:0">保存した句はこの端末のブラウザにだけ残ります。大事な句はコピーして別の場所にも控えてください。</p>
+    <div id="notes"></div>
+  </div>
+</section>
+</main>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ------------ 季語データ: 分類|季語|よみ|傍題(,区切り)|解説 ------------ */
+const RAW=`#春
+時候|春|はる||立春（二月四日頃）から立夏の前日まで
+時候|立春|りっしゅん|春立つ|暦の上で春が始まる日。まだ寒さは厳しい
+時候|余寒|よかん||立春を過ぎても残る寒さ
+時候|早春|そうしゅん|春浅し|春のはじめ。寒さの中に春の気配
+時候|春寒|はるさむ|春寒し|春になってからぶり返す寒さ
+時候|啓蟄|けいちつ||三月六日頃。虫が土の中から出てくる頃
+時候|麗か|うららか|うらら|春の日がやわらかく明るく照るさま
+時候|長閑|のどか|のどけし|春ののんびりと穏やかな様子
+時候|暖か|あたたか|暖かし|春の心地よい暖かさ
+時候|日永|ひなが|永き日|春になって昼が長く感じられること
+時候|春暁|しゅんぎょう|春の曙|春の明け方
+時候|春の宵|はるのよい||春の日暮れから夜にかけての華やいだ時間
+時候|春の夜|はるのよ|春夜|
+時候|花冷え|はなびえ||桜の咲く頃の一時的な冷え込み
+時候|行く春|ゆくはる|春惜しむ|過ぎ去ろうとする春。名残惜しさ
+天文|春風|はるかぜ|春の風|やわらかく暖かな風
+天文|東風|こち|朝東風,夕東風|春に東から吹く風。まだ冷たさがある
+天文|春一番|はるいちばん||立春後に初めて吹く強い南風
+天文|春雨|はるさめ||春にしとしと静かに降る雨
+天文|春雷|しゅんらい||春に鳴る雷。虫出しの雷とも
+天文|朧月|おぼろづき|朧月夜|春の夜にぼんやり霞んだ月
+天文|朧|おぼろ|草朧,鐘朧|春の夜の霞。ものの輪郭がぼやける
+天文|霞|かすみ||春の昼にたちこめる霞（夜は朧）
+天文|陽炎|かげろう||暖かい日に地面からゆらゆら立つ光の揺らぎ
+天文|花曇|はなぐもり||桜の咲く頃の薄曇り
+天文|春の雪|はるのゆき|淡雪,牡丹雪|すぐに解ける春の雪
+天文|春光|しゅんこう|春の光|
+地理|山笑う|やまわらう|春の山|芽吹いて明るくなる春の山
+地理|雪解|ゆきどけ|雪解け,雪解水|
+地理|春の川|はるのかわ||雪解け水で豊かに流れる川
+地理|春泥|しゅんでい||雪解けや雨でぬかるんだ道
+地理|水温む|みずぬるむ||冷たかった水がゆるんでくる
+地理|残雪|ざんせつ||春になっても消え残る雪
+生活|春眠|しゅんみん|春眠し|春の心地よい眠り
+生活|朝寝|あさね||春の朝の寝坊
+生活|花見|はなみ|花見客,花筵|
+生活|入学|にゅうがく|入学式|
+生活|卒業|そつぎょう|卒業式,卒業生|
+生活|遠足|えんそく||
+生活|春休み|はるやすみ||
+生活|風船|ふうせん||
+生活|しゃぼん玉|しゃぼんだま||
+生活|ぶらんこ|ぶらんこ|鞦韆|
+生活|春愁|しゅんしゅう||春のそこはかとない物思い
+生活|野焼|のやき|野火|
+行事|雛祭|ひなまつり|雛,桃の節句|
+行事|彼岸|ひがん|お彼岸|春分を中日とする七日間（秋は「秋彼岸」）
+行事|バレンタインの日|ばれんたいんのひ|バレンタインデー|
+動物|鶯|うぐいす||
+動物|燕|つばめ|燕来る,初燕|
+動物|雲雀|ひばり|揚雲雀|
+動物|蛙|かわず|かえる,蛙鳴く|
+動物|蝶|ちょう|蝶々,初蝶|
+動物|蜂|はち||
+動物|猫の恋|ねこのこい|恋猫|
+動物|蝌蚪|かと|おたまじゃくし|
+動物|白魚|しらうお||
+植物|桜|さくら|夜桜,山桜,初桜|
+植物|花|はな||俳句で「花」とだけ言えば桜のこと
+植物|落花|らっか|花散る,花吹雪,花筏|
+植物|梅|うめ|白梅,紅梅|
+植物|桃の花|もものはな||
+植物|菜の花|なのはな||
+植物|蒲公英|たんぽぽ||
+植物|土筆|つくし||
+植物|菫|すみれ||
+植物|チューリップ|ちゅーりっぷ||
+植物|椿|つばき||
+植物|若草|わかくさ||
+植物|木の芽|このめ|芽吹く|
+植物|蓬|よもぎ||
+#夏
+時候|夏|なつ||立夏（五月五日頃）から立秋の前日まで
+時候|立夏|りっか|夏立つ,夏来る|
+時候|薄暑|はくしょ||初夏の、少し汗ばむくらいの暑さ
+時候|梅雨寒|つゆざむ||梅雨どきの肌寒さ
+時候|暑し|あつし|暑さ|
+時候|炎暑|えんしょ|酷暑|
+時候|短夜|みじかよ|明易し|夏の短い夜
+時候|涼し|すずし|涼|暑さの中で感じる涼しさ（夏の季語）
+時候|夕凪|ゆうなぎ||夕方、海風が止んで蒸し暑くなる時間
+時候|土用|どよう|土用入|立秋前の十八日間。暑さの盛り
+時候|晩夏|ばんか|夏の果|
+天文|五月雨|さみだれ||梅雨の長雨
+天文|梅雨|つゆ|梅雨入,梅雨明|
+天文|夕立|ゆうだち||
+天文|雷|かみなり|いかずち,遠雷|
+天文|雲の峰|くものみね|入道雲|
+天文|南風|みなみ||夏に吹く南からの風
+天文|青嵐|あおあらし||青葉の頃に吹き渡る強い風
+天文|風薫る|かぜかおる|薫風|初夏の若葉をわたるさわやかな風
+天文|虹|にじ||
+天文|炎天|えんてん||
+天文|西日|にしび||
+地理|山滴る|やましたたる|夏の山|青々と茂った夏の山
+地理|滝|たき||
+地理|泉|いずみ||
+地理|青田|あおた||
+地理|夏の海|なつのうみ||
+生活|夏休み|なつやすみ||
+生活|帰省|きせい||夏休みに故郷へ帰ること
+生活|扇風機|せんぷうき||
+生活|冷房|れいぼう||
+生活|団扇|うちわ||
+生活|風鈴|ふうりん||
+生活|浴衣|ゆかた||
+生活|麦茶|むぎちゃ||
+生活|かき氷|かきごおり|氷水|
+生活|ビール|びーる||
+生活|昼寝|ひるね|三尺寝|
+生活|日焼|ひやけ||
+生活|汗|あせ||
+生活|プール|ぷーる||
+生活|サングラス|さんぐらす||
+生活|夜店|よみせ||
+生活|花火|はなび|遠花火,手花火|歳時記によっては秋。現代では夏として詠まれることが多い
+行事|祭|まつり|夏祭|俳句で「祭」とだけ言えば夏
+行事|端午|たんご|こどもの日,鯉幟|
+行事|母の日|ははのひ||
+動物|蛍|ほたる||
+動物|蝉|せみ|蝉時雨|
+動物|金魚|きんぎょ||
+動物|蚊|か||
+動物|蟻|あり||
+動物|時鳥|ほととぎす||
+動物|甲虫|かぶとむし|かぶと虫|
+動物|蝸牛|かたつむり||
+動物|蜘蛛|くも||
+動物|鮎|あゆ||
+植物|紫陽花|あじさい||
+植物|向日葵|ひまわり||
+植物|新緑|しんりょく||
+植物|若葉|わかば||
+植物|青葉|あおば||
+植物|万緑|ばんりょく||見渡すかぎり一面の緑
+植物|薔薇|ばら||
+植物|蓮|はす||
+植物|百合|ゆり||
+植物|夏草|なつくさ||
+植物|木下闇|こしたやみ||夏の木々が茂って暗くなった木陰
+植物|筍|たけのこ||
+植物|トマト|とまと||
+#秋
+時候|秋|あき||立秋（八月七日頃）から立冬の前日まで
+時候|立秋|りっしゅう|秋立つ,今朝の秋|
+時候|残暑|ざんしょ||立秋を過ぎても残る暑さ
+時候|新涼|しんりょう|秋涼し|秋になって感じる涼しさ
+時候|爽やか|さわやか||秋の澄んだ空気の心地よさ
+時候|秋の暮|あきのくれ||秋の夕暮れ。晩秋の意味でも使う
+時候|夜長|よなが|長き夜|秋の夜が長く感じられること
+時候|秋の夜|あきのよ||
+時候|秋澄む|あきすむ||秋の大気が澄みわたる
+時候|冷やか|ひややか||秋に肌で感じるひんやり感
+時候|肌寒|はださむ||
+時候|夜寒|よさむ||秋の夜の寒さ
+時候|そぞろ寒|そぞろさむ||なんとなく感じる晩秋の寒さ
+時候|身に入む|みにしむ||秋の冷たさや寂しさが身にしみる
+時候|秋深し|あきふかし||
+時候|行く秋|ゆくあき|秋惜しむ|
+天文|秋風|あきかぜ|秋の風|秋に吹く風。どこか寂しさや冷たさを帯びる
+天文|月|つき|満月,月夜|俳句で「月」とだけ言えば秋
+天文|名月|めいげつ|十五夜,今日の月|
+天文|天の川|あまのがわ|銀河|秋の季語
+天文|流星|りゅうせい|流れ星|
+天文|秋晴|あきばれ||
+天文|鰯雲|いわしぐも|鱗雲|
+天文|野分|のわき||秋の暴風。台風のこと
+天文|台風|たいふう||
+天文|秋雨|あきさめ||
+天文|霧|きり|夜霧,朝霧|俳句で「霧」は秋
+天文|露|つゆ|白露,露けし|
+天文|稲妻|いなずま||
+天文|秋の空|あきのそら|秋空|
+地理|花野|はなの||秋草の花が咲き乱れる野
+地理|刈田|かりた||
+地理|山粧う|やまよそおう|秋の山|紅葉した秋の山
+地理|秋の水|あきのみず||
+生活|月見|つきみ||
+生活|夜なべ|よなべ||
+生活|新米|しんまい||
+生活|稲刈|いねかり||
+生活|案山子|かかし||
+生活|運動会|うんどうかい||
+生活|灯火親しむ|とうかしたしむ||秋の夜は灯の下で読書がしたくなる
+生活|秋思|しゅうし||秋のもの思い
+生活|紅葉狩|もみじがり||
+生活|墓参|はかまいり|墓参り|
+行事|七夕|たなばた||俳句では秋
+行事|盆|ぼん|盂蘭盆,魂祭|
+行事|盆踊|ぼんおどり||
+行事|敬老の日|けいろうのひ||
+行事|ハロウィン|はろうぃん||
+動物|虫|むし|虫の声,虫すだく|俳句で「虫」は秋に鳴く虫
+動物|鈴虫|すずむし||
+動物|蟋蟀|こおろぎ||
+動物|蜻蛉|とんぼ|赤蜻蛉|
+動物|蜩|ひぐらし|かなかな|
+動物|法師蝉|ほうしぜみ|つくつく法師|
+動物|雁|かり|雁渡る|
+動物|渡り鳥|わたりどり||
+動物|鵙|もず||
+動物|鹿|しか||
+動物|秋刀魚|さんま||
+植物|紅葉|もみじ|こうよう|
+植物|銀杏黄葉|いちょうもみじ||
+植物|芒|すすき|薄,尾花|
+植物|萩|はぎ||
+植物|コスモス|こすもす||
+植物|曼珠沙華|まんじゅしゃげ|彼岸花|
+植物|菊|きく||
+植物|桔梗|ききょう||
+植物|朝顔|あさがお||俳句では秋
+植物|木犀|もくせい|金木犀|
+植物|柿|かき||
+植物|林檎|りんご||
+植物|葡萄|ぶどう||
+植物|栗|くり||
+植物|梨|なし||
+植物|西瓜|すいか||俳句では秋
+植物|茸|きのこ||
+植物|稲|いね|稲穂|
+植物|団栗|どんぐり||
+植物|秋草|あきくさ||
+#冬
+時候|冬|ふゆ||立冬（十一月七日頃）から立春の前日まで
+時候|立冬|りっとう|冬立つ,冬に入る|
+時候|小春|こはる|小春日和|初冬の、春のように暖かい日
+時候|冬めく|ふゆめく||
+時候|寒し|さむし|寒さ|
+時候|冷たし|つめたし||
+時候|短日|たんじつ|日短|冬の昼が短いこと
+時候|冬の夜|ふゆのよ||
+時候|霜夜|しもよ||霜の降りる冷え込んだ夜
+時候|冬至|とうじ||
+時候|冴ゆ|さゆ|冴える|寒さで光や音が澄みきる
+時候|凍る|こおる|凍つ|
+時候|年の暮|としのくれ|歳末,年の瀬|
+時候|大晦日|おおみそか||
+時候|大寒|だいかん||
+時候|春待つ|はるまつ||冬の終わり、春を待ちわびる気持ち
+天文|木枯|こがらし|凩|初冬に吹く強く冷たい風
+天文|北風|きたかぜ||
+天文|時雨|しぐれ||初冬に降ったり止んだりする雨
+天文|霜|しも|初霜|
+天文|雪|ゆき|初雪,粉雪,雪催|
+天文|霰|あられ||
+天文|冬晴|ふゆばれ||
+天文|冬の月|ふゆのつき|寒月|
+天文|冬の星|ふゆのほし|寒星,凍星|
+天文|オリオン|おりおん||
+天文|虎落笛|もがりぶえ||冬の強風が柵や電線に当たって鳴る音
+地理|枯野|かれの||
+地理|山眠る|やまねむる|冬の山|草木が枯れて静まりかえる冬の山
+地理|冬の海|ふゆのうみ||
+地理|氷|こおり||
+地理|霜柱|しもばしら||
+地理|冬田|ふゆた||
+生活|炬燵|こたつ||
+生活|ストーブ|すとーぶ||
+生活|焚火|たきび||
+生活|襟巻|えりまき|マフラー|
+生活|手袋|てぶくろ||
+生活|マスク|ますく||
+生活|毛布|もうふ||
+生活|蒲団|ふとん|布団|
+生活|おでん|おでん||
+生活|鍋|なべ|鍋物,寄せ鍋|
+生活|焼芋|やきいも||
+生活|日向ぼこ|ひなたぼこ|日向ぼっこ|
+生活|息白し|いきしろし|白息|
+生活|悴む|かじかむ||
+生活|咳|せき||
+生活|風邪|かぜ||
+生活|湯たんぽ|ゆたんぽ||
+生活|年忘|としわすれ|忘年会|
+生活|雪だるま|ゆきだるま||
+生活|大掃除|おおそうじ|煤払|
+行事|クリスマス|くりすます|聖夜,聖樹|
+行事|七五三|しちごさん||
+行事|酉の市|とりのいち||
+行事|勤労感謝の日|きんろうかんしゃのひ||
+動物|鷹|たか||
+動物|鴨|かも||
+動物|白鳥|はくちょう||
+動物|鶴|つる||
+動物|水鳥|みずどり||
+動物|寒鴉|かんがらす||
+動物|冬眠|とうみん||
+動物|牡蠣|かき||
+動物|冬の蝶|ふゆのちょう||
+植物|落葉|おちば||
+植物|枯葉|かれは||
+植物|木の葉|このは||
+植物|冬木|ふゆき|冬木立|
+植物|枯木|かれき||
+植物|冬紅葉|ふゆもみじ||
+植物|山茶花|さざんか||
+植物|水仙|すいせん||
+植物|寒椿|かんつばき||
+植物|蜜柑|みかん||
+植物|大根|だいこん||
+植物|白菜|はくさい||
+植物|葱|ねぎ||
+植物|枯草|かれくさ||
+植物|ポインセチア|ぽいんせちあ||
+#新年
+時候|正月|しょうがつ||
+時候|元日|がんじつ||
+時候|元旦|がんたん||元日の朝
+時候|去年今年|こぞことし||年が改まる一瞬に去年と今年を思う
+時候|松の内|まつのうち||
+天文|初日|はつひ|初日の出|
+天文|初空|はつぞら||
+天文|初東雲|はつしののめ||元日の明け方
+生活|初夢|はつゆめ||
+生活|書初|かきぞめ||
+生活|年賀状|ねんがじょう||
+生活|お年玉|おとしだま||
+生活|雑煮|ぞうに||
+生活|御節|おせち||
+生活|福袋|ふくぶくろ||
+生活|初詣|はつもうで||
+生活|門松|かどまつ||
+生活|鏡餅|かがみもち||
+生活|双六|すごろく||
+生活|羽子板|はごいた||
+行事|七草|ななくさ|七草粥|
+行事|成人の日|せいじんのひ||
+動物|初鴉|はつがらす||
+植物|福寿草|ふくじゅそう||
+植物|若菜|わかな||`;
+
+const KIGO=[];let season='';
+RAW.split('\n').forEach(l=>{
+  if(!l.trim())return;
+  if(l[0]==='#'){season=l.slice(1);return}
+  const [c,w,r,alt,m]=l.split('|');
+  KIGO.push({s:season,c,w,r,alt:alt?alt.split(','):[],m:m||'',id:season+':'+w});
+});
+const SEASONS=['春','夏','秋','冬','新年'];
+const CATS=['時候','天文','地理','生活','行事','動物','植物'];
+
+/* ------------ storage ------------ */
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ------------ util ------------ */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1600)}
+const toHira=s=>s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));
+const SMALL='ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ';
+function isKanaOnly(s){return /^[ぁ-ゖァ-ヺー\s　、。・]*$/.test(s)}
+function mora(s){let n=0;for(const ch of s){if(/[ぁ-ゖァ-ヺー]/.test(ch)&&!SMALL.includes(ch))n++}return n}
+
+function currentSeason(d=new Date()){
+  const m=d.getMonth()+1,day=d.getDate(),v=m*100+day;
+  if(v>=101&&v<=107)return '新年';
+  if(v>=204&&v<505)return '春';
+  if(v>=505&&v<807)return '夏';
+  if(v>=807&&v<1107)return '秋';
+  return '冬';
+}
+$('#seasonNow').innerHTML='いまの季節 <span class="chip s-'+currentSeason()+'">'+currentSeason()+'</span>';
+
+/* ------------ routing（ハッシュに頼らず直接切り替え） ------------ */
+const VIEWS=['make','learn','kigo','note'];
+let curView='make';
+function go(v){
+  if(!VIEWS.includes(v))v='make';
+  curView=v;
+  VIEWS.forEach(x=>{$('#v-'+x).classList.toggle('on',x===v)});
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));
+  try{if(v==='note')renderNotes();if(v==='kigo')renderKigo();}catch(e){console.error(e)}
+  try{history.replaceState(null,'','#'+v)}catch(e){}
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(!a)return;
+  e.preventDefault();
+  go(a.getAttribute('href').slice(1));
+});
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(v&&v!==curView)go(v)});
+/* ------------ 作る ------------ */
+const LABEL=['上五','中七','下五'],TARGET=[5,7,5];
+let lines=store.get('haiku.draft',[{t:'',r:''},{t:'',r:''},{t:'',r:''}]);
+let memo=store.get('haiku.memo',['','','','']);
+['m1','m2','m3','m4'].forEach((id,i)=>{const el=$('#'+id);el.value=memo[i]||'';el.addEventListener('input',()=>{memo[i]=el.value;store.set('haiku.memo',memo);renderKataHelp()})});
+
+function buildLines(){
+  $('#lines').innerHTML=lines.map((l,i)=>`
+  <div class="ku-line">
+    <div class="ku-head"><b>${LABEL[i]}</b><span class="muted">${TARGET[i]}音</span><span class="cnt" id="c${i}">0</span></div>
+    <input class="t" type="text" data-i="${i}" data-f="t" value="${esc(l.t)}" placeholder="${['起こされて','知らぬ山なみ','秋の風'][i]}">
+    <input class="r" type="text" data-i="${i}" data-f="r" value="${esc(l.r)}" placeholder="よみ（ひらがな）${['おこされて','しらぬやまなみ','あきのかぜ'][i]}">
+  </div>`).join('');
+  $('#lines').querySelectorAll('input').forEach(inp=>inp.addEventListener('input',e=>{
+    const i=+inp.dataset.i,f=inp.dataset.f;lines[i][f]=inp.value;
+    if(f==='t'){const auto=autoReading(inp.value);if(auto!==null&&(!lines[i].r||lines[i]._auto)){lines[i].r=auto;lines[i]._auto=true;$('#lines').querySelector(`input.r[data-i="${i}"]`).value=auto}}
+    if(f==='r')lines[i]._auto=false;
+    update();
+  }));
+  update();
+}
+/* 季語のよみで置き換えて、かなだけになれば自動でよみを作る */
+const KMAP=(()=>{const arr=[];KIGO.forEach(k=>{arr.push([k.w,k.r]);k.alt.forEach(a=>{if(isKanaOnly(a))arr.push([a,toHira(a)])})});return arr.sort((a,b)=>b[0].length-a[0].length)})();
+function autoReading(t){
+  if(!t)return '';
+  let s=t;for(const [w,r] of KMAP){if(s.includes(w))s=s.split(w).join(r)}
+  s=s.replace(/[\s　]/g,'');
+  return isKanaOnly(s)?toHira(s):null;
+}
+function lineCount(l){
+  const src=l.r&&l.r.trim()?l.r:(isKanaOnly(l.t)?l.t:'');
+  return src?mora(src):null;
+}
+function findKigo(text){
+  const found=[];let masked=text;
+  const terms=[];KIGO.forEach(k=>{terms.push([k.w,k]);k.alt.forEach(a=>terms.push([a,k]))});
+  terms.sort((a,b)=>b[0].length-a[0].length);
+  for(const [w,k] of terms){
+    if(w.length<1)continue;
+    let idx=masked.indexOf(w);
+    while(idx!==-1){
+      if(!found.some(f=>f.k===k))found.push({w,k});
+      masked=masked.slice(0,idx)+'□'.repeat(w.length)+masked.slice(idx+w.length);
+      idx=masked.indexOf(w);
+    }
+  }
+  return found;
+}
+const FEEL=['嬉し','うれし','悲し','かなし','寂し','さびし','淋し','楽し','たのし','美し','うつくし','綺麗','きれい','切な','せつな','懐かし','なつかし','幸せ','しあわせ','感動','素敵','すてき','愛し','恋し','辛い','つらい','苦し'];
+const RIKUTSU=['ので','だから','ため','思う','思ふ','おもう','感じ','気がする','ような','ように','みたい','とても','すごく'];
+
+function update(){
+  store.set('haiku.draft',lines);
+  const counts=lines.map(lineCount);
+  counts.forEach((c,i)=>{
+    const el=$('#c'+i);
+    if(c===null){el.textContent='よみ?';el.className='cnt';return}
+    el.textContent=c+'/'+TARGET[i];
+    el.className='cnt '+(c===TARGET[i]?'ok':c>TARGET[i]?'over':'under');
+  });
+  const full=lines.map(l=>l.t.trim()).join('');
+  const reads=lines.map(l=>l.r).join('');
+  $('#tate').textContent=full||'ここに句が縦書きで表示されます';
+  $('#tate').style.color=full?'':'#b9ae9f';
+
+  const out=[];
+  if(!full){$('#checks').innerHTML='<li><span class="ic info">i</span><span>句を入れるとチェックが出ます。</span></li>';return}
+  // 音数
+  if(counts.every(c=>c!==null)){
+    const tot=counts.reduce((a,b)=>a+b,0);
+    if(counts.every((c,i)=>c===TARGET[i]))out.push(['ok','五・七・五、ぴったり十七音です。']);
+    else{
+      counts.forEach((c,i)=>{
+        if(c>TARGET[i]){
+          if(i===1)out.push(['warn',`中七が${c}音（中八）。リズムが崩れやすいので、助詞を削る・言い換えるなどで七音に。`]);
+          else out.push(['tip',`${LABEL[i]}が${c}音で字余り。上五の字余りは許されやすいが、削れるなら削る。`]);
+        }else if(c<TARGET[i])out.push(['tip',`${LABEL[i]}が${c}音で字足らず。あと${TARGET[i]-c}音。`]);
+      });
+      out.push(['info',`合計 ${tot}音`]);
+    }
+  }else out.push(['info','漢字を含む行は「よみ」を入れると音数をチェックできます。']);
+  // 季語
+  const ks=findKigo(full);
+  if(ks.length===0)out.push(['warn','季語が見つかりません（辞典にない季語の可能性も）。季語辞典から選んでみましょう。']);
+  else if(ks.length===1){const k=ks[0].k;out.push(['ok',`季語は「${esc(ks[0].w)}」<span class="chip s-${k.s}">${k.s}</span>${k.m?'— '+esc(k.m):''}`]);
+    if(k.s!==currentSeason())out.push(['info',`いまは${currentSeason()}の季節です。思い出の句なら問題ありません。`]);}
+  else{
+    const ss=[...new Set(ks.map(x=>x.k.s))];
+    out.push(['warn',`季語らしき言葉が${ks.length}つ：${ks.map(x=>`「${esc(x.w)}」<span class="chip s-${x.k.s}">${x.k.s}</span>`).join('')}<br>季重なりの可能性。主役の季語を一つに絞りましょう${ss.length>1?'（季節もばらばらです）':''}。※「月曜」の「月」のように、季語ではない使い方なら無視してOK。`]);
+  }
+  // 感情語・理屈
+  const fe=FEEL.filter(w=>full.includes(w));
+  if(fe.length)out.push(['warn',`気持ちを表す言葉「${fe.map(esc).join('」「')}」があります。気持ちは言わずに、そう感じさせたモノや景色を書きましょう。`]);
+  const ri=RIKUTSU.filter(w=>full.includes(w));
+  if(ri.length)out.push(['tip',`「${ri.map(esc).join('」「')}」は説明・理屈・比喩の言葉。なくても伝わるか試してみて。`]);
+  // の の連続
+  const noCount=(full.match(/の/g)||[]).length;
+  if(noCount>=3)out.push(['tip',`「の」が${noCount}回。続くと間延びするので、一つ減らせないか。`]);
+  // 切れ
+  if(/(や|かな|けり)/.test(full)){
+    const kire=full.match(/(や|かな|けり)/g);out.push(['info',`切れ字「${kire.join('」「')}」があります。一句に切れ字は一つが基本。`]);
+    if(kire.length>1)out.push(['tip','切れ字が二つ以上あると、切れどころがぼやけます。']);
+  }
+  // 抽象語
+  if(/(知らぬ|知らない|不思議|何か|なにか|いろいろ)/.test(full))out.push(['tip','「知らぬ」「不思議」などの抽象的な言葉は、何を見てそう感じたかの具体的なモノに置き換えると映像が立ちます。']);
+  // 動詞の目安（て・た・る終わりの語の数をざっくり）
+  const te=(reads.match(/て/g)||[]).length;
+  if(te>=2)out.push(['tip','「〜て」が二つ以上。動作が多いと報告文になりがち。動作は一つに絞れないか。']);
+  // 下五
+  const last=lines[2].t.trim();
+  if(last&&ks.some(x=>last.includes(x.w)))out.push(['info','下五に季語＝余韻で終わる形。']);
+  $('#checks').innerHTML=out.map(([lv,t])=>`<li><span class="ic ${lv}">${{ok:'✓',warn:'!',tip:'?',info:'i'}[lv]}</span><span>${t}</span></li>`).join('');
+}
+
+/* 型 */
+let kata=store.get('haiku.kata',0);
+const KATA=[
+  {f:'［十二音のフレーズ（動作や発見）］＋［季語 五音］',h:'まず季語と関係のない「その場のこと」を十二音で書き、最後に季語を置く。フレーズの中で季語を説明しないこと。'},
+  {f:'［季語＋や（五音）］／［十二音のフレーズ］',h:'「や」で大きく切れるので、季語が舞台を作り、残りの十二音がそこで起きたことになる。「秋風や」「春の夜や」など。'},
+  {f:'［季語］をじっと観察した十七音',h:'季語そのもの（例：芒、落葉）の形・動き・色を細かく見て描く。他のモノを持ち込まない。難しいが決まると強い。'}
+];
+function renderKataHelp(){
+  document.querySelectorAll('#kata button').forEach(b=>b.classList.toggle('on',+b.dataset.k===kata));
+  const k=KATA[kata];
+  const kg=(memo[3]||'').trim();
+  let sample='';
+  if(kg){
+    if(kata===0)sample=`下五に「${esc(kg)}」を置き、上五・中七に①の動作や発見を十二音で。`;
+    if(kata===1)sample=`上五を「${esc(kg)}や」にして、中七・下五に①のフレーズを。`;
+    if(kata===2)sample=`「${esc(kg)}」だけを見つめて、色・形・動きを描写。`;
+  }
+  $('#kataHelp').innerHTML=`<div class="formula">${k.f}</div><p class="muted" style="margin:4px 0">${k.h}</p>${sample?`<p style="margin:4px 0;font-size:14px">→ ${sample}</p>`:''}`;
+}
+document.querySelectorAll('#kata button').forEach(b=>b.addEventListener('click',()=>{kata=+b.dataset.k;store.set('haiku.kata',kata);renderKataHelp()}));
+
+$('#btnExample').addEventListener('click',()=>{
+  lines=[{t:'起こされて',r:'おこされて'},{t:'秋風頬に',r:'あきかぜほほに'},{t:'知らぬ土地',r:'しらぬとち'}];
+  memo=['サービスエリアで休憩','寝ていたら起こされた','頬に秋風、知らない景色','秋風'];
+  ['m1','m2','m3','m4'].forEach((id,i)=>$('#'+id).value=memo[i]);store.set('haiku.memo',memo);
+  buildLines();renderKataHelp();toast('作例を入れました。「書き方」に添削例があります');
+});
+$('#btnClear').addEventListener('click',()=>{lines=[{t:'',r:''},{t:'',r:''},{t:'',r:''}];buildLines()});
+$('#btnSave').addEventListener('click',()=>{
+  const full=lines.map(l=>l.t.trim()).join('');
+  if(!full){toast('句が空です');return}
+  const notes=store.get('haiku.notes',[]);
+  const ks=findKigo(full);
+  notes.unshift({id:Date.now(),ku:full,lines:lines.map(l=>({t:l.t,r:l.r})),memo:memo.slice(),kigo:ks[0]?ks[0].w:'',season:ks[0]?ks[0].k.s:'',date:new Date().toISOString()});
+  store.set('haiku.notes',notes);toast('句帳に保存しました');
+});
+
+/* ------------ 季語辞典 ------------ */
+let fSeason=currentSeason(),fCat='すべて',favOnly=false;
+let favs=new Set(store.get('haiku.favs',[]));
+function renderSegs(){
+  $('#segSeason').innerHTML=['すべて',...SEASONS].map(s=>`<button class="s ${s===fSeason?'on':''} b-${s}" data-s="${s}">${s}</button>`).join('')+`<button class="${favOnly?'on':''}" id="favBtn">★ お気に入り</button>`;
+  $('#segCat').innerHTML=['すべて',...CATS].map(c=>`<button class="${c===fCat?'on':''}" data-c="${c}">${c}</button>`).join('');
+  $('#segSeason').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{fSeason=b.dataset.s;renderKigo()});
+  $('#favBtn').onclick=()=>{favOnly=!favOnly;renderKigo()};
+  $('#segCat').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{fCat=b.dataset.c;renderKigo()});
+}
+function renderKigo(){
+  renderSegs();
+  const q=$('#q').value.trim();const qh=toHira(q);
+  const list=KIGO.filter(k=>(fSeason==='すべて'||k.s===fSeason)&&(fCat==='すべて'||k.c===fCat)&&(!favOnly||favs.has(k.id))&&
+    (!q||k.w.includes(q)||k.r.includes(qh)||k.alt.some(a=>a.includes(q)||toHira(a).includes(qh))||k.m.includes(q)));
+  $('#kcount').textContent=`${list.length}語`;
+  $('#klist').innerHTML=list.map(k=>`<div class="kitem b-l-${k.s}" data-id="${esc(k.id)}">${favs.has(k.id)?'<span class="fav">★</span>':''}<div class="w">${esc(k.w)}</div><div class="r">${esc(k.r)}・${mora(k.r)}音・${k.c}</div></div>`).join('')||'<p class="muted">見つかりませんでした。</p>';
+  $('#klist').querySelectorAll('.kitem').forEach(el=>el.onclick=()=>openKigo(el.dataset.id));
+}
+$('#q').addEventListener('input',renderKigo);
+
+function openKigo(id){
+  const k=KIGO.find(x=>x.id===id);if(!k)return;
+  const n=mora(k.r);
+  $('#sheet').innerHTML=`
+    <div class="row" style="justify-content:space-between"><span><span class="chip s-${k.s}">${k.s}</span><span class="muted">${k.c}</span></span><button class="btn sm" id="close">閉じる</button></div>
+    <div class="big" style="margin-top:8px">${esc(k.w)}</div>
+    <div class="muted">${esc(k.r)}（${n}音）</div>
+    ${k.alt.length?`<p style="margin:10px 0 0;font-size:14px"><b>傍題（言い換え）</b>：${k.alt.map(esc).join('、')}</p>`:''}
+    <p style="margin:10px 0">${esc(k.m||'—')}</p>
+    <p class="muted" style="margin:6px 0">${n===5?'五音なので上五・下五にそのまま置けます。':n<5?`${n}音。「${esc(k.w)}や」「${esc(k.w)}の」など助詞を足すと五音に近づきます。`:`${n}音。中七に入れるか、言い換え（傍題）を探しましょう。`}</p>
+    <h3>句に入れる</h3>
+    <div class="row">${LABEL.map((L,i)=>`<button class="btn pri sm" data-ins="${i}">${L}に入れる</button>`).join('')}<button class="btn sm" data-memo="1">メモの季語にする</button></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" id="favT">${favs.has(k.id)?'★ お気に入り解除':'☆ お気に入り'}</button></div>`;
+  $('#modal').classList.add('on');
+  $('#close').onclick=closeModal;
+  $('#favT').onclick=()=>{favs.has(k.id)?favs.delete(k.id):favs.add(k.id);store.set('haiku.favs',[...favs]);openKigo(id);renderKigo()};
+  $('#sheet').querySelectorAll('[data-ins]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.ins;lines[i].t+=k.w;lines[i].r=(lines[i].r||'')+k.r;lines[i]._auto=false;
+    memo[3]=k.w;$('#m4').value=k.w;store.set('haiku.memo',memo);
+    closeModal();go('make');buildLines();renderKataHelp();toast(`「${k.w}」を${LABEL[i]}に入れました`);
+  });
+  $('#sheet').querySelector('[data-memo]').onclick=()=>{memo[3]=k.w;$('#m4').value=k.w;store.set('haiku.memo',memo);renderKataHelp();closeModal();toast('メモに入れました')};
+}
+function closeModal(){$('#modal').classList.remove('on')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+/* ------------ 句帳 ------------ */
+function renderNotes(){
+  const notes=store.get('haiku.notes',[]);
+  if(!notes.length){$('#notes').innerHTML='<p class="muted">まだ保存した句はありません。「作る」で句を作って保存してください。</p>';return}
+  $('#notes').innerHTML=notes.map(n=>{
+    const d=new Date(n.date);
+    return `<div class="note-item">
+      <div class="k">${esc(n.ku)}</div>
+      <div class="muted">${n.season?`<span class="chip s-${n.season}">${n.season}</span>`:''}${n.kigo?'季語：'+esc(n.kigo)+'　':''}${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}${n.memo&&n.memo[0]?'　'+esc(n.memo[0]):''}</div>
+      <div class="row" style="margin-top:6px"><button class="btn sm" data-edit="${n.id}">推敲する</button><button class="btn sm" data-copy="${n.id}">コピー</button><button class="btn sm" data-del="${n.id}">削除</button></div>
+    </div>`}).join('');
+  $('#notes').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
+    const n=notes.find(x=>x.id==b.dataset.edit);lines=n.lines.map(l=>({t:l.t,r:l.r}));
+    if(n.memo){memo=n.memo.slice();['m1','m2','m3','m4'].forEach((id,i)=>$('#'+id).value=memo[i]||'');store.set('haiku.memo',memo)}
+    go('make');buildLines();renderKataHelp();
+  });
+  $('#notes').querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+    const n=notes.find(x=>x.id==b.dataset.copy);
+    try{await navigator.clipboard.writeText(n.ku);toast('コピーしました')}catch(e){toast('コピーできませんでした')}
+  });
+  $('#notes').querySelectorAll('[data-del]').forEach(b=>{
+    b.onclick=()=>{
+      if(b.dataset.armed){store.set('haiku.notes',notes.filter(x=>x.id!=b.dataset.del));renderNotes();toast('削除しました')}
+      else{b.dataset.armed='1';b.textContent='本当に削除？';b.classList.add('pri');setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='削除';b.classList.remove('pri')}},2500)}
+    };
+  });
+}
+
+document.documentElement.classList.add('js');
+buildLines();renderKataHelp();go((location.hash||'').slice(1)||'make');
+</script>
+</body>
+</html>
