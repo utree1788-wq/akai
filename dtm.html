@@ -3,41 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ポケットＤＴＭ ＳＴＵＤＩＯ ｖａｐｏｒ</title>
-<meta name="theme-color" content="#12032c">
+<title>ポケットDTM Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=DotGothic16&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1b0a23;--bg2:#200c2a;--panel:#11081c;--panel2:#1d0b26;--line:#341444;--txt:#f5bffa;--dim:#bd98e1;--acc:#ff33c0;--acc2:#8252ff;--grn:#33fff0;--red:#ff3352;--lcd:#11081c;--lcdtxt:#ff33c0}
+:root{--bg:#0b0218;--bg2:#12052a;--panel:#170733;--panel2:#1d0a3d;--line:#52266f;--txt:#f6eaff;--dim:#b9a3d9;--acc:#ff4fd8;--acc2:#8b5cff;--grn:#05ffa1;--red:#ff4f7b;--lcd:#05010d;--lcdtxt:#3ff3ff;--cy:#3ff3ff;--yl:#ffe66d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:"M PLUS Rounded 1c",-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:14px;overscroll-behavior:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:"Zen Kaku Gothic New",-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:14px;overscroll-behavior:none}
 body{user-select:none;-webkit-user-select:none}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh}
-button{font:inherit;font-weight:700;color:var(--txt);background:linear-gradient(#11081c,#1e0b27);border:1.5px solid var(--line);border-radius:12px;padding:5px 10px;cursor:pointer;min-height:32px;box-shadow:0 2px 0 #341444}
-button:active{transform:translateY(1px);box-shadow:0 1px 0 #341444}
-button.on{background:linear-gradient(#ff52c9,#ff33c0);color:#fde7fe;border-color:#ff33c0;box-shadow:0 2px 0 #ff33c0}
-select,input[type=number],input[type=text]{font:inherit;background:#11081c;color:var(--txt);border:1.5px solid var(--line);border-radius:12px;padding:4px 8px;min-height:32px}
+button{font:inherit;font-weight:700;color:var(--txt);background:linear-gradient(#0b0512,#12071e);border:1.5px solid var(--line);border-radius:12px;padding:5px 10px;cursor:pointer;min-height:32px;box-shadow:0 2px 0 #240f3c}
+button:active{transform:translateY(1px);box-shadow:0 1px 0 #240f3c}
+button.on{background:linear-gradient(#ff52bd,#ff52bc);color:#fff;border-color:#ff46b8;box-shadow:0 2px 0 #ff1faa}
+select,input[type=number],input[type=text]{font:inherit;background:#0b0512;color:var(--txt);border:1.5px solid var(--line);border-radius:12px;padding:4px 8px;min-height:32px}
 input[type=range]{accent-color:var(--acc)}
 /* transport */
-#top{display:flex;align-items:center;gap:5px;padding:7px 8px 6px;background:linear-gradient(90deg,#2a1037,#250f33 55%,#123f30);border-bottom:1.5px solid var(--line)}
+#top{display:flex;align-items:center;gap:5px;padding:7px 8px 6px;background:linear-gradient(90deg,#1c0c2e,#190b2a 55%,#210e36);border-bottom:1.5px solid var(--line)}
 #top>button{width:34px;padding:3px 0;flex:none;font-size:14px}
-#lcd{min-width:96px;background:#11081c;border:1.5px solid var(--line);border-radius:12px;padding:2px 10px;font-family:ui-monospace,Menlo,monospace;color:var(--lcdtxt);min-width:0;flex:1 1 auto;max-width:300px;cursor:pointer;line-height:1.15;box-shadow:inset 0 1px 4px #351446;overflow:hidden}
+#lcd{min-width:96px;background:#0b0512;border:1.5px solid var(--line);border-radius:12px;padding:2px 10px;font-family:ui-monospace,Menlo,monospace;color:var(--lcdtxt);min-width:0;flex:1 1 auto;max-width:300px;cursor:pointer;line-height:1.15;box-shadow:inset 0 1px 4px #250f3e;overflow:hidden}
 #lcdPos{font-size:16px;font-weight:800;letter-spacing:.04em;white-space:nowrap}
 #lcdSub{font-size:10px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#playBtn{width:44px!important;color:#f2aaf8!important;font-size:16px!important}
-#playBtn.playing{background:linear-gradient(#52fff2,#33fff0);color:#fde7fe!important;border-color:#f1a7f8}
+#playBtn{width:44px!important;color:#1affa2!important;font-size:16px!important}
+#playBtn.playing{background:linear-gradient(#52ffb4,#1fffa2);color:#fff!important;border-color:#1affa4}
 #recBtn{color:var(--red)!important}
-#recBtn.on{background:linear-gradient(#ff526c,#ff3352);color:#fde7fe!important}
+#recBtn.on{background:linear-gradient(#341656,#ff52b0);color:#fff!important}
 #modeSeg{display:flex;flex:none}
 #modeSeg button{min-height:32px;padding:0 7px;font-size:11px;font-weight:800;border-radius:0}
 #modeSeg button:first-child{border-radius:12px 0 0 12px}#modeSeg button:last-child{border-radius:0 12px 12px 0}
-#masterMeter{width:8px;height:32px;flex:none;border-radius:4px;background:#250e31}
+#masterMeter{width:8px;height:32px;flex:none;border-radius:4px;background:#180a28}
 /* tabs */
 #tabs{display:flex;gap:4px;padding:5px 6px 0;background:var(--bg2)}
-#tabs button{flex:1;border-radius:14px 14px 0 0;border-bottom:none;box-shadow:none;background:#190a21;color:var(--dim);font-size:12px;padding:6px 2px;min-height:36px;display:flex;align-items:center;justify-content:center;gap:4px}
+#tabs button{flex:1;border-radius:14px 14px 0 0;border-bottom:none;box-shadow:none;background:#0e0618;color:var(--dim);font-size:12px;padding:6px 2px;min-height:36px;display:flex;align-items:center;justify-content:center;gap:4px}
 #tabs button .ti{font-size:14px}
-#tabs button.on{color:#fde7fe;background:linear-gradient(#ff52c9,#ff33c0);border-color:#ff33c0}
-#ctx{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:6px 8px;background:#11081c;border-bottom:1.5px solid var(--line);min-height:44px}
+#tabs button.on{color:#fff;background:linear-gradient(#341656,#ff52bc);border-color:#ff46b8}
+#ctx{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:6px 8px;background:#0b0512;border-bottom:1.5px solid var(--line);min-height:44px}
 #ctx:empty{display:none}
 #ctx .lab{font-size:11px;color:var(--dim)}
 #ctx select{max-width:170px}
@@ -45,99 +44,120 @@ input[type=range]{accent-color:var(--acc)}
 .pill .dot{width:10px;height:10px;border-radius:50%}
 #views{flex:1;position:relative;min-height:0}
 .view{position:absolute;inset:0;display:none}
+#songWrap{position:absolute;inset:0;overflow-y:auto;padding:8px 8px 40px;-webkit-overflow-scrolling:touch}
+.sgHead{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;background:#0b0512;border:1.5px solid var(--line);border-radius:16px;padding:8px 12px;margin-bottom:8px}
+.sgHead b{font-size:16px}.sgHead .st{font-size:12px;color:var(--dim);font-weight:700}
+.sgLeg{display:flex;flex-wrap:wrap;gap:4px 10px;width:100%;font-size:11px;font-weight:700;color:var(--dim)}
+.sgLeg span{display:inline-flex;align-items:center;gap:4px;cursor:pointer}.sgLeg span.mute{opacity:.35;text-decoration:line-through}
+.sgLeg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.sgRow{display:grid;gap:4px;margin-bottom:4px}
+.sgBar{position:relative;background:#0b0512;border:1.5px solid var(--line);border-radius:12px;padding:3px 5px 4px;min-width:0;cursor:pointer;overflow:hidden}
+.sgBar.empty{background:#0e0618;border-style:dashed}
+.sgBar.now{border-color:var(--acc);box-shadow:0 0 0 2px #ff6fae55}
+.sgBar.cur{outline:2px dashed var(--acc2);outline-offset:-2px}
+.sgBar.loop{background:linear-gradient(#12071d,#0b0512)}
+.sgTop{display:flex;align-items:center;gap:4px;min-height:18px}
+.sgNo{font-size:10px;font-weight:800;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
+.sgSec{font-size:10px;font-weight:800;color:#fff;background:var(--acc2);border-radius:8px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+.sgSec.add{background:none;color:#e3c3d6;border:1px dashed #291144}
+.sgCh{font-size:13px;font-weight:800;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:17px;display:flex;gap:6px}
+.sgCh span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.sgCh span+span{color:#bfa1d9;font-size:11px;align-self:center}
+.sgBar canvas{display:block;width:100%;height:var(--sgH,36px);border-radius:6px;background:#0d0616}
+.sgSecStart{border-left:4px solid var(--acc2)}
+
 .view.on{display:block}
-.scroller{position:absolute;inset:0;overflow:auto;background:#180920}
+.scroller{position:absolute;inset:0;overflow:auto;background:#0e0617}
 .spacer{position:relative}
 .scroller canvas{position:sticky;left:0;top:0;display:block;touch-action:pan-x pan-y}
-#tools{display:flex;flex-wrap:wrap;gap:5px;padding:6px 8px calc(7px + env(safe-area-inset-bottom));background:linear-gradient(#11081c,#1e0b27);border-top:1.5px solid var(--line);align-items:center}
+#tools{display:flex;flex-wrap:wrap;gap:5px;padding:6px 8px calc(7px + env(safe-area-inset-bottom));background:linear-gradient(#0b0512,#12071e);border-top:1.5px solid var(--line);align-items:center}
 #tools:empty{display:none}
 .seg{display:flex}.seg button{border-radius:0}.seg button:first-child{border-radius:12px 0 0 12px}.seg button:last-child{border-radius:0 12px 12px 0}
 #tools select{max-width:120px}
 .grow{flex:1}
 /* chord bar */
-#chordBar{background:linear-gradient(90deg,#1b0a24,#1b0b26);border-bottom:1.5px solid var(--line);padding:5px 8px;display:flex;flex-direction:column;gap:5px}
+#chordBar{background:linear-gradient(90deg,#10071b,#11071d);border-bottom:1.5px solid var(--line);padding:5px 8px;display:flex;flex-direction:column;gap:5px}
 #chordBar.hidden{display:none}
 .cb-row{display:flex;gap:5px;align-items:center;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
 .cb-row::-webkit-scrollbar{display:none}
 .cb-row select{min-height:30px;padding:2px 4px}
 #chordIn{flex:1 1 150px;min-width:0;min-height:30px}
 #chordBar .cb-row:first-child{flex-wrap:wrap}
-.chip{flex:none;touch-action:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;min-height:40px;padding:2px 8px;border-radius:14px;background:linear-gradient(#11081c,#220d2c);border:1.5px solid #3b174e;box-shadow:0 2px 0 #341444;cursor:grab;font-weight:800;color:var(--txt)}
+.chip{flex:none;touch-action:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;min-height:40px;padding:2px 8px;border-radius:14px;background:linear-gradient(#0b0512,#150923);border:1.5px solid #2a1246;box-shadow:0 2px 0 #240f3c;cursor:grab;font-weight:800;color:var(--txt)}
 .chip small{font-size:9px;color:var(--dim);font-weight:700}
-.chip.c1{background:linear-gradient(#11081c,#240e2f)}.chip.c2{background:linear-gradient(#11081c,#200d2c);border-color:#221343}.chip.c3{background:linear-gradient(#11081c,#0f3527);border-color:#52fff2}.chip.c4{background:linear-gradient(#11081c,#35290f);border-color:#ffc652}
-.chip.prog{background:linear-gradient(#ff52c9,#ff52c9);color:#fde7fe;border-color:#ff33c0}
-.chip.prog small{color:#fde7fe}
-.ghost{position:fixed;z-index:50;pointer-events:none;padding:6px 12px;border-radius:14px;background:#ff33c0;color:#fde7fe;font-weight:800;box-shadow:0 6px 18px #ff33c066;transform:translate(-50%,-130%);white-space:nowrap;font-size:13px}
+.chip.c1{background:linear-gradient(#0b0512,#170a27)}.chip.c2{background:linear-gradient(#0b0512,#150923);border-color:#230f3a}.chip.c3{background:linear-gradient(#0b0512,#1b0b2c);border-color:#52ffb5}.chip.c4{background:linear-gradient(#0b0512,#1b0b2c);border-color:#ffc652}
+.chip.prog{background:linear-gradient(#2a1246,#ff52bd);color:#fff;border-color:#ff46b8}
+.chip.prog small{color:#fff}
+.ghost{position:fixed;z-index:50;pointer-events:none;padding:6px 12px;border-radius:14px;background:#ff52bc;color:#fff;font-weight:800;box-shadow:0 6px 18px #ff6fae66;transform:translate(-50%,-130%);white-space:nowrap;font-size:13px}
 .ghost small{display:block;font-size:10px;font-weight:700;opacity:.9}
 .cb-tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .cb-tabs::-webkit-scrollbar{display:none}
 .cb-tabs button{flex:none;min-height:28px;padding:2px 10px;font-size:11px;border-radius:20px}
 .dim{color:var(--dim)}
-#cbInfo{font-size:11px;line-height:1.5;background:#11081c;border:1.5px dashed #3b174e;border-radius:12px;padding:5px 9px;max-height:64px;overflow-y:auto}
-#cbInfo b{color:#ff33c0}
-#cbInfo .nt{color:#7933ff;font-weight:700;white-space:nowrap}
-.chip.fT{background:linear-gradient(#11081c,#240e2f);border-color:#3b174e}
-.chip.fSD{background:linear-gradient(#11081c,#0f3527);border-color:#52fff2}
-.chip.fD{background:linear-gradient(#11081c,#382a10);border-color:#ffc652}
-.chip.fA{background:linear-gradient(#11081c,#200d2c);border-color:#221343}
-.chip.fB{background:linear-gradient(#11081c,#0d1d2c);border-color:#15304a}
+#cbInfo{font-size:11px;line-height:1.5;background:#0b0512;border:1.5px dashed #2a1246;border-radius:12px;padding:5px 9px;max-height:64px;overflow-y:auto}
+#cbInfo b{color:#ff26ae}
+#cbInfo .nt{color:#7d39ff;font-weight:700;white-space:nowrap}
+.chip.fT{background:linear-gradient(#0b0512,#170a27);border-color:#2a1246}
+.chip.fSD{background:linear-gradient(#0b0512,#1b0b2c);border-color:#52ffb5}
+.chip.fD{background:linear-gradient(#0b0512,#1d0c30);border-color:#ffc652}
+.chip.fA{background:linear-gradient(#0b0512,#150923);border-color:#230f3a}
+.chip.fB{background:linear-gradient(#0b0512,#150923);border-color:#281042}
 .chip.prog{min-width:96px}
 /* mastering */
-#v-master{overflow:auto;background:#180920}
+#v-master{overflow:auto;background:#0e0617}
 #masterWrap{padding:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;max-width:1200px}
-.mcard{background:#11081c;border:1.5px solid var(--line);border-radius:18px;padding:8px 12px 10px}
-.mcard h3{margin:2px 0 6px;font-size:13px;color:#ff33c0;display:flex;align-items:center;gap:6px}
+.mcard{background:#0b0512;border:1.5px solid var(--line);border-radius:18px;padding:8px 12px 10px}
+.mcard h3{margin:2px 0 6px;font-size:13px;color:#ff26ae;display:flex;align-items:center;gap:6px}
 .mcard h3 .mtog{margin-left:auto;min-height:26px;padding:0 12px;font-size:11px}
 .mtop{grid-column:1/-1}
 .mbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
 .mbar select{flex:1;min-width:150px}
 #mMeter{width:100%;height:130px;display:block;border-radius:12px;border:1.5px solid var(--line)}
 .mread{font-size:11px;color:var(--dim);margin-top:4px}
-.mread b{color:#ff33c0}
-.ib{min-height:0!important;width:20px;height:20px;padding:0!important;border-radius:50%!important;font-size:11px!important;line-height:1;color:#7933ff!important;background:#1d0b28!important;border:1px solid #1e123d!important;box-shadow:none!important;vertical-align:middle;flex:none}
-.infobox{display:none;font-size:11.5px;line-height:1.6;color:#f4b7f9;background:#190a22;border-left:3px solid #ff52c9;border-radius:8px;padding:6px 9px;margin:2px 0 8px}
+.mread b{color:#ff26ae}
+.ib{min-height:0!important;width:20px;height:20px;padding:0!important;border-radius:50%!important;font-size:11px!important;line-height:1;color:#7d39ff!important;background:#12081f!important;border:1px solid #1f0d34!important;box-shadow:none!important;vertical-align:middle;flex:none}
+.infobox{display:none;font-size:11.5px;line-height:1.6;color:#f2dffb;background:#0f0618;border-left:3px solid #341656;border-radius:8px;padding:6px 9px;margin:2px 0 8px}
 .infobox.open{display:block}
 .row label{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 /* step sequencer / drum editor */
-#v-step{background:#180920}
+#v-step{background:#0e0617}
 #v-step.on{display:flex;flex-direction:column}
 #stepScroll{flex:1;min-height:0;overflow:auto}
 #stepWrap{padding:8px 8px 14px;min-width:max-content}
-#stepPanel{flex:none;max-height:36%;overflow:auto;background:#11081c;border-top:1.5px solid var(--line);padding:6px 10px 12px}
+#stepPanel{flex:none;max-height:36%;overflow:auto;background:#0b0512;border-top:1.5px solid var(--line);padding:6px 10px 12px}
 #stepPanel:empty{display:none}
 .srow{display:flex;align-items:center;gap:6px;margin-bottom:3px}
 .sname{width:100px;flex:none;min-height:30px;font-size:11px;text-align:left;display:grid;grid-template-columns:8px 1fr;column-gap:4px;align-items:center;align-content:center;padding:0 6px;position:sticky;left:0;z-index:3;white-space:nowrap;overflow:hidden;line-height:1.1}
 .sname .led{grid-row:1/3}
 .sname .ab{font-size:8px;color:var(--dim);font-weight:800}
-.sname .led{width:7px;height:7px;border-radius:50%;background:#341444;flex:none}
+.sname .led{width:7px;height:7px;border-radius:50%;background:#240f3c;flex:none}
 .sname .led.hit{background:var(--acc);box-shadow:0 0 8px var(--acc)}
-.srow.rsel .sname{background:linear-gradient(#250e30,#331343);border-color:#ff33c0}
-.srow.rsel .stp{border-color:#401854}
+.srow.rsel .sname{background:linear-gradient(#180a27,#230f3a);border-color:#ff46b8}
+.srow.rsel .stp{border-color:#2e134c}
 .steps{display:flex;gap:3px}
-.stp{position:relative;overflow:hidden;width:24px;height:30px;border-radius:7px;padding:0;min-height:0;border:1.5px solid #311340;background:#1e0b27;box-shadow:none}
-.stp.alt{background:#1d0b28;border-color:#1a0f35}
-.stp.bb{box-shadow:inset 3px 0 0 #ff52c9}
-.stp.on{background:#11081c;border-color:#ff33c0}
-.stp .vb{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#ff52c9,#ff33c0)}
-.stp.gh .vb{background:#2b1039}
-.stp.ac .vb{background:linear-gradient(#ff33c0,#ff33c0)}
-.stp .vn{position:absolute;left:0;right:0;top:2px;font-size:8.5px;font-weight:800;color:#f5befa;text-align:center;z-index:1}
-.stp .am{position:absolute;right:1px;bottom:1px;font-size:9px;color:#fde7fe;background:#7933ff;border-radius:4px;padding:0 2px;z-index:1;line-height:1.25;font-style:normal}
-.stp .om{position:absolute;bottom:2px;width:6px;height:6px;border-radius:50%;background:#f2aaf8;border:1px solid #11081c;transform:translateX(-50%);z-index:2}
-.stp.sel{outline:2px solid #7933ff;outline-offset:-2px}
-.stp.now{box-shadow:0 0 0 2px #8252ff}
+.stp{position:relative;overflow:hidden;width:24px;height:30px;border-radius:7px;padding:0;min-height:0;border:1.5px solid #210e38;background:#12071e;box-shadow:none}
+.stp.alt{background:#12081f;border-color:#1b0b2d}
+.stp.bb{box-shadow:inset 3px 0 0 #ff52bf}
+.stp.on{background:#0b0512;border-color:#ff46b8}
+.stp .vb{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#2b1248,#ff52bc)}
+.stp.gh .vb{background:#1d0c30}
+.stp.ac .vb{background:linear-gradient(#ff52bc,#ff1aa9)}
+.stp .vn{position:absolute;left:0;right:0;top:2px;font-size:8.5px;font-weight:800;color:#f2dffb;text-align:center;z-index:1}
+.stp .am{position:absolute;right:1px;bottom:1px;font-size:9px;color:#fff;background:#7d39ff;border-radius:4px;padding:0 2px;z-index:1;line-height:1.25;font-style:normal}
+.stp .om{position:absolute;bottom:2px;width:6px;height:6px;border-radius:50%;background:#1affa2;border:1px solid #0b0512;transform:translateX(-50%);z-index:2}
+.stp.sel{outline:2px solid #7d39ff;outline-offset:-2px}
+.stp.now{box-shadow:0 0 0 2px #341656}
 .shead .sname,.lanehead .sname{min-height:0}
-.lanehead{position:sticky;bottom:0;z-index:4;background:linear-gradient(transparent,#180920 18%);padding:8px 0 4px;margin:0}
-.shead{position:sticky;top:0;z-index:4;background:#180920;padding-bottom:2px}
+.lanehead{position:sticky;bottom:0;z-index:4;background:linear-gradient(transparent,#0e0617 18%);padding:8px 0 4px;margin:0}
+.shead{position:sticky;top:0;z-index:4;background:#0e0617;padding-bottom:2px}
 .ghostname{visibility:hidden;border:none!important;background:none!important;box-shadow:none!important}
 .snum{width:24px;font-size:8px;color:var(--dim);white-space:nowrap;overflow:visible}
-.lanelab{visibility:visible;display:flex;flex-direction:column;font-size:11px;color:#ff33c0;font-weight:800;line-height:1.2;background:#180920!important}
+.lanelab{visibility:visible;display:flex;flex-direction:column;font-size:11px;color:#ff26ae;font-weight:800;line-height:1.2;background:#0e0617!important}
 .lanelab small{font-size:10px;color:var(--dim)}
-#lane{display:block;height:76px;border:1.5px solid var(--line);border-radius:8px;touch-action:none;cursor:ns-resize;background:#11081c}
+#lane{display:block;height:76px;border:1.5px solid var(--line);border-radius:8px;touch-action:none;cursor:ns-resize;background:#0b0512}
 #stepModes button{display:flex;flex-direction:column;align-items:center;line-height:1;padding:3px 7px;min-height:38px;font-size:14px}
 #stepModes small{font-size:8.5px;margin-top:2px}
 .phead{display:flex;gap:6px;align-items:center;margin-bottom:2px;flex-wrap:wrap}
-#stepPanel h4{font-size:12px;color:#ff33c0;margin:8px 0 4px;display:flex;align-items:center;gap:6px}
+#stepPanel h4{font-size:12px;color:#ff26ae;margin:8px 0 4px;display:flex;align-items:center;gap:6px}
 .pbtns{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0;align-items:center}
 .pbtns button{min-height:28px;padding:2px 9px;font-size:11.5px}
 #stepPanel .row{grid-template-columns:86px 1fr 54px;margin:4px 0}
@@ -147,30 +167,30 @@ input[type=range]{accent-color:var(--acc)}
 .tplgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
 .tplb{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:46px;font-size:12px}
 .tplb small{font-size:10px;color:var(--dim);font-weight:700}
-.tplb.on small{color:#fde7fe}
+.tplb.on small{color:#fff}
 .shint{color:var(--dim);font-size:11.5px;margin:2px 0 8px;line-height:1.6;position:sticky;left:0;max-width:92vw}
 /* mixer */
-#v-mixer{overflow:auto;background:#180920}
+#v-mixer{overflow:auto;background:#0e0617}
 #mixWrap{display:flex;gap:6px;padding:8px;min-width:max-content;min-height:100%}
-.strip{width:80px;flex:none;background:linear-gradient(#11081c,#1d0b26);border:1.5px solid var(--line);border-radius:16px;padding:6px 5px;display:flex;flex-direction:column;align-items:center;gap:5px}
-.strip.master{background:linear-gradient(#11081c,#1e0c2a);width:88px;border-color:#1e123d}
+.strip{width:80px;flex:none;background:linear-gradient(#0b0512,#11071d);border:1.5px solid var(--line);border-radius:16px;padding:6px 5px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.strip.master{background:linear-gradient(#0b0512,#140821);width:88px;border-color:#1f0d34}
 .strip.sel{box-shadow:0 0 0 2px var(--acc)}
 .strip .nm{font-size:11px;font-weight:800;width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-top:4px solid var(--c);border-radius:3px;padding-top:4px}
 .strip button{width:100%;min-height:26px;padding:0;font-size:11px}
 .strip .fxs{font-size:9px;color:var(--dim);min-height:24px;text-align:center;line-height:1.3}
 .strip .fxs b{color:var(--acc);font-weight:800}
 .fwrap{display:flex;gap:5px;align-items:stretch;height:180px}
-.fwrap canvas{width:8px;height:180px;background:#250e31;border-radius:4px}
+.fwrap canvas{width:8px;height:180px;background:#180a28;border-radius:4px}
 .fader{writing-mode:vertical-lr;direction:rtl;width:26px;height:180px;margin:0}
 .strip .db{font-size:10px;color:var(--dim);font-family:ui-monospace,monospace}
 .strip .panr{width:64px}
 .ms{display:flex;gap:3px;width:100%}
-.ms button.m.on{background:linear-gradient(#ff526c,#ff3352);color:#fde7fe;border-color:#ff3352}
-.ms button.s.on{background:linear-gradient(#52fff2,#33fff0);color:#fde7fe;border-color:#f1a7f8}
+.ms button.m.on{background:linear-gradient(#2b1248,#ff52b3);color:#fff;border-color:#ff50b2}
+.ms button.s.on{background:linear-gradient(#52ffb6,#1fffa2);color:#fff;border-color:#1affa4}
 /* sheet */
-#sheet{position:fixed;inset:0;background:#f5bffa44;display:flex;align-items:flex-end;justify-content:center;z-index:20}
+#sheet{position:fixed;inset:0;background:rgba(5,0,15,.65);display:flex;align-items:flex-end;justify-content:center;z-index:20}
 #sheet.hidden{display:none}
-#sheetBody{background:#11081c;width:100%;max-width:560px;max-height:86vh;overflow:auto;border-radius:22px 22px 0 0;padding:14px 14px calc(20px + env(safe-area-inset-bottom));border:1.5px solid var(--line)}
+#sheetBody{background:#0b0512;width:100%;max-width:560px;max-height:86vh;overflow:auto;border-radius:22px 22px 0 0;padding:14px 14px calc(20px + env(safe-area-inset-bottom));border:1.5px solid var(--line)}
 #sheetBody h2{font-size:16px;margin:2px 0 12px;display:flex;align-items:center;gap:8px}
 #sheetBody h2 .x{margin-left:auto}
 #sheetBody h3{font-size:12px;color:var(--acc);margin:16px 0 8px;font-weight:800;letter-spacing:.05em}
@@ -180,8 +200,8 @@ input[type=range]{accent-color:var(--acc)}
 .row input[type=range]{width:100%}
 .btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .btns button{flex:1 1 30%}
-button.danger{color:#ff3352}
-button.primary{background:linear-gradient(#ff52c9,#ff33c0);color:#fde7fe;border-color:#ff33c0}
+button.danger{color:#ff52b0}
+button.primary{background:linear-gradient(#341656,#ff52bc);color:#fff;border-color:#ff46b8}
 .plist{display:flex;flex-direction:column;gap:6px}
 .pitem{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;padding:8px 10px}
 .pitem .info{flex:1;min-width:0}
@@ -189,7 +209,7 @@ button.primary{background:linear-gradient(#ff52c9,#ff33c0);color:#fde7fe;border-
 .pitem .info small{color:var(--dim)}
 .help p{margin:6px 0;line-height:1.7}
 .help b{color:var(--acc)}
-#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#f5bffaee;color:#fde7fe;padding:9px 16px;border-radius:16px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#5a2a45ee;color:#fff;padding:9px 16px;border-radius:16px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
 #fileIn{display:none}
 @media (max-width:430px){ #homeBtn,#metBtn{display:none} #lcdSub{font-size:9px} #tabs button .ti{display:none} #tabs button{font-size:10.5px;padding:6px 1px} #tabs{gap:2px} }
@@ -206,7 +226,7 @@ button.primary{background:linear-gradient(#ff52c9,#ff33c0);color:#fde7fe;border-
   #tabs button .ti{display:block;font-size:18px}
   #ctx{grid-area:ctx;flex-wrap:nowrap;overflow-x:auto;min-height:38px;padding:3px 8px;scrollbar-width:none}
   #ctx>*{flex:none}
-  #chordBar{grid-area:chords;width:216px;flex-direction:column;overflow-y:auto;padding:6px calc(6px + env(safe-area-inset-right)) 6px 6px;border-bottom:none;border-left:1.5px solid var(--line);background:linear-gradient(#1b0a24,#1b0b26)}
+  #chordBar{grid-area:chords;width:216px;flex-direction:column;overflow-y:auto;padding:6px calc(6px + env(safe-area-inset-right)) 6px 6px;border-bottom:none;border-left:1.5px solid var(--line);background:linear-gradient(#10071b,#11071d)}
   #chordBar .cb-row{flex-wrap:wrap;overflow:visible}
   #chordBar .cb-row select{flex:1 1 40%;min-width:0}
   #chordIn{min-width:0;flex:1 1 100%}
@@ -242,135 +262,109 @@ button.primary{background:linear-gradient(#ff52c9,#ff33c0);color:#fde7fe;border-
   #mMeter{height:100px}
 }
 
-#rlib{position:fixed;left:0;right:0;bottom:0;height:min(48vh,460px);z-index:15;background:var(--panel);border-top:2px solid var(--acc);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px #f5bffa22;display:flex;flex-direction:column;padding:8px 10px 0}
-#rlib.hidden{display:none}
-body.rldrag #rlib{opacity:.25;pointer-events:none}
-body.rldrag{touch-action:none}
-.rlhead{display:flex;align-items:center;gap:8px}.rlhead b{font-size:15px;color:var(--lcdtxt)}.rlhint{flex:1;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rlx{border:none;background:var(--panel2);border-radius:50%;width:30px;height:30px;color:var(--txt)}
-.rlbar{display:flex;gap:6px;margin-top:6px}.rlbar input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:6px 9px;font:inherit;background:#11081c;color:var(--txt)}
-.rlbar button{border:1.5px solid var(--line);background:#11081c;border-radius:10px;font:inherit;font-size:12px;color:var(--dim);padding:0 9px;white-space:nowrap}.rlbar button.on{border-color:var(--acc);color:var(--lcdtxt);background:var(--panel2)}
-.rlchips{display:flex;gap:5px;overflow-x:auto;margin:6px 0 4px;padding-bottom:2px;scrollbar-width:none}.rlchips::-webkit-scrollbar{display:none}
-.rlch{flex:none;border:1.5px solid var(--line);background:#11081c;border-radius:999px;padding:3px 10px;font:inherit;font-size:12px;color:var(--dim);white-space:nowrap}.rlch.on{background:var(--acc);border-color:var(--acc);color:#fde7fe;font-weight:700}
-.rllist{flex:1;overflow-y:auto;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-.rlc{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:6px 8px 6px 4px;margin:5px 0;background:#11081c}
-.rlc.pl{border-color:var(--acc);background:var(--panel2)}
-.rlh{flex:none;width:34px;align-self:stretch;display:grid;place-items:center;font-size:22px;color:var(--acc);touch-action:none;cursor:grab;border-radius:8px;background:var(--bg2)}
-.rlm{flex:1;min-width:0}.rln{font-size:13px;line-height:1.3}.rln span{color:var(--acc2);font-weight:700;margin-right:5px;font-size:12px}.rls{font-size:10.5px;color:var(--dim);margin:2px 0 3px}
-.rlg{display:flex;flex-direction:column;gap:1.5px}.rlr{display:flex;gap:1.5px}.rlr i{width:6px;height:5px;border-radius:1px;background:#270f34}.rlr i.b{background:#331444}.rlr i.x{background:#f3b2f9}.rlr i.a{background:var(--acc)}.rlr i.g{background:#bd98e1}.rlr i.o{background:#11081c;box-shadow:0 0 0 1px var(--acc2) inset}
-.rlp,.rla{flex:none;width:38px;height:38px;border-radius:50%;border:none;font-size:15px}.rlp{background:var(--acc);color:#fde7fe}.rla{background:var(--panel2);color:var(--lcdtxt);font-size:20px;font-weight:700}
-#rlGhost{position:fixed;z-index:40;transform:translate(-50%,-130%);background:var(--txt);color:#fde7fe;border-radius:12px;padding:7px 12px;font-size:12.5px;pointer-events:none;box-shadow:0 6px 20px #fadefc44;max-width:80vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#rlGhost small{display:block;font-size:11px;opacity:.75;margin-top:2px}#rlGhost.ok{background:var(--acc)}
-body.rlopen #plScroll{padding-bottom:48vh}
-/* ===================== VAPORWAVE SKIN ===================== */
-:root{--bg:#0d0221;--bg2:#140433;--panel:#1a0838;--panel2:#241049;--line:#4b2380;--txt:#f6e9ff;--dim:#a68bd6;--acc:#ff2fb3;--acc2:#22e4f0;--grn:#22f0c8;--red:#ff3d6e;--lcd:#07010f;--lcdtxt:#3ff7ff;
-  --vw-pink:#ff2fb3;--vw-cyan:#22e4f0;--vw-violet:#9b5cff;--vw-sun1:#ffd36b;--vw-sun2:#ff4fa0}
-html,body{background:#0d0221;font-family:"M PLUS Rounded 1c","DotGothic16",system-ui,sans-serif}
-body{background:radial-gradient(120% 70% at 50% 120%,#3a0a5e 0%,#0d0221 60%) fixed,#0d0221}
-::selection{background:#ff2fb3;color:#fff}
-/* buttons: dark glass + neon rim */
-button{background:linear-gradient(180deg,#2c1257 0%,#180838 100%);border:1px solid #5b2d9a;border-radius:6px;color:var(--txt);box-shadow:inset 0 1px 0 #ffffff1f,0 2px 0 #07010f}
-button:active{box-shadow:inset 0 1px 0 #ffffff1f,0 0 0 #000;transform:translateY(1px)}
-button.on,button.primary,#tabs button.on,.chip.prog{background:linear-gradient(180deg,#ff5fd0 0%,#b12cff 100%);color:#fff;border-color:#ff8be0;text-shadow:0 0 6px #fff8,-1px 0 #22e4f0aa,1px 0 #ff2fb3aa;box-shadow:0 0 10px #ff2fb377,inset 0 1px 0 #ffffff55}
-select,input[type=number],input[type=text]{background:#0b0320;color:var(--txt);border:1px solid #5b2d9a;border-radius:6px}
-input[type=range]{accent-color:#ff2fb3}
-/* header = sunset horizon */
-#top{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid #ff2fb3;
-  background:linear-gradient(180deg,#12032c 0%,#2a0751 45%,#5d0d6e 78%,#a3196f 100%);
-  box-shadow:0 1px 0 #22e4f055,0 6px 18px #ff2fb322}
-#top::before{content:"";position:absolute;z-index:-2;right:12%;bottom:-38px;width:110px;height:110px;border-radius:50%;
-  background:linear-gradient(180deg,var(--vw-sun1) 0%,#ff8a5c 45%,var(--vw-sun2) 75%);
-  -webkit-mask:linear-gradient(#000 0 52%,transparent 52% 56%,#000 56% 63%,transparent 63% 68%,#000 68% 74%,transparent 74% 80%,#000 80% 85%,transparent 85% 91%,#000 91%);
-          mask:linear-gradient(#000 0 52%,transparent 52% 56%,#000 56% 63%,transparent 63% 68%,#000 68% 74%,transparent 74% 80%,#000 80% 85%,transparent 85% 91%,#000 91%);
-  opacity:.55;filter:drop-shadow(0 0 12px #ff4fa0)}
-#top>*{position:relative;z-index:1}
-#vwWave{position:absolute!important;inset:0;z-index:0!important;width:100%;height:100%;pointer-events:none;opacity:.8;mix-blend-mode:screen}
-#lcd{background:#07010fcc;border:1px solid #22e4f0;border-radius:4px;color:var(--lcdtxt);box-shadow:inset 0 0 12px #22e4f033,0 0 8px #22e4f044;font-family:"VT323",ui-monospace,monospace}
-#lcdPos{font-family:"VT323",ui-monospace,monospace;font-size:22px;font-weight:400;letter-spacing:.08em;line-height:1;
-  text-shadow:-1.5px 0 #ff2fb3,1.5px 0 #22e4f0,0 0 8px #3ff7ff99;animation:vwGlitch 7s infinite steps(1)}
-#lcdSub{font-family:"VT323",ui-monospace,monospace;font-size:13px;color:#ff9ce0;letter-spacing:.12em}
-#playBtn{color:#22f0c8!important}
-#playBtn.playing{background:linear-gradient(180deg,#25f5d9,#1a7cff)!important;color:#07010f!important;border-color:#9ffcff!important;box-shadow:0 0 12px #22e4f0aa!important}
-#recBtn{color:#ff3d6e!important}
-#recBtn.on{background:linear-gradient(180deg,#ff4f7e,#a3003a)!important;color:#fff!important;box-shadow:0 0 12px #ff3d6eaa!important;animation:vwBlink 1s infinite steps(1)}
-#modeSeg button:first-child{border-radius:6px 0 0 6px}#modeSeg button:last-child{border-radius:0 6px 6px 0}
-#masterMeter{background:#07010f;border:1px solid #5b2d9a;border-radius:2px}
-/* tabs = retro OS window tabs */
-#tabs{background:linear-gradient(180deg,#140433,#1c0742);border-bottom:1px solid #4b2380}
-#tabs button{font-family:"DotGothic16","M PLUS Rounded 1c",sans-serif;font-weight:400;letter-spacing:.06em;border-radius:6px 6px 0 0;background:#1a0838;color:#a68bd6;border:1px solid #4b2380;border-bottom:none}
-#tabs button.on{background:linear-gradient(180deg,#ff5fd0,#7b2cff);color:#fff}
-#ctx,#tools{background:linear-gradient(180deg,#170637,#10032a);border-color:#4b2380}
-#chordBar{background:linear-gradient(90deg,#1a0738,#0f1c3d);border-color:#4b2380}
-.scroller,#v-step,#v-mixer,#v-master{background:#0b0220}
-/* chips / cards / strips */
-.chip{border-radius:6px;border:1px solid #5b2d9a;background:linear-gradient(180deg,#2a1150,#170733)}
-.chip small{color:#9fefff}
-.mcard,.strip,.pitem,.rlc{border-radius:8px;border:1px solid #4b2380;background:linear-gradient(180deg,#1d0a40,#12052b)}
-.strip.master{background:linear-gradient(180deg,#2a0d52,#130530);border-color:#9b5cff}
-.mcard h3,#stepPanel h4,#sheetBody h3{font-family:"DotGothic16","M PLUS Rounded 1c",sans-serif;font-weight:400;letter-spacing:.1em;color:#ff7fdc;text-shadow:0 0 8px #ff2fb366}
-#cbInfo,.infobox{background:#0b0320;border-color:#5b2d9a;color:#e6d6ff}
-#sheet{background:#05010ecc;backdrop-filter:blur(2px)}
-#sheetBody{background:linear-gradient(180deg,#1d0842,#0d0221);border:1px solid #ff2fb3;border-bottom:none;border-radius:10px 10px 0 0;box-shadow:0 -6px 30px #ff2fb344}
-#sheetBody h2{font-family:"DotGothic16","M PLUS Rounded 1c",sans-serif;font-weight:400;letter-spacing:.08em;
-  background:linear-gradient(90deg,#ff2fb3,#9b5cff,#22e4f0);-webkit-background-clip:text;background-clip:text;color:transparent}
-#sheetBody h2 .x{-webkit-text-fill-color:var(--txt)}
-#toast{background:#07010fee;border:1px solid #22e4f0;border-radius:4px;font-family:"VT323","DotGothic16",monospace;font-size:17px;letter-spacing:.06em;color:#3ff7ff;text-shadow:-1px 0 #ff2fb3,1px 0 #22e4f0}
-#rlib{background:linear-gradient(180deg,#1d0842,#0d0221)}
-.stp{border-radius:3px}
-.stp.on{background:#2a0d52}
-/* VHS on-screen display */
-#vwOSD{position:absolute;inset:0;pointer-events:none;z-index:6;font-family:"VT323",monospace;color:#fff;font-size:20px;letter-spacing:.08em;
-  text-shadow:-1.5px 0 #ff2fb3cc,1.5px 0 #22e4f0cc,0 0 6px #000}
-#vwOSD .l{position:absolute;right:10px;bottom:6px;font-size:17px;opacity:.75}
-#vwOSD .r{display:none;font-family:"DotGothic16",monospace;font-size:12px;opacity:.75;text-align:right;line-height:1.35}
-#vwOSD .l.rec{color:#ff5a7e;animation:vwBlink 1s infinite steps(1)}
-/* full-screen CRT layers */
-#vwFX{position:fixed;inset:0;pointer-events:none;z-index:9000}
-#vwFX>*{position:absolute;inset:0}
-#vwScan{background:repeating-linear-gradient(180deg,#0000 0 2px,#00000059 2px 3px)}
-#vwNoise{width:100%;height:100%;mix-blend-mode:screen;opacity:.05}
-#vwTrack{top:-20%;bottom:auto;height:14%;background:linear-gradient(180deg,#fff0,#ffffff14 45%,#22e4f018 55%,#fff0);animation:vwTrack 9s linear infinite}
-#vwVig{background:radial-gradient(130% 100% at 50% 50%,#0000 60%,#000a 100%)}
-body.fx1 #vwNoise{opacity:.025}body.fx1 #vwTrack{display:none}body.fx1 #vwScan{opacity:.5}
-body.fx0 #vwFX,body.fx0 #vwWave{display:none}
-body.fx0 #lcdPos{animation:none}
-#views.vwGl{animation:vwTear .26s steps(2) 1}
-@keyframes vwGlitch{0%,93%,100%{transform:none;clip-path:none}94%{transform:translateX(2px) skewX(-8deg)}95%{transform:translateX(-3px);clip-path:inset(30% 0 40% 0)}96%{transform:translateX(1px) skewX(6deg)}97%{transform:none}}
-@keyframes vwBlink{0%{opacity:1}50%{opacity:.25}}
-@keyframes vwTrack{0%{top:-20%}100%{top:120%}}
-@keyframes vwTear{0%{transform:translateX(-6px);filter:hue-rotate(60deg) saturate(2) contrast(1.3)}50%{transform:translateX(5px) skewX(3deg);filter:hue-rotate(-50deg) saturate(1.8)}100%{transform:none;filter:none}}
-@media (prefers-reduced-motion:reduce){#lcdPos,#vwTrack,#recBtn.on,#vwOSD .l.rec{animation:none!important}#views.vwGl{animation:none}}
-@media (max-width:430px){#top::before{width:84px;height:84px;bottom:-30px;right:20%}#lcdPos{font-size:20px}#vwOSD .r{display:none}}
-/* ===== per-area colours ===== */
-#tabs button[data-v=playlist]{--vc:#ff2fb3;--vc2:#8a1cff;--vt:#ffd0f0}
-#tabs button[data-v=step]{--vc:#22e4f0;--vc2:#1a5cff;--vt:#d0fbff}
-#tabs button[data-v=roll]{--vc:#a86bff;--vc2:#4a1ccf;--vt:#e6d6ff}
-#tabs button[data-v=mixer]{--vc:#ff8a3d;--vc2:#ff2f6e;--vt:#ffe0c8}
-#tabs button[data-v=master]{--vc:#3dffb0;--vc2:#0fa3c9;--vt:#d4fff0}
-#tabs button{color:var(--vc);border-color:color-mix(in srgb,var(--vc) 45%,transparent);border-top:2px solid var(--vc);background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 14%,#1a0838),#140433)}
-#tabs button.on{background:linear-gradient(180deg,var(--vc),var(--vc2));color:#fff;border-color:var(--vc);box-shadow:0 0 12px color-mix(in srgb,var(--vc) 60%,transparent);text-shadow:0 0 6px #0008}
-body{--vc:#ff2fb3;--vc2:#8a1cff}
-body[data-vw=playlist]{--vc:#ff2fb3;--vc2:#8a1cff}
-body[data-vw=step]{--vc:#22e4f0;--vc2:#1a5cff}
-body[data-vw=roll]{--vc:#a86bff;--vc2:#4a1ccf}
-body[data-vw=mixer]{--vc:#ff8a3d;--vc2:#ff2f6e}
-body[data-vw=master]{--vc:#3dffb0;--vc2:#0fa3c9}
-body[data-vw]{--acc:var(--vc)}
-#tabs{border-bottom:2px solid var(--vc);box-shadow:0 2px 10px color-mix(in srgb,var(--vc) 35%,transparent)}
-#ctx{background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 16%,#170637),#10032a);border-bottom-color:color-mix(in srgb,var(--vc) 50%,#4b2380)}
-#tools{background:linear-gradient(180deg,#10032a,color-mix(in srgb,var(--vc) 16%,#170637));border-top:1px solid color-mix(in srgb,var(--vc) 55%,#4b2380)}
-.scroller,#v-step,#v-mixer,#v-master{background:color-mix(in srgb,var(--vc) 5%,#0b0220)}
-#ctx button.on,#tools button.on,#stepPanel button.on,#v-step button.on,#v-mixer button.on,#v-master button.on,#ctx button.primary,#tools button.primary{
-  background:linear-gradient(180deg,var(--vc),var(--vc2));border-color:var(--vc);box-shadow:0 0 10px color-mix(in srgb,var(--vc) 55%,transparent)}
-#ctx select,#tools select,#ctx input,#tools input{border-color:color-mix(in srgb,var(--vc) 50%,#5b2d9a)}
-.mcard h3,#stepPanel h4{color:var(--vc);text-shadow:0 0 8px color-mix(in srgb,var(--vc) 45%,transparent)}
-.mcard{border-color:color-mix(in srgb,var(--vc) 40%,#4b2380)}
-input[type=range]{accent-color:var(--vc)}
-#vwOSD .l:not(.rec){color:color-mix(in srgb,var(--vc) 55%,#fff)}
-#top{border-bottom-color:var(--vc)}
+/* ===== VAPORWAVE skin ===== */
+html,body{background:#0b0218}
+body{background:radial-gradient(120% 70% at 50% 0%,#2a0a4f 0%,#0b0218 65%)}
+button{border-radius:6px;background:linear-gradient(#1f0b40,#130628);border-color:#4a2370;box-shadow:0 0 0 transparent;color:var(--txt)}
+button:active{box-shadow:none}
+button.on,button.primary{background:linear-gradient(90deg,#ff4fd8,#8b5cff)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 0 12px rgba(255,79,216,.55)!important;text-shadow:0 0 6px rgba(255,255,255,.5)}
+button.danger{color:#ff6b8f;border-color:#7a2350}
+select,input[type=number],input[type=text],textarea{background:rgba(0,0,0,.45)!important;color:var(--txt)!important;border:1px solid #6a2f8e!important;border-radius:4px!important}
+input[type=range]{accent-color:#ff4fd8}
+#top{background:linear-gradient(90deg,#1a0636,#2b0a52 50%,#062a40)!important;border-bottom:1px solid rgba(255,79,216,.45)!important;box-shadow:0 2px 16px rgba(255,79,216,.18)}
+#lcd{background:#05010d!important;border:1px solid var(--cy)!important;border-radius:3px!important;box-shadow:0 0 12px rgba(63,243,255,.35),inset 0 0 18px rgba(63,243,255,.12)!important;color:var(--cy)!important;font-family:VT323,ui-monospace,monospace!important}
+#lcdPos{font-family:VT323,monospace;font-size:23px!important;letter-spacing:0!important;font-weight:400!important;line-height:.95;color:#fff;text-shadow:2px 0 #ff4fd8,-2px 0 #3ff3ff}
+#lcdSub{font-family:VT323,monospace;font-size:14px!important;color:#ffe66d!important;letter-spacing:.06em}
+#playBtn{color:#05ffa1!important}
+#playBtn.playing{background:linear-gradient(90deg,#05ffa1,#3ff3ff)!important;color:#0b0218!important;box-shadow:0 0 14px rgba(5,255,161,.6)!important}
+#recBtn{color:#ff4f7b!important}#recBtn.on{background:#ff4f7b!important;color:#fff!important;box-shadow:0 0 14px #ff4f7b!important}
+#modeSeg button{border-radius:0!important}
+#tabs{background:#0e0322!important;border-color:#4a2370!important}
+#tabs button{font-family:"DotGothic16","Zen Kaku Gothic New",sans-serif;font-weight:400;background:rgba(255,255,255,.03)!important;color:#b9a3d9!important;border-color:#4a2370!important;border-radius:4px 4px 0 0}
+#tabs button.on{background:linear-gradient(180deg,#ff4fd8,#8b5cff)!important;color:#fff!important;box-shadow:0 0 14px rgba(255,79,216,.5)!important;text-shadow:1px 0 #3ff3ff,-1px 0 #ff4fd8}
+#ctx{background:rgba(20,6,40,.92)!important;border-color:#4a2370!important}
+#ctx .lab{color:#b9a3d9}
+#tools{background:linear-gradient(#140629,#0b0218)!important;border-top:1px solid rgba(255,79,216,.4)!important}
+.scroller{background:#0d0322!important}
+#sheet>div,#sheetBody{background:rgba(18,5,38,.97)!important;border-color:#ff4fd8!important;color:var(--txt)}
+#sheetBody h2{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;background:linear-gradient(180deg,#fff,#ffd3f6 40%,#ff4fd8 55%,#3ff3ff);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+#sheetBody h2 .x{-webkit-text-fill-color:#f6eaff}
+#sheetBody h3{color:#3ff3ff!important;font-family:"DotGothic16",sans-serif;font-weight:400;letter-spacing:.05em}
+.infobox{background:rgba(63,243,255,.07)!important;border-color:rgba(63,243,255,.4)!important;color:#d9ccf0!important}
+/* overview */
+.sgHead{background:rgba(20,6,40,.85)!important;border:1px solid rgba(255,79,216,.45)!important;border-radius:4px!important;box-shadow:0 0 18px rgba(139,92,255,.2)}
+.sgHead b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:18px;background:linear-gradient(180deg,#fff 0%,#ffd3f6 40%,#ff4fd8 55%,#3ff3ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sgHead .st{font-family:VT323,monospace;font-size:17px!important;color:#3ff3ff!important;font-weight:400!important;letter-spacing:.04em}
+.sgBar{background:rgba(23,7,51,.85)!important;border:1px solid #4a2370!important;border-radius:3px!important}
+.sgBar.empty{background:rgba(255,255,255,.02)!important;border-style:dashed!important}
+.sgBar.now{border-color:#3ff3ff!important;box-shadow:0 0 14px rgba(63,243,255,.55),inset 0 0 10px rgba(63,243,255,.2)!important}
+.sgBar.cur{outline-color:#ff4fd8!important}
+.sgBar.loop{background:linear-gradient(rgba(139,92,255,.25),rgba(23,7,51,.85))!important}
+.sgSecStart{border-left:3px solid #ff4fd8!important}
+.sgNo{font-family:VT323,monospace;font-size:16px!important;font-weight:400!important;color:#ffe66d!important}
+.sgSec{background:linear-gradient(90deg,#ff4fd8,#8b5cff)!important;border-radius:0!important;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);padding:0 8px!important;font-family:"DotGothic16";font-weight:400!important}
+.sgSec.add{background:none!important;color:#6a4a8e!important;border:1px dashed #4a2370!important;clip-path:none}
+.sgCh{flex-wrap:wrap;column-gap:5px!important;font-size:12.5px!important;color:#fff!important;text-shadow:1px 0 rgba(255,79,216,.7),-1px 0 rgba(63,243,255,.7)}
+.sgCh span+span{color:#d9b8ff!important}
+.sgBar canvas{background:#0b0218!important;border-radius:2px!important}
+/* VHS overlays */
+.vfx{position:fixed;inset:0;pointer-events:none;z-index:9000}
+.vfx.scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+.vfx.vig{background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.55) 100%)}
+.vfx.grain{opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:vgrain .5s steps(4) infinite}
+@keyframes vgrain{0%{transform:translate(0,0)}25%{transform:translate(-30px,20px)}50%{transform:translate(20px,-40px)}75%{transform:translate(-10px,30px)}}
+.vfx.trk{height:30px;bottom:auto;top:-40px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.08) 40%,rgba(63,243,255,.08) 60%,transparent);animation:vtrk 8s linear infinite;mix-blend-mode:screen}
+@keyframes vtrk{to{transform:translateY(115vh)}}
+body.novhs .vfx{display:none}
+.sgCh span{flex:0 1 auto!important;max-width:100%}
+@media (max-width:430px){#lcdPos{font-size:20px!important}#lcdSub{font-size:12px!important}}
+@media (prefers-reduced-motion:reduce){.vfx.grain,.vfx.trk{animation:none}.vfx.trk{display:none}}
+
+/* ===== landscape tuning (after skin) ===== */
+@media (orientation:landscape) and (max-height:560px){
+  #app{grid-template-columns:66px minmax(0,1fr) auto}
+  #top{gap:4px;padding-top:3px;padding-bottom:3px}
+  #top>button,#modeSeg button{min-height:28px!important;height:28px}
+  #lcd{max-width:250px;padding:0 8px!important;align-items:center!important;height:30px}
+  #lcdPos{font-size:20px!important;line-height:1!important}
+  #lcdSub{font-size:13px!important}
+  #tabs{gap:3px!important;padding:4px 3px 4px calc(3px + env(safe-area-inset-left))!important;overflow:hidden!important}
+  #tabs button{flex:1 1 0!important;min-height:0!important;padding:1px!important;font-size:9.5px!important;border-radius:4px!important;border-bottom:1px solid #4a2370!important;overflow:hidden}
+  #tabs button .ti{font-size:15px!important;line-height:1.05}
+  #ctx{min-height:30px!important;padding:2px 8px!important;gap:4px}
+  #ctx:has(> .lab:only-child){min-height:0!important;padding:2px 10px!important}
+  #ctx>.lab:only-child{flex:1 1 auto!important;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+  #tools{gap:4px;padding-top:2px!important}
+  button,select,input[type=text],input[type=number]{min-height:28px}
+  #songWrap{padding:5px 8px 20px calc(8px + env(safe-area-inset-right))}
+  .sgHead{flex-wrap:nowrap!important;padding:3px 10px!important;margin-bottom:5px!important;gap:4px 12px!important;overflow-x:auto;scrollbar-width:none}
+  .sgHead>*{flex:none;white-space:nowrap}
+  .sgHead b{font-size:15px!important}
+  .sgHead .st{font-size:15px!important}
+  .sgLeg{width:auto!important;flex-wrap:nowrap!important}
+  .sgRow{gap:3px!important;margin-bottom:3px!important}
+  .sgBar{padding:2px 4px 3px!important}
+  .sgTop{min-height:15px!important}
+  .sgCh{min-height:15px!important;font-size:12px!important;flex-wrap:nowrap!important;overflow:hidden}
+  .sgCh span+span{font-size:10px!important}
+  #songWrap{--sgH:30px}
+  #v-mixer,#v-master{overflow:auto}
+  .strip{width:150px!important;display:grid!important;grid-template-columns:minmax(0,1fr) 40px;column-gap:6px;row-gap:3px;align-content:start;align-items:center;padding:5px 6px!important;border-radius:4px!important}
+  .strip>*{grid-column:1}
+  .strip>.fwrap{grid-column:2;grid-row:1/span 8;height:clamp(80px,calc(100dvh - 150px),240px)!important;align-self:start;justify-content:center}
+  .strip .fwrap canvas,.strip .fader{height:100%!important}
+  .strip>.row,.strip>div:has(>.panr){display:flex!important;align-items:center;gap:4px;font-size:9.5px!important}
+  .strip>.row input,.strip .panr{flex:1;min-width:0;width:auto!important}
+  .strip .fxs{display:none}
+  .strip .db{grid-column:2;text-align:center;font-size:9px}
+  .strip.master>div[style*="flex:1"]{display:none}
+  .strip.master{width:120px!important}
+  #stepPanel{width:min(300px,38vw)!important}
+}
 </style>
 </head>
 <body>
+<div class="vfx scan"></div><div class="vfx vig"></div><div class="vfx grain"></div><div class="vfx trk"></div>
 <div id="app">
   <header id="top">
     <button id="menuBtn" title="メニュー">☰</button>
@@ -384,6 +378,7 @@ input[type=range]{accent-color:var(--vc)}
     <canvas id="masterMeter" width="8" height="32"></canvas>
   </header>
   <nav id="tabs">
+    <button data-v="song"><span class="ti">📜</span><span>全体</span></button>
     <button data-v="playlist"><span class="ti">🎼</span><span>プレイリスト</span></button>
     <button data-v="step"><span class="ti">🥁</span><span>ステップ</span></button>
     <button data-v="roll"><span class="ti">🎹</span><span>ピアノロール</span></button>
@@ -406,6 +401,7 @@ input[type=range]{accent-color:var(--vc)}
     <div id="cbInfo"></div>
   </div>
   <main id="views">
+    <div id="v-song" class="view"><div id="songWrap"></div></div>
     <div id="v-playlist" class="view"><div class="scroller" id="plScroll"><div class="spacer" id="plSpacer"><canvas id="plCv"></canvas></div></div></div>
     <div id="v-roll" class="view"><div class="scroller" id="prScroll"><div class="spacer" id="prSpacer"><canvas id="prCv"></canvas></div></div></div>
     <div id="v-step" class="view"><div id="stepScroll"><div id="stepWrap"></div></div><div id="stepPanel"></div></div>
@@ -415,7 +411,6 @@ input[type=range]{accent-color:var(--vc)}
   <div id="tools"></div>
 </div>
 <div id="sheet" class="hidden"><div id="sheetBody"></div></div>
-<div id="rlib" class="hidden"></div>
 <div id="toast"></div>
 <input id="fileIn" type="file" accept=".json,application/json">
 
@@ -430,8 +425,9 @@ const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const NOTE = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const OLD_PALETTE = ['#ff5c33','#33c0ff','#9052ff','#33ffe9','#ffce33','#ff52c9','#33ffec','#ffa533','#5271ff','#ecff33','#ff3352','#33bbff','#9652ff','#33ffe8','#ffc733','#ff52c9','#33fff4','#ff8a33','#5278ff','#ffff33'];
-const PALETTE = ['#ff52c9','#33a2ff','#8452ff','#33fff1','#ffb533','#ff526c','#33deff','#ff8433','#5268ff','#b6ff33'];
+const OLD_PALETTE = ['#ff7a59','#4fc3f7','#b388ff','#7bd88f','#ffd54f','#ff80ab','#4dd0c4','#ffab40','#90a4ff','#d4e157','#ff6b5b','#5bc8ff','#b98bff','#7be08a','#ffd25b','#ff8bd0','#5bffd8','#ffa15b','#9fb4ff','#e0e07b'];
+const PASTEL_PALETTE = ['#ff8fbf','#7ec4ff','#b99cff','#6fd8ad','#ffc96b','#ff9a9a','#6fd3e6','#ffb07c','#a3afff','#bde27a'];
+const PALETTE = ['#ff4fd8','#3ff3ff','#9b6bff','#05ffa1','#ffe66d','#ff6b8f','#01cdfe','#ff9e4f','#7b8cff','#c6ff5c'];
 const HI = 108, LO = 24;
 const RULER = 24;
 const PR_KEYW = 66, PR_ROWH = 20;
@@ -453,6 +449,29 @@ const PRESETS = {
   chip:    {name:'8bit',          prog:80, w1:'square',  w2:'square',  oct2:1, det:0, mix2:0,  fm:0,  fmr:1,  a:.001,d:.2, s:.8, r:.05,cut:12000,res:.3,fenv:0, fdec:.1, gain:.55},
   synbass: {name:'シンセベース',  prog:38, w1:'sawtooth',w2:'square',  oct2:-1,det:4, mix2:.5, fm:0,  fmr:1,  a:.002,d:.3, s:.6, r:.08,cut:500, res:6,  fenv:3,  fdec:.2, gain:1},
   subbass: {name:'サブベース',    prog:33, w1:'sine',    w2:'triangle',oct2:0, det:0, mix2:.3, fm:0,  fmr:1,  a:.005,d:.2, s:1,  r:.1, cut:900, res:.5,fenv:0,  fdec:.1, gain:1.2},
+  ebass:   {name:'エレキベース（指）', prog:33, w1:'sawtooth',w2:'sine',    oct2:0, det:0, mix2:.7, fm:0,  fmr:1,  a:.004,d:.5, s:.35,r:.07,cut:650, res:1.2,fenv:1.8, fdec:.1, gain:1.1},
+  pickbass:{name:'エレキベース（ピック）', prog:34, w1:'sawtooth',w2:'square',oct2:0, det:0, mix2:.35,fm:0,  fmr:1,  a:.002,d:.4, s:.42,r:.06,cut:1300,res:1.8,fenv:2.5, fdec:.07,gain:.95},
+  slapbass:{name:'スラップベース', prog:36, w1:'sawtooth',w2:'sine',    oct2:0, det:0, mix2:.6, fm:.4, fmr:2,  a:.002,d:.3, s:.3, r:.06,cut:1700,res:2.5,fenv:3.5, fdec:.05,gain:1},
+  fretless:{name:'フレットレス', prog:35, w1:'triangle',w2:'sawtooth',oct2:0, det:0, mix2:.35,fm:0,  fmr:1,  a:.012,d:.7, s:.55,r:.1, cut:560, res:4,  fenv:1.2, fdec:.18,gain:1.25},
+  upright: {name:'ウッドベース', prog:32, w1:'sine',    w2:'triangle',oct2:0, det:0, mix2:.6, fm:0,  fmr:1,  a:.005,d:.38,s:.12,r:.12,cut:430, res:1,  fenv:1.6, fdec:.05,gain:1.6},
+  gtclean: {name:'エレキギター（クリーン）', prog:27, w1:'sawtooth',w2:'square',oct2:0, det:0, mix2:.4, fm:0, fmr:1, a:.003,d:.9, s:.12,r:.15,cut:1800,res:1,  fenv:2,  fdec:.15,gain:.85},
+  gtdist:  {name:'エレキギター（歪み）', prog:30, w1:'sawtooth',w2:'sawtooth',oct2:0, det:10,mix2:.9, fm:0, fmr:1, a:.004,d:1.2,s:.7, r:.12,cut:2200,res:1.5,fenv:.8, fdec:.2, gain:.6},
+  gtacou:  {name:'アコースティックギター', prog:25, w1:'sawtooth',w2:'triangle',oct2:0,det:0, mix2:.8, fm:0, fmr:1, a:.002,d:1.6,s:.05,r:.3, cut:2500,res:.8, fenv:2.5,fdec:.08,gain:.85},
+  gtnylon: {name:'ナイロンギター', prog:24, w1:'triangle',w2:'sine',   oct2:1, det:0, mix2:.25,fm:0, fmr:1, a:.003,d:1.4,s:.05,r:.3, cut:1500,res:.7, fenv:1.4,fdec:.07,gain:1.1},
+  gtjazz:  {name:'ジャズギター', prog:26, w1:'triangle',w2:'sine',     oct2:1, det:0, mix2:.25,fm:0, fmr:1, a:.006,d:1.4,s:.25,r:.2, cut:900, res:.8, fenv:.8, fdec:.12,gain:1.1},
+  trumpet: {name:'トランペット', prog:56, w1:'sawtooth',w2:'square',   oct2:0, det:0, mix2:.15,fm:0, fmr:1, a:.03, d:.3, s:.8, r:.08,cut:1600,res:1,  fenv:1.4,fdec:.1, gain:.6},
+  mutetp:  {name:'ミュートTp', prog:59, w1:'sawtooth',w2:'square',     oct2:1, det:0, mix2:.1, fm:0, fmr:1, a:.02, d:.3, s:.7, r:.06,cut:2600,res:6,  fenv:.5, fdec:.1, gain:.4},
+  trombone:{name:'トロンボーン', prog:57, w1:'sawtooth',w2:'triangle', oct2:0, det:0, mix2:.25,fm:0, fmr:1, a:.045,d:.3, s:.8, r:.1, cut:900, res:1,  fenv:1.2,fdec:.12,gain:.7},
+  sax:     {name:'サックス', prog:65, w1:'sawtooth',w2:'square',       oct2:0, det:0, mix2:.9, fm:0, fmr:1, a:.025,d:.3, s:.75,r:.08,cut:1500,res:2,  fenv:1,  fdec:.1, gain:.5},
+  flute:   {name:'フルート', prog:73, w1:'sine',    w2:'triangle',     oct2:1, det:0, mix2:.08,fm:0, fmr:1, a:.05, d:.2, s:.85,r:.1, cut:4000,res:.5, fenv:0,  fdec:.1, gain:.9},
+  clarinet:{name:'クラリネット', prog:71, w1:'square',  w2:'triangle', oct2:0, det:0, mix2:.4, fm:0, fmr:1, a:.03, d:.2, s:.85,r:.08,cut:1300,res:1.5,fenv:.3, fdec:.1, gain:.55},
+  violin:  {name:'バイオリン', prog:40, w1:'sawtooth',w2:'sawtooth',   oct2:0, det:14,mix2:1,  fm:0, fmr:1, a:.09, d:.3, s:.85,r:.25,cut:2600,res:.8, fenv:.2, fdec:.2, gain:.45},
+  cello:   {name:'チェロ', prog:42, w1:'sawtooth',w2:'sawtooth',       oct2:0, det:10,mix2:.9, fm:0, fmr:1, a:.1,  d:.3, s:.85,r:.3, cut:1400,res:.8, fenv:.2, fdec:.2, gain:.55},
+  pizz:    {name:'ピチカート', prog:45, w1:'triangle',w2:'sine',       oct2:1, det:0, mix2:.25,fm:0, fmr:1, a:.003,d:.25,s:0,  r:.1, cut:1500,res:.8, fenv:1,  fdec:.05,gain:1.2},
+  harpsi:  {name:'ハープシコード', prog:6, w1:'sawtooth',w2:'sawtooth', oct2:1, det:4, mix2:.5, fm:0, fmr:1, a:.001,d:.8, s:0,  r:.15,cut:4500,res:2,  fenv:1,  fdec:.05,gain:.5},
+  accord:  {name:'アコーディオン', prog:21, w1:'sawtooth',w2:'square', oct2:0, det:18,mix2:.75,fm:0, fmr:1, a:.04, d:.2, s:.9, r:.08,cut:2200,res:1,  fenv:.2, fdec:.1, gain:.42},
+  vibes:   {name:'ビブラフォン', prog:11, w1:'sine',    w2:'sine',     oct2:2, det:0, mix2:.06,fm:0, fmr:1, a:.001,d:2.2,s:.1, r:.6, cut:6000,res:.5, fenv:0,  fdec:.1, gain:1},
+  marimba: {name:'マリンバ', prog:12, w1:'sine',    w2:'sine',         oct2:2, det:0, mix2:.1, fm:0, fmr:1, a:.001,d:.35,s:0,  r:.1, cut:5000,res:.5, fenv:0,  fdec:.1, gain:1.3},
   reese:   {name:'リースベース',  prog:38, w1:'sawtooth',w2:'sawtooth',oct2:0, det:22,mix2:.9, fm:0,  fmr:1,  a:.005,d:.3, s:.9, r:.1, cut:700, res:2,  fenv:1,  fdec:.4, gain:.9},
 };
 const DRUMKIT = [
@@ -486,7 +505,7 @@ function newPattern(tr, len){
   P.patterns[p.id] = p; tr.lastPat = p.id; return p;
 }
 function newProject(){
-  P = {ver:2, id:uid(), name:'新しい曲', bpm:120, beats:4, bars:32, swing:0, master:.85, masterFx:defFx(), mastering:defMastering('natural'), loop:{on:false,s:0,e:4}, tracks:[], patterns:{}};
+  P = {ver:2, id:uid(), name:'新しい曲', bpm:120, beats:4, bars:32, swing:0, master:.85, masterFx:defFx(), mastering:defMastering('natural'), loop:{on:false,s:0,e:4}, marks:{}, tracks:[], patterns:{}};
   const d = mkTrack('drum','ドラム',null,0), pi = mkTrack('synth','ピアノ','piano',1), b = mkTrack('synth','ベース','synbass',2);
   P.tracks.push(d, pi, b);
   const dp = newPattern(d); d.clips.push({id:uid(), t:0, auto:true, len:dp.len, pat:dp.id});
@@ -502,11 +521,12 @@ function migrate(p){
   for(const [k, v] of Object.entries({bpm:120, beats:4, bars:32, swing:0, master:.85, name:'無題'})) if(p[k] === undefined) p[k] = v;
   if(!p.id) p.id = uid();
   if(!p.loop) p.loop = {on:false, s:0, e:4};
+  if(!p.marks || typeof p.marks !== 'object') p.marks = {};
   if(!Array.isArray(p.tracks) || !p.tracks.length){ const keep = p; newProject(); P.id = keep.id || P.id; P.name = keep.name || P.name; return P; }
   p.tracks.forEach((t, i) => {
     if(!t.id) t.id = uid();
     if(!t.color) t.color = PALETTE[i % PALETTE.length];
-    { const oi = OLD_PALETTE.indexOf(t.color); if(oi >= 0) t.color = PALETTE[oi % PALETTE.length]; }
+    { const oi = OLD_PALETTE.indexOf(t.color); if(oi >= 0) t.color = PALETTE[oi % PALETTE.length]; const pi = PASTEL_PALETTE.indexOf(t.color); if(pi >= 0) t.color = PALETTE[pi]; }
     if(t.kind === 'synth') t.params = {...PRESETS[t.preset || 'piano'], ...(t.params || {})};
     else { t.kind = 'drum'; t.params = {tune:0, decay:1, ...(t.params || {})}; }
     for(const k of ['vol','pan','rev','dly']) if(typeof t[k] !== 'number') t[k] = k === 'vol' ? .8 : 0;
@@ -934,14 +954,151 @@ function setView(v){
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-' + v));
   renderChrome();
   if(v === 'playlist') layoutPL();
+  if(v === 'song') renderOverview();
   if(v === 'roll'){ layoutPR(); if(!prScrolled[editPat]){ centerRoll(); prScrolled[editPat] = 1; } }
   if(v === 'step') renderStep();
   if(v === 'mixer') renderMixer();
   if(v === 'master') renderMaster();
   if(v === 'mixer' || v === 'step' || v === 'master') requestAnimationFrame(meterLoop);
 }
+
+// ======================================================================
+// song overview (全体)
+// ======================================================================
+const SG = {per:0, chords:true, last:-1, lastTap:-1};
+const SEC_NAMES = ['イントロ','Aメロ','Bメロ','サビ','落ちサビ','間奏','Cメロ','大サビ','アウトロ','ブレイク'];
+const SG_QUALS = ['', 'm', '7', 'maj7', 'm7', 'sus4', 'sus2', '7sus4', 'dim', 'dim7', 'm7b5', 'aug', '6', 'm6', 'add9', 'madd9', 'mM7', '9', 'm9', 'maj9', '5'];
+function songNotes(tr){
+  const out = [];
+  for(const c of tr.clips){
+    const pat = patById(c.pat); if(!pat || pat.len <= 0) continue;
+    const cl = clipLen(c), hits = hitsOf(tr, pat);
+    for(let base = c.t; base < c.t + cl; base += pat.len)
+      for(const n of hits){ const at = base + n.t; if(at < c.t + cl) out.push({t:at, d:Math.min(n.d || 24, c.t + cl - at), p:n.p, v:n.v}); }
+  }
+  return out;
+}
+function contentEnd(){ let e = 0; P.tracks.forEach(t => t.clips.forEach(c => e = Math.max(e, c.t + clipLen(c)))); return e; }
+function detectChord(notes, a, b){
+  const w = Array(12).fill(0); let bass = null;
+  for(const n of notes){ const s = Math.max(a, n.t), e = Math.min(b, n.t + n.d); if(e <= s) continue; w[n.p % 12] += (e - s) * (n.v / 100); if(bass === null || n.p < bass) bass = n.p; }
+  const tot = w.reduce((x, y) => x + y, 0); if(tot <= 0) return null;
+  const used = w.filter(x => x > tot * .04).length; if(used < 2) return null;
+  const bpc = bass % 12; let best = null;
+  for(let r = 0; r < 12; r++){
+    if(w[r] <= 0) continue;
+    for(const qn of SG_QUALS){
+      const q = qualEntry(qn); if(!q) continue;
+      const iv = [...new Set(q[1].map(x => x % 12))], set = new Set(iv.map(x => (r + x) % 12));
+      let inW = 0, outW = 0, miss = 0;
+      for(let pc = 0; pc < 12; pc++){ if(set.has(pc)) { inW += w[pc]; if(w[pc] <= tot * .02) miss++; } else outW += w[pc]; }
+      const sc = inW - outW * 1.2 - miss * tot * .22 - iv.length * tot * .015 + (r === bpc ? tot * .12 : 0);
+      if(!best || sc > best.sc) best = {sc, r, q, set};
+    }
+  }
+  if(!best || best.sc < tot * .35) return null;
+  let name = NOTE[best.r] + best.q[2];
+  if(bpc !== best.r && best.set.has(bpc)) name += '/' + NOTE[bpc];
+  return name;
+}
+function songKeyName(all){
+  const h = Array(12).fill(0); all.forEach(n => h[n.p % 12] += n.d); let best = 0, bs = -1, minor = false;
+  for(let k = 0; k < 12; k++){ const sc = [0,2,4,5,7,9,11].reduce((s, i) => s + h[(k + i) % 12], 0); if(sc > bs){ bs = sc; best = k; } }
+  if(bs <= 0) return '—';
+  const rel = (best + 9) % 12; if(h[rel] > h[best] * 1.15) minor = true;
+  return minor ? NOTE[rel] + 'm（' + NOTE[best] + 'メジャーと同じ調号）' : NOTE[best] + 'メジャー';
+}
+let SGcache = null;
+function renderOverview(){
+  if(!P.marks) P.marks = {};
+  const W = $('songWrap'); if(!W) return;
+  const bt = barT(), endT = Math.max(contentEnd(), bt), lastBar = Math.ceil(endT / bt);
+  const per = SG.per || (W.clientWidth > 1100 ? 8 : W.clientWidth > 640 ? 8 : 4);
+  const nBars = Math.max(per, Math.ceil(lastBar / per) * per);
+  const tn = P.tracks.map(tr => ({tr, notes:songNotes(tr)}));
+  const melodic = tn.filter(x => x.tr.kind !== 'drum' && audible(x.tr)).flatMap(x => x.notes);
+  SGcache = {tn, per, nBars};
+  const secs = Math.round(lastBar * bt * spt()), dur = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2,'0')}`;
+  let h = `<div class="sgHead"><b>${esc(P.name)}</b><span class="st">${P.bpm} BPM ・ ${P.beats}/4 ・ ${lastBar}小節 ・ 約${dur}</span><span class="st">キー推定：${songKeyName(melodic)}</span>
+    <div class="sgLeg">${P.tracks.map(t => `<span data-mt="${t.id}" class="${t.mute ? 'mute' : ''}" title="タップでミュート"><i style="background:${t.color}"></i>${esc(t.name)}</span>`).join('')}</div></div>`;
+  for(let r = 0; r < nBars; r += per){
+    h += `<div class="sgRow" style="grid-template-columns:repeat(${per},minmax(0,1fr))">`;
+    for(let b = r; b < r + per; b++){
+      const a = b * bt, e = a + bt, has = tn.some(x => x.tr.clips.some(c => c.t < e && c.t + clipLen(c) > a));
+      const sec = P.marks[b];
+      let ch = '';
+      if(SG.chords && has && melodic.length){
+        const half = P.beats % 2 === 0 ? bt / 2 : bt;
+        const c1 = detectChord(melodic, a, a + half), c2 = half < bt ? detectChord(melodic, a + half, e) : null;
+        ch = `<span>${esc(c1 || (c2 ? '' : '·'))}</span>${c2 && c2 !== c1 ? `<span>${esc(c2)}</span>` : ''}`;
+      }
+      const inLoop = P.loop.on && b >= P.loop.s && b < P.loop.e;
+      h += `<div class="sgBar${has ? '' : ' empty'}${sec ? ' sgSecStart' : ''}${inLoop ? ' loop' : ''}" data-b="${b}">
+        <div class="sgTop"><span class="sgNo">${b + 1}</span><span class="sgSec${sec ? '' : ' add'}" data-sec="${b}">${sec ? esc(sec) : '＋'}</span></div>
+        ${SG.chords ? `<div class="sgCh">${ch}</div>` : ''}<canvas data-cb="${b}"></canvas></div>`;
+    }
+    h += '</div>';
+  }
+  W.innerHTML = h;
+  const nTr = Math.max(1, P.tracks.length);
+  W.style.setProperty('--sgH', Math.min(innerHeight < 500 && innerWidth > innerHeight ? 34 : 64, Math.max(28, nTr * 7)) + 'px');
+  W.querySelectorAll('canvas[data-cb]').forEach(cv => drawSongBar(cv, +cv.dataset.cb));
+  W.querySelectorAll('.sgBar').forEach(el => el.onclick = e => {
+    if(e.target.dataset.sec !== undefined) return openSecSheet(+e.target.dataset.sec);
+    const b = +el.dataset.b, was = playing, again = SG.lastTap === b && !playing;
+    if(was) stop(); setSongMode(true); songPos = b * barT(); SG.lastTap = b;
+    if(was || again) play(); updateLcd(); updateSongHead(true);
+  });
+  W.querySelectorAll('[data-mt]').forEach(el => el.onclick = () => { const t = trackById(el.dataset.mt); t.mute = !t.mute; syncMix(); markDirty(); renderOverview(); });
+  SG.last = -1; updateSongHead(true);
+}
+function drawSongBar(cv, b){
+  const dpr = window.devicePixelRatio || 1, Wd = cv.clientWidth || 80, H = cv.clientHeight || 36;
+  cv.width = Math.round(Wd * dpr); cv.height = Math.round(H * dpr); const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const bt = barT(), a = b * bt, e = a + bt, tn = SGcache.tn, rh = H / tn.length;
+  for(let i = 1; i < P.beats; i++){ g.fillStyle = '#1a0b2b'; g.fillRect(Math.round(i / P.beats * Wd), 0, 1, H); }
+  tn.forEach((x, i) => {
+    const y = i * rh, tr = x.tr, act = x.tr.clips.some(c => c.t < e && c.t + clipLen(c) > a);
+    if(!act) return;
+    g.globalAlpha = audible(tr) ? 1 : .25;
+    g.fillStyle = tr.color + '22'; g.fillRect(0, y + .5, Wd, rh - 1);
+    const ns = x.notes.filter(n => n.t < e && n.t + n.d > a); if(!ns.length) return;
+    g.fillStyle = tr.color;
+    if(tr.kind === 'drum'){
+      ns.forEach(n => { const nx = (n.t - a) / bt * Wd; g.globalAlpha = (audible(tr) ? 1 : .25) * (.35 + n.v / 127 * .65); g.fillRect(nx, y + rh * .15, Math.max(1.5, Wd / 64), rh * .7); });
+    } else {
+      let lo = 127, hi = 0; x.notes.forEach(n => { lo = Math.min(lo, n.p); hi = Math.max(hi, n.p); }); const span = Math.max(6, hi - lo);
+      ns.forEach(n => { const nx = Math.max(0, (n.t - a) / bt * Wd), nw = Math.max(1.5, (Math.min(e, n.t + n.d) - Math.max(a, n.t)) / bt * Wd - .5), ny = y + 1 + (1 - (n.p - lo) / span) * (rh - 3.5); g.fillRect(nx, ny, nw, Math.max(1.5, rh / 6)); });
+    }
+    g.globalAlpha = 1;
+  });
+}
+function updateSongHead(force){
+  if(view !== 'song') return;
+  const b = Math.floor(curTick() / barT());
+  if(!force && b === SG.last) return; SG.last = b;
+  const W = $('songWrap');
+  W.querySelectorAll('.sgBar.now,.sgBar.cur').forEach(el => el.classList.remove('now', 'cur'));
+  const el = W.querySelector(`.sgBar[data-b="${b}"]`);
+  if(el){ el.classList.add(playing ? 'now' : 'cur');
+    if(playing && !dragging){ const r = el.getBoundingClientRect(), wr = W.getBoundingClientRect(); if(r.bottom > wr.bottom - 10 || r.top < wr.top) W.scrollTop += r.top - wr.top - 60; } }
+}
+function openSecSheet(b){
+  const cur = P.marks[b] || '';
+  openSheet(`<h2>${b + 1}小節目のセクション<button class="x">✕</button></h2>
+    <div class="infobox open">ここから始まる部分の名前を付けると、全体の構成がひと目でわかります。</div>
+    <div class="btns" style="flex-wrap:wrap">${SEC_NAMES.map(n => `<button data-sn="${n}" class="${n === cur ? 'on' : ''}">${n}</button>`).join('')}</div>
+    <div class="row"><label>自由入力</label><input type="text" id="secTxt" value="${esc(cur)}" placeholder="例：サビ2" style="grid-column:2/-1"></div>
+    <div class="btns"><button id="secOk" class="primary">決定</button><button id="secDel" class="danger">ラベルを外す</button></div>`, B => {
+    const set = v => { pushUndo(); if(v) P.marks[b] = v.slice(0, 16); else delete P.marks[b]; markDirty(); closeSheet(); renderOverview(); };
+    B.querySelectorAll('[data-sn]').forEach(x => x.onclick = () => set(x.dataset.sn));
+    $('secOk').onclick = () => set($('secTxt').value.trim()); $('secDel').onclick = () => set('');
+  });
+}
+
 function redrawAll(fromFrame){
   if(view === 'playlist') drawPL();
+  else if(view === 'song'){ if(fromFrame) updateSongHead(); else renderOverview(); }
   else if(view === 'roll') drawPR();
   else if(view === 'step') updateStepHead();
 }
@@ -950,7 +1107,7 @@ function sizeCanvas(cv, sc){
   cv.style.width = W + 'px'; cv.style.height = H + 'px';
   if(cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)){ cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
 }
-window.addEventListener('resize', () => { if(view === 'playlist') layoutPL(); if(view === 'roll') layoutPR(); if(view === 'master') sizeMeter(); });
+let sgRT; window.addEventListener('resize', () => { if(view === 'song'){ clearTimeout(sgRT); sgRT = setTimeout(renderOverview, 150); } if(view === 'playlist') layoutPL(); if(view === 'roll') layoutPR(); if(view === 'master') sizeMeter(); });
 function rr(g, x, y, w, h, r){ r = Math.min(r, w / 2, h / 2); g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 
 // --------------- context bar & tools ---------------
@@ -972,7 +1129,7 @@ function renderChrome(){
     const nsel = plSel.size;
     ctx.innerHTML = nsel
       ? `<span class="lab">${nsel}個のクリップ</span><button id="cEdit">✎ 開く</button><button id="cDup">複製</button><button id="cUnique">ユニーク化</button><button id="cSplit">分割</button><button id="cDel" class="danger">削除</button>`
-      : `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button><button id="rlibBtn" class="${RL.open?'on':''}">📚 リズム図鑑</button><span class="pill"><span class="dot" style="background:${ct ? ct.color : '#bd98e1'}"></span>${ct ? esc(ct.name) : ''}</span><span class="lab">空き場所をタップでクリップ配置 ／ ダブルタップで編集</span>`;
+      : `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button><span class="pill"><span class="dot" style="background:${ct ? ct.color : '#bfa1d9'}"></span>${ct ? esc(ct.name) : ''}</span><span class="lab">空き場所をタップでクリップ配置 ／ ダブルタップで編集</span>`;
     tools.innerHTML = `${modeSeg(plMode)}<select id="plSnap">${PL_SNAPS.map(([n], i) => `<option value="${i}" ${i===plSnapIdx?'selected':''}>スナップ ${n}</option>`).join('')}</select>
       <button id="undoBtn">↶</button><button id="redoBtn">↷</button><button id="addTrk">＋トラック</button><span class="grow"></span><button id="zOut">－</button><button id="zIn">＋</button>`;
   } else if(view === 'roll'){
@@ -981,12 +1138,15 @@ function renderChrome(){
       <select id="lenSel">${LENS.map(([n], i) => `<option value="${i}" ${i===lenIdx?'selected':''}>${i ? '長さ ' + n : n}</option>`).join('')}</select>
       <button id="undoBtn">↶</button><button id="redoBtn">↷</button><button id="editBtn">編集</button><span class="grow"></span><button id="zOut">－</button><button id="zIn">＋</button>`;
   } else if(view === 'step'){
-    ctx.innerHTML = `${patCtl(null)}<button id="instBtn" title="音源設定">🎛 ${et ? esc(et.name) : ''}</button><button id="tplBtn2">🥁 テンプレート</button><button id="rlibBtn" class="${RL.open?'on':''}">📚 リズム図鑑</button>`;
+    ctx.innerHTML = `${patCtl(null)}<button id="instBtn" title="音源設定">🎛 ${et ? esc(et.name) : ''}</button><button id="tplBtn2">🥁 テンプレート</button>`;
     tools.innerHTML = `<div class="seg" id="stepModes">${[['pen','✏️','通常'],['ghost','👻','ゴースト'],['accent','❗','アクセント'],['flam','f','フラム'],['ruff','r','ラフ'],['roll','≋','ロール'],['sel','⬚','選択'],['erase','🧽','消す']].map(([k, i, n]) => `<button data-sm="${k}" class="${ST.mode === k ? 'on' : ''}" title="${n}">${i}<small>${n}</small></button>`).join('')}</div>
       <select id="divSel" title="グリッド">${DIVS.map(([v, n]) => `<option value="${v}" ${ep && stepT(ep) === v ? 'selected' : ''}>グリッド ${n}</option>`).join('')}</select>
       <span class="lab" style="font-size:11px;color:var(--dim)">新規</span><input type="number" id="dvIn" min="1" max="127" value="${defVel}" style="width:58px" title="新しく置く音のベロシティ">
       <button id="undoBtn">↶</button><button id="redoBtn">↷</button><button id="clrPat" class="danger">消去</button>
       <span class="lab" style="font-size:11px;color:var(--dim)">スウィング</span><input type="range" id="swingR" min="0" max="70" value="${P.swing}" style="width:80px">`;
+  } else if(view === 'song'){
+    ctx.innerHTML = `<span class="lab">曲の最初から最後まで。小節をタップでそこへ移動、もう一度タップで再生。紫のラベルでセクション名（Aメロ・サビ…）を付けられます</span>`;
+    tools.innerHTML = `<select id="sgPer">${[2,4,8,16].map(n => `<option value="${n}" ${SG.per === n ? 'selected' : ''}>1行 ${n}小節</option>`).join('')}<option value="0" ${!SG.per ? 'selected' : ''}>1行 自動</option></select><select id="sgChd"><option value="1" ${SG.chords ? 'selected' : ''}>コード表示</option><option value="0" ${SG.chords ? '' : 'selected'}>コード非表示</option></select><span class="grow"></span><button id="sgToPl">🎼 この位置をプレイリストで</button>`;
   } else if(view === 'mixer'){
     ctx.innerHTML = `<span class="lab">フェーダーで音量、FXでEQ・コンプ・歪み・フィルター。M=ミュート S=ソロ。MASTERのFXはマスタリング画面へ</span>`;
     tools.innerHTML = '';
@@ -996,6 +1156,9 @@ function renderChrome(){
   }
   // wire
   const on = (id, fn, ev = 'onclick') => { const el = $(id); if(el) el[ev] = fn; };
+  on('sgPer', e => { SG.per = +e.target.value; renderOverview(); }, 'onchange');
+  on('sgChd', e => { SG.chords = e.target.value === '1'; renderOverview(); }, 'onchange');
+  on('sgToPl', () => { setView('playlist'); plScroll.scrollLeft = Math.max(0, songPos * plPPT() - 40); drawPL(); });
   on('cbTog', () => { cb.show = !cb.show; if(cb.show){ const k = guessKey(); if(k != null) cb.key = k; } renderChrome(); if(view === 'playlist') layoutPL(); if(view === 'roll') layoutPR(); });
   renderChordBar();
   document.querySelectorAll('#modeBtns button').forEach(b => b.onclick = () => setMode(b.dataset.m));
@@ -1006,7 +1169,6 @@ function renderChrome(){
   on('lenSel', e => { lenIdx = +e.target.value; }, 'onchange');
   on('editBtn', openEditSheet);
   on('addTrk', openAddTrack);
-  on('rlibBtn', () => RL.open ? closeRLib() : openRLib());
   on('instBtn', () => et && openInstrument(et));
   on('patSel', e => selectPattern(e.target.value), 'onchange');
   on('patNew', () => { if(!et) return; pushUndo(); const p = newPattern(et, ep ? ep.len : barT()); selectPattern(p.id); markDirty(); toast(`${et.name} に ${p.name} を作成`); });
@@ -1086,23 +1248,23 @@ function drawPL(){
   if(view !== 'playlist') return;
   const g = plG, dpr = window.devicePixelRatio || 1, W = plCv.width / dpr, H = plCv.height / dpr, k = plPPT(), bt = barT();
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.fillStyle = '#180920'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#0e0617'; g.fillRect(0, 0, W, H);
   const t0 = Math.max(0, plT(PL_HEADW)), t1 = plT(W);
   // lanes
   P.tracks.forEach((tr, r) => {
     const y = plY(r); if(y > H || y + PL_ROWH < RULER) return;
-    g.fillStyle = r % 2 ? '#1c0b24' : '#1a0a23'; g.fillRect(PL_HEADW, y, W, PL_ROWH);
-    if(tr.id === curTrackId){ g.fillStyle = '#ff33c012'; g.fillRect(PL_HEADW, y, W, PL_ROWH); }
-    g.fillStyle = '#2b1039'; g.fillRect(PL_HEADW, y + PL_ROWH - 1, W, 1);
+    g.fillStyle = r % 2 ? '#10071b' : '#10061a'; g.fillRect(PL_HEADW, y, W, PL_ROWH);
+    if(tr.id === curTrackId){ g.fillStyle = '#ff6fae12'; g.fillRect(PL_HEADW, y, W, PL_ROWH); }
+    g.fillStyle = '#1d0c30'; g.fillRect(PL_HEADW, y + PL_ROWH - 1, W, 1);
   });
   const lanesBottom = Math.min(H, plY(P.tracks.length));
   // grid
   const vl = (step, col) => { g.fillStyle = col; for(let t = Math.ceil(t0 / step) * step; t <= t1; t += step){ g.fillRect(Math.round(plX(t)), RULER, 1, lanesBottom - RULER); } };
-  if(PPQ * k >= 6) vl(PPQ, '#260f33');
-  vl(bt, '#39164c');
-  if(bt * 4 * k >= 20) vl(bt * 4, '#ff52c9');
-  const ex = plX(songEnd()); if(ex < W){ g.fillStyle = '#38154a66'; g.fillRect(Math.max(PL_HEADW, ex), RULER, W, H); }
-  if(P.loop.on){ const a = Math.max(PL_HEADW, plX(P.loop.s * bt)), b = plX(P.loop.e * bt); if(b > a){ g.fillStyle = '#ff33c014'; g.fillRect(a, RULER, b - a, lanesBottom - RULER); } }
+  if(PPQ * k >= 6) vl(PPQ, '#190b2a');
+  vl(bt, '#291144');
+  if(bt * 4 * k >= 20) vl(bt * 4, '#bfa1d9');
+  const ex = plX(songEnd()); if(ex < W){ g.fillStyle = '#e9cfdd66'; g.fillRect(Math.max(PL_HEADW, ex), RULER, W, H); }
+  if(P.loop.on){ const a = Math.max(PL_HEADW, plX(P.loop.s * bt)), b = plX(P.loop.e * bt); if(b > a){ g.fillStyle = '#ff6fae14'; g.fillRect(a, RULER, b - a, lanesBottom - RULER); } }
   // clips
   g.save(); g.beginPath(); g.rect(PL_HEADW, RULER, W - PL_HEADW, H - RULER); g.clip();
   g.font = '10px -apple-system,sans-serif'; g.textBaseline = 'middle';
@@ -1127,63 +1289,63 @@ function drawPL(){
             const ny = bodyY + (1 - (n.p - lo + .5) / span) * bodyH;
             g.fillRect(nx, ny - 1, Math.max(1.5, Math.min(n.d, c.t + cl - at) * k - .5), tr.kind === 'drum' ? 2 : 2.5);
           }
-          if(rep > 0){ g.fillStyle = '#f5bffa40'; g.fillRect(plX(bx), y + 13, 1, h - 13); g.fillStyle = tr.color; }
+          if(rep > 0){ g.fillStyle = '#5a2a4540'; g.fillRect(plX(bx), y + 13, 1, h - 13); g.fillStyle = tr.color; }
         }
       }
-      g.fillStyle = '#f5bffa'; g.save(); g.beginPath(); g.rect(x, y, w - 4, 13); g.clip(); g.fillText((c.auto ? '' : '◆ ') + pat.name, x + 4, y + 7); g.restore();
-      if(plSel.has(c)){ g.strokeStyle = '#f5bffa'; g.lineWidth = 2; rr(g, x + 1, y + .5, w - 2, h - 1, 4); g.stroke(); }
-      if(c.pat === editPat){ g.fillStyle = '#f5bffa'; g.fillRect(x + 1, y + h - 2, Math.max(2, w - 2), 2); }
+      g.fillStyle = '#f2dffb'; g.save(); g.beginPath(); g.rect(x, y, w - 4, 13); g.clip(); g.fillText((c.auto ? '' : '◆ ') + pat.name, x + 4, y + 7); g.restore();
+      if(plSel.has(c)){ g.strokeStyle = '#f2dffb'; g.lineWidth = 2; rr(g, x + 1, y + .5, w - 2, h - 1, 4); g.stroke(); }
+      if(c.pat === editPat){ g.fillStyle = '#f2dffb'; g.fillRect(x + 1, y + h - 2, Math.max(2, w - 2), 2); }
     }
   });
   if(rectPL){
     const x1 = plX(Math.min(rectPL.t0, rectPL.t1)), x2 = plX(Math.max(rectPL.t0, rectPL.t1));
     const y1 = RULER + Math.min(rectPL.y0, rectPL.y1) - plScroll.scrollTop, y2 = RULER + Math.max(rectPL.y0, rectPL.y1) - plScroll.scrollTop;
-    g.fillStyle = '#8252ff33'; g.strokeStyle = '#8252ff'; g.lineWidth = 1; g.fillRect(x1, y1, x2 - x1, y2 - y1); g.strokeRect(x1 + .5, y1 + .5, x2 - x1, y2 - y1);
+    g.fillStyle = '#b79bff33'; g.strokeStyle = '#341656'; g.lineWidth = 1; g.fillRect(x1, y1, x2 - x1, y2 - y1); g.strokeRect(x1 + .5, y1 + .5, x2 - x1, y2 - y1);
   }
   const ph = songMode ? curTick() : songPos, px = plX(ph);
-  g.fillStyle = songMode ? '#ff33c0' : '#ff33c066'; g.fillRect(Math.round(px), RULER, 2, H);
+  g.fillStyle = songMode ? '#ff52bb' : '#ff5fa266'; g.fillRect(Math.round(px), RULER, 2, H);
   g.restore();
   // headers
-  g.fillStyle = '#200c2a'; g.fillRect(0, RULER, PL_HEADW, H);
+  g.fillStyle = '#140821'; g.fillRect(0, RULER, PL_HEADW, H);
   P.tracks.forEach((tr, r) => {
     const y = plY(r); if(y > H || y + PL_ROWH < RULER) return;
     const selT = tr.id === curTrackId;
-    g.fillStyle = selT ? '#2a1037' : '#1b0a23'; g.fillRect(0, y, PL_HEADW - 1, PL_ROWH - 1);
+    g.fillStyle = selT ? '#1c0c2e' : '#10061a'; g.fillRect(0, y, PL_HEADW - 1, PL_ROWH - 1);
     g.fillStyle = tr.color; g.fillRect(0, y, 5, PL_ROWH - 1);
-    g.fillStyle = selT ? '#ff33c0' : '#f5bffa'; g.font = 'bold 12px -apple-system,"Hiragino Sans",sans-serif'; g.textAlign = 'left';
+    g.fillStyle = selT ? '#ff26ae' : '#f2dffb'; g.font = 'bold 12px -apple-system,"Hiragino Sans",sans-serif'; g.textAlign = 'left';
     g.save(); g.beginPath(); g.rect(10, y, PL_HEADW - 16, PL_ROWH); g.clip();
     g.fillText(tr.name, 11, y + 15);
-    g.fillStyle = '#bd98e1'; g.font = '10px -apple-system,sans-serif'; g.fillText(tr.kind === 'drum' ? 'ドラムキット' : (PRESETS[tr.preset] || {}).name || '', 11, y + 30);
+    g.fillStyle = '#bfa1d9'; g.font = '10px -apple-system,sans-serif'; g.fillText(tr.kind === 'drum' ? 'ドラムキット' : (PRESETS[tr.preset] || {}).name || '', 11, y + 30);
     g.restore();
     // M S buttons
     const by = y + PL_ROWH - 20;
-    [['M', tr.mute, '#ff3352', 10], ['S', tr.solo, '#33fff0', 36]].forEach(([l, on, col, bx]) => {
-      g.fillStyle = on ? col : '#290f35'; rr(g, bx, by, 22, 15, 3); g.fill();
-      g.fillStyle = on ? '#11081c' : '#bd98e1'; g.font = 'bold 10px sans-serif'; g.textAlign = 'center'; g.fillText(l, bx + 11, by + 8);
+    [['M', tr.mute, '#ff52b3', 10], ['S', tr.solo, '#1fffa2', 36]].forEach(([l, on, col, bx]) => {
+      g.fillStyle = on ? col : '#1b0b2d'; rr(g, bx, by, 22, 15, 3); g.fill();
+      g.fillStyle = on ? '#0b0512' : '#bfa1d9'; g.font = 'bold 10px sans-serif'; g.textAlign = 'center'; g.fillText(l, bx + 11, by + 8);
     });
-    g.fillStyle = '#bd98e1'; g.font = '13px sans-serif'; g.fillText('⚙', PL_HEADW - 18, by + 8); g.textAlign = 'left';
+    g.fillStyle = '#bfa1d9'; g.font = '13px sans-serif'; g.fillText('⚙', PL_HEADW - 18, by + 8); g.textAlign = 'left';
     // meter
     const n = live && live.tracks[tr.id]; const lv = playing && n ? dbl(n.peak || 0) : 0;
-    g.fillStyle = '#341445'; g.fillRect(64, by + 5, PL_HEADW - 92, 5);
-    if(lv > 0){ g.fillStyle = lv > .95 ? '#ff3352' : '#ff33c0'; g.fillRect(64, by + 5, (PL_HEADW - 92) * lv, 5); }
+    g.fillStyle = '#250f3d'; g.fillRect(64, by + 5, PL_HEADW - 92, 5);
+    if(lv > 0){ g.fillStyle = lv > .95 ? '#ff52b0' : '#ff52bb'; g.fillRect(64, by + 5, (PL_HEADW - 92) * lv, 5); }
   });
   // add-track row
-  { const y = plY(P.tracks.length); if(y < H){ g.fillStyle = '#1a0a22'; g.fillRect(0, y, W, PL_ROWH); g.fillStyle = '#bd98e1'; g.font = '12px -apple-system,"Hiragino Sans",sans-serif'; g.fillText('＋ トラックを追加', 12, y + PL_ROWH / 2); } }
-  g.fillStyle = '#341445'; g.fillRect(PL_HEADW - 1, RULER, 1, H);
+  { const y = plY(P.tracks.length); if(y < H){ g.fillStyle = '#0f0618'; g.fillRect(0, y, W, PL_ROWH); g.fillStyle = '#bfa1d9'; g.font = '12px -apple-system,"Hiragino Sans",sans-serif'; g.fillText('＋ トラックを追加', 12, y + PL_ROWH / 2); } }
+  g.fillStyle = '#250f3d'; g.fillRect(PL_HEADW - 1, RULER, 1, H);
   // ruler
-  g.fillStyle = '#230d2d'; g.fillRect(0, 0, W, RULER);
-  if(P.loop.on){ const a = Math.max(PL_HEADW, plX(P.loop.s * bt)), b = plX(P.loop.e * bt); if(b > a){ g.fillStyle = '#ff33c055'; g.fillRect(a, 3, b - a, RULER - 6); } }
+  g.fillStyle = '#160925'; g.fillRect(0, 0, W, RULER);
+  if(P.loop.on){ const a = Math.max(PL_HEADW, plX(P.loop.s * bt)), b = plX(P.loop.e * bt); if(b > a){ g.fillStyle = '#ff6fae55'; g.fillRect(a, 3, b - a, RULER - 6); } }
   g.font = '11px sans-serif'; g.textAlign = 'left';
   const step = Math.max(1, Math.ceil(36 / (bt * k)));
   for(let b = Math.max(0, Math.floor(t0 / bt)); b * bt <= t1; b++){
     const x = plX(b * bt); if(x < PL_HEADW - 1) continue;
-    g.fillStyle = '#ff52c9'; g.fillRect(Math.round(x), b % step ? RULER - 6 : 5, 1, b % step ? 6 : RULER - 5);
-    if(b % step === 0 && b < P.bars){ g.fillStyle = '#f3b2f9'; g.fillText(String(b + 1), x + 4, RULER / 2 + 1); }
+    g.fillStyle = '#ff52bf'; g.fillRect(Math.round(x), b % step ? RULER - 6 : 5, 1, b % step ? 6 : RULER - 5);
+    if(b % step === 0 && b < P.bars){ g.fillStyle = '#f2dffb'; g.fillText(String(b + 1), x + 4, RULER / 2 + 1); }
   }
-  if(px >= PL_HEADW){ g.fillStyle = '#ff33c0'; g.beginPath(); g.moveTo(px - 6, 0); g.lineTo(px + 7, 0); g.lineTo(px + 1, 9); g.closePath(); g.fill(); }
-  g.fillStyle = '#230d2d'; g.fillRect(0, 0, PL_HEADW, RULER);
-  g.fillStyle = '#ff33c0'; g.font = 'bold 11px sans-serif'; g.fillText('♪ PLAYLIST', 10, RULER / 2 + 1);
-  g.fillStyle = '#341445'; g.fillRect(0, RULER - 1, W, 1);
+  if(px >= PL_HEADW){ g.fillStyle = '#ff52bb'; g.beginPath(); g.moveTo(px - 6, 0); g.lineTo(px + 7, 0); g.lineTo(px + 1, 9); g.closePath(); g.fill(); }
+  g.fillStyle = '#160925'; g.fillRect(0, 0, PL_HEADW, RULER);
+  g.fillStyle = '#ff26ae'; g.font = 'bold 11px sans-serif'; g.fillText('♪ PLAYLIST', 10, RULER / 2 + 1);
+  g.fillStyle = '#250f3d'; g.fillRect(0, RULER - 1, W, 1);
 }
 function clipAt(r, tick){
   const tr = P.tracks[r]; if(!tr) return null;
@@ -1380,21 +1542,21 @@ function drawPR(){
   const tr = prTr(), p = editP(); if(!tr) return;
   const g = prG, dpr = window.devicePixelRatio || 1, W = prCv.width / dpr, H = prCv.height / dpr, k = prPPT(), rows = rowCount(tr);
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.fillStyle = '#180920'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#0e0617'; g.fillRect(0, 0, W, H);
   const st = prScroll.scrollTop, r0 = Math.max(0, Math.floor(st / PR_ROWH)), r1 = Math.min(rows - 1, Math.ceil((st + H) / PR_ROWH));
   for(let r = r0; r <= r1; r++){
     const y = prY(r);
-    if(tr.kind === 'drum') g.fillStyle = r % 2 ? '#1b0a23' : '#1d0b27';
-    else g.fillStyle = [1,3,6,8,10].includes((HI - r) % 12) ? '#1f0c2a' : '#17091f';
+    if(tr.kind === 'drum') g.fillStyle = r % 2 ? '#10061a' : '#12071e';
+    else g.fillStyle = [1,3,6,8,10].includes((HI - r) % 12) ? '#140821' : '#0d0516';
     g.fillRect(PR_KEYW, y, W, PR_ROWH);
-    g.fillStyle = tr.kind !== 'drum' && (HI - r) % 12 === 0 ? '#3d1851' : '#280f35'; g.fillRect(PR_KEYW, y + PR_ROWH - 1, W, 1);
+    g.fillStyle = tr.kind !== 'drum' && (HI - r) % 12 === 0 ? '#2c1249' : '#1b0b2c'; g.fillRect(PR_KEYW, y + PR_ROWH - 1, W, 1);
   }
   const gb = Math.min(H, prY(rows)), t0 = Math.max(0, prT(PR_KEYW)), t1 = prT(W), sn = prSnapT(), bt = barT();
   const vl = (step, col) => { g.fillStyle = col; for(let t = Math.ceil(t0 / step) * step; t <= t1; t += step) g.fillRect(Math.round(prX(t)), RULER, 1, gb - RULER); };
-  if(sn * k >= 6 && sn < PPQ) vl(sn, '#240e2f');
-  if(PPQ * k >= 5) vl(PPQ, '#301340');
-  vl(bt, '#ff52c9');
-  const ex = prX(p.len); if(ex < W){ g.fillStyle = '#36154788'; g.fillRect(Math.max(PR_KEYW, ex), RULER, W, H); g.fillStyle = '#ff33c0'; g.fillRect(Math.round(ex), RULER, 2, gb - RULER); }
+  if(sn * k >= 6 && sn < PPQ) vl(sn, '#170a27');
+  if(PPQ * k >= 5) vl(PPQ, '#210e38');
+  vl(bt, '#bfa1d9');
+  const ex = prX(p.len); if(ex < W){ g.fillStyle = '#ead2df88'; g.fillRect(Math.max(PR_KEYW, ex), RULER, W, H); g.fillStyle = '#ff52bc'; g.fillRect(Math.round(ex), RULER, 2, gb - RULER); }
   g.save(); g.beginPath(); g.rect(PR_KEYW, RULER, W - PR_KEYW, H - RULER); g.clip();
   // ghost: other patterns playing at the same time are not shown; show other notes of same pattern beyond len dimmed
   for(const n of p.notes){
@@ -1403,47 +1565,47 @@ function drawPR(){
     if(x + w < PR_KEYW || x > W || y + PR_ROWH < RULER || y > H) continue;
     g.globalAlpha = (n.t >= p.len ? .3 : 1) * (.45 + .55 * n.v / 127); g.fillStyle = tr.color;
     rr(g, x, y + 1.5, w, PR_ROWH - 3, 3); g.fill(); g.globalAlpha = 1;
-    g.fillStyle = '#f5bffa55'; g.fillRect(x, y + PR_ROWH - 4, Math.max(2, w * n.v / 127), 2);
-    if(prSel.has(n)){ g.strokeStyle = '#f5bffa'; g.lineWidth = 2; rr(g, x, y + 1.5, w, PR_ROWH - 3, 3); g.stroke(); }
-    if(tr.kind !== 'drum' && w > 22 && k >= .65){ g.fillStyle = '#f5bffacc'; g.font = '9px sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillText(noteName(n.p), x + 3, y + PR_ROWH / 2 - 1); }
+    g.fillStyle = '#5a2a4555'; g.fillRect(x, y + PR_ROWH - 4, Math.max(2, w * n.v / 127), 2);
+    if(prSel.has(n)){ g.strokeStyle = '#f2dffb'; g.lineWidth = 2; rr(g, x, y + 1.5, w, PR_ROWH - 3, 3); g.stroke(); }
+    if(tr.kind !== 'drum' && w > 22 && k >= .65){ g.fillStyle = '#5a2a45cc'; g.font = '9px sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillText(noteName(n.p), x + 3, y + PR_ROWH / 2 - 1); }
   }
   if(rectPR){
     const x1 = prX(Math.min(rectPR.t0, rectPR.t1)), x2 = prX(Math.max(rectPR.t0, rectPR.t1));
     const y1 = RULER + Math.min(rectPR.y0, rectPR.y1) - st, y2 = RULER + Math.max(rectPR.y0, rectPR.y1) - st;
-    g.fillStyle = '#8252ff33'; g.strokeStyle = '#8252ff'; g.lineWidth = 1; g.fillRect(x1, y1, x2 - x1, y2 - y1); g.strokeRect(x1 + .5, y1 + .5, x2 - x1, y2 - y1);
+    g.fillStyle = '#b79bff33'; g.strokeStyle = '#341656'; g.lineWidth = 1; g.fillRect(x1, y1, x2 - x1, y2 - y1); g.strokeRect(x1 + .5, y1 + .5, x2 - x1, y2 - y1);
   }
   const pt = patTick(); let px = -99;
-  if(pt != null){ px = prX(pt); g.fillStyle = '#ff33c0'; g.fillRect(Math.round(px), RULER, 2, H); }
-  const cx = prX(prCursor); g.fillStyle = '#ff33c066'; g.fillRect(Math.round(cx), RULER, 1, H);
+  if(pt != null){ px = prX(pt); g.fillStyle = '#ff52bb'; g.fillRect(Math.round(px), RULER, 2, H); }
+  const cx = prX(prCursor); g.fillStyle = '#ff6fae66'; g.fillRect(Math.round(cx), RULER, 1, H);
   g.restore();
   // keys
-  g.fillStyle = '#331443'; g.fillRect(0, RULER, PR_KEYW, H); g.textBaseline = 'middle';
+  g.fillStyle = '#230f3b'; g.fillRect(0, RULER, PR_KEYW, H); g.textBaseline = 'middle';
   for(let r = r0; r <= r1; r++){
     const y = prY(r);
     if(tr.kind === 'drum'){
-      g.fillStyle = r % 2 ? '#1e0b27' : '#220d2c'; g.fillRect(0, y, PR_KEYW - 1, PR_ROWH - 1);
-      g.fillStyle = '#f5bffa'; g.font = '11px -apple-system,"Hiragino Sans",sans-serif'; g.textAlign = 'right'; g.fillText(DRUMKIT[r].n, PR_KEYW - 6, y + PR_ROWH / 2);
+      g.fillStyle = r % 2 ? '#12071e' : '#150923'; g.fillRect(0, y, PR_KEYW - 1, PR_ROWH - 1);
+      g.fillStyle = '#f2dffb'; g.font = '11px -apple-system,"Hiragino Sans",sans-serif'; g.textAlign = 'right'; g.fillText(DRUMKIT[r].n, PR_KEYW - 6, y + PR_ROWH / 2);
     } else {
       const pp = HI - r, pc = pp % 12, black = [1,3,6,8,10].includes(pc);
-      g.fillStyle = '#11081c'; g.fillRect(0, y, PR_KEYW - 1, PR_ROWH - 1);
-      if(black){ g.fillStyle = '#8a52ff'; g.fillRect(0, y + 1, PR_KEYW * .62, PR_ROWH - 2); }
-      if(pc === 0){ g.fillStyle = '#ff33c0'; g.font = 'bold 11px sans-serif'; g.textAlign = 'right'; g.fillText(noteName(pp), PR_KEYW - 6, y + PR_ROWH / 2); }
+      g.fillStyle = '#d6c8f0'; g.fillRect(0, y, PR_KEYW - 1, PR_ROWH - 1);
+      if(black){ g.fillStyle = '#140629'; g.fillRect(0, y + 1, PR_KEYW * .62, PR_ROWH - 2); }
+      if(pc === 0){ g.fillStyle = '#c0109a'; g.font = 'bold 11px sans-serif'; g.textAlign = 'right'; g.fillText(noteName(pp), PR_KEYW - 6, y + PR_ROWH / 2); }
     }
   }
-  g.fillStyle = '#341445'; g.fillRect(PR_KEYW - 1, RULER, 1, H);
+  g.fillStyle = '#250f3d'; g.fillRect(PR_KEYW - 1, RULER, 1, H);
   // ruler
-  g.fillStyle = '#230d2d'; g.fillRect(0, 0, W, RULER); g.textAlign = 'left'; g.font = '11px sans-serif';
+  g.fillStyle = '#160925'; g.fillRect(0, 0, W, RULER); g.textAlign = 'left'; g.font = '11px sans-serif';
   const stp = Math.max(1, Math.ceil(36 / (bt * k)));
   for(let b = Math.max(0, Math.floor(t0 / bt)); b * bt <= t1; b++){
     const x = prX(b * bt); if(x < PR_KEYW - 1) continue;
-    g.fillStyle = '#ff52c9'; g.fillRect(Math.round(x), 5, 1, RULER - 5);
-    if(b % stp === 0){ g.fillStyle = b * bt < p.len ? '#f3b2f9' : '#bd98e1'; g.fillText(String(b + 1), x + 4, RULER / 2 + 1); }
+    g.fillStyle = '#ff52bf'; g.fillRect(Math.round(x), 5, 1, RULER - 5);
+    if(b % stp === 0){ g.fillStyle = b * bt < p.len ? '#f2dffb' : '#bfa1d9'; g.fillText(String(b + 1), x + 4, RULER / 2 + 1); }
   }
-  if(PPQ * k >= 14) for(let t = Math.ceil(t0 / PPQ) * PPQ; t <= t1; t += PPQ){ if(t % bt){ g.fillStyle = '#3b174e'; g.fillRect(Math.round(prX(t)), RULER - 6, 1, 6); } }
-  if(px >= PR_KEYW){ g.fillStyle = '#ff33c0'; g.beginPath(); g.moveTo(px - 6, 0); g.lineTo(px + 7, 0); g.lineTo(px + 1, 9); g.closePath(); g.fill(); }
-  g.fillStyle = '#230d2d'; g.fillRect(0, 0, PR_KEYW, RULER);
-  g.fillStyle = tr.color; g.fillRect(6, 8, 8, 8); g.fillStyle = '#f3b2f9'; g.font = 'bold 10px sans-serif'; g.fillText('ROLL', 18, RULER / 2 + 1);
-  g.fillStyle = '#341445'; g.fillRect(0, RULER - 1, W, 1);
+  if(PPQ * k >= 14) for(let t = Math.ceil(t0 / PPQ) * PPQ; t <= t1; t += PPQ){ if(t % bt){ g.fillStyle = '#2a1246'; g.fillRect(Math.round(prX(t)), RULER - 6, 1, 6); } }
+  if(px >= PR_KEYW){ g.fillStyle = '#ff52bb'; g.beginPath(); g.moveTo(px - 6, 0); g.lineTo(px + 7, 0); g.lineTo(px + 1, 9); g.closePath(); g.fill(); }
+  g.fillStyle = '#160925'; g.fillRect(0, 0, PR_KEYW, RULER);
+  g.fillStyle = tr.color; g.fillRect(6, 8, 8, 8); g.fillStyle = '#f2dffb'; g.font = 'bold 10px sans-serif'; g.fillText('ROLL', 18, RULER / 2 + 1);
+  g.fillStyle = '#250f3d'; g.fillRect(0, RULER - 1, W, 1);
 }
 function prLoc(e){ const r = prCv.getBoundingClientRect(); return {x:e.clientX - r.left, y:e.clientY - r.top}; }
 prCv.addEventListener('touchstart', e => {
@@ -1697,8 +1859,8 @@ function openTemplates(){
     <div class="btns" style="flex-wrap:nowrap"><button id="tTempo" class="${ST.tplTempo ? 'on' : ''}">テンポ・ハネも合わせる</button><button id="tNew" class="${ST.tplNew ? 'on' : ''}">新しいパターンとして作る</button></div>
     <div class="row"><label>音色キット</label><select id="tKit" style="grid-column:2/-1"><option value="auto">おすすめ（テンプレートに合わせる）</option><option value="keep">今のキットのまま</option>${kitOptions('')}</select></div>
     <div class="btns"><button id="tTrack" class="${ST.tplTrack ? 'on' : ''}">別のドラムトラックとして作る（音色を分けたいとき）</button></div>
-    <h3>📋 ドラム譜面ノートから貼り付け</h3><div class="infobox open">ドラム譜面ノートで「DTMへ送る」→「コピー」した文字をここに貼り付けて「読み込む」。今の再生位置にクリップとして置かれます（プレイリストでドラッグして移動できます）。音色キットは下の設定に従い、「おすすめ」ならノートで選んだ音色になります。</div>
-    <textarea id="noteTxt" placeholder="DRUMNOTE1:… を貼り付け" style="width:100%;height:64px;font:11px monospace;border-radius:10px;border:1.5px solid var(--line,#484815);padding:8px;box-sizing:border-box"></textarea>
+    <h3>📋 ドラム／ベース譜面ノートから貼り付け</h3><div class="infobox open">ドラム譜面ノートで「DTMへ送る」→「コピー」した文字をここに貼り付けて「読み込む」。今の再生位置にクリップとして置かれます（プレイリストでドラッグして移動できます）。音色キットは下の設定に従い、「おすすめ」ならノートで選んだ音色になります。</div>
+    <textarea id="noteTxt" placeholder="DRUMNOTE1:… を貼り付け" style="width:100%;height:64px;font:11px monospace;border-radius:10px;border:1.5px solid var(--line,#271041);padding:8px;box-sizing:border-box"></textarea>
     <div class="btns"><button id="notePaste">クリップボードから貼り付け</button><button id="noteLoad" class="primary">ノートを読み込む</button></div>
     <h3>ロック・ポップ</h3><div class="tplgrid">${sec('pop')}</div><h3>ハード・メタル</h3><div class="tplgrid">${sec('metal')}</div><h3>ブラック・ダンス</h3><div class="tplgrid">${sec('black')}</div><h3>ラテン</h3><div class="tplgrid">${sec('latin')}</div><h3>ジャズ・ブルース・フュージョン</h3><div class="tplgrid">${sec('jazz')}</div><h3>フィルイン</h3><div class="tplgrid">${sec('fill')}</div>
     <div id="tplInfo" class="infobox"></div><div class="btns"><button id="tplLoad" class="primary" disabled>読み込む</button><button id="tplStop">■ 停止</button></div>`, b => {
@@ -1716,22 +1878,7 @@ function openTemplates(){
     });
     $('tplStop').onclick = stopAudition;
     $('notePaste').onclick = async () => { try{ $('noteTxt').value = await navigator.clipboard.readText(); toast('貼り付けました'); }catch(e){ toast('自動で読めませんでした。枠を長押しして貼り付けてください'); $('noteTxt').focus(); } };
-    $('noteLoad').onclick = () => {
-      let d = null; const raw = $('noteTxt').value.trim(), m = raw.match(/DRUMNOTE1:([A-Za-z0-9+/=]+)/);
-      try{ d = JSON.parse(decodeURIComponent(escape(atob(m[1])))); }catch(e){}
-      if(!d || !Array.isArray(d.notes) || !d.len) return toast('読み込めませんでした。「DRUMNOTE1:」から全部貼り付けてください');
-      stopAudition(); pushUndo();
-      const kc = $('tKit').value, kit = kc === 'auto' ? (KITS[d.kit] ? d.kit : null) : kc === 'keep' ? null : kc;
-      let drumTr = tr && tr.kind === 'drum' ? tr : P.tracks.find(t => t.kind === 'drum');
-      if(ST.tplTrack || !drumTr){ drumTr = mkTrack('drum', d.n, null, P.tracks.length); P.tracks.push(drumTr); }
-      if(kit) drumTr.params.kit = kit;
-      const np = newPattern(drumTr, d.len); np.name = d.n; np.len = d.len; np.div = d.div || 24;
-      np.notes = d.notes.map(n => { const o = {t:+n.t, d:+n.d || np.div, p:+n.p, v:clamp(+n.v || 100, 1, 127)}; if(n.off) o.off = +n.off; if(n.art) o.art = n.art; return o; });
-      drumTr.clips.push({id:uid(), t:Math.floor(songPos / barT()) * barT(), auto:true, len:d.len, pat:np.id});
-      if(ST.tplTempo){ P.bpm = d.bpm; P.swing = d.swing || 0; reanchor(); }
-      ensureBars(); syncMix(); closeSheet(); selectPattern(np.id); markDirty(); updateLcd(); renderChrome();
-      toast(`「${d.n}」を読み込んでプレイリストに置きました`);
-    };
+    $('noteLoad').onclick = () => importNote($('noteTxt').value, {kit:$('tKit').value, newTrack:ST.tplTrack, tempo:ST.tplTempo, cur:tr});
     $('tplLoad').onclick = () => {
       if(!pick) return; stopAudition();
       const kc = $('tKit').value, kit = kc === 'auto' ? tplKit(pick) : kc === 'keep' ? null : kc;
@@ -1872,25 +2019,25 @@ function drawLane(){
   const dpr = window.devicePixelRatio || 1, W = steps * 27 - 3, H = cv.clientHeight || 76;
   if(cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)){ cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
   const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.fillStyle = '#11081c'; g.fillRect(0, 0, W, H);
-  for(let s = 0; s < steps; s++){ const x = s * 27; g.fillStyle = Math.floor(s / perBeat) % 2 ? '#1b0b26' : '#1b0a24'; g.fillRect(x, 0, 24, H); }
+  g.fillStyle = '#0b0512'; g.fillRect(0, 0, W, H);
+  for(let s = 0; s < steps; s++){ const x = s * 27; g.fillStyle = Math.floor(s / perBeat) % 2 ? '#11071d' : '#10071b'; g.fillRect(x, 0, 24, H); }
   g.font = 'bold 9px sans-serif'; g.textAlign = 'center';
   if(ST.lane === 'vel'){
-    g.strokeStyle = '#341444'; [32, 64, 96].forEach(v => { const y = H - 12 - v / 127 * (H - 16); g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); });
-  } else { g.strokeStyle = '#431a59'; g.beginPath(); g.moveTo(0, H / 2); g.lineTo(W, H / 2); g.stroke(); }
+    g.strokeStyle = '#240f3c'; [32, 64, 96].forEach(v => { const y = H - 12 - v / 127 * (H - 16); g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); });
+  } else { g.strokeStyle = '#311452'; g.beginPath(); g.moveTo(0, H / 2); g.lineTo(W, H / 2); g.stroke(); }
   rowNotes(p).forEach(n => {
     const s = Math.floor(n.t / st), x = s * 27;
     if(ST.lane === 'vel'){
       const h = n.v / 127 * (H - 16), y = H - 12 - h;
-      g.fillStyle = ST.sel.has(n) ? '#8252ff' : n.v <= 50 ? '#341444' : n.v >= 115 ? '#ff33c0' : '#ff52c9'; g.fillRect(x + 3, y, 18, h);
-      g.fillStyle = '#f3b2f9'; g.fillText(n.v, x + 12, H - 2);
+      g.fillStyle = ST.sel.has(n) ? '#341656' : n.v <= 50 ? '#240f3c' : n.v >= 115 ? '#ff4fbb' : '#ff52bc'; g.fillRect(x + 3, y, 18, h);
+      g.fillStyle = '#f2dffb'; g.fillText(n.v, x + 12, H - 2);
     } else {
       const off = (n.off || 0) * TICK480, h = clamp(off / 60, -1, 1) * (H / 2 - 12);
-      g.fillStyle = off < 0 ? '#33fff1' : '#8252ff'; g.fillRect(x + 4, H / 2 - Math.max(h, 0), 16, Math.abs(h) || 2);
-      g.fillStyle = '#f3b2f9'; g.fillText((off > 0 ? '+' : '') + Math.round(off), x + 12, off < 0 ? 10 : H - 2);
+      g.fillStyle = off < 0 ? '#48ffb4' : '#341656'; g.fillRect(x + 4, H / 2 - Math.max(h, 0), 16, Math.abs(h) || 2);
+      g.fillStyle = '#f2dffb'; g.fillText((off > 0 ? '+' : '') + Math.round(off), x + 12, off < 0 ? 10 : H - 2);
     }
   });
-  if(ST.lane === 'off'){ g.fillStyle = '#bd98e1'; g.textAlign = 'left'; g.font = '9px sans-serif'; }
+  if(ST.lane === 'off'){ g.fillStyle = '#bfa1d9'; g.textAlign = 'left'; g.font = '9px sans-serif'; }
 }
 function bindLane(cv, p, tr){
   let drag = null;
@@ -2033,7 +2180,7 @@ function renderMixer(){
       <div class="db">${toDb(tr.vol)} dB</div>
       <div class="ms"><button class="m ${tr.mute ? 'on' : ''}">M</button><button class="s ${tr.solo ? 'on' : ''}">S</button></div>
       <button class="inst">🎛 音源</button></div>`;
-  w.innerHTML = P.tracks.map(strip).join('') + `<div class="strip master" style="--c:#8252ff"><div class="nm">MASTER</div><button class="fx">✨ FX</button><div class="fxs">${P.mastering.on ? '<b>' + esc((MPRESETS[P.mastering.preset] || {n:'カスタム'}).n.split('（')[0]) + '</b>' : 'マスタリングOFF'}</div>
+  w.innerHTML = P.tracks.map(strip).join('') + `<div class="strip master" style="--c:#341656"><div class="nm">MASTER</div><button class="fx">✨ FX</button><div class="fxs">${P.mastering.on ? '<b>' + esc((MPRESETS[P.mastering.preset] || {n:'カスタム'}).n.split('（')[0]) + '</b>' : 'マスタリングOFF'}</div>
       <div style="flex:1"></div><div class="fwrap"><canvas width="8" height="180"></canvas><input type="range" class="fader" min="0" max="1.25" step=".01" value="${P.master}"></div><div class="db">${toDb(P.master)} dB</div></div>`;
   w.querySelectorAll('.strip').forEach(el => {
     const master = el.classList.contains('master'), tr = master ? null : P.tracks[+el.dataset.i];
@@ -2059,8 +2206,8 @@ function meterLoop(){
       const n = m.id === '__m' ? live && live.ms : live && live.tracks[m.id];
       const lv = n ? (playing ? readPeak(n) : (n.peak = (n.peak || 0) * .85)) : 0;
       const g = m.cv.getContext('2d'), h = m.cv.height, hh = dbl(lv) * h;
-      g.fillStyle = '#250e31'; g.fillRect(0, 0, 8, h);
-      const grd = g.createLinearGradient(0, h, 0, 0); grd.addColorStop(0, '#33fff1'); grd.addColorStop(.7, '#ffb533'); grd.addColorStop(1, '#ff3352');
+      g.fillStyle = '#180a28'; g.fillRect(0, 0, 8, h);
+      const grd = g.createLinearGradient(0, h, 0, 0); grd.addColorStop(0, '#48ffb4'); grd.addColorStop(.7, '#ffc052'); grd.addColorStop(1, '#ff52b0');
       g.fillStyle = grd; g.fillRect(0, h - hh, 8, hh);
     });
   }
@@ -2076,8 +2223,8 @@ function meterLoop(){
   const g = $('masterMeter').getContext('2d');
   if(live && playing){ P.tracks.forEach(t => { if(live.tracks[t.id] && view !== 'mixer') readPeak(live.tracks[t.id]); }); }
   const lv = live ? (playing ? (view === 'mixer' ? live.ms.peak : readPeak(live.ms)) : 0) : 0;
-  g.fillStyle = '#250e31'; g.fillRect(0, 0, 8, 32);
-  const dv = dbl(lv); g.fillStyle = lv > .95 ? '#ff3352' : dv > .8 ? '#ffb533' : '#33fff1'; g.fillRect(0, 32 - dv * 32, 8, dv * 32);
+  g.fillStyle = '#180a28'; g.fillRect(0, 0, 8, 32);
+  const dv = dbl(lv); g.fillStyle = lv > .95 ? '#ff52b0' : dv > .8 ? '#ffc052' : '#48ffb4'; g.fillRect(0, 32 - dv * 32, 8, dv * 32);
   requestAnimationFrame(topMeter);
 })();
 function openFx(tr){
@@ -2198,25 +2345,79 @@ function openSongSettings(){
     $('lS').onchange = lc; $('lE').onchange = lc;
   });
 }
+const NOTE_STYLE = {fingered:'ebass', pick:'pickbass', slap:'slapbass', fretless:'fretless', acoustic:'upright', synth:'synbass'};
+function importNote(raw, o = {}){
+  const m = String(raw || '').match(/(DRUMNOTE1|BASSNOTE1|MULTINOTE1):([A-Za-z0-9+/=]+)/); let d = null;
+  try{ d = JSON.parse(decodeURIComponent(escape(atob(m[2])))); }catch(e){}
+  if(d && m[1] === 'MULTINOTE1') return importMulti(d, o);
+  if(!d || !Array.isArray(d.notes) || !d.len){ toast('読み込めませんでした。「…NOTE1:」から全部貼り付けてください'); return false; }
+  stopAudition && stopAudition(); pushUndo();
+  const isBass = m[1] === 'BASSNOTE1'; let tr;
+  if(isBass){
+    const pk = NOTE_STYLE[d.style] || 'ebass';
+    tr = o.newTrack ? null : P.tracks.find(t => t.kind === 'synth' && t.preset === pk);
+    if(!tr){ tr = mkTrack('synth', PRESETS[pk].name, pk, P.tracks.length); P.tracks.push(tr); }
+  } else {
+    const kc = o.kit || 'auto', kit = kc === 'auto' ? (KITS[d.kit] ? d.kit : null) : kc === 'keep' ? null : kc;
+    tr = o.cur && o.cur.kind === 'drum' ? o.cur : P.tracks.find(t => t.kind === 'drum');
+    if(o.newTrack || !tr){ tr = mkTrack('drum', d.n, null, P.tracks.length); P.tracks.push(tr); }
+    if(kit) tr.params.kit = kit;
+  }
+  const np = newPattern(tr, d.len); np.name = d.n; np.len = d.len; np.div = d.div || 24;
+  np.notes = d.notes.map(n => { const x = {t:+n.t, d:+n.d || np.div, p:+n.p, v:clamp(+n.v || 100, 1, 127)}; if(!isBass){ if(n.off) x.off = +n.off; if(n.art) x.art = n.art; } else if(n.art === 'ghost') x.v = Math.min(x.v, 50); return x; });
+  tr.clips.push({id:uid(), t:Math.floor(songPos / barT()) * barT(), auto:true, len:d.len, pat:np.id});
+  if(o.tempo){ P.bpm = d.bpm; if(!isBass) P.swing = d.swing || 0; reanchor(); }
+  ensureBars(); syncMix(); closeSheet(); selectPattern(np.id); markDirty(); updateLcd(); renderChrome();
+  toast(`「${d.n}」を${isBass ? '「' + tr.name + '」トラックに' : ''}読み込んでプレイリストに置きました`);
+  return true;
+}
+function importMulti(d, o){
+  if(!Array.isArray(d.parts) || !d.parts.length || !d.len){ toast('読み込めませんでした'); return false; }
+  pushUndo(); const at = Math.floor(songPos / barT()) * barT(); let first = null;
+  d.parts.forEach(pt => {
+    let tr;
+    if(pt.drum){ tr = P.tracks.find(t => t.kind === 'drum' && t.name === pt.name); if(!tr){ tr = mkTrack('drum', pt.name, null, P.tracks.length); P.tracks.push(tr); } if(KITS[pt.kit]) tr.params.kit = pt.kit; }
+    else { const pk = PRESETS[pt.preset] ? pt.preset : 'piano';
+      tr = P.tracks.find(t => t.kind === 'synth' && t.name === pt.name && t.preset === pk);
+      if(!tr){ tr = mkTrack('synth', pt.name, pk, P.tracks.length); P.tracks.push(tr); } }
+    const np = newPattern(tr, d.len); np.name = d.n + (d.parts.length > 1 ? ' ' + pt.name : ''); np.len = d.len;
+    np.notes = pt.notes.map(n => ({t:+n.t, d:+n.d || 24, p:+n.p, v:clamp(+n.v || 100, 1, 127)}));
+    tr.clips.push({id:uid(), t:at, auto:true, len:d.len, pat:np.id}); if(!first) first = np.id;
+  });
+  if(o.tempo){ P.bpm = d.bpm; reanchor(); }
+  ensureBars(); syncMix(); closeSheet(); if(first) selectPattern(first); markDirty(); updateLcd(); renderChrome();
+  toast(`「${d.n}」を ${d.parts.length}パート読み込んでプレイリストに置きました`);
+  return true;
+}
+function openPasteNote(){
+  openSheet(`<h2>📋 ノートから貼り付け<button class="x">✕</button></h2>
+    <div class="infobox open">ドラム・ベース・ギター・ホーン・ストリングス・キーボード譜面ノートの「DTMへ送る」→「コピー」した文字を貼り付けて「読み込む」。今の再生位置にクリップとして置かれます。ベースは奏法に合った音色のトラック（指・ピック・スラップ・フレットレス・ウッド・シンセ）に入ります。</div>
+    <textarea id="pnTxt" placeholder="…NOTE1:… を貼り付け" style="width:100%;height:80px;font:11px monospace;padding:8px;box-sizing:border-box"></textarea>
+    <div class="btns"><button id="pnClip">クリップボードから</button><button id="pnTempo">テンポも合わせる：OFF</button><button id="pnGo" class="primary">読み込む</button></div>`, () => {
+    let tempo = false;
+    $('pnClip').onclick = async () => { try{ $('pnTxt').value = await navigator.clipboard.readText(); }catch(e){ toast('自動で読めませんでした。枠を長押しして貼り付けてください'); $('pnTxt').focus(); } };
+    $('pnTempo').onclick = e => { tempo = !tempo; e.currentTarget.textContent = 'テンポも合わせる：' + (tempo ? 'ON' : 'OFF'); e.currentTarget.classList.toggle('on', tempo); };
+    $('pnGo').onclick = () => importNote($('pnTxt').value, {tempo, kit:'auto'});
+  });
+}
 function openMenu(){
   openSheet(`<h2>ファイル<button class="x">✕</button></h2>
     <div style="color:var(--dim);font-size:12px;margin-bottom:4px">${store.db ? 'アカウントに自動保存（他の端末からも開けます）' : 'このブラウザに自動保存'} ／ 状態: ${saveState}</div>
     <div class="btns"><button id="mOpen">📂 曲を開く</button><button id="mNew">✨ 新規作成</button><button id="mCopy">📄 別名で複製</button></div>
-    <div class="btns"><button id="mSong">🎼 曲の設定（テンポ・拍子・長さ）</button></div>
+    <div class="btns"><button id="mSong">🎼 曲の設定（テンポ・拍子・長さ）</button><button id="mPaste">📋 ノートから貼り付け</button></div>
     <h3>書き出し</h3>
     <div class="btns"><button id="mExport" class="primary">🎧 WAV＋MIDI を書き出し（ZIP）</button></div>
     <div class="btns"><button id="mJson">💾 曲ファイル(.json)</button><button id="mImport">📥 曲ファイルを読み込む</button></div>
-    <h3>見た目</h3><div class="btns"><button id="mVhs">📼 VHSエフェクト：${window.vwFxLabel ? vwFxLabel() : "強"}（タップで切替）</button></div>
     <h3>ヘルプ</h3><div class="btns"><button id="mHelp">❓ 使い方・ショートカット</button></div>`, () => {
     $('mOpen').onclick = openProjects;
     $('mNew').onclick = () => { flushSave(); stop(); newProject(); undoStack = []; redoStack = []; songPos = 0; patPos = 0; afterLoad(true); markDirty(); closeSheet(); toast('新しい曲を作成しました'); };
     $('mCopy').onclick = () => { flushSave(); const c = JSON.parse(JSON.stringify(P)); c.id = uid(); c.name = P.name + ' のコピー'; P = migrate(c); afterLoad(false); markDirty(); closeSheet(); toast('複製しました（以降はコピー側に保存）'); };
     $('mSong').onclick = openSongSettings;
+    $('mPaste').onclick = openPasteNote;
     $('mExport').onclick = exportAudio;
     $('mJson').onclick = () => offerFile(safeName(P.name) + '.json', JSON.stringify(P));
     $('mImport').onclick = () => $('fileIn').click();
     $('mHelp').onclick = openHelp;
-    $('mVhs').onclick = () => { if(!window.vwSetFx) return; vwSetFx((vwFxLevel() + 2) % 3); $('mVhs').textContent = '📼 VHSエフェクト：' + vwFxLabel() + '（タップで切替）'; };
   });
 }
 function openHelp(){
@@ -2760,7 +2961,7 @@ function chipDown(e, ch, el){
     if(!cdrag) return;
     if(!cdrag.ghost && Math.hypot(ev.clientX - cdrag.x0, ev.clientY - cdrag.y0) > 6){ cdrag.ghost = document.createElement('div'); cdrag.ghost.className = 'ghost'; document.body.appendChild(cdrag.ghost); }
     if(cdrag.ghost){ const tg = dropTarget(ev.clientX, ev.clientY); cdrag.ghost.style.left = ev.clientX + 'px'; cdrag.ghost.style.top = ev.clientY + 'px';
-      cdrag.ghost.innerHTML = `${esc(ch.label)}<small>${tg ? esc(tg.bad || tg.label) : 'トラックの上で離す'}</small>`; cdrag.ghost.style.background = tg && !tg.bad ? '#ff33c0' : '#8252ff'; }
+      cdrag.ghost.innerHTML = `${esc(ch.label)}<small>${tg ? esc(tg.bad || tg.label) : 'トラックの上で離す'}</small>`; cdrag.ghost.style.background = tg && !tg.bad ? '#ff52bc' : '#341656'; }
   };
   const up = ev => {
     el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
@@ -2961,15 +3162,15 @@ const mStat = {pin:-90, pout:-90, rms:-90, hold:-90, holdT:0};
 function drawMasterMeter(){
   const cv = $('mMeter'); if(!cv || !cv.width) return;
   const g = cv.getContext('2d'), dpr = window.devicePixelRatio || 1, W = cv.width / dpr, H = cv.height / dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.fillStyle = '#180920'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#0e0617'; g.fillRect(0, 0, W, H);
   const m = live && live.mst, barsW = 150, sw = W - barsW - 10;
   // spectrum
-  g.strokeStyle = '#30123f'; g.lineWidth = 1; g.font = '9px sans-serif'; g.fillStyle = '#bd98e1';
+  g.strokeStyle = '#210e37'; g.lineWidth = 1; g.font = '9px sans-serif'; g.fillStyle = '#bfa1d9';
   [100, 1000, 10000].forEach(fq => { const x = Math.log(fq / 20) / Math.log(1000) * sw; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); g.fillText(fq >= 1000 ? fq / 1000 + 'k' : fq, x + 2, H - 3); });
   if(m && m.anOut){
     m.anOut.getByteFrequencyData(m.freq);
     const bins = m.freq.length, nyq = (AC.sampleRate || 44100) / 2;
-    const grd = g.createLinearGradient(0, H, 0, 0); grd.addColorStop(0, '#8252ff'); grd.addColorStop(.6, '#ff52c9'); grd.addColorStop(1, '#ffb533');
+    const grd = g.createLinearGradient(0, H, 0, 0); grd.addColorStop(0, '#341656'); grd.addColorStop(.6, '#ff52bc'); grd.addColorStop(1, '#ffc052');
     g.fillStyle = grd; g.beginPath(); g.moveTo(0, H);
     for(let x = 0; x <= sw; x += 2){ const fq = 20 * Math.pow(1000, x / sw), i = Math.min(bins - 1, Math.round(fq / nyq * bins)); g.lineTo(x, H - (m.freq[i] / 255) * (H - 8)); }
     g.lineTo(sw, H); g.closePath(); g.globalAlpha = .85; g.fill(); g.globalAlpha = 1;
@@ -2984,11 +3185,11 @@ function drawMasterMeter(){
   const rh = (H - 6) / rows.length;
   rows.forEach(([l, v, lo, hi, gr], i) => {
     const y = 3 + i * rh, bw = barsW - 4;
-    g.fillStyle = '#250e31'; g.fillRect(bx, y + 11, bw, rh - 15);
+    g.fillStyle = '#180a28'; g.fillRect(bx, y + 11, bw, rh - 15);
     const frac = gr ? clamp(-v / 12, 0, 1) : clamp((v - lo) / (hi - lo), 0, 1);
-    g.fillStyle = gr ? '#8252ff' : (v > -1 ? '#ff3352' : v > -6 ? '#ffb533' : '#33fff1');
+    g.fillStyle = gr ? '#341656' : (v > -1 ? '#ff52b0' : v > -6 ? '#ffc052' : '#48ffb4');
     if(gr) g.fillRect(bx + bw - bw * frac, y + 11, bw * frac, rh - 15); else g.fillRect(bx, y + 11, bw * frac, rh - 15);
-    g.fillStyle = '#f3b2f9'; g.font = 'bold 9px sans-serif'; g.fillText(l, bx, y + 9);
+    g.fillStyle = '#f2dffb'; g.font = 'bold 9px sans-serif'; g.fillText(l, bx, y + 9);
     g.textAlign = 'right'; g.fillText(v <= -89 ? '-∞' : v.toFixed(1) + 'dB', bx + bw, y + 9); g.textAlign = 'left';
   });
   const rd = $('mRead');
@@ -3016,7 +3217,7 @@ function refreshAll(){
   if(!patById(editPat)){ const t = trackById(curTrackId) || P.tracks[0]; editPat = t.lastPat; }
   const ep = editP(); if(ep) curTrackId = curTrackId && trackById(curTrackId) ? curTrackId : ep.track;
   updateTransport(); renderChrome();
-  if(view === 'playlist') layoutPL(); if(view === 'roll') layoutPR(); if(view === 'step') renderStep(); if(view === 'mixer') renderMixer();
+  if(view === 'playlist') layoutPL(); if(view === 'roll') layoutPR(); if(view === 'step') renderStep(); if(view === 'mixer') renderMixer(); if(view === 'song') renderOverview();
 }
 function afterLoad(reset){
   prSel.clear(); plSel.clear();
@@ -3024,147 +3225,6 @@ function afterLoad(reset){
   syncMix(); refreshAll();
   if(reset){ plScroll.scrollLeft = 0; plScroll.scrollTop = 0; }
 }
-// ======================================================================
-// RHYTHM LIBRARY (リズム図鑑 326) — drag onto the playlist / step editor
-// ======================================================================
-const RLIB = [{"n":"01","g":"基本ビート","t":"8ビート","p":[{"id":"001","name":"バスドラ4分踏み8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x-x-x-x-"]}},{"id":"002","name":"2分音符の流れを強調した8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x---x---"]}},{"id":"003","name":"4拍目をプッシュする8ビートの定番パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"004","name":"2分音符の流れを強調した8ビートの定番パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x--xx---"]}},{"id":"005","name":"2分音符の流れを強調した8ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x--xx--x"]}},{"id":"006","name":"ライドを刻む8ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"R":["xxxxxxxx"],"S":["--x---x-"],"K":["xx--xx--"],"F":["--x---x-"]}},{"id":"007","name":"スネアを抜いてリズムに幅を持たせた8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["------x-"],"K":["x--xx---"]}},{"id":"008","name":"バスドラで8分ウラを強調した8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x--x----"]}},{"id":"009","name":"ウラのバスドラで4拍目を呼び込む8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x----x--"]}},{"id":"010","name":"8分ウラを強調した8ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x--x-x--"]}},{"id":"011","name":"小節アタマのバスドラを抜いた8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["-x--xx--"]}},{"id":"012","name":"8分ウラを強調した8ビートの2小節パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx","xxxxxxxx"],"S":["--x---x-","--x---x-"],"K":["x---x--x","-x--xx--"]}},{"id":"013","name":"クラッシュを加えたシンコペーション・パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxx-","-xxxxxxx"],"C":["-------x","--------"],"S":["--x---x-","--x---x-"],"K":["x---xx-x","----xx--"]}},{"id":"014","name":"シンコペーションを2連続するパターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxx--xx-","-xxxxxxx"],"C":["---x---x","--------"],"S":["--x---x-","--x---x-"],"K":["x--x-x-x","-x--xx--"]}},{"id":"015","name":"ハット・オープンを加えた8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxo"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"016","name":"ハット・オープンを加えた8ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxoxx"],"S":["--x---x-"],"K":["x---x--x"]}},{"id":"017","name":"バスドラとハット・オープンで8分ウラを強調する","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxoxxxx"],"S":["--x---x-"],"K":["x--x----"]}},{"id":"018","name":"ハーフ・オープンで荒々しく刻む8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["hhhhhhhh"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"019","name":"フロアを刻んで低音を強調した8ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":["xxxxxxxx"],"S":["--x---x-"],"K":["x---xx--"]}}]},{"n":"02","g":"基本ビート","t":"16ビート","p":[{"id":"020","name":"オルタネートでハットを刻む16ビートの基本形","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x-------x-------"]}},{"id":"021","name":"バスドラを2連打する16ビートの基本形","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x------xx-------"]}},{"id":"022","name":"バスドラで4拍目をプッシュする16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x-------x--x----"]}},{"id":"023","name":"8分音符のバスドラを絡めた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x-----x-x-------"]}},{"id":"024","name":"片手でハットを刻む16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxxxxxxxxxxxxxx","xxxxxxxxxxxxxxxo"],"S":["----x-------x---","----x-------x---"],"K":["x------xx-x-----","x------xx-x-----"]}},{"id":"025","name":"16ビートのハット・バリエーション1","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x------xx-------"]}},{"id":"026","name":"16ビートのハット・バリエーション2","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxx-xxx-xxx-xxx-"],"S":["----x-------x---"],"K":["x-------x--x----"]}},{"id":"027","name":"ハットをランダムに刻む16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx","xxxxx-xxxx-xx-xx"],"S":["----x-------x---","----x-------x---"],"K":["x-------x-------","x-------x-------"]}},{"id":"028","name":"ライドを刻む16ビートのバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x-----xxx-x-----"],"F":["--x-x-------x-x-"]}},{"id":"029","name":"カップを絡めた16ビートのバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-xcx-xcx-xcx-xc"],"S":["----x-------x---"],"K":["x-------x-------"],"F":["--x-x-x---x-x-x-"]}},{"id":"030","name":"アタマにアクセントをつけた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">xxx-xxx>xxx-xxx"],"S":["----x-------x---"],"K":["x-------x-------"]}},{"id":"031","name":"ウラにアクセントをつけた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xx>x-x>xxx>x-x>x"],"S":["----x-------x---"],"K":["x------xx-------"]}},{"id":"032","name":"アクセントでウネリを加えた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">xx>-x>xx>x>-x>x"],"S":["----x-------x---"],"K":["x---x---x---x---"]}},{"id":"033","name":"ランダムにアクセントを加えた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">x>x-xx>x>>x-x>>","xx>x-xxxxx>x-xxx"],"S":["----x-------x---","----x-------x---"],"K":["x-------x-------","x-------x-------"]}},{"id":"034","name":"バスドラで16分ウラを強調したパターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x------x--------"]}},{"id":"035","name":"バスドラで16分ウラを強調したバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---"],"K":["x------x-xx-----"]}},{"id":"036","name":"16分ウラをバスドラとハットで強調したパターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-oxoxxxx-xxx"],"S":["----x-------x---"],"K":["x----x-x--------"]}},{"id":"037","name":"小節アタマのバスドラを抜いた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx","oxxx-xxxxoxo-xxx"],"S":["----x-------x---","----x-------x---"],"K":["-x-----x-x------","-x-----x-x------"]}},{"id":"038","name":"スネアを抜いて幅を加えた16ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxxxxxxxxxx-xxx","xxxxxxxxxxxx-xox"],"S":["------------x---","------------x---"],"K":["x--x--x---------","x--x--x---------"]}}]},{"n":"03","g":"基本ビート","t":"4ビート／2ビート","p":[{"id":"039","name":"4分刻みのシンバル・レガート","tempo":"All","ts":"4/4","steps":4,"swing":false,"tr":{"R":["xxxx"],"F":["-x-x"]}},{"id":"040","name":"シンバル・レガートの基本形","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"F":["---x-----x--"]}},{"id":"041","name":"アップ・テンポのシンバル・レガート","tempo":"260-340","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x-xxx-xx"],"F":["--x---x-"]}},{"id":"042","name":"シンバル・レガートにハット4分踏みを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"F":["x--x--x--x--"]}},{"id":"043","name":"ランダムな演奏のシンバル・レガート","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x--x-xx--","x--x-xx--x--"],"F":["---x-----x--","---x-----x--"]}},{"id":"044","name":"ランダムな演奏のシンバル・レガートのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x--","x-xx--x--x-x"],"F":["---x-----x--","---x-----x--"]}},{"id":"045","name":"シンコペーションを加えたシンバル・レガート","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x","---x-xx--x-x"],"F":["---x-----x--","---x-----x--"]}},{"id":"046","name":"ハットを使った2ビート・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--x-oo--x-o"],"F":["---x-----x--"]}},{"id":"047","name":"バスドラとスネアを加えた2ビートのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--x-oo--x-o"],"S":["---x-----x--"],"K":["x-----x-----"],"F":["---x-----x--"]}},{"id":"048","name":"ライドを使った2ビート・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x----xx----x"],"F":["---x-----x--"]}},{"id":"049","name":"ライドを使った2ビートのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x----xx----x","x--x-xx-x-x-"],"F":["---x-----x--","---x-----x--"]}},{"id":"050","name":"シンコペーションを加えた2ビート・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--x-oo--x-o","---x-oo--x-o"],"K":["------------","--------x---"],"F":["---x-----x--","---x-----x--"]}},{"id":"051","name":"シンコペーションを加えた2ビートのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--x-oo--x-o","o-o--xo--x-o"],"F":["---x-----x--","---x-----x--"]}},{"id":"052","name":"ブラシを使ったスロー・パターン","tempo":"All","ts":"4/4","steps":4,"swing":false,"tr":{"W":["xxxx"],"F":["-x-x"]}},{"id":"053","name":"ブラシを使った4ビート・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"P":["x--x-xx--x-x"],"W":["x-----x-----"],"F":["---x-----x--"]}},{"id":"054","name":"ブラシを使ったシンコペ・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"P":["x--x-xx--x->","---x-xx--x-x"],"W":["x-----x-----","x-----x-----"],"F":["---x-----x--","---x-----x--"]}},{"id":"055","name":"ブラシを使ったシンコペ・パターンのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"P":["x--x-xx--x-x","x-x>-xx--x-x"],"W":["x-----x-----","x-----x-----"],"F":["---x-----x--","---x-----x--"]}},{"id":"056","name":"ジャズ・ワルツのパターン","tempo":"All","ts":"3/4","steps":9,"swing":false,"tr":{"R":["x--x-xx--","x--x-xx--"],"S":["--------x","--x---x--"],"K":["x--------","x--------"],"F":["---x--x--","---x--x--"]}},{"id":"057","name":"ジャズ・ワルツのバリエーション","tempo":"All","ts":"3/4","steps":9,"swing":false,"tr":{"R":["x--x--x-x","x--x--x--"],"S":["-----x---","-----x--x"],"K":["x--------","x--------"],"F":["---x-----","---x-----"]}}]},{"n":"04","g":"ロック","t":"ロック8ビート","p":[{"id":"058","name":"ハットで4分音符を強調した8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":[">x>x>x>x"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"059","name":"ハットでウラ拍を強調した軽快8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["x>x>x>x>"],"S":["--x---x-"],"K":["x---x---"]}},{"id":"060","name":"全てのハットを強調して躍動感を増した8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":[">>>>>>>>"],"S":["--x---x-"],"K":["x---x---"]}},{"id":"061","name":"ランダムなハット・アクセントの8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":[">x>x>xx>","x>xx>x>x"],"S":["--x---x-","--x---x-"],"K":["x---x---","x---x---"]}},{"id":"062","name":"カップで4分音符を強調した8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"R":["cxcxcxcx"],"S":["--x---x-"],"K":["x---x---"]}},{"id":"063","name":"カップでウラ拍にアクセントをつけた8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"R":["xcxcxcxc"],"S":["--x---x-"],"K":["x---x---"]}},{"id":"064","name":"カップでランダムにアクセントをつけた8ビート","tempo":"90-160","ts":"4/4","steps":8,"swing":false,"tr":{"R":["cxcxccxx","xccxxcxc"],"S":["--x---x-","--x---x-"],"K":["x---x---","x---x---"]}},{"id":"065","name":"ハット・オープンで2拍4拍を強調した8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxo-xxo-"],"F":["---x---x"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"066","name":"バスドラでウラ拍を強調した8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["xx-x-x-x","-x-x-x--"]}},{"id":"067","name":"クラッシュでリズムを刻む派手な8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"C":["xxxxxxxx"],"S":["--x---x-"],"K":["xxxxxxxx"]}},{"id":"068","name":"4拍目にフロアを加えて厚みをつけた8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"T3":["------x-"],"K":["x--xx---"]}},{"id":"069","name":"4拍目にフロアのみを叩く8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x-----"],"T3":["------x-"],"K":["x--xx---"]}},{"id":"070","name":"タム類でカラフルに装飾した8ビート","tempo":"90-160","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxx-xx","xxxx---x"],"S":["--x---x-","--x-----"],"T1":["--------","---x----"],"T2":["-----x--","-----x--"],"T3":["--------","------x-"],"K":["x---x---","x---x---"]}},{"id":"071","name":"3拍目にフロアでアクセントをつけた8ビート","tempo":"90-160","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"T3":["----x---"],"K":["x--xx---"]}},{"id":"072","name":"足で踏むハットでニュアンスをつけた8ビート","tempo":"70-140","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---x-"],"K":["x---x---"],"F":["-x-x-x-x"]}},{"id":"073","name":"ハーフ・タイム・フィールの8ビート","tempo":"90-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["----x---","-x--x--x"],"K":["x-x-x-x-","x-x-x-x-"]}},{"id":"074","name":"ハットを4分音符で刻んだロック・ビート","tempo":"90-220","ts":"4/4","steps":8,"swing":false,"tr":{"H":["x-x-x-x-"],"S":["--x---x-"],"K":["x---xx--"]}},{"id":"075","name":"4分刻みロック・ビートのバリエーション","tempo":"90-220","ts":"4/4","steps":8,"swing":false,"tr":{"H":["o-o-o-o-"],"S":["--x---x-"],"K":["x--x-x--"]}},{"id":"076","name":"カップで変化をつけたロック・ビート","tempo":"90-220","ts":"4/4","steps":8,"swing":false,"tr":{"R":["c-c-cc-c","-c-cc-c-"],"S":["--x---x-","--x---x-"],"K":["x---x--x","-x--x---"]}}]},{"n":"05","g":"ロック","t":"ロック16ビート","p":[{"id":"077","name":"バスドラの16分音符でビートをプッシュ","tempo":"90-180","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"K":["x-------x-xx----","x---------xx----"]}},{"id":"078","name":"ハットに16分音符を絡めたロック・ビート","tempo":"90-180","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xxx-x-x-x-","x-x-x-xxxxx-x-x-"],"S":["----x-------x---"],"K":["x-------x-x-----"]}},{"id":"079","name":"16分音符に荒々しいオープンを加えたロック・ビート","tempo":"90-160","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxoo-xooxxoo-xoo"],"S":["----x-------x---"],"K":["x-------x-------"]}},{"id":"080","name":"ファンク系パターンにロック・フィールを加えたビート","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["o-o-x-o-o-o-x-o-"],"S":["----x-------x--x"],"K":["x-x--x-x-x-xx-x-","x-x--x---x-x----"]}},{"id":"081","name":"フロアでリズムを刻んだシェイク系パターン","tempo":"90-160","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x-x-x-x-x-x-x-x-"],"S":["----x--x----x--x"],"K":["x-------x-x-----"]}},{"id":"082","name":"フロアとタムを絡めたシェイク系パターン","tempo":"90-160","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x-x-x-x-x-x-x-x-"],"T1":["-------x-------x"],"S":["----x-------x---"],"K":["x-------x-x-----"]}},{"id":"083","name":"フロアとタムを絡めたジャングル風パターン","tempo":"90-160","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x---x---x---x---"],"S":["--x---x---x---x-"],"T1":["---x---x---x---x"],"K":["x---x---x---x---"]}},{"id":"084","name":"フロアとタムで16分音符を刻むパターン","tempo":"90-150","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x-x-x-x-x-x-x-x-"],"T1":["-x-x-x-x-x-x-x-x"],"S":["----x-------x---"],"K":["x-------x-----x-","-x------x-------"]}},{"id":"085","name":"スネアで16分音符を刻むパターン","tempo":"95-155","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">-xx>-xx>-xx>-xx"],"K":["x---x---x---x---"]}}]},{"n":"06","g":"ロック","t":"メタル・ビート","p":[{"id":"086","name":"ダブル・タイムのロック・ビート","tempo":"140-210","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["--x---x---x---x-"],"K":["x---xx--x---xx--"]}},{"id":"087","name":"ダブル・タイムのロック・ビート・バリエーション","tempo":"140-210","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["--x---x---x---x-"],"K":["x---x--x-x--x---"]}},{"id":"088","name":"スネアをアタマ打ちしたメタル・パターン","tempo":"140-210","ts":"4/4","steps":16,"swing":false,"tr":{"H":["o-o-o-o-o-o-o-o-"],"S":["x---x---x---x---"],"K":["--xx--xx--xx--xx"]}},{"id":"089","name":"フロアとバスドラの疑似ツーバス・パターン","tempo":"108-188","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"K":["-x-x-x-x-x-x-x-x"]}},{"id":"090","name":"ダブル・タイムのツーバス連打パターン","tempo":"104-204","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["--x---x---x---x-"],"K":["xxxxxxxxxxxxxxxx"]}},{"id":"091","name":"タムを絡めたツーバス連打パターン","tempo":"104-204","ts":"4/4","steps":16,"swing":false,"tr":{"Z":["x---x---x---x---"],"S":["--x---x---x---x-"],"T1":["-------x--------"],"K":["xxxxxxxxxxxxxxxx"]}},{"id":"092","name":"3連系ツーバス・パターン","tempo":"120-200","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-----x--"],"K":["xxxxxxxxxxxx"]}},{"id":"093","name":"3連系ツーバス・パターンのバリエーション","tempo":"120-200","ts":"4/4","steps":12,"swing":false,"tr":{"H":[">-x>-x>-x>-x"],"S":["-g-x-g-g-x-g"],"K":["xxxxxxxxxxxx"]}},{"id":"094","name":"ツーバスを使った高速ブギー・パターン","tempo":"170-230","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-----x--"],"K":["x-xx-xx-xx-x"]}}]},{"n":"07","g":"ロック","t":"3連系ロック・ビート","p":[{"id":"095","name":"ゴーストを使用したLA系シャッフル・パターン","tempo":"90-170","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["-g->-g-g->-g"],"K":["x-----x-x---"]}},{"id":"096","name":"オルタネートで叩く3連系リズム","tempo":"90-170","ts":"4/4","steps":12,"swing":false,"tr":{"H":[">-x>-x>-x>-x"],"S":["-gx-gxggx-gg"],"K":["x-----x-x---"]}},{"id":"097","name":"LA系シャッフルのバリエーション","tempo":"90-170","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx-xx-x"],"S":["-g-x---g-x--"],"K":["x-----x-x---"]}},{"id":"098","name":"フロアを刻んだシャッフル・パターン","tempo":"90-170","ts":"4/4","steps":12,"swing":false,"tr":{"T3":["x-xx-xx-xx-x"],"S":["---x-----x--"],"K":["x-----x-x---"]}},{"id":"099","name":"ハットを4分音符で刻むシャッフル・パターン","tempo":"120-190","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-----x--"],"K":["x-----x-x---"]}},{"id":"100","name":"ハットを4分音符で刻むシャッフルのバリエーション1","tempo":"120-190","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-x---x--"],"K":["x-----x-x---"]}},{"id":"101","name":"ハットを4分音符で刻むシャッフルのバリエーション2","tempo":"120-190","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--o--o--o--"],"S":["g-xx-xg-xx-x"],"K":["x-x---x-x---"]}},{"id":"102","name":"ハーフ・タイムのシャッフル・パターン","tempo":"55-90","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["-g--g-x-g--g"],"K":["x-x-----x-x-"]}},{"id":"103","name":"バスドラの3連符を絡めた8ビート","tempo":"65-100","ts":"4/4","steps":24,"swing":false,"tr":{"H":["x--x--x--x--x--x--x--x--"],"S":["------x-----------x-----"],"K":["x---xx----------xx----xx"]}}]},{"n":"08","g":"ロック","t":"変則ロック・ビート","p":[{"id":"104","name":"タムを絡めた1拍半フレーズ","tempo":"180-310","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">-----x-----x---","--x-----x-----x-"],"T1":["--x-----x-----x-","----x-----x-----"],"T3":["----x-----x-----","x-----x-----x---"],"K":["----x-----x-----","x-----x-----x---"]}},{"id":"105","name":"タムを使ったジャングル系パターン","tempo":"92-142","ts":"4/4","steps":16,"swing":false,"tr":{"T3":["x--x--x---x--x--"],"T1":["--x---x-x---x-x-"],"S":["----x-------x---"],"F":["x-x-x-x-x-x-x-x-"]}},{"id":"106","name":"エスニックの要素を含んだ秀逸パターン","tempo":"92-142","ts":"4/4","steps":16,"swing":false,"tr":{"B":["xxxxxx--xxxx--xx"],"S":["------xx>g--xx--"],"K":["x---x---x---x---"]}},{"id":"107","name":"アクセントを後ろにズラしたスリップ・ビート","tempo":"90-160","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["------x-------x-"],"K":["x-x-------x-x---","--x-------x-x---"]}},{"id":"108","name":"アクセントを前にズラしたスリップ・ビート","tempo":"90-160","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["-x---x--","-x---x--"],"K":["x--x--xx","---x---x"]}},{"id":"109","name":"スネアとバスドラで変則的アクセントをつけた8ビート","tempo":"100-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x-x--x","--x---x-"],"K":["x----x--","-x--xx-x"]}},{"id":"110","name":"スネアとバスドラの変則的16分アクセント・パターン","tempo":"85-145","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-x-x-xxx-xx"],"S":["----x-x---x---x-","--x-x---x-x---x-"],"K":["x----x--x--x--xx","--x--x--x-----x-"]}},{"id":"111","name":"4分音符でチャイナを刻むポリリズミックなアプローチ","tempo":"90-150","ts":"4/4","steps":16,"swing":false,"tr":{"Z":["x---x---x---x---"],"S":["---x---x---x--x-"],"K":["x-----x-----xx--"]}},{"id":"112","name":"ロック系3拍子のリズム","tempo":"90-140","ts":"3/4","steps":12,"swing":false,"tr":{"H":["x-x-x-x-x-x-"],"S":["----x---x---"],"K":["xx----xx----"]}}]},{"n":"09","g":"ファンク","t":"ファンク・ビート","p":[{"id":"113","name":"ハット8分刻みファンク・ビート","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"K":["x------xx-------"]}},{"id":"114","name":"ハット8分刻みファンク・ビートのバリエーション","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"K":["x-----x-x------x","--x--x--x-------"]}},{"id":"115","name":"16分のスネアとバスドラを絡めた8分刻みのファンク","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x-----x-x--g"],"K":["x------x--x-----"]}},{"id":"116","name":"シンコペーションを加えた8分刻みファンク・パターン","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xo--x-x-x-"],"S":["----x-------x---"],"K":["x------x--x-----"]}},{"id":"117","name":"ライド8分刻みにハット・オープンを加える","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-x-x-x-x-x-x-x-"],"H":["-------o--------","-------o-o------"],"S":["----x-----x-x---","----x-------x---"],"K":["x------x--x-----","x------x-x-x----"]}},{"id":"118","name":"オルタネートで刻む16ビートに左手のスネアを加える","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxx-xx-xxx","xxxx-xxxxxxo-xxx"],"S":["----x----x--x---","----x-------x---"],"K":["x-x--x--x--x----","x-----x-x-------"]}},{"id":"119","name":"スネアのアクセントを前に移動した16ビート","tempo":"60-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxx-xxxxxxxo-xxx"],"S":["---x--------x---"],"K":["x-----x-x-------"]}},{"id":"120","name":"片手16ビートにスネアのバリエーションを加える","tempo":"50-100","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxxxxxxxxxxxxxx"],"S":["----x-------x-gg"],"K":["x-------x--x----"]}},{"id":"121","name":"片手16ビートにバスドラのバリエーションを加える","tempo":"50-100","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxxxxxxxxxxxxxx"],"S":["----x-------x---"],"K":["xx----xx--------","xx---xx---x---x-"]}},{"id":"122","name":"8分刻みのハットにゴースト・ノートを絡めたパターン","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["-g-g>g-g-g-g>g-g"],"K":["x-------x--x----"]}},{"id":"123","name":"ハットとスネアをオルタネートで叩いたパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["-g-g>g-g-g-g>g-g"],"K":["x-----x-x-------","x-----x---x-----"]}},{"id":"124","name":"スネアのアクセントを後ろに移動したパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["-g-g-g>g-g-g-g>g"],"K":["xx----x--x------"]}},{"id":"125","name":"3〜4拍目のノリをスリップさせたファンク・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["-g-g>g-g-g-g-g>g"],"K":["x--x------x--x--"]}},{"id":"126","name":"2拍目のアクセントをスリップさせたファンク・パターン","tempo":"84-120","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-o-x-x-x-x-x-"],"S":["-g-g-g>g-g-g>g-g"],"K":["x-----x---x-----"]}},{"id":"127","name":"ハットをオルタネートで刻んだハネ系パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":true,"tr":{"H":["xx>x-xoxxx>x-xxo"],"S":["----x-------x---"],"K":["x---------x-----"]}},{"id":"128","name":"32分音符のハットで装飾するファンク・パターン","tempo":"84-120","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xxx-x-xxxx","x-x-x-xxxxxxxx-x"],"S":["----x-x-----x---","----x-------x---"],"K":["x-------x-x-----","x-------x-------"]}},{"id":"129","name":"両手のコンビネーションを生かしたファンク","tempo":"84-120","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["g---x-g-g---x--g"],"K":["x-------x--x----","x---------x-----"]}}]},{"n":"10","g":"ファンク","t":"ディスコ・ビート","p":[{"id":"130","name":"ハットをウラ打ちしたディスコ王道パターン1","tempo":"90-140","ts":"4/4","steps":8,"swing":false,"tr":{"H":["-x-x-x-x"],"S":["--x---x-"],"K":["x-x-x-x-"]}},{"id":"131","name":"ハットをウラでオープンしたディスコ王道パターン","tempo":"90-140","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xoxoxoxo"],"S":["--x---x-"],"K":["x-x-x-x-"]}},{"id":"132","name":"16分音符と8分ウラのオープンを混ぜたパターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxo-xxo-xxo-xxo-"],"S":["----x-------x---"],"K":["x---x---x---x---"]}},{"id":"133","name":"ウラ打ちに16分音符を混ぜたバリエーション","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["--x---xx-xx---xx"],"S":["----x-------x---"],"K":["x---x---x---x---"]}},{"id":"134","name":"ライドのウラ打ちにゴースト・ノートを混ぜたパターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-c-xxc-x-c-xxc-"],"S":["-g--x-gg-g--x-gg"],"K":["x---x---x---x---"]}},{"id":"135","name":"16分音符の刻みを使った定番ディスコ・パターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x---x---x---x---"]}},{"id":"136","name":"8分と16分音符のハットを混ぜたディスコ・パターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxx-xxx-x-x-x-x-","xxxx--x-x-x-x-x-"],"S":["----x-------x---"],"K":["x---x---x---x---","x---x---x-x-x---"]}},{"id":"137","name":"16分音符にタムを絡めたディスコ・パターン","tempo":"84-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxx-xx-x"],"S":["----x-------x---"],"T1":["-----------x----"],"T2":["--------------x-"],"K":["x---x---x---x---"]}},{"id":"138","name":"ニューヨーク発祥の“ハッスル・ビート”","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-o-x-o-x-o-x-o-"],"S":["x--x----x--x--x-"],"K":["x---x---x---x---"]}}]},{"n":"11","g":"ファンク","t":"R&B／ヒップ・ホップ","p":[{"id":"139","name":"8分音符のハットにスネアを絡めたシェイク・パターン","tempo":"84-124","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xxx-x-x-x-"],"S":["----x--x----x---"],"K":["x-------x-x-----"]}},{"id":"140","name":"シェイク・パターンのバリエーション","tempo":"84-124","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xxx-x-x-x-"],"S":["----x--x-x--x---"],"K":["x-------x-x-----"]}},{"id":"141","name":"ライドとスネアを16分音符で絡めたR&Bパターン","tempo":"84-124","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-xxx-x-x-xxx-x-"],"S":["----x-gg-g--x-gg"],"K":["x-x---x-------x-"],"F":["----x-------x---"]}},{"id":"142","name":"2拍4拍でタムとスネアを同時に叩くパターン","tempo":"84-124","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"T1":["----x-------x---"],"K":["x------xx-x-----"]}},{"id":"143","name":"マンボ・スタイルのR&Bパターン","tempo":"84-124","ts":"4/4","steps":8,"swing":false,"tr":{"T2":["xx-x-x-x"],"X":["--x-x---"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"144","name":"ハネ系16分音符でスイングするパターン","tempo":"80-140","ts":"4/4","steps":16,"swing":true,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x-------x-------"]}},{"id":"145","name":"ハネ系16分パターンのバリエーション","tempo":"80-130","ts":"4/4","steps":16,"swing":true,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x---x---x---"],"K":["x------x--x-----"]}},{"id":"146","name":"ハネ系16分音符のハット・バリエーション","tempo":"80-130","ts":"4/4","steps":16,"swing":true,"tr":{"H":["x-x-xxx-x-x-xxx-"],"S":["----x-------x---"],"K":["x------xx-x-----","x------xx----x--"]}},{"id":"147","name":"ハットを6連符で刻んだハネ系16分音符パターン","tempo":"80-130","ts":"4/4","steps":24,"swing":false,"tr":{"H":[">xx>xx>xx>xx>xx>xx>xx>xx"],"S":["------x-----------x-----"],"K":["x----x---------x--------","x----x---------x-----x--"]}}]},{"n":"12","g":"ファンク","t":"変則ファンク・ビート","p":[{"id":"148","name":"スネアの位置を変えたトリッキーなパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["--xx-xxxx-x-xxx-"],"S":["xx--x-----x---x-"],"K":["--x---x--x--x---"]}},{"id":"149","name":"3拍フレーズを強調したスネアのパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-o-x-x-xxo-x-x-"],"S":["x-----x--g-x----"],"K":["x---------x---x-"]}},{"id":"150","name":"ニューオーリンズ系のファンク・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["--x-x-g-ggg->ggg"],"K":["x--x--x----x--x-"]}},{"id":"151","name":"ハットとスネアでの3拍フレーズを絡めたパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xx-xx-xx-xx-xx"],"S":["-x--x--x--x--x--"],"K":["xx---x--x--x--x-","xx---x--x--x--x-"]}},{"id":"152","name":"リニア・フレーズを使ったファンク・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["-x---x-x--x---x-"],"S":["--g-x---g--gx-g-"],"K":["x--x--x--x------"]}},{"id":"153","name":"左足も加えたリニア・フレーズのバリエーション","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x--x---x-x--x-"],"S":["---g>-g-g---g>-g"],"K":["-x-------x------"],"F":["----x-x-----x---"]}},{"id":"154","name":"16分ウラのバスドラやスネアを多用した変則パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x---x---x--x"],"K":["x--x--xx-x---x-x","x--x-x-xx-x-x-x-"]}},{"id":"155","name":"音を抜くことで個性を出す変則パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["--xxx-xx--xx-xxo","-xxo----x-xo--xx"],"S":["----x-------x---","------x---------"],"K":["x-------x-----x-","-x--------------"]}},{"id":"156","name":"3拍子のファンク・パターン","tempo":"80-130","ts":"3/4","steps":12,"swing":false,"tr":{"H":["x-o-xx-xx-x-"],"S":["----xg--x---"],"K":["x-----x----x"]}}]},{"n":"13","g":"ファンク","t":"ファンク・フュージョン","p":[{"id":"157","name":"パラディドルを応用したファンク・フュージョン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xx-x--x-xx-x--"],"S":["-g--x-gg-g--x-gg"],"K":["x---------x--x--"]}},{"id":"158","name":"スネアとハットの32分音符を組み込んだパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xx-xx-x-x-xox-x-"],"S":["-g--g-x---g-x-gg"],"K":["x------x--x-----"]}},{"id":"159","name":"ライドとスネアのコンビネーション・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x--x-x--x--x-x--"],"S":["-gg-x-gg-gg-x-gg"],"K":["x--x---xx--x---x"],"F":["----x-------x---"]}},{"id":"160","name":"2種類のパラディドルを組み合わせたパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x--x-xx-x-xx-x--"],"S":["-gg-x--g-g--x-gg"],"K":["x--x------x--x--"]}}]},{"n":"14","g":"ジャズ","t":"ディキシーランド・ジャズ","p":[{"id":"161","name":"シンプルなディキシーランド・ジャズ","tempo":"All","ts":"4/4","steps":4,"swing":false,"tr":{"S":["xzxz"],"K":["x-x-"]}},{"id":"162","name":"プレス・ロールを使ったディキシーランド・ジャズ","tempo":"All","ts":"4/4","steps":4,"swing":false,"tr":{"S":["z>z>"],"K":["xxxx"]}},{"id":"163","name":"5ストローク・ロールを使ったディキシーランド","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"S":["x-zzx-f-","xxx-x-zz"],"K":["x---x---","x---x---"]}},{"id":"164","name":"リムを軽快に叩くディキシーランド・ジャズ","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"X":["x--x-xx-xx-x","x--x-xx-xx-x"],"S":["------------","-----------z"],"K":["x-----x-----","x-----x-----"]}}]},{"n":"15","g":"ジャズ","t":"ジャングル・ビート","p":[{"id":"165","name":"フロア・タムを使ったジャングル・ビート","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":[">x>xx>xx",">xx>x>xx"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"166","name":"ジャングル・ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":[">x>x>>xx",">x>x>x>x"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"167","name":"手順を変化させたジャングル・ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":[">>xx>>xx",">xx>x>xx"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"168","name":"タムを使ったジャングル・ビートのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":["x-xxx-xx","x-x-xx-x"],"T1":["-x---x--","-x-x--x-"],"K":["x---x---"],"F":["--x---x-"]}}]},{"n":"16","g":"ジャズ","t":"スイング・ジャズ","p":[{"id":"169","name":"バスドラ4分踏みとスネアを加えたスイング・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"S":["---x-----x--"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"170","name":"クローズド・リムを加えたスイング・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"X":["---------x--"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"171","name":"タムを絡めたラテン風のパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"X":["---x--------"],"T2":["---------x-x"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"172","name":"ジャズ・シャッフルのパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx-xx-x"],"S":["x-x>-xx-x>-x"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"173","name":"左手で3連符ウラにアクセントを加えたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"S":["------------","--------x---"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"174","name":"2拍3連のウラにスネアを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"S":["-x->-x-x->-x"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"175","name":"レガートの隙間をスネアで埋めるパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"S":["-xx-x--xx-x-"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"176","name":"3連符アタマ抜きのスネアを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx--x-x"],"S":["-xx-xx-xx-xx"],"K":["x--x--x--x--"],"F":["---x-----x--"]}},{"id":"177","name":"ハット・レガートにウラのバスドラを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--x-xo--x-x"],"X":["---------x--"],"K":["x----x------"],"F":["---x-----x--"]}}]},{"n":"17","g":"ジャズ","t":"モダン・ジャズ","p":[{"id":"178","name":"左手のコンピングを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx-xx-x","x-xx-xx-xx-x"],"S":["---x----x--x","--x---x-x--x"],"F":["---x-----x--"]}},{"id":"179","name":"左手コンピングのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx-xx-x","x--x-xx--x-x"],"S":["---x----x---","x----x-----x"],"F":["---x-----x--"]}},{"id":"180","name":"スネアとライドでのシンコペーションを含むパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x->---x-x","x-xx-xx-xx-x"],"S":["-----x---x--","--x----x-x-x"],"K":["x-----------","------------"],"F":["---x-----x--"]}},{"id":"181","name":"バスドラとライドでのシンコペーションを含むパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx-xx->","---x-xx-x--x"],"S":["---x----x---","--------x---"],"K":["x----------x","------------"],"F":["---x-----x--","---x-----x--"]}},{"id":"182","name":"バスドラとライドを絡めたシンコペーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx-xx-x","x-xx-x-x>x-x"],"S":["--x-----x---","--------g--x"],"K":["------------","--x-----x---"],"F":["---x-----x--"]}},{"id":"183","name":"バスドラとスネアのコンピングを絡めたパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx-xx-x","x-xx-xx--x-x"],"S":["-----x--x---","--------x---"],"K":["x----------x","--x-----x---"],"F":["---x-----x--"]}},{"id":"184","name":"バスドラとスネアでのコンピングのバリエーション","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x--x-xx-xx-x","x-xx-xx--x-x"],"S":["---x----x---","--------x---"],"K":["x-----x----x","--x---x-----"],"F":["---x-----x--"]}},{"id":"185","name":"3拍フレーズを使ったコンピング","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx--x-x","x-xx-xx-xx-x"],"S":["--x---x----x","--x-----x---"],"K":["x----x-----x","--x---x-----"],"F":["---x-----x--"]}},{"id":"186","name":"スネアとバスドラのコンビネーションによるコンピング","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx-xx-x"],"S":["-x--x--x--x-"],"K":["--x--x--x--x"],"F":["---x-----x--"]}}]},{"n":"18","g":"ジャズ","t":"ボサノヴァ／アフロ・キューバン","p":[{"id":"187","name":"クローズド・リムを使ったボサノヴァの基本パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"X":["x--x--x-","--x--x--"],"K":["x--xx--x"]}},{"id":"188","name":"ライドで刻むボサノヴァ・パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"R":["xxxxxxxx"],"X":["--x--x--","x--x--x-"],"K":["x--xx--x"],"F":["--x---x-"]}},{"id":"189","name":"ブラシで刻んだボサノヴァのバリエーション","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"P":["xxxxxxxx"],"X":["---x-x-x","--x--x--"],"K":["x--xx--x"],"F":["--x---x-"]}},{"id":"190","name":"クローズド・リムを使ったサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"X":["--x--x-----x--x-","----x--x--x-----"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"191","name":"ジャズで使えるアフロ・キューバン・パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x-x-x-xx","x-xxx-xx"],"X":["--x-----","--x-----"],"S":["------xx","---x---x"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"192","name":"ライドでカスカラを叩いたアフロ・キューバン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x-x-xx-x","x-xx-xxx"],"X":["--x-----","--x-----"],"S":["------xx","------xx"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"193","name":"クラーベの音形を絡めたルンバ系リズム","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-x-x-x-x-x-","x-x-x-x-x-x-x-x-"],"X":["x-----x-----x---","----x---x-------"],"K":["x---------------","x-----------x---"]}},{"id":"194","name":"モザンビークの手順を使ったパターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">-x>xx>xx>xx>xx-",">-x>xx>xx>xx>xx-"],"S":["--x---x---x-x--x"],"T1":["----x---------x-"],"K":["x---x---x---x---"],"F":["x---x---x---x---"]}},{"id":"195","name":"ジャズ系のアフリカン・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xxx-x-x"],"T2":["---x---x-x-x"],"F":["x--x--x--x--"]}}]},{"n":"19","g":"ジャズ","t":"ジャズ・フュージョン","p":[{"id":"196","name":"右手ライドと左手ハットを16分で絡めたパターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["--x-x-x---x-x-x-"],"H":["-x-o-x-o-x-o-x-o"],"S":["----x-------x---"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"197","name":"ジャズ・フュージョン的なサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x----x--x---","------x---x--x--"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"198","name":"拍アタマでハット・オープンを使ったサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["oxxxoxxxoxxxoxxx"],"S":["g-g-gg--g-g-gg--"],"K":["x--xx--xx--xx--x"]}},{"id":"199","name":"ラテン風アクセントのフュージョン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["o-x>x>x-o-x-o>x-"],"S":["--x-x-x---x-x-x-"],"K":["x--------x--x---"]}},{"id":"200","name":"タム類とカウベルを絡めたフュージョン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"B":["x-xx---xx-x-xx--"],"S":["-g--ggg-gg-g--gg"],"T1":["----x-----------"],"K":["x---------x-----"]}},{"id":"201","name":"ジャズ・ファンク系のフュージョン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":true,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"202","name":"ジャズ・ファンク系パターンのバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":true,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----xg--x---x-gx","-------gx---x-g-"],"K":["x-----x-----x--x","--x---x--x-x--x-"],"F":["--x-------------"]}},{"id":"203","name":"パラディドル・ディドルの応用パターン","tempo":"All","ts":"4/4","steps":24,"swing":false,"tr":{"H":["x-xx--x-xx--x-xx--x-xx--"],"S":["-g--gg>g--gg-g--gg>g--gg"],"K":["x--------x-x------------"]}},{"id":"204","name":"3連系アフロ・フュージョン・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"R":["x-xx-xx---xx"],"S":["-x---x--xx--"],"K":["x--x--x--x--"]}}]},{"n":"20","g":"ブルース","t":"シャッフル・ビート","p":[{"id":"205","name":"最も基本的なシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["---x-----x--"],"K":["x----xx-----"]}},{"id":"206","name":"バスドラの音数を増やしたシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["---x-----x--"],"K":["x-x--xx-x--x"]}},{"id":"207","name":"ウラを強調したシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["---x-----x--"],"K":["x----x------","x----x--x--x"]}},{"id":"208","name":"スネアでシャッフルを表現するパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["--gx-g--gx-g"],"K":["x--x--x--x--"]}},{"id":"209","name":"左右の手を同時に叩いたシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["x-x>-xx-x>-x"],"K":["x--x--x--x--"]}},{"id":"210","name":"スネアで3連符ウラを叩くシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"S":["--x--x--x--x"],"K":["x--x--x--x--"]}},{"id":"211","name":"右手4分音符刻みのシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-----x--"],"K":["x-----x----x","--x--xx-----"]}},{"id":"212","name":"足で踏むハットを加えたシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x--x--x--"],"S":["---x-----x--"],"K":["x--x--x--x--"],"F":["--x--x--x--x"]}},{"id":"213","name":"ハットを3連符で刻むパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x-----x----x","--x---x-----"]}}]},{"n":"21","g":"ブルース","t":"12/8ビート","p":[{"id":"214","name":"スネアをウラで叩くスロー・ブルース・パターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["--x--x--x--x"],"K":["x--x--x--x--"]}},{"id":"215","name":"代表的なスロー・ブルース・パターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x----xx-----"]}},{"id":"216","name":"ハットに16分音符を混ぜたスロー・ブルース","tempo":"All","ts":"12/8","steps":24,"swing":false,"tr":{"H":["x-xxx-x-x-x-x-xxx-x-x-x-"],"S":["------x-----------x-----"],"K":["x---------x-x-----------"]}},{"id":"217","name":"バスドラの音数を増やしたスロー・ブルース","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x-xx-xx-xx-x"]}},{"id":"218","name":"ハネた16分音符を混ぜたスロー・ブルース","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x-----xx---x"]}},{"id":"219","name":"16分音符ウラのスネアを絡めたブルース","tempo":"All","ts":"12/8","steps":24,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-x-x-x-x-"],"S":["---x--x--x-x---x--x--x-x"],"K":["x---x-----x-x---x-----x-"]}},{"id":"220","name":"バスドラ2連打でプッシュするブルース","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x----xxx---x","x----x----xx"]}},{"id":"221","name":"16分音符のスネアとバスドラで装飾したパターン","tempo":"All","ts":"12/8","steps":24,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-x-x-x-x-"],"S":["--x---x-x---x-x---x-x---"],"K":["x--x---x--x--x-x--x---x-"]}},{"id":"222","name":"16分音符でハットを刻んだブルース","tempo":"All","ts":"12/8","steps":24,"swing":false,"tr":{"H":["xxxxxxxxxxxxxxxxxxxxxxxx"],"S":["------x-----------x-----"],"K":["x--------------x--------"]}}]},{"n":"22","g":"ブルース","t":"変則ブルース・ビート","p":[{"id":"223","name":"クローズド・リムでパーカッシブに演出したパターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"X":["--x--x--x--x"],"K":["x--x-x-xx-x-"]}},{"id":"224","name":"スネアのアクセントを変化させた力強いパターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x--x---x-"],"K":["x--x-xx--xx-"]}},{"id":"225","name":"ライドとハットの16分音符を絡めたパターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"R":["xxxxxxxxxxxx"],"S":["---x-----x--"],"K":["x-----x-x---"]}},{"id":"226","name":"ポリリズム風アプローチを混ぜたパターン","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["---x---x---x"],"K":["x----xx----x"]}}]},{"n":"23","g":"カントリー／ロック","t":"カントリー／ロカビリー","p":[{"id":"227","name":"スイングしたカントリーのパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x--x-xx--x-x"],"S":["---x-----x--"],"K":["x-----x-----"]}},{"id":"228","name":"リムを刻んだロカビリーのパターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"X":["x--x-xx--x-x"],"S":["---x-----x--"],"K":["x-----x-----"]}},{"id":"229","name":"軽快なダブル・タイムのパターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["-x-x-x-x"],"K":["x-x-x-x-"]}},{"id":"230","name":"ブラシを使ったソフトなシャッフル・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"P":["x-xx-xx-xx-x"],"X":["---x-----x--"],"K":["x-----x-----"]}},{"id":"231","name":"ブラシを使ったソフトな8ビート系パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"P":["xxxxxxxx"],"X":["--x---x-"],"K":["x---x---"]}},{"id":"232","name":"スティックを使ったトレイン・ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":["xx>xx>xxxx>>xx>x"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"233","name":"ロッズを使ったトレイン・ビート","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":["xx>xxx>xxx>xxx>x"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}}]},{"n":"24","g":"カントリー／ロック","t":"ロックンロール","p":[{"id":"234","name":"60年代ロックンロール・パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--xx--x-"],"K":["x-x-x-x-"]}},{"id":"235","name":"60年代ロックンロール・パターンのバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-x-x-x-x-x-"],"S":["----x->-----x---"],"K":["x-------x-------"],"F":["----x-------x---"]}},{"id":"236","name":"スネアを抜いて間を作ったパターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["------x-"],"K":["x--x----"]}},{"id":"237","name":"バスドラとスネアで8分音符の流れを作り出す","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x---xx"],"K":["x---xx--"]}},{"id":"238","name":"タムを絡めたパーカッシブなパターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["--x-----"],"T1":["-----xx-"],"K":["x--xx--x"],"F":["--x---x-"]}},{"id":"239","name":"4分打ちのライドにスネアを絡めたパターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x->-x->-"],"S":["-gxg-gxg"],"K":["x---xx--"],"F":["--x---x-"]}},{"id":"240","name":"スネアとハット同時打ちのロックンロール","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"H":["oo>ooo>o"],"S":["xxxxxxxx"],"K":["x--xx---"]}},{"id":"241","name":"タムを絡めたラテン系ロックンロール・パターン","tempo":"All","ts":"4/4","steps":8,"swing":false,"tr":{"T3":["x-x-xx-x","-x--xx-x"],"S":["--x---x-","--xx--x-"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"242","name":"軽快な3連系ロックンロール・パターン","tempo":"All","ts":"4/4","steps":12,"swing":false,"tr":{"H":["o--o--o--o--"],"S":["-----x---x--"],"K":["x--x--x--x--"]}}]},{"n":"25","g":"カントリー／ロック","t":"ニューオーリンズ","p":[{"id":"243","name":"ニューオーリンズのセカンド・ライン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">xx>xx>x>x>x>xxz"],"K":["x-----x---x-x---"],"F":["---x--------x--x"]}},{"id":"244","name":"タムを使ったセカンド・ライン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">xx>xx>xxx>>xx>z"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"245","name":"フラムを絡めたニューオーリンズ系パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":["xxxfxxfxxfxfxxfx"],"K":["x--x--x-x--x--x-"]}},{"id":"246","name":"ファンク系味付けのニューオーリンズ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-x-x-x-x-x-"],"S":["-g--x-------x---"],"K":["x--x-x---xx-x---"]}}]},{"n":"26","g":"エスニック","t":"アフリカン","p":[{"id":"247","name":"ポリリズミックな12/8拍子のアフリカン・リズム","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"R":["x-x-xx-x-x-x"],"X":["--x-----x---"],"S":["-----x------"],"T2":["-----------x"],"K":["x-----x-----"],"F":["---x-----x--"]}},{"id":"248","name":"タム類で彩りをつけた12/8拍子のバリエーション","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"R":["x-x-xx-x-x-x"],"T2":["-x--x--x----"],"S":["---------xx-"],"K":["x---x-x---x-"],"F":["---x-----x--"]}},{"id":"249","name":"ウラを強調した12/8拍子のバリエーション","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"R":["x-x-xx-x-x-x"],"X":["--x-----x---"],"S":["----xx------"],"K":["x-----x---xx"],"F":["---x-----x--"]}},{"id":"250","name":"フロアを刻む12/8拍子のバリエーション","tempo":"All","ts":"12/8","steps":12,"swing":false,"tr":{"T3":["x--x--x--x--"],"T2":["-xx-xx-xx-xx"],"F":["---x-----x--"]}},{"id":"251","name":"3/4拍子にノるアフリカン・リズムのバリエーション","tempo":"All","ts":"3/4","steps":6,"swing":false,"tr":{"R":["xx-x-x"],"X":["--x---"],"S":["----xx"],"K":["x-----"],"F":["--x-x-"]}},{"id":"252","name":"16分音符系の3/4拍子パターン","tempo":"All","ts":"3/4","steps":12,"swing":false,"tr":{"R":["x-x-xxxxx-xx"],"X":["--x-----x---"],"T1":["-----x------"],"K":["x-----------"],"F":["----x---x---"]}},{"id":"253","name":"4/4拍子のアフリカン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x-xx-xx-x-xx-x-x"],"T2":["-x--x-----x-----"],"X":["------------x---"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"254","name":"4/4拍子アフリカン・パターンのバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["x--x--x---x--x--"],"S":["----x-x---xxxx--"],"T2":["-x------x-------"],"K":["x---x---x---x---"],"F":["--x---x---x---x-"]}},{"id":"255","name":"16ビート・フィールのアフリカン・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx--xo"],"S":["----x-------xx--"],"K":["x------xx-x-----"]}}]},{"n":"27","g":"エスニック","t":"ブラジリアン","p":[{"id":"256","name":"スネアの刻みにアクセントを絡めたサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">x>x>>x>xx>x>>xx"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"257","name":"クローズド・リムを使ったバリエーション","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"T2":["x-xx-x-xx-x-xx-x"],"X":["-x--x-x--x-x--x-"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"258","name":"スネアとフロアを絡めたサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">xx>>xxx>xx>>xxx"],"T3":["----x-------x---"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"259","name":"スネアの刻みにタム類で色付けしたサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">x>x>xxx>x>x>xx>"],"T1":["---------x------"],"T2":["---------------x"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"260","name":"フロアを多めに叩くサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"T3":[">--x--x->x-x-x>x"],"S":["-xx-xx-x--x-x-x-"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"261","name":"ライドとスネアでアクセントをつけるサンバ","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"R":["xx-xx-x-xx-xx-x-"],"S":["x-xx-xx-x-xx-xx-"],"K":["x--xx--xx--xx--x"],"F":["--x---x---x---x-"]}},{"id":"262","name":"ハットを刻んだサンバ・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxx-xxxxxxx-xxx"],"S":["----x-------x---","----x-----xx-x--"],"K":["x--xx--xx--xx--x"]}},{"id":"263","name":"バイヨンのリズム・パターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">-->-->->-->-->-"],"S":["-gg-gg-g-gg-gg-g"],"K":["x--x--x-x--x--x-"]}},{"id":"264","name":"スネアで叩くバイヨンのパターン","tempo":"All","ts":"4/4","steps":16,"swing":false,"tr":{"S":[">xx>xx>x>z->xx>x"],"K":["x--x--x-x--x--x-"],"F":["--x-------x-----"]}}]},{"n":"28","g":"エスニック","t":"レゲエ","p":[{"id":"265","name":"レゲエ特有のワン・ドロップ系パターン","tempo":"60-90","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"X":["--x---x-"],"K":["--x---x-"]}},{"id":"266","name":"ハネたフィールのレゲエ・パターン","tempo":"60-90","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-xx-xx-xx-x"],"X":["------x-----","------x----x"],"K":["------x-----"]}},{"id":"267","name":"ミドル・テンポのミリタリアン・ビート","tempo":"70-110","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxxxxxxxxxxxxxx"],"X":["----x-------x---","----x---x---x-xx"],"K":["----x-------x---"]}},{"id":"268","name":"テンポ速めのミリタリアン・ビート","tempo":"90-150","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-xxx-x-"],"X":["----x---x--x--x-","----x-x-x---x-x-"],"K":["----x-------x---"]}},{"id":"269","name":"ダンサブルなレゲエ・パターン","tempo":"75-120","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xx-x-x-xxx-x-x"],"X":["----x---x---x---"],"K":["x--x----x--x----"]}},{"id":"270","name":"細かい6連符を絡めたレゲエ・パターン","tempo":"70-110","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-o-x-xxx-o-x-xx"],"X":["----x---x---x--x"],"K":["----x-------x---"]}},{"id":"271","name":"ハット・オープンを使ったスカのパターン","tempo":"110-180","ts":"4/4","steps":8,"swing":false,"tr":{"H":["-o-o-o-o"],"X":["--x---x-"],"K":["--x---x-"],"F":["--x---x-"]}}]},{"n":"29","g":"エスニック","t":"ラテン／アフロ・キューバン","p":[{"id":"272","name":"クラーベの音形を叩くアフロ・キューバン・パターン","tempo":"80-130","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x-x-xx-x","x-xx-xxx"],"X":["--x-x---","---x--x-"],"K":["---x---x"],"F":["x-x-x-x-"]}},{"id":"273","name":"クラーベを変化させたアフロ・キューバン・パターン","tempo":"80-130","ts":"4/4","steps":8,"swing":false,"tr":{"B":["x-x-xx-x","x-xx-xx-"],"X":["--x-x---","---x---x"],"K":["---x----"],"F":["x-x-x-x-"]}},{"id":"274","name":"近代的アフロ・キューバン・リズム、ソンゴ・パターン","tempo":"80-130","ts":"4/4","steps":8,"swing":false,"tr":{"R":["c---c---","c---c---"],"S":["--x--x-x","-xx--x-x"],"K":["---x----"],"F":["x-x-x-x-"]}},{"id":"275","name":"タムを絡めたソンゴのバリエーション","tempo":"80-130","ts":"4/4","steps":8,"swing":false,"tr":{"B":["x---x---","x---x---"],"S":["--x--x-x","-xx--x-x"],"K":["---x----"],"F":["x-x-x-x-"]}},{"id":"276","name":"6/8拍子のアフロ・キューバン・リズム","tempo":"110-160","ts":"6/8","steps":6,"swing":false,"tr":{"H":["x-xx-x"],"S":["-x--x-","x--x-x"],"K":["x-x--x","-x----"]}},{"id":"277","name":"チャチャのリズム・パターン","tempo":"60-110","ts":"4/4","steps":8,"swing":false,"tr":{"R":["x-x-xxxo","xxxx-o-x"],"X":["--x-x---","x--x--x-"],"K":["---x---x","----x---"]}},{"id":"278","name":"カウベルを刻んだモザンビークのパターン","tempo":"90-130","ts":"4/4","steps":16,"swing":false,"tr":{"B":["x-xxx-x-xx-xx-x-"],"S":["-x----x-------x-"],"K":["xx-----x-x----x-"]}},{"id":"279","name":"リムを絡めたカリプソのパターン","tempo":"94-130","ts":"4/4","steps":8,"swing":false,"tr":{"T2":["x-x-x-xx"],"X":["-x-x-x--"],"K":["x-x-x-x-"],"F":["-x-x-x-x"]}},{"id":"280","name":"ハットとタムを絡めたサルサ系パターン","tempo":"94-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">xx>-o--xxx>xxx-"],"S":["------x---------"],"T2":["---------x------"],"T1":["--------------x-"],"K":["x---x---x---x---"]}}]},{"n":"30","g":"変則","t":"打ち込み系リズム","p":[{"id":"281","name":"16分音符ウラを絡めたドラムンベース風パターン","tempo":"150-200","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-xxx-"],"S":["----x-----x--x-x"],"K":["x-----x---------"]}},{"id":"282","name":"1拍半の流れを生かしたドラムンベース風パターン","tempo":"150-200","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["----x---x-------","x-----x-x--x--x-"],"K":["x-----x-----x---","--x-------x-----"]}},{"id":"283","name":"テクノの代表的なパターン","tempo":"90-150","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["----x-------x---"],"K":["x-----x-x-------"]}},{"id":"284","name":"ハウスの代表的なパターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxo-xxxoxxo-xxxo"],"S":["----x-------x---"],"K":["x---x---x---x---"]}}]},{"n":"31","g":"変則","t":"ポリリズム／譜割りフレーズ","p":[{"id":"285","name":"16分音符の3つ割りフレーズのパターン","tempo":"90-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">xx>xx>xx>xx>xx>"],"S":["-gg-gg-gg-gg-gg-"],"K":["x-----x-x---x---","--x-x---x---x-x-"]}},{"id":"286","name":"3連符の4つ割りフレーズのパターン","tempo":"50-100","ts":"4/4","steps":12,"swing":false,"tr":{"H":[">xxx>xxx>xxx"],"S":["---x-----x--"],"K":["x---x---x---"]}},{"id":"287","name":"6/8拍子と4拍子を混ぜたフィールのポリリズム","tempo":"90-160","ts":"4/4","steps":12,"swing":false,"tr":{"H":["x-x-x-x-x-x-"],"S":["-----x-----x"],"K":["x-x---x-x---"]}},{"id":"288","name":"12/8拍子に8ビートのフィールを重ねたポリリズム","tempo":"50-100","ts":"12/8","steps":12,"swing":false,"tr":{"H":["xxxxxxxxxxxx"],"S":["--x--x--x-xx"],"K":["xx-xx-xx-x--"]}}]},{"n":"32","g":"変則","t":"変拍子","p":[{"id":"289","name":"8ビート系の5/4拍子パターン","tempo":"90-160","ts":"5/4","steps":10,"swing":false,"tr":{"H":["xxxxxxxxxx"],"S":["--x---x---"],"K":["x--xx-x---"]}},{"id":"290","name":"ジャズ系の5/4拍子パターン","tempo":"100-180","ts":"5/4","steps":15,"swing":false,"tr":{"R":["x-xx-xx--x--x-x"],"S":["--x---x-----x--"],"K":["x--------x-----"],"F":["---x--------x--"]}},{"id":"291","name":"ジャズ系5/4拍子のバリエーション","tempo":"100-180","ts":"5/4","steps":15,"swing":false,"tr":{"R":["x--x-xx--xx-x-x"],"S":["---------x---x-"],"K":["x-----x--------"],"F":["---x-----x-----"]}},{"id":"292","name":"8ビート系7/4拍子のパターン","tempo":"90-160","ts":"7/4","steps":14,"swing":false,"tr":{"H":["xxxxxxxxxxxxxx"],"S":["--x---x---x-xx"],"K":["x--xx--x-x----"]}},{"id":"293","name":"8ビート系変拍子の複合パターン（6/8＋5/8）","tempo":"90-160","ts":"11/8","steps":11,"swing":false,"tr":{"H":["xxxxxxxxxxx"],"S":["--x--x--x-x"],"K":["xx----x-x--"]}},{"id":"294","name":"ジャズ・フュージョン系5/8拍子のパターン","tempo":"85-130","ts":"5/8","steps":10,"swing":false,"tr":{"R":["x---x-x-x-"],"S":["-----x--x-"],"K":["x-x---x---"],"F":["-x--x--x-x"]}},{"id":"295","name":"ファンク・フュージョン系5/8拍子のパターン","tempo":"85-145","ts":"5/8","steps":10,"swing":false,"tr":{"H":["x-x-x-x-x-"],"S":["-x-x-x-xx-"],"K":["x--x------"]}},{"id":"296","name":"ライドのカップがポイントの5/8拍子パターン","tempo":"85-145","ts":"5/8","steps":10,"swing":false,"tr":{"R":["c-x-c-x-c-"],"S":["-x-x-x-xx-"],"K":["x--x------"]}},{"id":"297","name":"ファンク系7/8拍子のパターン","tempo":"85-145","ts":"7/8","steps":14,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-"],"S":["----x-----x--x"],"K":["x--x--x----x--"]}},{"id":"298","name":"ファンク系7/8拍子のバリエーション","tempo":"85-145","ts":"7/8","steps":14,"swing":false,"tr":{"H":["x-----x-x-x-x-"],"S":["gg>g>gg-x---x-"],"K":["x-------x--x--"]}},{"id":"299","name":"スネアとハットを叩き分けた7/8拍子","tempo":"85-145","ts":"7/8","steps":14,"swing":false,"tr":{"H":["x-xx-xxxx-xxox"],"S":["--x---x---xx-x"],"K":["x--x----x--x--"]}},{"id":"300","name":"ライドでレガートを刻んだ7/8拍子","tempo":"80-130","ts":"7/8","steps":14,"swing":false,"tr":{"R":["x-xx-xx-xx-xx-"],"S":["----x-------x-"],"K":["x--x--x-------"]}},{"id":"301","name":"ソンゴ風7/8拍子のパターン","tempo":"80-130","ts":"7/8","steps":14,"swing":false,"tr":{"H":["x---x---x---x-"],"S":["--xx-xxx-xx-x-"],"K":["x--x--x----x--"]}},{"id":"302","name":"ファンク系9/8拍子のパターン","tempo":"80-130","ts":"9/8","steps":18,"swing":false,"tr":{"H":["x-x-x-o-x-x-x-x-x-"],"S":["----x-----x-----x-"],"K":["xx-----x--x----x--"]}},{"id":"303","name":"ハット・オープンを絡めた9/8拍子のパターン","tempo":"80-145","ts":"9/8","steps":18,"swing":false,"tr":{"H":["o-x-o-x-xox-o-x-ox"],"S":["----x-------x---x-"],"K":["x-------x-------x-"]}},{"id":"304","name":"9/8拍子パターンのバリエーション","tempo":"80-145","ts":"9/8","steps":18,"swing":false,"tr":{"H":["xxx-x-x-x-xox-x-xx"],"S":["---xx-x-x-x-x-x-x-"],"K":["x-------x-x-------"]}},{"id":"305","name":"10/8拍子のファンク系パターン","tempo":"80-140","ts":"10/8","steps":20,"swing":false,"tr":{"H":["x-xx-xx-x-xx-xx-x-x-"],"S":["--g--gg--g--g--gg--g"],"K":["x---------x---x-----"]}},{"id":"306","name":"16分音符が1つ少ない15/16拍子","tempo":"80-140","ts":"15/16","steps":15,"swing":false,"tr":{"H":["o-x-x-x-x-x-x--"],"S":["----x-----x->xx"],"K":["x-------x--x---"]}},{"id":"307","name":"16分音符を1つ加えた17/16拍子","tempo":"80-140","ts":"17/16","steps":17,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x--"],"S":["----x-----x->gxgg"],"K":["x-------x--x-----"]}}]},{"n":"33","g":"シグネチャー・ビート","t":"シグネチャー・ビート","p":[{"id":"308","name":"ジョーイ・クレイマー風の印象的ロック・ビート","tempo":"80-140","ts":"4/4","steps":16,"swing":false,"tr":{"H":["o-x-x-x-x-x-x-x-"],"S":["----x-------x---"],"K":["x------xx-x-----"]}},{"id":"309","name":"デヴィッド・ガリバルディ風のファンク・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-xxx-o-o-x-"],"S":["-g--gggg-g--x-gg"],"K":["x-xx-------x-x--"],"F":["-------------x--"]}},{"id":"310","name":"スティーヴ・ガッド風の新発想ドラミング","tempo":"80-130","ts":"4/4","steps":8,"swing":false,"tr":{"H":["cocococo"],"S":["--x---x-"],"K":["x---x---"],"F":["--x---x-"]}},{"id":"311","name":"ジェフ・ポーカロ風のハーフ・タイム・シャッフル","tempo":"70-110","ts":"4/4","steps":24,"swing":false,"tr":{"H":[">-x>-x>-x>-x>-x>-x>-x>-x"],"S":["-g--g--g--g-x-g--g--g--g"],"K":["x-----x--x-----------x--"]}},{"id":"312","name":"ハーヴィ・メイソン風のフュージョン・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":[">-x->-x->-x->-x-"],"S":["----x-------x--g"],"K":["x-----x--xx-----"]}},{"id":"313","name":"アンディ・ニューマーク風のファンク・パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xxxo--x-x-x-xxxx"],"S":["g-----------x---"],"K":["x--------x-----x"]}},{"id":"314","name":"スタントン・ムーア風のラテン系パターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["xx-xx-x-xx-xx-x-"],"X":["----x-------x---"],"T1":["------x-------x-"],"T2":["-------x-------x"],"K":["x--x--x-x--x--x-"],"F":["--x-------x-----"]}},{"id":"315","name":"クライド・スタブルフィールド風のJBパターン","tempo":"90-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-xxx-x-"],"S":["----x-------x---"],"K":["x-------x-x-----","--x-------x---x-"]}},{"id":"316","name":"ドン・ブリューワー風のカウベル4分打ちパターン","tempo":"90-130","ts":"4/4","steps":8,"swing":false,"tr":{"B":["x-x-x-x-"],"S":["--x---xx"],"K":["x----x--","-x---x--"]}},{"id":"317","name":"スティーヴ・ジョーダン風の都会的なパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["oxoxx-x-oxox>-x-"],"S":["g-g-ggggg-g-x-gg"],"K":["x-----x---------"]}},{"id":"318","name":"ジョン・ボーナム風の超有名パターン","tempo":"70-100","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-x-"],"S":["--------x-----g-"],"K":["x-xxx--x-xxx-x--"]}},{"id":"319","name":"リンゴ・スター風の個性溢れるパターン","tempo":"80-130","ts":"4/4","steps":16,"swing":false,"tr":{"S":["----f------fx-fx"],"K":["x-----x-x-------"]}},{"id":"320","name":"モータウンのシグネチャー・パターン","tempo":"100-150","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx"],"S":["x-x-x-x-"],"K":["x----x-x"]}},{"id":"321","name":"スティーヴ・スミス風のアイデア溢れるパターン","tempo":"90-140","ts":"4/4","steps":8,"swing":false,"tr":{"H":["xxxxxxxx","xxxxxxxx"],"S":["--x-----","--x--x--"],"T1":["------x-","-------x"],"K":["x-x-x-x-"]}},{"id":"322","name":"カーマイン・アピス風にハット・オープンを絡めたパターン","tempo":"90-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-x-x-oo"],"S":["----x-------x---"],"K":["x--x--x---xx-x-x"]}},{"id":"323","name":"スチュアート・コープランド風のレゲエ・パターン","tempo":"130-170","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-x-xxx-x-xx"],"X":["x---x---x---x---"],"K":["x---x---x---x---"]}},{"id":"324","name":"バーナード・パーディ風のハット・オープンを絡めたパターン","tempo":"90-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-x-x-x-x-o-x-o-"],"S":["x---x-xxx-x-xx-x"],"K":["x-xx-----x-----x"]}},{"id":"325","name":"ジガブー風の伝説的ニューオーリンズ・ファンク","tempo":"90-130","ts":"4/4","steps":16,"swing":false,"tr":{"H":["x-xxx-xxx-xxx-xx"],"S":["-----x---x--x--x"],"K":["x--x-x---xx-x--x"]}},{"id":"326","name":"メル・テイラーの叩くキャラバン風のパターン","tempo":"130-200","ts":"4/4","steps":8,"swing":false,"tr":{"T3":["x-x-x-x-"],"T1":["--xx--xx"],"K":["x-x-x-x-"],"F":["--x---x-"]}}]}];
-const RL_FLAT = []; RLIB.forEach(c => c.p.forEach((p, i) => { p.ch = c; p.code = c.n + '-' + String(i + 1).padStart(2, '0'); RL_FLAT.push(p); }));
-const RL_NAMES = {C:'クラッシュ',Z:'チャイナ',R:'ライド',H:'ハット',B:'カウベル',P:'ブラシ',W:'ブラシ回し',T1:'ハイタム',T2:'ミッドタム',X:'リム',S:'スネア',T3:'フロア',K:'バスドラ',F:'足ハット'};
-const RL = {ch:'all', q:'', tempo:true, open:false, drag:null};
-function rlBeatSize(p){ const [n, d] = p.ts.split('/').map(Number); const beats = d === 4 ? n : (d === 8 && (n === 6 || n === 12)) ? n / 3 : d === 8 ? n / 2 : n / 4; return p.steps / beats; }
-function rlBars(p){ return Math.max(...Object.values(p.tr).map(t => t.length)); }
-function rlBpm(p){ if(p.tempo === 'All') return p.ts === '12/8' ? 66 : 110; const m = p.tempo.split('-').map(Number); return Math.round((m[0] + (m[1] || m[0])) / 2); }
-function rlKit(p){ const g = p.ch.g, t = p.ch.t; if(/ジャズ/.test(g) || /ブラシ/.test(p.name)) return 'jazz'; if(/打ち込み/.test(t)) return 'r909'; if(/ロック/.test(g) || /メタル/.test(t)) return 'rock'; if(/エスニック/.test(g)) return 'perc'; return 'std'; }
-function rlNote(k, ch){ // -> {p, v, art}
-  const acc = ch === '>', gh = ch === 'g', v = acc ? 122 : gh ? 38 : 100;
-  switch(k){
-    case 'K': return {p:36, v};
-    case 'S': return ch === 'f' ? {p:38, v:105, art:'flam'} : ch === 'z' ? {p:38, v:85, art:'roll'} : {p:38, v};
-    case 'X': return {p:37, v};
-    case 'H': return ch === 'o' ? {p:46, v:100} : ch === 'h' ? {p:46, v:72} : {p:42, v: acc ? 118 : gh ? 45 : 88};
-    case 'F': return {p:44, v:85};
-    case 'R': return ch === 'c' ? {p:53, v:105} : {p:51, v: acc ? 118 : 90};
-    case 'C': return {p:49, v:115};
-    case 'Z': return {p:52, v:110};
-    case 'B': return {p:56, v: acc ? 115 : 95};
-    case 'T1': return {p:48, v}; case 'T2': return {p:45, v}; case 'T3': return {p:41, v};
-    case 'P': return {p:38, v: acc ? 90 : 62};
-    case 'W': return {p:38, v:40, art:'roll'};
-  }
-  return null;
-}
-function rlPattern(p){ // -> {notes, len, div}
-  const st = 96 / rlBeatSize(p), nb = rlBars(p), notes = [];
-  for(const k in p.tr){ const t = p.tr[k];
-    for(let b = 0; b < nb; b++){ const s = t[b % t.length];
-      for(let i = 0; i < p.steps; i++){ const c = s[i]; if(c === '-') continue; const n = rlNote(k, c); if(!n) continue;
-        const o = {t:Math.round((b * p.steps + i) * st), d:k === 'W' ? Math.round(st * 2) : Math.round(st), p:n.p, v:n.v}; if(n.art) o.art = n.art; notes.push(o); } } }
-  const div = DIVS.some(d => d[0] === st) ? st : (st % 24 === 0 ? 24 : st % 32 === 0 ? 32 : 24);
-  return {notes, len:Math.round(nb * p.steps * st), div};
-}
-function rlDrumTrack(){ const t = trackById(curTrackId); return t && t.kind === 'drum' ? t : P.tracks.find(x => x.kind === 'drum'); }
-function rlApplyTempo(p){ if(!RL.tempo) return; P.bpm = rlBpm(p); P.swing = p.swing ? 55 : 0; reanchor(); syncMix(); }
-// place as a clip in the playlist. tr = null → new drum track
-function rlPlace(p, tr, tick){
-  rlStop(); pushUndo();
-  const {notes, len, div} = rlPattern(p);
-  if(!tr){ tr = mkTrack('drum', p.code + ' ' + p.name, null, P.tracks.length); tr.params.kit = rlKit(p); P.tracks.push(tr); }
-  const np = newPattern(tr, len); np.name = p.code + ' ' + p.name; np.notes = notes; np.len = len; np.div = div;
-  tr.clips.push({id:uid(), t:Math.max(0, tick), auto:true, len, pat:np.id});
-  editPat = np.id; tr.lastPat = np.id; curTrackId = tr.id;
-  rlApplyTempo(p); ensureBars(); syncMix(); markDirty(); updateLcd(); renderChrome();
-  if(view === 'playlist') layoutPL(); else redrawAll();
-  toast(`「${p.code} ${p.name}」を ${tr.name} の ${Math.floor(tick / barT()) + 1}小節目に置きました`);
-}
-// load into the pattern being edited in the step editor
-function rlLoadStep(p){
-  const ep = editP(), tr = ep && trackById(ep.track);
-  if(!tr || tr.kind !== 'drum') return rlPlace(p, rlDrumTrack() || null, Math.floor(songPos / barT()) * barT());
-  rlStop(); pushUndo(); const {notes, len, div} = rlPattern(p);
-  ep.notes = notes; ep.len = len; ep.div = div; ep.name = p.code + ' ' + p.name;
-  rlApplyTempo(p); markDirty(); updateLcd(); renderChrome(); renderStep();
-  toast(`「${p.code} ${p.name}」をステップに読み込みました`);
-}
-// ---- audition ----
-let rlPlaying = null, rlTimer = null;
-function rlStop(){ clearInterval(rlTimer); rlTimer = null; rlPlaying = null; document.querySelectorAll('#rlib .rlc.pl').forEach(c => { c.classList.remove('pl'); c.querySelector('.rlp').textContent = '▶'; }); }
-function rlAudition(p){
-  if(rlPlaying === p) return rlStop();
-  rlStop(); getAC(); if(playing) stop();
-  let base = rlDrumTrack(); if(!base) return toast('ドラムトラックがありません');
-  const tr = {...base, params:{...base.params, kit:base.params.kit || rlKit(p)}}; applyTrack(live, base);
-  const {notes, len} = rlPattern(p), pat = {notes, len}, hits = drumHits(pat), bpm = RL.tempo ? rlBpm(p) : P.bpm, s = 60 / bpm / PPQ;
-  const sw = h => p.swing && (h.base % 48) === 24 ? 24 * .36 : 0;
-  let next = AC.currentTime + .06;
-  const loop = () => { while(next < AC.currentTime + .4){ const t0 = next; hits.forEach(h => playDrum(live, tr, h.p, t0 + (h.t + sw(h)) * s, h.v)); next += len * s; } };
-  loop(); rlTimer = setInterval(loop, 150); rlPlaying = p;
-  const card = document.querySelector(`#rlib .rlc[data-id="${p.id}"]`); if(card){ card.classList.add('pl'); card.querySelector('.rlp').textContent = '■'; }
-}
-// ---- drawer UI ----
-function rlMini(p){ // tiny preview of bar 1
-  const rows = ['C','Z','R','H','B','P','W','T1','T2','X','S','T3','K','F'].filter(k => p.tr[k]), bs = rlBeatSize(p);
-  return '<div class="rlg">' + rows.map(k => '<div class="rlr">' + [...p.tr[k][0]].map((c, i) => `<i class="${c === '-' ? (i % bs === 0 ? 'b' : '') : c === '>' ? 'a' : c === 'g' ? 'g' : c === 'o' || c === 'h' ? 'o' : 'x'}"></i>`).join('') + '</div>').join('') + '</div>';
-}
-function openRLib(){
-  if(view !== 'playlist' && view !== 'step') setView('playlist');
-  RL.open = true; $('rlib').classList.remove('hidden'); document.body.classList.add('rlopen'); rlRender();
-}
-function closeRLib(){ rlStop(); RL.open = false; $('rlib').classList.add('hidden'); document.body.classList.remove('rlopen'); }
-function rlRender(){
-  const el = $('rlib'), q = RL.q.trim().toLowerCase();
-  const chips = `<button class="rlch ${RL.ch === 'all' ? 'on' : ''}" data-c="all">すべて</button>` + [...new Set(RLIB.map(c => c.g))].map(g => `<button class="rlch ${RL.ch === 'g:' + g ? 'on' : ''}" data-c="g:${esc(g)}">${esc(g)}</button>`).join('') + RLIB.map(c => `<button class="rlch ${RL.ch === 'c:' + c.n ? 'on' : ''}" data-c="c:${c.n}">${c.n} ${esc(c.t)}</button>`).join('');
-  const list = RL_FLAT.filter(p => (RL.ch === 'all' || (RL.ch.startsWith('g:') ? p.ch.g === RL.ch.slice(2) : p.ch.n === RL.ch.slice(2))) && (!q || (p.name + p.ch.t + p.ch.g + p.code + p.id + p.ts).toLowerCase().includes(q)));
-  el.innerHTML = `<div class="rlhead"><b>📚 リズム図鑑</b><span class="rlhint">⠿ をつかんでプレイリスト（またはステップ）へドラッグ</span><button class="rlx" id="rlX">✕</button></div>
-    <div class="rlbar"><input id="rlQ" type="search" placeholder="検索（シャッフル, 16ビート, 05-03…）" value="${esc(RL.q)}"><button id="rlT" class="${RL.tempo ? 'on' : ''}" title="置いたときに曲のテンポ・ハネも合わせる">テンポも合わせる</button></div>
-    <div class="rlchips">${chips}</div>
-    <div class="rllist">${list.map(p => `<div class="rlc" data-id="${p.id}"><div class="rlh" title="ドラッグして配置">⠿</div><div class="rlm"><div class="rln"><span>${p.code}</span>${esc(p.name)}</div><div class="rls">${p.ts}・♩=${p.tempo === 'All' ? '自由' : p.tempo}${p.swing ? '・ハネ' : ''}${rlBars(p) > 1 ? '・' + rlBars(p) + '小節' : ''}</div>${rlMini(p)}</div><button class="rlp">▶</button><button class="rla" title="今の位置に置く">＋</button></div>`).join('') || '<div class="rls" style="padding:20px;text-align:center">該当なし</div>'}</div>`;
-  $('rlX').onclick = closeRLib;
-  $('rlT').onclick = e => { RL.tempo = !RL.tempo; e.target.classList.toggle('on', RL.tempo); };
-  $('rlQ').oninput = e => { RL.q = e.target.value; clearTimeout(RL.qt); RL.qt = setTimeout(() => { rlRender(); const i = $('rlQ'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }, 250); };
-  el.querySelectorAll('.rlch').forEach(b => b.onclick = () => { RL.ch = b.dataset.c; rlRender(); });
-  el.querySelectorAll('.rlc').forEach(card => {
-    const p = RL_FLAT.find(x => x.id === card.dataset.id);
-    card.querySelector('.rlp').onclick = () => rlAudition(p);
-    card.querySelector('.rla').onclick = () => { if(view === 'step') rlLoadStep(p); else rlPlace(p, rlDrumTrack() || null, Math.floor(songPos / barT()) * barT()); };
-    card.querySelector('.rlh').addEventListener('pointerdown', e => rlDragStart(e, p));
-  });
-}
-// ---- drag & drop ----
-function rlTarget(x, y){
-  if(view === 'playlist'){
-    const r = plCv.getBoundingClientRect(); if(x < r.left || x > r.right || y < r.top + RULER || y > r.bottom) return null;
-    const lx = x - r.left, ly = y - r.top, row = Math.floor((ly - RULER + plScroll.scrollTop) / PL_ROWH);
-    const tick = Math.max(0, Math.floor(Math.max(0, plT(Math.max(lx, PL_HEADW))) / barT()) * barT());
-    const tr = P.tracks[row], ok = tr && tr.kind === 'drum';
-    return {kind:'pl', tr:ok ? tr : null, tick, row, label:(ok ? tr.name : '＋新しいドラムトラック') + ' ／ ' + (Math.floor(tick / barT()) + 1) + '小節目'};
-  }
-  if(view === 'step'){ const r = $('v-step').getBoundingClientRect(); if(x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return {kind:'step', label:'このパターンに読み込む'}; }
-  return null;
-}
-function rlDragStart(e, p){
-  e.preventDefault(); rlStop();
-  const g = document.createElement('div'); g.id = 'rlGhost'; g.innerHTML = `<b>${p.code}</b> ${esc(p.name)}<small>ここに離すと配置</small>`; document.body.appendChild(g);
-  RL.drag = {p, g, id:e.pointerId}; document.body.classList.add('rldrag');
-  const move = ev => { if(ev.pointerId !== RL.drag.id) return; ev.preventDefault();
-    g.style.left = ev.clientX + 'px'; g.style.top = ev.clientY + 'px';
-    const t = rlTarget(ev.clientX, ev.clientY); RL.drag.t = t; g.classList.toggle('ok', !!t);
-    g.querySelector('small').textContent = t ? t.label : 'ここでは置けません';
-    if(t && t.kind === 'pl'){ RL.hl = t; drawPL(); } else if(RL.hl){ RL.hl = null; drawPL(); }
-    // auto scroll playlist near edges
-    if(view === 'playlist'){ const r = plCv.getBoundingClientRect(); if(ev.clientX > r.right - 30) plScroll.scrollLeft += 12; else if(ev.clientX < r.left + PL_HEADW + 20 && ev.clientX > r.left + PL_HEADW) plScroll.scrollLeft -= 12; }
-  };
-  const up = ev => { if(ev.pointerId !== RL.drag.id) return; window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
-    const t = ev.type === 'pointerup' ? rlTarget(ev.clientX, ev.clientY) : null; g.remove(); document.body.classList.remove('rldrag'); RL.drag = null; RL.hl = null;
-    if(t && t.kind === 'pl') rlPlace(p, t.tr, t.tick); else if(t && t.kind === 'step') rlLoadStep(p); else if(view === 'playlist') drawPL();
-  };
-  window.addEventListener('pointermove', move, {passive:false}); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
-  move(e);
-}
-// drop-target highlight on the playlist canvas
-const rlDrawPL0 = drawPL;
-drawPL = function(){ rlDrawPL0.apply(this, arguments); const t = RL.hl; if(!t) return; const y = plY(t.row), x = Math.max(PL_HEADW, plX(t.tick)), w = Math.max(30, plX(t.tick + barT()) - x);
-  plG.save(); plG.fillStyle = '#ff33c044'; plG.strokeStyle = '#ff33c0'; plG.lineWidth = 2; plG.setLineDash([6, 4]); plG.fillRect(x, y + 3, w, PL_ROWH - 6); plG.strokeRect(x + 1, y + 4, w - 2, PL_ROWH - 8); plG.restore(); };
-
 (function init(){
   let loaded = false;
   try{ const s = localStorage.getItem('pdtm_current'); if(s){ P = migrate(JSON.parse(s)); loaded = true; } }catch(e){}
@@ -3183,82 +3243,6 @@ drawPL = function(){ rlDrawPL0.apply(this, arguments); const t = RL.hl; if(!t) r
   })();
 })();
 document.addEventListener('visibilitychange', () => { if(document.hidden) flushSave(); });
-</script>
-<script>
-(() => {
-  "use strict";
-  const KEY = 'vwFxLevel';
-  let lvl = 2; try { const v = localStorage.getItem(KEY); if (v !== null) lvl = +v; } catch (e) {}
-  const applyLvl = () => { document.body.classList.remove('fx0', 'fx1', 'fx2'); document.body.classList.add('fx' + lvl); };
-  window.vwSetFx = n => { lvl = n; try { localStorage.setItem(KEY, String(n)); } catch (e) {} applyLvl(); };
-  window.vwFxLabel = () => ['オフ', '弱', '強'][lvl];
-  window.vwFxLevel = () => lvl;
-  applyLvl();
-  // ---- CRT overlay ----
-  const fx = document.createElement('div'); fx.id = 'vwFX';
-  fx.innerHTML = '<canvas id="vwNoise"></canvas><div id="vwScan"></div><div id="vwTrack"></div><div id="vwVig"></div>';
-  document.body.appendChild(fx);
-  const nz = document.getElementById('vwNoise'), ng = nz.getContext('2d');
-  nz.width = Math.max(120, Math.round(innerWidth / 1.5)); nz.height = Math.max(120, Math.round(innerHeight / 1.5));
-  const nimg = ng.createImageData(nz.width, nz.height);
-  const paintNoise = () => { const d = nimg.data; for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255 | 0; d[i] = v; d[i + 1] = v * .8 | 0; d[i + 2] = v; d[i + 3] = 255; } ng.putImageData(nimg, 0, 0); };
-  paintNoise();
-  // ---- VHS OSD ----
-  const views = document.getElementById('views');
-  const osd = document.createElement('div'); osd.id = 'vwOSD';
-  osd.innerHTML = '<div class="l">■ STOP</div><div class="r">ポケットＤＴＭ<br>ＳＴＵＤＩＯ　'+'― ＳＰ</div>';
-  views.appendChild(osd);
-  const osdL = osd.querySelector('.l');
-  const playBtn = document.getElementById('playBtn'), recBtn = document.getElementById('recBtn');
-  const updOSD = () => {
-    const rec = recBtn && recBtn.classList.contains('on'), pl = playBtn && playBtn.classList.contains('playing');
-    osdL.textContent = rec && pl ? '● REC' : rec ? '● REC  ‖' : pl ? '▶ PLAY' : '■ STOP';
-    osdL.classList.toggle('rec', !!rec);
-  };
-  const mo = new MutationObserver(updOSD);
-  [playBtn, recBtn].forEach(b => b && mo.observe(b, { attributes: true, attributeFilter: ['class'] }));
-  updOSD();
-  // ---- current area → body[data-vw] ----
-  const tabBtns = [...document.querySelectorAll('#tabs button[data-v]')];
-  const updVw = () => { const b = tabBtns.find(x => x.classList.contains('on')); if (b) document.body.dataset.vw = b.dataset.v; };
-  const mo2 = new MutationObserver(updVw); tabBtns.forEach(b => mo2.observe(b, { attributes: true, attributeFilter: ['class'] })); updVw();
-  // ---- tab switch glitch ----
-  document.getElementById('tabs').addEventListener('click', e => {
-    if (!e.target.closest('button') || lvl === 0) return;
-    views.classList.remove('vwGl'); void views.offsetWidth; views.classList.add('vwGl');
-  });
-  views.addEventListener('animationend', () => views.classList.remove('vwGl'));
-  // ---- header oscilloscope ----
-  const top = document.getElementById('top');
-  const cv = document.createElement('canvas'); cv.id = 'vwWave'; top.insertBefore(cv, top.firstChild);
-  const g = cv.getContext('2d'); let W = 0, H = 0, dpr = 1;
-  const fit = () => { dpr = Math.min(2, window.devicePixelRatio || 1); W = top.clientWidth; H = top.clientHeight; cv.width = W * dpr; cv.height = H * dpr; };
-  fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(top); else addEventListener('resize', fit);
-  const buf = new Float32Array(1024); let t0 = 0, lastN = 0, idleT = 0;
-  const getAn = () => { try { return (typeof live !== 'undefined' && live && live.mst && live.mst.anOut) ? live.mst.anOut : null; } catch (e) { return null; } };
-  function frame(ts) {
-    requestAnimationFrame(frame);
-    if (document.hidden || lvl === 0 || ts - t0 < 33) return; t0 = ts;
-    if (lvl === 2 && ts - lastN > 70) { paintNoise(); lastN = ts; }
-    const an = getAn(), playing = playBtn && playBtn.classList.contains('playing');
-    let n = 256, data;
-    if (an && playing) { an.getFloatTimeDomainData(buf); data = buf; n = buf.length; }
-    else { idleT += .03; data = null; }
-    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
-    // horizon grid
-    g.strokeStyle = '#22e4f022'; g.lineWidth = 1;
-    for (let i = 1; i < 4; i++) { const y = H - (H * .5) * Math.pow(i / 4, 1.8); g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
-    const mid = H * .55, amp = H * .42;
-    const path = off => { g.beginPath(); for (let i = 0; i < n; i++) { const x = i / (n - 1) * W; let v;
-        if (data) v = data[i]; else { const p = i / n * Math.PI * 2; v = .18 * Math.sin(p * 3 + idleT) + .07 * Math.sin(p * 11 - idleT * 2.3) + .03 * (Math.random() - .5); }
-        const y = mid - Math.max(-1, Math.min(1, v * 1.6)) * amp; i ? g.lineTo(x + off, y) : g.moveTo(x + off, y); } g.stroke(); };
-    g.lineWidth = 1.6; g.shadowBlur = 0;
-    g.strokeStyle = '#ff2fb3aa'; path(-2.5);
-    g.strokeStyle = '#22e4f0aa'; path(2.5);
-    g.strokeStyle = '#ffffffcc'; g.lineWidth = 1; g.shadowColor = '#3ff7ff'; g.shadowBlur = 8; path(0); g.shadowBlur = 0;
-  }
-  requestAnimationFrame(frame);
-})();
 </script>
 </body>
 </html>
