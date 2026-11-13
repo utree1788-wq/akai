@@ -1,0 +1,24 @@
+{
+  "id": "./mpk-app.html",
+  "name": "MPK mini plus トレーナー",
+  "short_name": "MPK",
+  "start_url": "./mpk-app.html",
+  "scope": "./mpk-app",
+  "display": "standalone",
+  "background_color": "#0b0218",
+  "theme_color": "#140030",
+  "icons": [
+    {
+      "src": "mpk-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "mpk-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

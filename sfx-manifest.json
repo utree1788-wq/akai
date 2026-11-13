@@ -1,0 +1,24 @@
+{
+  "id": "./sfx-app.html",
+  "name": "SFX LAB 効果音ラボ",
+  "short_name": "効果音",
+  "start_url": "./sfx-app.html",
+  "scope": "./sfx-app",
+  "display": "standalone",
+  "background_color": "#0b0218",
+  "theme_color": "#140030",
+  "icons": [
+    {
+      "src": "sfx-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "sfx-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
