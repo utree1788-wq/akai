@@ -3225,6 +3225,98 @@ function afterLoad(reset){
   syncMix(); refreshAll();
   if(reset){ plScroll.scrollLeft = 0; plScroll.scrollTop = 0; }
 }
+// ======================================================================
+// 律動アプリから受け取る（ドラッグ＆ドロップ / 「DTMへ送る」ボタン）
+// ======================================================================
+const RX_TAG = 'POCKETDTM_RHYTHM:';
+const RX_VAL = '0123456789ABCDEFGHIJKLMNOPQRSTUV';
+function rxBeatSize(r){ const [n, d] = r.ts.split('/').map(Number); const beats = d === 4 ? n : (d === 8 && (n === 6 || n === 12)) ? n / 3 : d === 8 ? n / 2 : n / 4; return r.steps / beats; }
+function rxBars(r){ return Math.max(...Object.values(r.tr).map(t => t.length)); }
+function rxVel(r, k, b, i){ const t = r.v && r.v[k]; if(!t) return 0; const c = t[b % t.length][i]; return c === '-' || c === undefined ? 0 : RX_VAL.indexOf(c) * 4 + 3; }
+function rxNote(k, ch){
+  switch(k){
+    case 'K': return {p:36}; case 'X': return {p:37}; case 'F': return {p:44}; case 'C': return {p:49}; case 'Z': return {p:52}; case 'B': return {p:56};
+    case 'S': return ch === 'f' ? {p:38, art:'flam'} : ch === 'z' ? {p:38, art:'roll'} : {p:38};
+    case 'H': return {p:(ch === 'o' || ch === 'h') ? 46 : 42};
+    case 'R': return {p:ch === 'c' ? 53 : 51};
+    case 'T1': return {p:48}; case 'T2': return {p:45}; case 'T3': return {p:41};
+    case 'P': return {p:38}; case 'W': return {p:38, art:'roll'};
+  }
+  return null;
+}
+function rxPattern(r){
+  const st = 96 / rxBeatSize(r), nb = rxBars(r), notes = [];
+  for(const k in r.tr){ const t = r.tr[k];
+    for(let b = 0; b < nb; b++){ const s = t[b % t.length];
+      for(let i = 0; i < r.steps; i++){ const c = s[i]; if(c === '-') continue; const n = rxNote(k, c); if(!n) continue;
+        const v = clamp(rxVel(r, k, b, i) || (c === '>' ? 122 : c === 'g' ? 35 : 100), 1, 127);
+        const o = {t:Math.round((b * r.steps + i) * st), d:k === 'W' ? Math.round(st * 2) : Math.round(st), p:n.p, v}; if(n.art) o.art = n.art; notes.push(o); } } }
+  const div = DIVS.some(d => d[0] === st) ? st : (st % 24 === 0 ? 24 : 32);
+  return {notes, len:Math.round(nb * r.steps * st), div};
+}
+function rxKit(r){ const g = r.genre || '', t = r.chapter || ''; if(/ジャズ/.test(g) || /ブラシ/.test(r.name)) return 'jazz'; if(/打ち込み/.test(t)) return 'r909'; if(/ロック/.test(g)) return 'rock'; if(/エスニック/.test(g)) return 'perc'; return 'std'; }
+function rxParse(s){ if(typeof s !== 'string' || !s.startsWith(RX_TAG)) return null; try{ const r = JSON.parse(s.slice(RX_TAG.length)); return r && r.tr && r.steps ? r : null; }catch(e){ return null; } }
+function rxDrumTrack(){ const t = trackById(curTrackId); return t && t.kind === 'drum' ? t : P.tracks.find(x => x.kind === 'drum'); }
+function rxTempoNote(r){ return r.tempo && r.tempo !== 'All' ? `（推奨テンポ ♩=${r.tempo}${r.swing ? '・ハネ' : ''}）` : (r.swing ? '（ハネのリズム：スウィングを上げると近づきます）' : ''); }
+function rxPlace(r, tr, tick){
+  if(playing) stop();
+  pushUndo();
+  const {notes, len, div} = rxPattern(r), label = r.code + ' ' + r.name;
+  if(!tr){ tr = mkTrack('drum', label, null, P.tracks.length); tr.params.kit = rxKit(r); P.tracks.push(tr); }
+  const np = newPattern(tr, len); np.name = label; np.notes = notes; np.len = len; np.div = div;
+  tr.clips.push({id:uid(), t:Math.max(0, tick), auto:true, len, pat:np.id});
+  editPat = np.id; tr.lastPat = np.id; curTrackId = tr.id;
+  ensureBars(); syncMix(); markDirty(); updateLcd(); renderChrome();
+  if(view === 'playlist') layoutPL(); else redrawAll();
+  toast(`「${label}」を ${tr.name} の ${Math.floor(tick / barT()) + 1}小節目に置きました${rxTempoNote(r)}`);
+}
+function rxLoadStep(r){
+  const ep = editP(), tr = ep && trackById(ep.track);
+  if(!tr || tr.kind !== 'drum') return rxPlace(r, rxDrumTrack() || null, Math.floor(songPos / barT()) * barT());
+  if(playing) stop();
+  pushUndo(); const {notes, len, div} = rxPattern(r);
+  ep.notes = notes; ep.len = len; ep.div = div; ep.name = r.code + ' ' + r.name;
+  markDirty(); updateLcd(); renderChrome(); renderStep();
+  toast(`「${r.code} ${r.name}」をステップに読み込みました${rxTempoNote(r)}`);
+}
+function rxTarget(x, y){
+  if(view === 'playlist'){
+    const rc = plCv.getBoundingClientRect(); if(x < rc.left || x > rc.right || y < rc.top + RULER || y > rc.bottom) return null;
+    const lx = x - rc.left, ly = y - rc.top, row = Math.floor((ly - RULER + plScroll.scrollTop) / PL_ROWH);
+    const tick = Math.max(0, Math.floor(Math.max(0, plT(Math.max(lx, PL_HEADW))) / barT()) * barT());
+    const tr = P.tracks[row], ok = tr && tr.kind === 'drum';
+    return {kind:'pl', tr:ok ? tr : null, tick, row};
+  }
+  if(view === 'step') return {kind:'step'};
+  return {kind:'here'};
+}
+let rxHl = null;
+const rxDrawPL0 = drawPL;
+drawPL = function(){ rxDrawPL0.apply(this, arguments); const t = rxHl; if(!t || view !== 'playlist') return; const y = plY(t.row), x = Math.max(PL_HEADW, plX(t.tick)), w = Math.max(30, plX(t.tick + barT()) - x);
+  plG.save(); plG.fillStyle = '#ff4fd844'; plG.strokeStyle = '#ff4fd8'; plG.lineWidth = 2; plG.setLineDash([6, 4]); plG.fillRect(x, y + 3, w, PL_ROWH - 6); plG.strokeRect(x + 1, y + 4, w - 2, PL_ROWH - 8); plG.restore(); };
+const rxIsOurs = e => e.dataTransfer && [...e.dataTransfer.types].includes('text/plain');
+document.addEventListener('dragover', e => {
+  if(!rxIsOurs(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
+  const t = rxTarget(e.clientX, e.clientY);
+  const nh = t && t.kind === 'pl' ? t : null;
+  if(JSON.stringify(nh && [nh.row, nh.tick]) !== JSON.stringify(rxHl && [rxHl.row, rxHl.tick])){ rxHl = nh; drawPL(); }
+});
+document.addEventListener('dragleave', e => { if(e.relatedTarget === null && rxHl){ rxHl = null; drawPL(); } });
+document.addEventListener('drop', e => {
+  const r = rxParse(e.dataTransfer && e.dataTransfer.getData('text/plain'));
+  rxHl = null; if(view === 'playlist') drawPL();
+  if(!r) return; e.preventDefault();
+  const t = rxTarget(e.clientX, e.clientY);
+  if(t && t.kind === 'pl') rxPlace(r, t.tr, t.tick);
+  else if(t && t.kind === 'step') rxLoadStep(r);
+  else rxPlace(r, rxDrumTrack() || null, Math.floor(songPos / barT()) * barT());
+});
+// 「DTMへ送る」ボタン（同じサイトの別ウィンドウから）
+let rxLast = '', rxLastT = 0;
+function rxInbox(s){ const now = Date.now(); if(s === rxLast && now - rxLastT < 1500) return; rxLast = s; rxLastT = now; const r = rxParse(s); if(!r) return; if(view === 'step') rxLoadStep(r); else rxPlace(r, rxDrumTrack() || null, Math.floor(songPos / barT()) * barT()); }
+window.addEventListener('storage', e => { if(e.key === 'pocketdtm-inbox' && e.newValue) rxInbox(e.newValue.replace(/^\d+\|/, '')); });
+try{ const bc = new BroadcastChannel('pocketdtm'); bc.onmessage = e => rxInbox(e.data); }catch(e){}
+
 (function init(){
   let loaded = false;
   try{ const s = localStorage.getItem('pdtm_current'); if(s){ P = migrate(JSON.parse(s)); loaded = true; } }catch(e){}
