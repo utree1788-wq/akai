@@ -762,7 +762,10 @@ function playDrum(mix, tr, p, t, vel){
       42:() => E(N(.03,'highpass',9500),.001,.45,.018), 46:() => E(N(.25,'highpass',9000),.001,.38,.17),
     },
   };
-  const kv = V[kid] && V[kid][p]; if(kv){ kv(); return; }
+  const vv = pc.voice;
+  if(vv && vv.startsWith('x:')){ const fam = DFAM[p], f = fam && XV[fam] && XV[fam][vv.slice(2)]; if(f){ f[1]({E, N, O, M, t}, p); return; } }
+  else if(vv && vv !== 'std'){ const f2 = V[vv] && V[vv][p]; if(f2){ f2(); return; } }
+  const kv = vv === 'std' ? null : V[kid] && V[kid][p]; if(kv){ kv(); return; }
   switch(p){
     case 36: E(O('sine',155,42,.12,.55),.002,1,.45); E(N(.03,'highpass',2500),.001,.3,.015); break;
     case 38: E(N(.3,'highpass',1200),.001,.6,.2); E(O('triangle',230,150,.06,.15),.001,.55,.1); break;
@@ -1397,6 +1400,8 @@ plCv.addEventListener('touchstart', e => {
 plCv.addEventListener('pointerdown', e => {
   if(e.button > 0) return;
   const {x, y} = plLoc(e), touch = e.pointerType === 'touch';
+  const phx = plX(songMode && playing ? curTick() : songPos);
+  if(x >= PL_HEADW && !touch && !e.shiftKey && (y < RULER || Math.abs(x - phx) < 6)){ plScrubStart(e, x); return; }
   if(y < RULER){ if(x < PL_HEADW) return; plDrag = {type:'ruler', x0:x, t0:plT(x), moved:false}; plCv.setPointerCapture(e.pointerId); dragging = true; return; }
   const r = plRowAt(y);
   if(x < PL_HEADW){ plDrag = {type:'head', r, x, y, x0:x, y0:y}; return; }
@@ -1419,6 +1424,15 @@ plCv.addEventListener('pointerdown', e => {
   }
   drawPL();
 });
+
+// playhead scrub (Logic-style): drag in the ruler or grab the playhead line
+function plScrubTick(x){ const sn = e_alt ? 1 : 24; return clamp(Math.round(Math.max(0, plT(Math.max(PL_HEADW, x))) / sn) * sn, 0, songEnd()); }
+let e_alt = false;
+function plScrubStart(e, x){ e_alt = e.altKey; const was = playing; if(was) stop(); if(!songMode) setSongMode(true); plDrag = {type:'scrub', was}; plCv.setPointerCapture(e.pointerId); dragging = true; songPos = plScrubTick(x); drawPL(); updateLcd(); }
+function plScrubMove(x){ songPos = plScrubTick(x); const sl = plScroll.scrollLeft, w = plScroll.clientWidth; if(x > w - 20) plScroll.scrollLeft = sl + 12; else if(x < PL_HEADW + 10 && sl > 0) plScroll.scrollLeft = Math.max(0, sl - 12); drawPL(); updateLcd(); }
+function plScrubEnd(){ const was = plDrag && plDrag.was; dragging = false; if(was) play(); drawPL(); }
+plCv.addEventListener('mousemove', e => { if(plDrag) return; const {x, y} = plLoc(e), phx = plX(songMode && playing ? curTick() : songPos); plCv.style.cursor = x >= PL_HEADW && (y < RULER || Math.abs(x - phx) < 6) ? 'ew-resize' : ''; });
+{ const d0 = drawPL; drawPL = function(){ d0.apply(this, arguments); if(view !== 'playlist') return; const x = plX(songMode && playing ? curTick() : songPos); if(x < PL_HEADW - 1) return; plG.fillStyle = '#ff52bb'; plG.beginPath(); plG.moveTo(x - 6, 2); plG.lineTo(x + 8, 2); plG.lineTo(x + 1, RULER - 2); plG.closePath(); plG.fill(); }; }
 function placeClip(r, tick){
   const tr = P.tracks[r]; pushUndo();
   let pat = patById(tr.lastPat); if(!pat || pat.track !== tr.id) pat = newPattern(tr);
@@ -1431,6 +1445,7 @@ plCv.addEventListener('pointermove', e => {
   if(!plDrag) return;
   const {x, y} = plLoc(e), tick = plT(x), sn = plSnapT();
   switch(plDrag.type){
+    case 'scrub': plScrubMove(x); break;
     case 'ruler': if(Math.abs(x - plDrag.x0) > 8) plDrag.moved = true;
       if(plDrag.moved){ const a = Math.min(plDrag.t0, tick), b = Math.max(plDrag.t0, tick); P.loop.s = clamp(Math.floor(a / barT()), 0, P.bars - 1); P.loop.e = clamp(Math.ceil(b / barT()), P.loop.s + 1, P.bars); P.loop.on = true; updateTransport(); drawPL(); }
       break;
@@ -1455,6 +1470,7 @@ plCv.addEventListener('pointermove', e => {
 plCv.addEventListener('pointerup', e => {
   if(!plDrag) return;
   const {x, y} = plLoc(e), d = plDrag, small = (d.x0 === undefined) || Math.abs(x - d.x0) + Math.abs(y - d.y0) < 10;
+  if(d.type === 'scrub'){ plScrubEnd(); plDrag = null; dragging = false; return; }
   if(d.type === 'ruler' && !d.moved){ const was = playing && songMode; if(was) stop(); songPos = clamp(Math.floor(d.t0 / plSnapT()) * plSnapT(), 0, songEnd()); if(!songMode) setSongMode(true); if(was) play(); updateLcd(); }
   if(d.type === 'place' && small) placeClip(d.r, d.tick);
   if(d.type === 'emptyrow' && small && d.r === P.tracks.length) openAddTrack();
@@ -1619,7 +1635,7 @@ prCv.addEventListener('pointerdown', e => {
   if(e.button > 0) return;
   const tr = prTr(); if(!tr) return;
   const {x, y} = prLoc(e), touch = e.pointerType === 'touch';
-  if(y < RULER){ if(x < PR_KEYW) return; prDrag = {type:'ruler', t0:prT(x)}; return; }
+  if(y < RULER){ if(x < PR_KEYW) return; prDrag = {type:'ruler', t0:prT(x)}; try{ prCv.setPointerCapture(e.pointerId); }catch(err){} prCursor = clamp(sFloor(prDrag.t0), 0, editP().len - 1); drawPR(); return; }
   if(x < PR_KEYW){ const row = prRow(y); prDrag = {type:'key', row, x0:x, y0:y}; if(!touch){ const pp = rowToPitch(tr, row); if(pp != null) preview(tr, pp); } return; }
   const tick = prT(x), row = prRow(y); if(row < 0 || row >= rowCount(tr)) return;
   const hit = noteAt(tick, row);
@@ -1647,6 +1663,7 @@ prCv.addEventListener('pointermove', e => {
   if(!prDrag) return;
   const {x, y} = prLoc(e), tr = prTr(), tick = prT(x), row = prRow(y), sn = prSnapT();
   switch(prDrag.type){
+    case 'ruler': prDrag.t0 = tick; prCursor = clamp(sFloor(tick), 0, editP().len - 1); drawPR(); break;
     case 'draw': case 'resize': {
       const n = prDrag.note, end = Math.round(tick / sn) * sn, nd = Math.max(Math.min(sn, 384) >= 12 ? Math.min(sn, 384) : 12, end - n.t);
       if(nd !== n.d){ if(prDrag.type === 'resize' && !prDrag.moved){ pushUndo(); prDrag.moved = true; } n.d = nd; markDirty(); drawPR(); }
@@ -1725,12 +1742,115 @@ function pasteNotes(){
 }
 
 
+// ======================================================================
+// DRUM VOICE LIBRARY — each kit piece can pick its own sound
+// ======================================================================
+const DFAM = {36:'kick',35:'kick',38:'snare',40:'snare',39:'clap',37:'rim',42:'chh',44:'phh',46:'ohh',41:'tom',45:'tom',48:'tom',43:'tom',47:'tom',49:'crash',55:'crash',52:'crash',51:'ride',53:'ride',56:'cow'};
+const TOMF = {41:95,45:135,48:185,43:78,47:82};
+const KITVOICE = {r808:[36,35,38,40,39,37,42,44,46,41,45,48,49,51], r909:[36,35,38,40,39,42,46,49,51], rock:[36,38,41,45,48], jazz:[36,38,40,37,42,44,51], electro:[36,38,39,42,46]};
+// X = {E, N, O, M, t}; p = piece pitch
+const XV = {
+  kick:{
+    deep:   ['ディープ（低く長い）',       (X) => { X.E(X.O('sine',95,34,.16,1.2),.002,1,1); }],
+    punch:  ['パンチ（アタック強め）',     (X) => { X.E(X.O('sine',210,52,.045,.45),.001,1,.32); X.E(X.N(.015,'highpass',3500),.0005,.6,.008); X.E(X.O('square',1400,null,0,.008),.0005,.15,.004); }],
+    tight:  ['タイト（短く締まる）',       (X) => { X.E(X.O('sine',150,62,.04,.22),.001,1,.13); X.E(X.N(.01,'bandpass',2500,1.5),.0005,.4,.006); }],
+    boom:   ['ブーム（808より長い）',      (X) => { X.E(X.O('sine',120,38,.2,2.6),.002,1,2.2); }],
+    trap:   ['トラップ（スライド）',       (X) => { X.E(X.O('sine',160,44,.35,1.9),.002,1,1.6); X.E(X.O('square',2000,null,0,.006),.0005,.12,.003); }],
+    vintage:['ヴィンテージ（丸い）',       (X) => { X.E(X.O('triangle',115,48,.09,.5),.003,.95,.38); X.E(X.N(.06,'lowpass',500),.002,.35,.05); }],
+    room:   ['ルーム（部屋鳴り）',         (X) => { X.E(X.O('sine',125,46,.08,.6),.002,1,.45); X.E(X.N(.35,'lowpass',900),.01,.18,.3); }],
+    hard:   ['ハード（硬く歪む）',         (X) => { X.E(X.O('square',130,45,.06,.35),.001,.5,.25); X.E(X.O('sine',170,50,.05,.4),.001,.9,.3); X.E(X.N(.02,'highpass',2000),.0005,.5,.01); }],
+    sub:    ['サブ（重低音だけ）',         (X) => { X.E(X.O('sine',62,40,.1,1),.006,1,.8); }],
+    chip:   ['8bit（ゲーム風）',           (X) => { X.E(X.O('square',220,40,.07,.2),.001,.45,.14); }],
+  },
+  snare:{
+    tight:  ['タイト（高く短い）',         (X) => { X.E(X.N(.14,'highpass',2500),.001,.6,.08); X.E(X.O('triangle',330,260,.03,.08),.001,.5,.05); }],
+    fat:    ['ファット（太い胴鳴り）',     (X) => { X.E(X.O('triangle',170,130,.08,.3),.001,.85,.2); X.E(X.N(.45,'bandpass',1800,.6),.001,.7,.32); }],
+    piccolo:['ピッコロ（カンと高い）',     (X) => { X.E(X.O('triangle',520,420,.03,.1),.001,.55,.06); X.E(X.N(.18,'highpass',4000),.001,.55,.1); }],
+    rimshot:['リムショット（抜ける）',     (X) => { X.E(X.N(.2,'highpass',1600),.001,.65,.13); X.E(X.O('square',900,null,0,.03),.0005,.3,.015); X.E(X.O('triangle',250,190,.04,.12),.001,.5,.08); }],
+    trap:   ['トラップ（クラップ重ね）',   (X) => { X.E(X.N(.25,'bandpass',1900,1.2),.001,.8,.15); [0,.008,.016].forEach(d => X.E(X.N(.03,'bandpass',1200,1.5,X.t + d),.001,.5,.01,X.t + d)); }],
+    gated:  ['ゲート（80年代風）',         (X) => { const g = X.N(.32,'bandpass',2200,.5); g.gain.setValueAtTime(.0001,X.t); g.gain.exponentialRampToValueAtTime(.8,X.t+.002); g.gain.setValueAtTime(.7,X.t+.2); g.gain.exponentialRampToValueAtTime(.0001,X.t+.24); X.E(X.O('triangle',210,170,.04,.2),.001,.6,.12); }],
+    lofi:   ['ローファイ（こもる）',       (X) => { X.E(X.N(.22,'bandpass',1200,1),.002,.7,.15); X.E(X.O('sine',200,170,.04,.12),.001,.45,.08); }],
+    dnb:    ['ドラムンベース（鋭い）',     (X) => { X.E(X.N(.16,'highpass',3000),.0005,.8,.09); X.E(X.O('sine',280,190,.02,.1),.0005,.6,.05); }],
+    brushslap:['ブラシ（叩く）',          (X) => { X.E(X.N(.25,'bandpass',3800,.7),.006,.5,.16); }],
+    chip:   ['8bit（ゲーム風）',           (X) => { X.E(X.N(.12,'lowpass',6000),.001,.5,.08); X.E(X.O('square',300,150,.05,.08),.001,.3,.05); }],
+  },
+  clap:{
+    big:    ['ビッグ（大きく広がる）',     (X) => { [0,.012,.024,.036].forEach(d => X.E(X.N(.03,'bandpass',1300,1.2,X.t + d),.001,.75,.012,X.t + d)); X.E(X.N(.6,'bandpass',1300,1,X.t + .04),.001,.65,.45,X.t + .04); }],
+    snap:   ['スナップ（指パッチン）',     (X) => { X.E(X.N(.06,'bandpass',2600,2.5),.0005,.9,.03); X.E(X.O('sine',1800,null,0,.02),.0005,.2,.01); }],
+    tight:  ['タイト（短い）',             (X) => { [0,.008].forEach(d => X.E(X.N(.02,'bandpass',1700,1.5,X.t + d),.001,.8,.008,X.t + d)); X.E(X.N(.12,'bandpass',1700,1.3,X.t + .016),.001,.7,.07,X.t + .016); }],
+    room:   ['ルーム（響く）',             (X) => { [0,.015,.03].forEach(d => X.E(X.N(.03,'bandpass',1100,1.2,X.t + d),.001,.7,.012,X.t + d)); X.E(X.N(1,'bandpass',900,.7,X.t + .04),.02,.3,.8,X.t + .04); }],
+  },
+  rim:{
+    click:  ['クリック（硬い）',           (X) => { X.E(X.O('square',1900,null,0,.02),.0005,.35,.01); X.E(X.N(.02,'highpass',5000),.0005,.3,.01); }],
+    wood:   ['ウッド（木の音）',           (X) => { X.E(X.O('sine',1050,950,.02,.07),.0005,.6,.04); X.E(X.O('sine',2400,null,0,.04),.0005,.15,.02); }],
+    r909:   ['TR-909風',                   (X) => { X.E(X.O('triangle',1600,null,0,.04),.0005,.45,.02); X.E(X.N(.03,'bandpass',4000,3),.0005,.4,.015); }],
+    stick:  ['スティック（打ち合わせ）',   (X) => { X.E(X.O('sine',2600,null,0,.05),.0005,.4,.025); X.E(X.O('sine',3700,null,0,.03),.0005,.2,.015); }],
+  },
+  chh:{
+    tight:  ['タイト（チッ）',             (X) => X.E(X.N(.04,'highpass',9000),.0005,.4,.022)],
+    crisp:  ['クリスプ（明るい）',         (X) => { X.E(X.N(.07,'highpass',8000),.0005,.38,.04); X.E(X.N(.05,'bandpass',12000,2),.0005,.2,.03); }],
+    dark:   ['ダーク（重め）',             (X) => X.E(X.N(.09,'bandpass',5000,1.2),.001,.4,.06)],
+    metal:  ['メタル（金属的）',           (X) => X.E(X.M(.07,7500,10500),.0005,.1,.045)],
+    trap:   ['トラップ（細かく鋭い）',     (X) => X.E(X.N(.03,'highpass',10500),.0005,.45,.014)],
+    shaker: ['シェイカー風',               (X) => X.E(X.N(.08,'highpass',6000,1),.015,.28,.04)],
+    lofi:   ['ローファイ',                 (X) => X.E(X.N(.06,'bandpass',4500,1.5),.001,.35,.04)],
+    chip:   ['8bit（ゲーム風）',           (X) => X.E(X.N(.04,'highpass',7000),.0005,.3,.02)],
+  },
+  phh:{
+    soft:   ['ソフト',                     (X) => X.E(X.N(.05,'highpass',5500),.003,.18,.03)],
+    chick:  ['チック（はっきり）',         (X) => { X.E(X.N(.04,'highpass',7000),.001,.3,.02); X.E(X.N(.02,'bandpass',800,1),.001,.12,.015); }],
+    metal:  ['メタル',                     (X) => X.E(X.M(.05,6500,9000),.001,.08,.03)],
+  },
+  ohh:{
+    long:   ['ロング（よく伸びる）',       (X) => X.E(X.N(.9,'highpass',7000),.001,.32,.7)],
+    dark:   ['ダーク',                     (X) => X.E(X.N(.6,'bandpass',5200,1),.001,.35,.45)],
+    metal:  ['メタル（808系）',            (X) => X.E(X.M(.7,6800,9800),.001,.09,.5)],
+    sizzle: ['シズル（ジャー）',           (X) => { X.E(X.N(.7,'highpass',8500),.001,.3,.55); X.E(X.N(.6,'bandpass',11000,2),.001,.15,.45); }],
+    short:  ['ショート（半開き）',         (X) => X.E(X.N(.25,'highpass',7500),.001,.32,.16)],
+  },
+  tom:{
+    deep:   ['ディープ（深く低い）',       (X, p) => { const f = TOMF[p] * .75; X.E(X.O('sine',f * 1.5,f,.22,.9),.002,.95,.7); X.E(X.N(.05,'lowpass',900),.001,.18,.03); }],
+    electro:['エレクトロ（ピュー）',       (X, p) => { const f = TOMF[p]; X.E(X.O('sine',f * 3,f * .8,.25,.5),.001,.9,.38); }],
+    r808:   ['TR-808風（丸い）',           (X, p) => { const f = TOMF[p] * 1.05; X.E(X.O('sine',f * 1.15,f,.1,.8),.002,.95,.6); }],
+    concert:['コンサート（明るい）',       (X, p) => { const f = TOMF[p] * 1.2; X.E(X.O('triangle',f * 1.4,f,.1,.45),.001,.8,.32); X.E(X.N(.08,'bandpass',2500,1),.001,.22,.05); }],
+    roto:   ['ロートタム（高い）',         (X, p) => { const f = TOMF[p] * 1.8; X.E(X.O('sine',f * 1.3,f,.08,.35),.001,.85,.24); }],
+    simmons:['シモンズ（80年代電子）',     (X, p) => { const f = TOMF[p] * 1.3; X.E(X.O('square',f * 2,f * .7,.3,.6),.001,.35,.45); X.E(X.O('sine',f * 2,f * .7,.3,.6),.001,.7,.45); }],
+  },
+  crash:{
+    bright: ['ブライト（明るい）',         (X) => { X.E(X.N(1.8,'highpass',6000),.002,.38,1.5); X.E(X.N(1.5,'bandpass',11000,1),.002,.2,1.1); }],
+    dark:   ['ダーク（太く暗い）',         (X) => { X.E(X.N(2.2,'bandpass',3800,.7),.003,.42,1.9); }],
+    trash:  ['トラッシュ（汚れた）',       (X) => { X.E(X.N(1.1,'bandpass',4500,2),.001,.5,.8); X.E(X.M(.8,4000,7000),.001,.07,.6); }],
+    swell:  ['スウェル（逆回転風）',       (X) => { const g = X.N(1.2,'highpass',5000); g.gain.setValueAtTime(.0001,X.t); g.gain.exponentialRampToValueAtTime(.45,X.t+.9); g.gain.exponentialRampToValueAtTime(.0001,X.t+1); }],
+    splash: ['スプラッシュ（短い）',       (X) => X.E(X.N(.6,'highpass',7000),.001,.42,.4)],
+  },
+  ride:{
+    dry:    ['ドライ（粒立ち）',           (X) => { X.E(X.N(.6,'bandpass',9000,2),.001,.3,.4); X.E(X.O('sine',5600,null,0,.25),.001,.05,.18); }],
+    sizzle: ['シズル（ジャーと伸びる）',   (X) => { X.E(X.N(1.8,'bandpass',8000,1),.001,.3,1.5); X.E(X.N(1.6,'highpass',11000),.001,.12,1.3); }],
+    bell:   ['ベル（カーン）',             (X) => { X.E(X.O('sine',2600,null,0,1),.001,.25,.8); X.E(X.O('sine',3900,null,0,.6),.001,.1,.5); X.E(X.N(.3,'bandpass',8000,3),.001,.1,.2); }],
+    metal:  ['メタル（808系）',            (X) => X.E(X.M(1,5500,9500),.001,.06,.8)],
+  },
+  cow:{
+    r808:   ['TR-808風',                   (X) => { X.E(X.O('square',540,null,0,.35),.001,.2,.3); X.E(X.O('square',800,null,0,.35),.001,.2,.3); }],
+    high:   ['ハイ（高い）',               (X) => { X.E(X.O('square',850,null,0,.2),.001,.2,.15); X.E(X.O('square',1270,null,0,.2),.001,.15,.15); }],
+    latin:  ['ラテン（生っぽい）',         (X) => { X.E(X.O('triangle',700,null,0,.25),.001,.45,.18); X.E(X.N(.05,'bandpass',3000,3),.001,.2,.03); }],
+  },
+};
+// list of selectable sounds for one piece: [value, label]
+function voiceList(p){
+  const out = [['', 'キットのまま'], ['std', 'スタンダード']];
+  for(const k in KITVOICE) if(KITVOICE[k].includes(p)) out.push([k, KITS[k].n.replace(/（.*/, '')]);
+  const fam = DFAM[p];
+  if(fam && XV[fam]) for(const id in XV[fam]) out.push(['x:' + id, XV[fam][id][0]]);
+  return out;
+}
+function voiceLabel(p, v){ const hit = voiceList(p).find(x => x[0] === (v || '')); return hit ? hit[1] : 'キットのまま'; }
+
 const PC_SL = [['tune','音程（半音）',-12,12,1,0],['decay','長さ（余韻）',.2,3,.05,1],['tone','明るさ',.05,1,.01,1],['vol','音量',0,2,.01,1],['pan','パン（左右）',-1,1,.05,0],['drive','歪み',0,1,.01,0]];
 const PC_INFO = '音程＝高く・低く（スネアを上げると軽く、下げると太く）。長さ＝余韻（短いとタイト、長いと広がる）。明るさ＝高音の量（下げるとこもった音）。歪み＝音を太く攻撃的に。';
 function kitOptions(sel){ return Object.entries(KITS).map(([k, v]) => `<option value="${k}" ${sel === k ? 'selected' : ''}>${v.n}</option>`).join(''); }
 function pieceRowsHTML(tr, p){
   const pc = pieceOf(tr, p);
-  return PC_SL.map(([k, l, a, b, st, d]) => `<div class="row"><label>${l}</label><input type="range" data-pk="${k}" min="${a}" max="${b}" step="${st}" value="${pc[k] ?? d}"><output>${fmt(pc[k] ?? d)}</output></div>`).join('') +
+  return `<div class="row"><label>音色の種類</label><select data-pvoice style="grid-column:2/-1">${voiceList(p).map(([v, n]) => `<option value="${v}" ${(pc.voice || '') === v ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></div><div class="pbtns"><button data-pvprev>◀ 前の音色</button><button data-pvnext>次の音色 ▶</button></div>` + PC_SL.map(([k, l, a, b, st, d]) => `<div class="row"><label>${l}</label><input type="range" data-pk="${k}" min="${a}" max="${b}" step="${st}" value="${pc[k] ?? d}"><output>${fmt(pc[k] ?? d)}</output></div>`).join('') +
     `<div class="pbtns"><button data-pcplay>▶ 試聴</button><button data-pcreset>この楽器をリセット</button></div>`;
 }
 function bindPieceRows(tr, p, root, rerender){
@@ -1740,6 +1860,13 @@ function bindPieceRows(tr, p, root, rerender){
     inp.onchange = () => { pushed = false; preview(tr, p); };
   });
   const pl = root.querySelector('[data-pcplay]'); if(pl) pl.onclick = () => preview(tr, p);
+  const vs = root.querySelector('[data-pvoice]');
+  if(vs){
+    const setV = v => { pushUndo(); tr.params.pieces = tr.params.pieces || {}; const pc = tr.params.pieces[p] = tr.params.pieces[p] || {}; if(v) pc.voice = v; else delete pc.voice; vs.value = v; markDirty(); preview(tr, p); };
+    vs.onchange = () => setV(vs.value);
+    const step = d => { const L = voiceList(p).map(x => x[0]); const i = L.indexOf(vs.value); setV(L[(i + d + L.length) % L.length]); };
+    const pv = root.querySelector('[data-pvprev]'), nx = root.querySelector('[data-pvnext]'); if(pv) pv.onclick = () => step(-1); if(nx) nx.onclick = () => step(1);
+  }
   const rs = root.querySelector('[data-pcreset]'); if(rs) rs.onclick = () => { pushUndo(); if(tr.params.pieces) delete tr.params.pieces[p]; markDirty(); rerender(); preview(tr, p); };
 }
 function kitDemo(tr){ [[36,0],[42,.12],[38,.24],[42,.36],[36,.48],[36,.6],[38,.72],[46,.84]].forEach(([p, d]) => setTimeout(() => preview(tr, p, p === 42 ? 80 : 110), d * 1000)); }
@@ -2433,7 +2560,7 @@ function openHelp(){
     <p><b>✨ マスタリング</b>：曲全体の最終仕上げ。EQ→マルチバンドコンプ→グルーコンプ→サチュレーション→ステレオ幅→リミッターの順に処理。ジャンル別プリセット、ON/OFF比較、スペクトラム、メーター付き。各項目の ⓘ で使い方を表示。</p>
     <p><b>ミキサー</b>：フェーダー、パン、リバーブ/ディレイ送り、FX（3バンドEQ・ローカット/ハイカット・コンプ・ディストーション）、メーター。MASTERにもFXあり。</p>
     <p><b>録音</b>：●を点灯 → 再生中にPCキーボード（A W S E D F T G Y H U J K、Z/Xでオクターブ）やMIDIキーボードで弾くと、編集中のパターンに入力。</p>
-    <p><b>ショートカット</b>：Space 再生 ／ F5 プレイリスト・F6 ステップ・F7 ピアノロール・F8 マスタリング・F9 ミキサー ／ Ctrl+Z / Ctrl+Shift+Z ／ Ctrl+C・V ／ Delete ／ 1 2 3 ツール切替 ／ L で PAT⇄SONG</p>
+    <p><b>ショートカット</b>：Space 再生 ／ Enter 先頭へ戻る ／ 目盛りをドラッグで再生位置を移動（Shift＋ドラッグでループ範囲） ／ F5 プレイリスト・F6 ステップ・F7 ピアノロール・F8 マスタリング・F9 ミキサー ／ Ctrl+Z / Ctrl+Shift+Z ／ Ctrl+C・V ／ Delete ／ 1 2 3 ツール切替 ／ L で PAT⇄SONG</p>
     <p><b>書き出し</b>：☰ → WAV（音声）・MIDI・曲データをまとめたZIP。MIDIは他のDAWに読み込めます。</p></div>`);
 }
 
@@ -2486,6 +2613,7 @@ document.addEventListener('keydown', e => {
   if(tag === 'input' && e.target.type !== 'range' || tag === 'select' || tag === 'textarea') return;
   const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   if(e.code === 'Space'){ e.preventDefault(); playing ? stop() : play(); return; }
+  if(e.key === 'Enter' && !mod){ e.preventDefault(); $('homeBtn').onclick(); return; }
   const fk = {F5:'playlist', F6:'step', F7:'roll', F9:'mixer', F8:'master'}[e.key]; if(fk){ e.preventDefault(); setView(fk); return; }
   if(mod && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
   if(mod && k === 'y'){ e.preventDefault(); redo(); return; }
