@@ -361,6 +361,40 @@ body.novhs .vfx{display:none}
   .strip.master{width:120px!important}
   #stepPanel{width:min(300px,38vw)!important}
 }
+
+/* ステップ画面：楽器一覧を見やすく（調整パネルは横へ／たためる、ベロシティ欄は薄く＆たためる） */
+.stp{height:24px}
+.sname{min-height:24px}
+.srow{margin-bottom:2px}
+#v-step .shint{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 4px}
+#lane{height:50px}
+.lanehead{padding:4px 0 2px}
+button.lanelab{border:1px solid #2e134c;border-radius:8px;cursor:pointer;text-align:left;min-height:0;padding:3px 6px}
+.lanehead.hid .steps{display:none}
+.lanehead.hid{background:none;padding:2px 0}
+.sptog{margin-left:auto;min-height:28px;padding:2px 10px;font-size:11px}
+#stepPanel.folded{padding-top:4px;padding-bottom:4px}
+#stepPanel.folded>:not(.phead){display:none}
+@media (min-width:760px){
+  #v-step.on{flex-direction:row}
+  #stepPanel{max-height:none;width:min(330px,34vw);border-top:none;border-left:1.5px solid var(--line)}
+  #stepPanel.folded{width:auto!important;padding:6px}
+  #stepPanel.folded .phead{flex-direction:column;align-items:stretch}
+  #stepPanel.folded .phead>:not(.sptog){display:none}
+  #stepPanel.folded .sptog{margin:0;writing-mode:vertical-rl;min-height:96px;padding:10px 4px}
+}
+@media (max-width:759px){
+  .sname{width:78px;font-size:10.5px}
+  .sname .ab{display:none}
+  #stepPanel{max-height:42%}
+  #stepPanel.folded .phead>.seg,#stepPanel.folded .phead>select{display:none}
+}
+@media (orientation:landscape) and (max-height:560px){
+  #stepPanel.folded{width:auto!important}
+  #stepPanel.folded .phead{flex-direction:column;align-items:stretch}
+  #stepPanel.folded .phead>:not(.sptog){display:none}
+  #stepPanel.folded .sptog{margin:0;writing-mode:vertical-rl;min-height:96px;padding:10px 4px}
+}
 </style>
 </head>
 <body>
@@ -1332,12 +1366,12 @@ function renderChrome(){
     const ct = trackById(curTrackId);
     const nsel = plSel.size;
     ctx.innerHTML = nsel
-      ? `<span class="lab">${nsel}個のクリップ</span><button id="cEdit">✎ 開く</button><button id="cDup">複製</button><button id="cUnique">ユニーク化</button><button id="cSplit">分割</button><button id="cDel" class="danger">削除</button>`
-      : `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button><span class="pill"><span class="dot" style="background:${ct ? ct.color : '#bfa1d9'}"></span>${ct ? esc(ct.name) : ''}</span><span class="lab">空き場所をタップでクリップ配置 ／ ダブルタップで編集</span>`;
+      ? `<span class="lab">${nsel}個のクリップ</span><button id="cEdit">✎ 開く</button><button id="cDup">複製</button><button id="cUnique">ユニーク化</button><button id="cSplit">分割</button><button id="cKey">🎼 キー</button><button id="cDel" class="danger">削除</button>`
+      : `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button><span class="pill"><span class="dot" style="background:${ct ? ct.color : '#bfa1d9'}"></span>${ct ? esc(ct.name) : ''}</span><button id="kcSong" title="曲全体のキーを変える">🎼 キー</button><span class="lab">空き場所をタップでクリップ配置 ／ ダブルタップで編集</span>`;
     tools.innerHTML = `${modeSeg(plMode)}<select id="plSnap">${PL_SNAPS.map(([n], i) => `<option value="${i}" ${i===plSnapIdx?'selected':''}>スナップ ${n}</option>`).join('')}</select>
       <button id="undoBtn">↶</button><button id="redoBtn">↷</button><button id="addTrk">＋トラック</button><span class="grow"></span><button id="zOut">－</button><button id="zIn">＋</button>`;
   } else if(view === 'roll'){
-    ctx.innerHTML = `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button>${patCtl(null)}<button id="instBtn" title="音源設定">🎛 ${et ? esc(et.name) : ''}</button>`;
+    ctx.innerHTML = `<button id="cbTog" class="${cb.show?'on':''}">🎵 コード</button>${patCtl(null)}<button id="kcBtn" title="このパターンのキーを変える">🎼 キー</button><button id="instBtn" title="音源設定">🎛 ${et ? esc(et.name) : ''}</button>`;
     tools.innerHTML = `${modeSeg(prMode)}<select id="prSnap">${PR_SNAPS.map(([n], i) => `<option value="${i}" ${i===prSnapIdx?'selected':''}>グリッド ${n}</option>`).join('')}</select>
       <select id="lenSel">${LENS.map(([n], i) => `<option value="${i}" ${i===lenIdx?'selected':''}>${i ? '長さ ' + n : n}</option>`).join('')}</select>
       <button id="undoBtn">↶</button><button id="redoBtn">↷</button><button id="editBtn">編集</button><span class="grow"></span><button id="zOut">－</button><button id="zIn">＋</button>`;
@@ -1386,6 +1420,7 @@ function renderChrome(){
   on('tplBtn2', openTemplates);
   on('cEdit', () => { const c = [...plSel][0]; if(c) openClip(c); });
   on('cDup', dupClips); on('cUnique', uniqueClips); on('cSplit', splitClips);
+  on('cKey', () => openKeySheet('clips')); on('kcSong', () => openKeySheet('song')); on('kcBtn', () => openKeySheet('pat'));
   on('cDel', () => { pushUndo(); deleteClips([...plSel]); markDirty(); });
 }
 function guessKey(){ const p = editP(); if(!p || !p.notes.length) return null; const h = Array(12).fill(0); p.notes.forEach(n => h[n.p % 12] += n.d); let best = 0, bs = -1; for(let k = 0; k < 12; k++){ const sc = [0,2,4,5,7,9,11].reduce((s, i) => s + h[(k + i) % 12], 0); if(sc > bs){ bs = sc; best = k; } } return best; }
@@ -1909,12 +1944,13 @@ function openEditSheet(){
     <div style="color:var(--dim);font-size:12px">選択中: ${prSel.size}個 ／ ${esc(p.name)}（${esc(tr.name)}）</div>
     <h3>選択</h3><div class="btns"><button data-a="all">全選択</button><button data-a="none">選択解除</button></div>
     <h3>コピー・貼り付け</h3><div class="btns"><button data-a="copy">コピー</button><button data-a="cut">カット</button><button data-a="paste">カーソル位置に貼り付け</button><button data-a="dup">右に複製</button><button data-a="del" class="danger">削除</button></div>
-    <h3>音程・タイミング</h3><div class="btns"><button data-a="up1">半音↑</button><button data-a="dn1">半音↓</button><button data-a="up12">オクターブ↑</button><button data-a="dn12">オクターブ↓</button><button data-a="quant">クオンタイズ</button><button data-a="len2">長さ×2</button><button data-a="len05">長さ÷2</button><button data-a="legato">レガート</button><button data-a="chord">3和音にする</button><button data-a="humanize">ヒューマナイズ</button></div>
+    <h3>音程・タイミング</h3><div class="btns"><button data-a="up1">半音↑</button><button data-a="dn1">半音↓</button><button data-a="up12">オクターブ↑</button><button data-a="dn12">オクターブ↓</button><button data-a="quant">クオンタイズ</button><button data-a="len2">長さ×2</button><button data-a="len05">長さ÷2</button><button data-a="legato">レガート</button><button data-a="chord">3和音にする</button><button data-a="humanize">ヒューマナイズ</button><button data-a="key">🎼 パターンのキー変更…</button></div>
     <h3>ベロシティ（音の強さ）</h3>
     ${rowSlider('vel','選択ノート',1,127,1,prSel.size ? Math.round([...prSel].reduce((s, n) => s + n.v, 0) / prSel.size) : defVel)}
     ${rowSlider('defv','新規ノート',1,127,1,defVel)}
     <div style="color:var(--dim);font-size:11px">オレンジの細線＝貼り付け位置（上の目盛りをタップで移動）</div>`, b => {
     const act = a => {
+      if(a === 'key'){ closeSheet(); openKeySheet('pat'); return; }
       if(a === 'all') p.notes.forEach(n => prSel.add(n));
       else if(a === 'none') prSel.clear();
       else if(a === 'copy' || a === 'cut'){ const s = selOrToast(); if(!s) return; const m = Math.min(...s.map(n => n.t)); clip = s.map(n => ({...n, t:n.t - m})); if(a === 'cut'){ pushUndo(); deleteNotes(s); markDirty(); } toast(`${s.length}個を${a === 'cut' ? 'カット' : 'コピー'}`); }
@@ -2268,6 +2304,11 @@ function paintCell(b, p){
   b.classList.toggle('on', !!n); b.classList.toggle('gh', !!n && n.v <= 50); b.classList.toggle('ac', !!n && n.v >= 115);
   b.classList.toggle('sel', !!n && ST.sel.has(n)); b.innerHTML = cellInner(n);
 }
+// ステップ画面の見やすさ設定（ベロシティ欄・調整パネルのたたみ）
+const stepSide = () => window.matchMedia('(min-width:760px)').matches || window.matchMedia('(orientation:landscape) and (max-height:560px)').matches;
+const stepUI = (() => { let s = null; try{ s = JSON.parse(localStorage.getItem('pdtm_stepui') || 'null'); }catch(e){}
+  return s && typeof s === 'object' ? {lane:s.lane !== false, panel:s.panel !== false} : {lane:true, panel:stepSide()}; })();
+function saveStepUI(){ try{ localStorage.setItem('pdtm_stepui', JSON.stringify(stepUI)); }catch(e){} }
 function renderStep(){
   const w = $('stepWrap'), p = editP(), tr = prTr();
   if(!p || !tr){ w.innerHTML = ''; $('stepPanel').innerHTML = ''; return; }
@@ -2295,11 +2336,12 @@ function renderStep(){
   });
   html += `<div class="srow"><button class="sname" id="moreRows" style="justify-content:center">${ST.showAll ? '▲ 少なく' : '▼ 全楽器'}</button><div class="steps"></div></div>`;
   const rowName = (STEP_ORDER.find(d => d.p === ST.row) || {}).n || '';
-  html += `<div class="srow lanehead"><span class="sname ghostname lanelab">${ST.lane === 'vel' ? 'ベロシティ' : 'タイミング'}<small>${esc(rowName)}</small></span><div class="steps"><canvas id="lane" width="10" height="10"></canvas></div></div>`;
+  html += `<div class="srow lanehead${stepUI.lane ? '' : ' hid'}"><button class="sname ghostname lanelab" id="laneTog" title="ベロシティ欄の表示／非表示">${stepUI.lane ? '▾' : '▸'} ${ST.lane === 'vel' ? 'ベロシティ' : 'タイミング'}${stepUI.lane ? `<small>${esc(rowName)}</small>` : ''}</button><div class="steps"><canvas id="lane" width="10" height="10"></canvas></div></div>`;
   w.innerHTML = html;
   stepBtns = [...w.querySelectorAll('.stp')]; stepBtns.forEach(b => paintCell(b, p));
   w.querySelectorAll('.sname[data-p]').forEach(b => b.onclick = () => { ST.row = +b.dataset.p; preview(tr, ST.row); renderStep(); });
   $('moreRows').onclick = () => { ST.showAll = !ST.showAll; renderStep(); };
+  $('laneTog').onclick = () => { stepUI.lane = !stepUI.lane; saveStepUI(); renderStep(); };
   const lane = $('lane'); lane.style.width = steps * 27 - 3 + 'px';
   bindLane(lane, p, tr); drawLane();
   renderStepPanel();
@@ -2401,7 +2443,7 @@ function renderStepPanel(){
   const el = $('stepPanel'), p = editP(), tr = prTr(); if(!el || !p || !tr || tr.kind !== 'drum'){ if(el) el.innerHTML = ''; return; }
   const rowName = (STEP_ORDER.find(d => d.p === ST.row) || {}).n || '';
   const lanes = `<div class="seg"><button data-lane="vel" class="${ST.lane === 'vel' ? 'on' : ''}">ベロシティ</button><button data-lane="off" class="${ST.lane === 'off' ? 'on' : ''}">タイミング</button></div>`;
-  let h = `<div class="phead">${lanes}<button id="tplBtn" class="primary">🥁 テンプレート</button><select id="kitSel" title="音色キット">${kitOptions(tr.params.kit || 'std')}</select></div>`;
+  let h = `<div class="phead">${lanes}<button id="tplBtn" class="primary">🥁 テンプレート</button><select id="kitSel" title="音色キット">${kitOptions(tr.params.kit || 'std')}</select><button id="spTog" class="sptog" title="調整パネルをたたむ／ひらく">${stepUI.panel ? (stepSide() ? '▶ たたむ' : '▼ たたむ') : (stepSide() ? '◀ 調整' : '▲ 調整')}</button></div>`;
   if(ST.sel.size){
     const arr = [...ST.sel], av = Math.round(arr.reduce((s, n) => s + n.v, 0) / arr.length), ao = Math.round(arr.reduce((s, n) => s + (n.off || 0), 0) / arr.length * TICK480);
     h += `<h4>選択中 ${arr.length}音</h4>
@@ -2426,8 +2468,9 @@ function renderStepPanel(){
       <h4>奏法のヒント${ibox('ghost')}<div class="dimtxt">ツールの 👻ゴースト・フラム・ラフ・ロール を選んでマスをタップ。⬚選択でまとめて数値調整。</div>
       <div class="infobox open" style="margin-top:6px">${DINFO.vel}</div>`;
   }
-  el.innerHTML = h;
-  el.querySelectorAll('[data-lane]').forEach(b => b.onclick = () => { ST.lane = b.dataset.lane; renderStep(); });
+  el.innerHTML = h; el.classList.toggle('folded', !stepUI.panel);
+  $('spTog').onclick = () => { stepUI.panel = !stepUI.panel; saveStepUI(); renderStepPanel(); requestAnimationFrame(drawLane); };
+  el.querySelectorAll('[data-lane]').forEach(b => b.onclick = () => { ST.lane = b.dataset.lane; if(!stepUI.lane){ stepUI.lane = true; saveStepUI(); } renderStep(); });
   $('tplBtn').onclick = openTemplates;
   $('kitSel').onchange = e => { pushUndo(); tr.params.kit = e.target.value; markDirty(); kitDemo(tr); toast(KITS[e.target.value].n + '：' + KITS[e.target.value].d); };
   if($('pcRowsS')) bindPieceRows(tr, ST.row, $('pcRowsS'), renderStepPanel);
@@ -2759,6 +2802,9 @@ function openHelp(){
     <p><b>プレイリスト</b>：空き場所をタップ → 選択中のパターンを配置。クリップをドラッグで移動、右端ドラッグで長さ（長くするとループ）。クリップをダブルタップで編集画面へ。同じパターンのクリップは連動するので、別々に編集したいときは「ユニーク化」。左のトラック名：タップで選択、M/S、⚙で音源設定。目盛りタップで再生位置、横ドラッグでループ範囲。</p>
     <p><b>🎵 コード（タブ）</b>：「ダイアトニック」＝キーに合うコードと役割（T/SD/D）、「応用・代理」＝セカンダリードミナント・裏コード・借用和音・テンション、「種類から作る」＝好きなルート×37種類、「定番進行」＝王道・カノン・丸サなど、「入力」＝テキストで入力。チップをタップすると下に役割と構成音の説明が出ます。</p>
     <p><b>🎵 コード</b>：ピアノロールかプレイリストで「🎵 コード」を押すとコードパッドが出ます。チップをタップで試聴、トラックの上へドラッグするとその場所にコードが置かれて鳴ります（ピアノロールでは落とした高さに合わせて配置）。入力欄にはコード名でもローマ字でも書けます：「C Am F G7」「do ram fa so7」「ド ラm ファ ソ7」、分数コード「C/E」、7th・sus4・dim・add9 なども可。▶で試聴、「配置」で並べて入力、「進行」チップでまとめてドラッグ。</p>
+    <p><b>🎼 キーを変える</b>：プレイリストでクリップを選んで「🎼 キー」、ピアノロールの「🎼 キー」、または何も選ばずに「🎼 キー」で曲全体。今のキーを音から推定して、好きなキーへまとめて移します（Cにする・半音↑↓なども）。</p>
+    <p><b>🎹 音楽理論ノートから</b>：理論ノート・コード進行100・コード表現テクのコードや進行（▶ボタン・カード）を、この画面のプレイリストのシンセ行かピアノロールへドラッグすると、その位置にコードが置かれます。スマホは理論ノート上部の「🎹 DTMへ送る」で、再生位置に置かれます。</p>
+    <p><b>🥁 ステップ画面</b>：右（スマホは下）の「たたむ」で調整パネルを、「▾ ベロシティ」でベロシティ欄をたためます。</p>
     <p><b>🥁 ドラム編集（ステップ）</b>：マスの数字がベロシティ（強さ）。下のツールで ✏️通常・👻ゴースト・❗アクセント・フラム・ラフ・ロールを選んでタップ（マウスはドラッグで連続入力）。行の名前をタップするとその楽器が選ばれ、一番下のレーンを上下にドラッグしてベロシティ／タイミング（突っ込み・モタリ）を1音ずつ調整できます。⬚選択でまとめて数値入力。右（下）のパネルで「表強・裏弱」などの強弱パターン、「2・4拍だけ遅らせ」などのノリ、ヒューマナイズ。グリッドは16分・8分3連・16分3連・32分。「🥁 テンプレート」でジャンル別の例を読み込めます。音色は、パネル上部のキット選択（スタンダード・ロック・ジャズ・808・909・エレクトロ・ローファイ・パーカッション）と、楽器ごとの音程・長さ・明るさ・音量・パン・歪みで調整。テンプレート読み込み時に「おすすめキット」が自動で選ばれ、「別のドラムトラックとして作る」でテンプレートごとに音色を分けられます。</p>
     <p><b>ステップ</b>：ドラムのパターンを16分音符のマスで打ち込み。</p>
     <p><b>ピアノロール</b>：✏️ペン＝タップで置く・タップで消す・ドラッグで移動・右端で長さ変更。⬚選択＝範囲選択して「編集」からコピー/移調/クオンタイズ/和音化など。🧽＝なぞって消去。パターンの長さは上の「長さ ± 」で変更。</p>
@@ -3258,7 +3304,7 @@ function placeChordsInPlaylist(list, r, t0){
   const tr = P.tracks[r]; if(!tr) return; if(tr.kind === 'drum') return toast('ドラムトラックにはコードを置けません');
   pushUndo();
   const total = list.length * cb.len, len = Math.max(barT(), Math.ceil(total / barT()) * barT());
-  const pat = {id:uid(), track:tr.id, name:list.length === 1 ? list[0].name : list.map(c => c.name).join('-').slice(0, 28), len, notes:[]};
+  const pat = {id:uid(), track:tr.id, name:list.length === 1 ? list[0].name : list.map(c => c.name).join('-').slice(0, 28), len, notes:[], chords:list.map(c => c.name)};
   let t = 0; list.forEach(ch => { voicing(ch, nearFor(tr)).forEach(pp => pat.notes.push({t, d:cb.len, p:pp, v:defVel})); t += cb.len; });
   P.patterns[pat.id] = pat; tr.lastPat = pat.id;
   const c = {id:uid(), t:Math.max(0, t0), auto:true, len, pat:pat.id}; tr.clips.push(c);
@@ -3559,6 +3605,109 @@ function afterLoad(reset){
   if(reset){ plScroll.scrollLeft = 0; plScroll.scrollTop = 0; }
 }
 // ======================================================================
+// キー変更（コード進行・フレーズのキーをまとめて変える）
+// ======================================================================
+const KC_MAJ = ['C','D♭','D','E♭','E','F','F♯','G','A♭','A','B♭','B'], KC_MIN = ['Cm','C♯m','Dm','E♭m','Em','Fm','F♯m','Gm','G♯m','Am','B♭m','Bm'];
+const KC_PMAJ = [6.35,2.23,3.48,2.33,4.38,4.09,2.52,5.19,2.39,3.66,2.29,2.88], KC_PMIN = [6.33,2.68,3.52,5.38,2.60,3.53,2.54,4.75,3.98,2.69,3.34,3.17];
+const kcName = k => (k.minor ? KC_MIN : KC_MAJ)[k.pc];
+// クルムハンスルのキー推定（音の長さで重みづけ）
+function kcEstimateChords(pats){
+  // コードごとの音のかたまり（同じ時刻に始まる音）から推定：音階に収まる度合い＋主和音＋V→Iの動き
+  const groups = [];
+  pats.forEach(p => { const by = {}; p.notes.forEach(n => (by[n.t] = by[n.t] || []).push(n.p)); Object.keys(by).map(Number).sort((a, b) => a - b).forEach(t => groups.push(by[t])); });
+  if(groups.length < 2) return null;
+  const G = groups.map(ps => { const lo = Math.min(...ps), pcs = [...new Set(ps.map(x => ((x % 12) + 12) % 12))], r = ((lo % 12) + 12) % 12; return {r, pcs, maj:pcs.includes((r + 4) % 12) && !pcs.includes((r + 3) % 12), min:pcs.includes((r + 3) % 12) && !pcs.includes((r + 4) % 12)}; });
+  let best = null;
+  for(let k = 0; k < 12; k++) for(const minor of [false, true]){
+    const sc = (minor ? [0,2,3,5,7,8,10,11] : [0,2,4,5,7,9,11]).map(i => (k + i) % 12);
+    let s = 0;
+    G.forEach((g, i) => {
+      s += g.pcs.filter(x => sc.includes(x)).length / g.pcs.length * 2;
+      const tonic = g.r === k && (minor ? g.min : g.maj);
+      if(tonic) s += 1.5 + (i === G.length - 1 || i === 0 ? 1 : 0);
+      const nx = G[i + 1]; if(nx && g.r === (k + 7) % 12 && nx.r === k && (minor ? nx.min : nx.maj)) s += 2.5;
+    });
+    if(!best || s > best.s) best = {pc:k, minor, s};
+  }
+  return best;
+}
+function kcEstimate(pats){
+  if(pats.some(p => Array.isArray(p.chords))){ const c = kcEstimateChords(pats); if(c) return c; }
+  const h = Array(12).fill(0); let tot = 0;
+  pats.forEach(p => p.notes.forEach(n => { h[((n.p % 12) + 12) % 12] += n.d || 24; tot++; }));
+  if(!tot) return null;
+  const corr = (prof, k) => { const mx = h.reduce((a, b) => a + b) / 12, mp = prof.reduce((a, b) => a + b) / 12; let s = 0, sx = 0, sp = 0; for(let i = 0; i < 12; i++){ const x = h[(i + k) % 12] - mx, y = prof[i] - mp; s += x * y; sx += x * x; sp += y * y; } return s / Math.sqrt(sx * sp || 1); };
+  let best = {pc:0, minor:false, r:-9};
+  for(let k = 0; k < 12; k++){ const a = corr(KC_PMAJ, k), b = corr(KC_PMIN, k); if(a > best.r) best = {pc:k, minor:false, r:a}; if(b > best.r) best = {pc:k, minor:true, r:b}; }
+  return best;
+}
+// コード名の移調（パターン名・保存したコード名用）
+const KC_SH = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'], KC_FL = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+function kcSpell(pc, key){ const flat = key.minor ? [0,2,5,7,10,3].includes(key.pc) : [0,5,10,3,8,1,6].includes(key.pc); return (flat ? KC_FL : KC_SH)[((pc % 12) + 12) % 12]; }
+function kcNamePc(n){ const b = {C:0,D:2,E:4,F:5,G:7,A:9,B:11}[n[0]]; return b + (n.includes('#') || n.includes('♯') ? 1 : 0) - (/[b♭]/.test(n.slice(1)) ? 1 : 0); }
+function kcSym(sym, st, key){
+  return String(sym).replace(/(^|[\s\-→|(（])([A-G](?:#|♯|b(?![a-z])|♭)?)([^\s\-→|/）)]*)(?:\/([A-G](?:#|♯|b|♭)?))?/g, (all, pre, r, q, b) => pre + kcSpell(kcNamePc(r) + st, key) + q + (b ? '/' + kcSpell(kcNamePc(b) + st, key) : ''));
+}
+function kcTargets(scope){
+  if(scope === 'song') return Object.values(P.patterns).filter(p => { const t = trackById(p.track); return t && t.kind !== 'drum'; });
+  if(scope === 'clips') return [...new Set([...plSel].map(c => c.pat))].map(patById).filter(p => p && trackById(p.track) && trackById(p.track).kind !== 'drum');
+  const p = editP(); return p && trackById(p.track) && trackById(p.track).kind !== 'drum' ? [p] : [];
+}
+function kcApply(pats, st, from, to, onlySel){
+  if(!st) return;
+  pushUndo();
+  // 選んだクリップだけ変える場合：他のクリップと共有しているパターンはコピーしてから変える
+  if(onlySel){
+    const map = {};
+    [...plSel].forEach(c => { const p = patById(c.pat), tr = trackOfClip(c); if(!p || tr.kind === 'drum') return; const others = P.tracks.some(t => t.clips.some(x => x.pat === p.id && !plSel.has(x)));
+      if(others){ if(!map[p.id]){ const q = JSON.parse(JSON.stringify(p)); q.id = uid(); q.name = p.name + "'"; P.patterns[q.id] = q; map[p.id] = q; } c.pat = map[p.id].id; } });
+    pats = [...new Set([...plSel].map(c => c.pat))].map(patById).filter(p => p && trackById(p.track).kind !== 'drum');
+  }
+  pats.forEach(p => {
+    p.notes.forEach(n => { let np = n.p + st; while(np > HI) np -= 12; while(np < LO) np += 12; n.p = np; });
+    if(Array.isArray(p.chords)){ const old = p.chords.join('-'); p.chords = p.chords.map(c => kcSym(c, st, to)); if(p.name === old.slice(0, 28) || p.name === old) p.name = p.chords.join('-').slice(0, 28); }
+    else if(/^[A-G]/.test(p.name)) p.name = kcSym(p.name, st, to);
+    p.key = {pc:to.pc, minor:to.minor};
+  });
+  if(cb && cb.show){ cb.key = to.pc; cb.minor = to.minor; }
+  markDirty(); renderChrome(); redrawAll(); if(view === 'roll') layoutPR(); if(view === 'playlist') layoutPL();
+  toast(`${pats.length}個のパターンを ${kcName(from)} → ${kcName(to)} に変更しました（元に戻すは ↶）`);
+}
+function openKeySheet(scope0){
+  let scope = scope0 || (view === 'playlist' && plSel.size ? 'clips' : 'pat');
+  const draw = () => {
+    const pats = kcTargets(scope);
+    const est = pats.find(p => p.key) ? pats.find(p => p.key).key : kcEstimate(pats);
+    const from = est ? {pc:est.pc, minor:est.minor} : {pc:0, minor:false};
+    const scopes = [['pat','開いているパターン'], ...(plSel.size ? [['clips',`選んだクリップ（${plSel.size}個）`]] : []), ['song','曲全体（ドラム以外の全トラック）']];
+    const keyOpts = sel => [...Array(24)].map((_, i) => { const k = {pc:i % 12, minor:i >= 12}; return `<option value="${i}" ${k.pc === sel.pc && k.minor === sel.minor ? 'selected' : ''}>${kcName(k)}</option>`; }).join('');
+    openSheet(`<h2>🎼 キーを変える<button class="x">✕</button></h2>
+      <div class="infobox open">コード進行やフレーズを、別のキーにまとめて移します（音の並び方・度数はそのまま）。音楽理論ノートからドラッグで入れたコード進行も、ここで好きなキーにできます。</div>
+      <h3>どこを変える？</h3><div class="btns" id="kcScope">${scopes.map(([k, n]) => `<button data-s="${k}" class="${scope === k ? 'primary' : ''}">${n}</button>`).join('')}</div>
+      <div style="color:var(--dim);font-size:12px;margin:4px 0">${pats.length ? `対象：${pats.length}個のパターン（${esc(pats.slice(0, 4).map(p => p.name).join('、'))}${pats.length > 4 ? '…' : ''}）` : '対象のパターンがありません（ドラム以外のパターンを開くか、クリップを選んでください）'}</div>
+      ${scope === 'clips' ? `<label style="font-size:12px;color:var(--dim)"><input type="checkbox" id="kcOnly" checked> 選んだクリップだけ変える（同じパターンを使う他のクリップはそのまま）</label>` : ''}
+      <h3>今のキー ${pats.find(p => p.key) ? '' : '<small style="color:var(--dim);font-weight:400">（音から推定。違っていたら直してください）</small>'}</h3>
+      <div class="row"><label>今のキー</label><select id="kcFrom" style="grid-column:2/-1">${keyOpts(from)}</select></div>
+      <h3>変更後のキー</h3>
+      <div class="row"><label>新しいキー</label><select id="kcTo" style="grid-column:2/-1">${keyOpts(from)}</select></div>
+      <div class="btns"><button id="kcC">${from.minor ? 'Am' : 'C'}にする</button><button data-d="-1">半音↓</button><button data-d="1">半音↑</button><button data-d="-2">全音↓</button><button data-d="2">全音↑</button><button data-d="5">4度上</button><button data-d="7">5度上</button></div>
+      <div class="row"><label>移す向き</label><select id="kcDir" style="grid-column:2/-1"><option value="near">近い方（音域をなるべく変えない）</option><option value="up">上へ</option><option value="down">下へ</option></select></div>
+      <div id="kcInfo" style="font-size:13px;margin:8px 0"></div>
+      <div class="btns"><button id="kcGo" class="primary">このキーに変える</button></div>`, b => {
+      const get = id => { const v = +$(id).value; return {pc:v % 12, minor:v >= 12}; };
+      const shift = () => { const f = get('kcFrom'), t = get('kcTo'); let d = ((t.pc - f.pc) % 12 + 12) % 12; const dir = $('kcDir').value; if(dir === 'near' && d > 6) d -= 12; if(dir === 'down' && d > 0) d -= 12; return d; };
+      const info = () => { const f = get('kcFrom'), t = get('kcTo'), d = shift(); $('kcInfo').innerHTML = f.minor !== t.minor ? '<span style="color:var(--pk)">※ メジャーとマイナーをまたぐ場合は、主音の高さだけを移します（平行調には変わりません）</span>' : (d ? `${kcName(f)} → <b>${kcName(t)}</b>（${d > 0 ? '+' : ''}${d}半音）` : '同じキーです'); };
+      b.querySelectorAll('#kcScope [data-s]').forEach(x => x.onclick = () => { scope = x.dataset.s; draw(); });
+      $('kcFrom').onchange = info; $('kcTo').onchange = info; $('kcDir').onchange = info;
+      $('kcC').onclick = () => { const f = get('kcFrom'); $('kcTo').value = f.minor ? 21 : 0; info(); };
+      b.querySelectorAll('[data-d]').forEach(x => x.onclick = () => { const t = get('kcTo'); $('kcTo').value = ((t.pc + +x.dataset.d) % 12 + 12) % 12 + (t.minor ? 12 : 0); info(); });
+      $('kcGo').onclick = () => { const d = shift(); if(!d) return toast('同じキーです'); const tp = kcTargets(scope); if(!tp.length) return toast('対象のパターンがありません'); const f = get('kcFrom'); const t = {pc:(f.pc + d + 120) % 12, minor:f.minor}; if(playing) stop(); closeSheet(); kcApply(tp, d, f, t, scope === 'clips' && $('kcOnly') && $('kcOnly').checked); };
+      info();
+    });
+  };
+  draw();
+}
+// ======================================================================
 // 他のアプリから受け取る（ドラッグ＆ドロップ / 「DTMへ送る」ボタン）
 //   POCKETDTM_RHYTHM: 律動一覧表・ドラム合体ラボ・フィルイン表（kit/samples付きもOK）
 //   POCKETDTM_RIFF:   リフ・パターン表
@@ -3675,7 +3824,8 @@ let rxHl = null;
 const rxDrawPL0 = drawPL;
 drawPL = function(){ rxDrawPL0.apply(this, arguments); const t = rxHl; if(!t || view !== 'playlist') return; const y = plY(t.row), x = Math.max(PL_HEADW, plX(t.tick)), w = Math.max(30, plX(t.tick + barT()) - x);
   plG.save(); plG.fillStyle = '#ff4fd844'; plG.strokeStyle = '#ff4fd8'; plG.lineWidth = 2; plG.setLineDash([6, 4]); plG.fillRect(x, y + 3, w, PL_ROWH - 6); plG.strokeRect(x + 1, y + 4, w - 2, PL_ROWH - 8); plG.restore(); };
-const rxIsOurs = e => e.dataTransfer && [...e.dataTransfer.types].includes('text/plain');
+const CX_MIME = 'application/x-pocketdtm-chords';
+const rxIsOurs = e => e.dataTransfer && [...e.dataTransfer.types].includes('text/plain') && ![...e.dataTransfer.types].includes(CX_MIME);
 document.addEventListener('dragover', e => {
   if(!rxIsOurs(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
   const t = rxTarget(e.clientX, e.clientY);
@@ -3685,6 +3835,7 @@ document.addEventListener('dragover', e => {
 document.addEventListener('dragleave', e => { if(e.relatedTarget === null && rxHl){ rxHl = null; drawPL(); } });
 function rxHere(){ return Math.floor(songPos / barT()) * barT(); }
 document.addEventListener('drop', e => {
+  if(e.defaultPrevented) return;
   const txt = e.dataTransfer && e.dataTransfer.getData('text/plain');
   const r = rxParse(txt), f = r ? null : rfParse(txt);
   rxHl = null; if(view === 'playlist') drawPL();
@@ -3701,13 +3852,102 @@ document.addEventListener('drop', e => {
     else rfPlace(f, null, rxHere());
   }
 });
+// ======================================================================
+// 音楽理論ノートから受け取る（コード／コード進行のドラッグ＆ドロップ / 「DTMへ送る」）
+// ======================================================================
+const CX_TAG = 'POCKETDTM_CHORDS:';
+const CX_FIX = {'maj79':'maj9','maj7911':'maj9','maj713':'maj13','maj7913':'maj13','m79':'m9','m711':'m11','m7911':'m11','m713':'m13','m7913':'m13',
+  '79':'9','7911':'11','713':'13','7913':'13','69':'69','m69':'m69','mb5':'dim','m7b5b9':'m7b5','m7b59':'m7b5','m7b511':'m7b5','m7b5b13':'m7b5',
+  'mmaj7':'mM7','mmaj':'mM7','mmaj79':'mM7','maj7#5':'augmaj7','aug7':'aug7','7#5':'aug7','7sus49':'9sus4','7sus4b9':'7sus4','sus49':'9sus4',
+  'maj7#119':'maj7#11','maj9#11':'maj7#11','7b9#9':'7alt','7#9b13':'7alt','7b9b13':'7b9','7#9#11':'7#9','7b5':'7#11','dim7b13':'dim7','madd9':'madd9','m7add11':'m11'};
+function cxChord(sym){
+  if(typeof sym !== 'string') return null;
+  const raw = sym.trim(); if(!raw) return null;
+  const direct = parseChord(raw); if(direct) return {c:direct, approx:false};
+  let s = raw.replace(/♭/g, 'b').replace(/♯/g, '#').replace(/[△Δ]/g, 'maj').replace(/[（）]/g, m => m === '（' ? '(' : ')').replace(/\s+/g, '');
+  let bass = ''; const sl = s.lastIndexOf('/'); if(sl > 0 && /^[A-G][#b]?$/.test(s.slice(sl + 1))){ bass = s.slice(sl); s = s.slice(0, sl); }
+  const m = s.match(/^([A-G][#b]?)(.*)$/); if(!m) return null;
+  const root = m[1]; let q = m[2].replace(/[(),]/g, '');
+  if(/^maj7?$/.test(q)) q = q === 'maj' ? '' : 'maj7';
+  const tryQ = qq => parseChord(root + qq + bass);
+  let c = CX_FIX[q] !== undefined ? tryQ(CX_FIX[q]) : null; if(c) return {c, approx:false};
+  c = tryQ(q); if(c) return {c, approx:false};
+  // 一番長く一致する種類に丸める（テンションは省略）
+  const keys = QUALS.map(x => x[0]).concat(Object.keys(QALIAS)).filter(Boolean).sort((a, b) => b.length - a.length);
+  for(const k of keys){ if(q.startsWith(k)){ c = tryQ(k); if(c) return {c, approx:true}; } }
+  c = tryQ(/^m(?!aj)/.test(q) ? 'm' : ''); return c ? {c, approx:true} : null;
+}
+function cxParse(s){
+  if(typeof s !== 'string') return null;
+  let d = null;
+  if(s.startsWith(CX_TAG)){ try{ d = JSON.parse(s.slice(CX_TAG.length)); }catch(e){ return null; } }
+  else { const toks = s.trim().split(/[\s,、，|｜→]+/).filter(Boolean); if(!toks.length || toks.length > 64) return null; d = {chords:toks, plain:true}; }
+  if(!d || !Array.isArray(d.chords) || !d.chords.length) return null;
+  const list = [], bad = [], approx = [];
+  d.chords.forEach(x => { const r = cxChord(String(x)); if(r){ list.push(r.c); if(r.approx) approx.push(x + '→' + r.c.name); } else bad.push(x); });
+  if(!list.length || (d.plain && bad.length)) return null;
+  return {list, bad, approx, name:d.name || ''};
+}
+function cxNote(r){ const n = []; if(r.approx.length) n.push('近い形に置換: ' + r.approx.join(' ')); if(r.bad.length) n.push('読めなかった: ' + r.bad.join(' ')); if(n.length) setTimeout(() => toast(n.join(' ／ ')), 2500); }
+function cxSynthTrack(){
+  let tr = chordTrack(); if(tr) return tr;
+  pushUndo(); tr = mkTrack('synth', 'コード', 'piano', P.tracks.length); P.tracks.push(tr); syncMix(); return tr;
+}
+function cxPlaceDefault(r){
+  if(playing) stop();
+  const tr0 = prTr();
+  if(view === 'roll' && tr0 && tr0.kind !== 'drum') placeChordsInRoll(r.list, prCursor || 0, null);
+  else { const tr = cxSynthTrack(); placeChordsInPlaylist(r.list, P.tracks.indexOf(tr), Math.floor(songPos / barT()) * barT()); }
+  cxNote(r);
+}
+function cxDrop(r, x, y){
+  if(playing) stop();
+  const tg = dropTarget(x, y);
+  if(tg && tg.bad){ toast(tg.bad + '（シンセのトラックの上に落としてください）'); return; }
+  if(tg && tg.kind === 'roll') placeChordsInRoll(r.list, tg.t, tg.pitch);
+  else if(tg && tg.kind === 'pl') placeChordsInPlaylist(r.list, tg.r, tg.t);
+  else return cxPlaceDefault(r);
+  cxNote(r);
+}
+let cxGhost = null;
+function cxGhostAt(x, y, tg){
+  if(!cxGhost){ cxGhost = document.createElement('div'); cxGhost.className = 'ghost'; document.body.appendChild(cxGhost); }
+  cxGhost.style.left = x + 'px'; cxGhost.style.top = y + 'px';
+  cxGhost.innerHTML = `🎵 コードを置く<small>${tg ? esc(tg.bad || tg.label) : (view === 'roll' ? 'ピアノロールの上で離す' : 'シンセのトラックの上で離す（それ以外は再生位置に）')}</small>`;
+  cxGhost.style.background = tg && !tg.bad ? '#ff52bc' : '#341656';
+}
+function cxGhostOff(){ if(cxGhost){ cxGhost.remove(); cxGhost = null; } if(rxHl){ rxHl = null; if(view === 'playlist') drawPL(); } }
+const cxIsOurs = e => e.dataTransfer && [...e.dataTransfer.types].includes(CX_MIME);
+document.addEventListener('dragover', e => {
+  if(!cxIsOurs(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
+  const tg = dropTarget(e.clientX, e.clientY); cxGhostAt(e.clientX, e.clientY, tg);
+  const nh = tg && tg.kind === 'pl' ? {row:tg.r, tick:tg.t} : null;
+  if(JSON.stringify(nh && [nh.row, nh.tick]) !== JSON.stringify(rxHl && [rxHl.row, rxHl.tick])){ rxHl = nh; drawPL(); }
+});
+document.addEventListener('dragleave', e => { if(e.relatedTarget === null) cxGhostOff(); });
+document.addEventListener('drop', e => {
+  const dt = e.dataTransfer; if(!dt) return;
+  const s = dt.getData(CX_MIME) || dt.getData('text/plain');
+  const isOurs = cxIsOurs(e) || (typeof s === 'string' && s.startsWith(CX_TAG));
+  if(!isOurs && (rxParse(s) || rfParse(s))) return;            // リズム・リフは既存の処理へ
+  const r = cxParse(s); cxGhostOff();
+  if(!r) return; e.preventDefault(); e.stopImmediatePropagation();
+  cxDrop(r, e.clientX, e.clientY);
+}, true);
+function cxInbox(s){
+  if(typeof s !== 'string' || !s.startsWith(CX_TAG)) return false;
+  const r = cxParse(s); if(!r) return true;
+  cxPlaceDefault(r);
+  try{ new BroadcastChannel('pocketdtm').postMessage('POCKETDTM_ACK'); }catch(e){}
+  return true;
+}
 // 「DTMへ送る」ボタン（同じサイトの別ウィンドウから）
 let rxLast = '', rxLastT = 0;
-function rxInbox(s){ const now = Date.now(); if(s === rxLast && now - rxLastT < 1500) return; rxLast = s; rxLastT = now;
+function rxInbox(s){ const now = Date.now(); if(s === rxLast && now - rxLastT < 1500) return; rxLast = s; rxLastT = now; if(cxInbox(s)) return;
   const r = rxParse(s); if(r){ if(view === 'step') rxLoadStep(r); else rxPlace(r, rxDrumTrack() || null, rxHere()); return; }
   const f = rfParse(s); if(f){ if(view === 'roll') rfLoadRoll(f); else rfPlace(f, null, rxHere()); } }
 window.addEventListener('storage', e => { if(e.key === 'pocketdtm-inbox' && e.newValue) rxInbox(e.newValue.replace(/^\d+\|/, '')); });
-try{ const bc = new BroadcastChannel('pocketdtm'); bc.onmessage = e => rxInbox(e.data); }catch(e){}
+try{ const bc = new BroadcastChannel('pocketdtm'); bc.onmessage = e => { if(e.data !== 'POCKETDTM_ACK') rxInbox(e.data); }; }catch(e){}
 
 (function init(){
   let loaded = false;
@@ -3717,6 +3957,9 @@ try{ const bc = new BroadcastChannel('pocketdtm'); bc.onmessage = e => rxInbox(e
   setView(trackById(curTrackId).kind === 'drum' ? 'step' : 'roll');
   afterLoad(false);
   if(!loaded) setTimeout(openHelp, 300);
+  // 音楽理論ノートの「DTMへ送る」で開かれたとき：届いていたコードを受け取る
+  try{ const ib = localStorage.getItem('pocketdtm-inbox') || '', m = ib.match(/^(\d+)\|(.*)$/s);
+    if(m && Date.now() - +m[1] < 20000 && m[2].startsWith(CX_TAG)){ localStorage.removeItem('pocketdtm-inbox'); setTimeout(() => cxInbox(m[2]), 600); } }catch(e){}
   (async () => {
     try{
       const [db, user] = await Promise.all([claudeUse('db'), claudeUse('user')]);
