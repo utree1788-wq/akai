@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>赤ペン俳句道場 ― プレバト流テクニック帖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f1e7; --paper2:#efe7d6; --ink:#25211c; --ink2:#5e5547; --line:#d9cdb6;
+  --red:#c8361f; --red-soft:#f3d9d2; --green:#3d6b4f; --gold:#a8822e; --card:#fffdf8;
+  --mincho:"Shippori Mincho",serif; --goth:"Zen Kaku Gothic New",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--goth);line-height:1.75;font-size:15px;
+  background-image:radial-gradient(rgba(120,90,40,.05) 1px,transparent 1px);background-size:5px 5px}
+header{padding:28px 20px 10px;max-width:1080px;margin:0 auto;display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.seal{width:62px;height:62px;border:3px solid var(--red);color:var(--red);font-family:var(--mincho);font-weight:800;
+  display:grid;place-items:center;font-size:15px;line-height:1.1;text-align:center;transform:rotate(-4deg);border-radius:6px;flex:none}
+h1{font-family:var(--mincho);font-weight:800;font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:.04em}
+.sub{color:var(--ink2);font-size:13px;margin:2px 0 0}
+nav{position:sticky;top:0;z-index:5;background:rgba(246,241,231,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:8px 14px}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink2);padding:7px 14px;border-radius:999px;font-weight:500;font-size:14px}
+nav a.on{background:var(--ink);color:var(--paper)}
+main{max-width:1080px;margin:0 auto;padding:22px 20px 80px}
+section{display:none} section.on{display:block}
+h2{font-family:var(--mincho);font-size:24px;margin:6px 0 4px}
+.lead{color:var(--ink2);margin:0 0 20px;max-width:760px}
+.note{font-size:12.5px;color:var(--ink2);background:var(--paper2);border-left:3px solid var(--gold);padding:10px 14px;border-radius:4px;margin:18px 0}
+/* timeline */
+.tl{position:relative;margin:10px 0 0 8px;padding-left:24px;border-left:2px solid var(--line)}
+.tl .ev{position:relative;margin:0 0 20px}
+.tl .ev::before{content:"";position:absolute;left:-31px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--red)}
+.tl .yr{font-family:var(--mincho);font-weight:800;color:var(--red);font-size:15px}
+.tl .ev p{margin:2px 0 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.box h3{font-family:var(--mincho);margin:0 0 8px;font-size:17px}
+.ladder{display:flex;flex-direction:column-reverse;gap:6px}
+.rung{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:6px;background:var(--paper2);font-size:14px}
+.rung b{font-family:var(--mincho)}
+.rung.top{background:var(--ink);color:var(--paper)}
+.seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.seasons div{text-align:center;padding:10px 4px;border-radius:8px;font-family:var(--mincho);font-weight:700;color:#fff}
+.seasons small{display:block;font-family:var(--goth);font-weight:400;font-size:11px;opacity:.9}
+/* techniques */
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+input[type=search],input[type=text],textarea{font:inherit;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 12px;color:var(--ink)}
+input[type=search]{flex:1;min-width:200px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink2)}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;position:relative;display:flex;flex-direction:column;gap:8px}
+.card .no{font-family:var(--mincho);color:var(--red);font-weight:800;font-size:13px}
+.card h3{font-family:var(--mincho);font-size:18px;margin:0;line-height:1.4}
+.card .cat{font-size:11px;color:var(--ink2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;align-self:flex-start}
+.card p{margin:0;font-size:14px}
+.star{position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#c9bca3}
+.star.on{color:var(--gold)}
+.ba{border-top:1px dashed var(--line);padding-top:10px;margin-top:2px;display:grid;gap:6px}
+.ku{font-family:var(--mincho);font-size:17px;letter-spacing:.06em}
+.ku.before{color:var(--ink2);text-decoration:line-through;text-decoration-color:rgba(200,54,31,.55);text-decoration-thickness:1.5px}
+.ku.after{color:var(--red);font-weight:700}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--ink2)}
+.why{font-size:13px;background:var(--red-soft);border-radius:6px;padding:8px 10px}
+.chk{font-size:12.5px;color:var(--green)}
+/* drill */
+.drill{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:720px}
+.drill .q{font-family:var(--mincho);font-size:26px;letter-spacing:.08em;margin:6px 0 14px;line-height:1.5}
+.drill textarea{width:100%;min-height:70px;font-family:var(--mincho);font-size:18px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button.b{font:inherit;font-weight:700;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;background:var(--ink);color:var(--paper)}
+button.b.red{background:var(--red)} button.b.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.reveal{margin-top:16px;display:none} .reveal.on{display:block}
+.score{font-size:13px;color:var(--ink2)}
+/* checker */
+.ck{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.ck{grid-template-columns:1fr}.seasons{grid-template-columns:repeat(2,1fr)}}
+.ck label{font-size:13px;font-weight:700;display:block;margin:10px 0 4px}
+.ck textarea,.ck input{width:100%}
+.res{display:flex;flex-direction:column;gap:8px}
+.r{border-radius:8px;padding:10px 12px;font-size:14px;border:1px solid var(--line);background:var(--card)}
+.r.warn{border-color:#e3b3a7;background:#fbefeb}
+.r.ok{border-color:#b9d1bf;background:#eef5ef}
+.r.info{background:var(--paper2)}
+.r b{font-family:var(--mincho)}
+.r a{color:var(--red)}
+.mora{display:flex;gap:8px;margin-top:6px}
+.mora span{flex:1;text-align:center;border-radius:6px;padding:6px;background:var(--paper2);font-weight:700}
+.mora span.bad{background:var(--red-soft);color:var(--red)}
+/* glossary */
+dl.gl{display:grid;grid-template-columns:150px 1fr;gap:10px 18px;margin:0}
+dl.gl dt{font-family:var(--mincho);font-weight:700;color:var(--red)}
+dl.gl dd{margin:0}
+@media(max-width:600px){dl.gl{grid-template-columns:1fr}dl.gl dd{margin-bottom:8px}}
+footer{max-width:1080px;margin:0 auto;padding:0 20px 40px;font-size:12px;color:var(--ink2)}
+.flash{outline:3px solid var(--red);outline-offset:2px;transition:outline .3s}
+</style>
+</head>
+<body>
+<header>
+  <div class="seal">赤ペン<br>道場</div>
+  <div>
+    <h1>赤ペン俳句道場</h1>
+    <p class="sub">『プレバト!!』俳句コーナーでくり返し教えられてきた考え方を、テクニック・添削ドリル・セルフチェックでまとめた手帖</p>
+  </div>
+</header>
+<nav><div class="in" id="nav">
+  <a href="#history">あゆみ</a>
+  <a href="#techniques">テクニック帖</a>
+  <a href="#drill">添削ドリル</a>
+  <a href="#checker">セルフ添削</a>
+  <a href="#glossary">用語集</a>
+</div></nav>
+
+<main>
+<!-- HISTORY -->
+<section id="history">
+  <h2>俳句コーナーのあゆみ</h2>
+  <p class="lead">番組がはじまってから今まで、俳句コーナーがどう育ってきたかと、査定のしくみ。</p>
+  <div class="tl">
+    <div class="ev"><div class="yr">2012年10月</div><p>『プレバト!!』放送開始（MBS／TBS系・木曜夜7時）。芸能人の才能をプロが査定するバラエティ。</p></div>
+    <div class="ev"><div class="yr">2013年11月</div><p>俳人・夏井いつき先生が初登場。視聴率が苦しい時期に、番組にとって「最後のカード」として始まったコーナーだと、総合演出が振り返っている。</p></div>
+    <div class="ev"><div class="yr">初期〜</div><p>大御所の句でも容赦なく直す添削と、梅沢富美男さんとの言い合いが名物に。査定は作者名を伏せて行うため、酷評した句が大物の作品だった、という場面もお約束になった。</p></div>
+    <div class="ev"><div class="yr">昇級・段位制度</div><p>才能アリ → 特待生（級）→ 名人（段）→ 永世名人と上がっていく制度ができ、昇格試験・一斉査定・抜き打ちテストなどの企画が増える。</p></div>
+    <div class="ev"><div class="yr">タイトル戦</div><p>名人・特待生が季節ごとに競うタイトル戦（春・夏・秋・冬）が定番に。決勝の句は夏井先生がじっくり講評する。</p></div>
+    <div class="ev"><div class="yr">2018年7月</div><p>全国的な俳句ブームを引っぱったとして、夏井先生が放送文化基金賞（個人・グループ部門）を受賞。</p></div>
+    <div class="ev"><div class="yr">永世名人と句集</div><p>永世名人たちは「句集の完成」を目標に一句ずつ挑む段階へ。ボツか掲載決定かが毎回の見どころ。梅沢さんは「特別永世名人」に。</p></div>
+    <div class="ev"><div class="yr">2025年夏</div><p>放送500回を突破。</p></div>
+    <div class="ev"><div class="yr">2026年1月</div><p>番組などの添削実例608句をもとにした『夏井いつきの俳句添削事典』（朝日出版社）が発売。</p></div>
+  </div>
+
+  <div class="grid2">
+    <div class="box">
+      <h3>査定のしくみ</h3>
+      <p style="margin:0 0 8px;font-size:14px">一般の挑戦者は3段階で査定され、順位が発表されます。</p>
+      <div class="ladder">
+        <div class="rung"><b>才能ナシ</b><span>発想・型から見直し</span></div>
+        <div class="rung"><b>凡人</b><span>誰でも思いつく内容</span></div>
+        <div class="rung top"><b>才能アリ</b><span>1位は特待生への道も</span></div>
+      </div>
+    </div>
+    <div class="box">
+      <h3>ランクの階段</h3>
+      <div class="ladder">
+        <div class="rung"><b>特待生</b><span>5級 → 1級</span></div>
+        <div class="rung"><b>名人</b><span>初段 → 10段</span></div>
+        <div class="rung"><b>永世名人</b><span>句集完成をめざす</span></div>
+        <div class="rung top"><b>特別永世名人</b><span>梅沢富美男さん</span></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink2);margin:8px 0 0">昇格試験では「直しなし」が条件。直しが入ると現状維持、ひどいと降格も。</p>
+    </div>
+    <div class="box">
+      <h3>季節のタイトル戦</h3>
+      <div class="seasons">
+        <div style="background:#c96a7d">春<small>俳桜戦／春光戦</small></div>
+        <div style="background:#c8361f">夏<small>炎帝戦</small></div>
+        <div style="background:#a8822e">秋<small>金秋戦</small></div>
+        <div style="background:#4a6b86">冬<small>冬麗戦</small></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink2);margin:8px 0 0">名称は時期によって変わることがあります。</p>
+    </div>
+    <div class="box">
+      <h3>添削の見方</h3>
+      <p style="margin:0;font-size:14px">一般レベルの回は「全員の添削を通して一つ学べる」ように、名人クラスはその人の目指す句に合わせて個別に、と添削の深さを変えているそうです。<br>なので、<b>自分のレベルに近い挑戦者の添削</b>から真似するのが近道。</p>
+    </div>
+  </div>
+  <div class="note">このアプリの例句（直す前・直した後）は、番組の放送句ではなく、テクニックを説明するために新しく作ったものです。放送された句と実際の添削は、番組や夏井先生の書籍でご覧ください。</div>
+</section>
+
+<!-- TECHNIQUES -->
+<section id="techniques">
+  <h2>テクニック帖</h2>
+  <p class="lead">添削でくり返し出てくるポイントを30項目に整理。☆を付けると「自分の弱点」として残ります。</p>
+  <div class="tools">
+    <input type="search" id="q" placeholder="キーワードで探す（例：季重なり、比喩、語順）">
+    <button class="chip" id="onlyStar">☆だけ</button>
+  </div>
+  <div class="tools" id="cats"></div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<!-- DRILL -->
+<section id="drill">
+  <h2>添削ドリル</h2>
+  <p class="lead">赤ペンを持つのはあなた。直す前の句を見て、自分ならどう直すか書いてから答え合わせ。</p>
+  <div class="drill">
+    <div class="score" id="dScore"></div>
+    <div class="lbl" style="margin-top:8px">直す前</div>
+    <div class="q" id="dQ"></div>
+    <textarea id="dA" placeholder="あなたの添削を書いてみよう"></textarea>
+    <div class="btns">
+      <button class="b ghost" id="dHint">ヒント</button>
+      <button class="b red" id="dShow">答え合わせ</button>
+      <button class="b" id="dNext">次の句 →</button>
+    </div>
+    <p id="dHintT" style="display:none;font-size:14px;color:var(--ink2);margin:10px 0 0"></p>
+    <div class="reveal" id="dRev">
+      <div class="lbl">添削例</div>
+      <div class="ku after" id="dAfter" style="font-size:22px"></div>
+      <div class="why" id="dWhy" style="margin-top:8px"></div>
+      <p style="font-size:13px;margin:10px 0 0">関連テクニック：<a href="#techniques" id="dLink" style="color:var(--red)"></a></p>
+      <div class="btns">
+        <button class="b ghost" data-self="1">できた！</button>
+        <button class="b ghost" data-self="0">まだまだ</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKER -->
+<section id="checker">
+  <h2>セルフ添削</h2>
+  <p class="lead">自分の句を入れると、添削でよく指摘されるポイントを機械的にチェックします。あくまで目安。最後に決めるのは自分の耳と目です。</p>
+  <div class="ck">
+    <div>
+      <label for="cT">俳句（上五・中七・下五をスペースで区切ると音数も見られます）</label>
+      <textarea id="cT" rows="3" placeholder="例：初雪や コンビニの前の 子どもたち"></textarea>
+      <label for="cY">よみ（ひらがな・任意）… 漢字があるときは入れると音数が正確に</label>
+      <input type="text" id="cY" placeholder="例：はつゆきや こんびにのまえの こどもたち">
+      <div class="btns"><button class="b red" id="cGo">チェックする</button><button class="b ghost" id="cEx">例を入れる</button></div>
+    </div>
+    <div class="res" id="cRes"><div class="r info">ここに結果が出ます。</div></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <h2>用語集</h2>
+  <p class="lead">番組の解説でよく出てくることば。</p>
+  <div class="box"><dl class="gl" id="gl"></dl></div>
+</section>
+</main>
+<footer>※ 番組の情報は公開記事をもとにまとめています。テクニックの説明はこのアプリ用に書き下ろしたもので、番組・出演者の発言の引用ではありません。</footer>
+
+<script>
+const T=[
+// 発想
+{c:"発想",t:"最初に浮かんだ発想は捨てる",p:"お題を見て一番に浮かぶことは、ほかの人も同じように浮かんでいる。凡人査定の多くは「みんなと同じ」が原因。三つ目・四つ目に出てきた発想から自分だけの景を探す。",b:"花見して桜がきれい楽しいな",a:"花冷えや子の手の甲の鉛筆跡",w:"「花見＝桜がきれい」は誰もが思う。花見から少し離れて、その日の自分の暮らしに目を移すと、オリジナルの景になる。",k:"その句、隣の人も作っていそうじゃない？"},
+{c:"発想",t:"お題・写真をそのまま描かない",p:"写真お題のときに写っているものを全部並べると、ただの説明になる。写真は入口にして、写っていない時間や人、音を想像して詠む。",b:"商店街人が多くてにぎやかだ",a:"小春日やコロッケ揚がる肉屋の香",w:"「人が多い・にぎやか」は写真を見れば分かること。写真の外の匂いを一つ取り出すと、読む人がその場に立てる。",k:"写真を見ていない人にも景が浮かぶ？"},
+{c:"発想",t:"一瞬を切り取る（時間を詰め込まない）",p:"朝から夜まで、出かけて帰るまで…と時間が流れる句は焦点がぼやける。17音で写せるのは一つの場面。シャッターを一回だけ切る。",b:"朝起きて海に出かけて日が暮れる",a:"夏の浜サンダルの砂払ひけり",w:"一日の流れを全部入れず、「帰る前に砂を払う」一瞬だけに絞った。その一瞬から一日の楽しさを読む人が想像してくれる。",k:"写真一枚に収まる場面になっている？"},
+{c:"発想",t:"言いたいことの“幹”を一つに",p:"思いが多いほど材料を盛りたくなる。伝えたい核を一つ決め、それ以外は思い切って削る。",b:"卒業の涙と笑顔と別れかな",a:"卒業や鞄の底に上履きを",w:"涙・笑顔・別れと感情を三つ並べると何も残らない。「上履きを持ち帰る」という一つの動作に絞ると、別れの実感が出る。",k:"この句の“幹”を一言で言える？"},
+// 描写
+{c:"描写",t:"説明しないで、映像を見せる",p:"「寒い」「冬だ」と言ってしまうのが説明。寒いと分かるものを見せれば、読む人が自分で寒さを感じてくれる。俳句は読者の頭の中で映像を再生させる詩。",b:"寒い朝息が白くて冬だなあ",a:"息白し始発の窓にまだ星座",w:"「寒い」「冬だなあ」は季語「息白し」が言ってくれている。浮いた音数で、始発の窓という具体的な景を足した。",k:"気持ちや状況を言葉で説明していない？"},
+{c:"描写",t:"感情語を使わない",p:"嬉しい・悲しい・寂しい・切ない…は読む人の想像を止めてしまう。気持ちは“もの”や“しぐさ”に託す。",b:"秋の夜寂しい気持ちひとり飯",a:"秋の夜の卵ひとつを割る音よ",w:"「寂しい」と言わず、卵を一つだけ割る音にひとり暮らしの静けさを託した。寂しさは読む人の側で生まれる。",k:"嬉しい・悲しい・寂しい…を使っていない？"},
+{c:"描写",t:"抽象語を具体的な“もの”へ",p:"「思い出」「未来」「希望」「青春」などの大きなことばは、句を薄くする。手で触れる・目で見える物に置き換える。",b:"思い出がよみがえる夏終わる",a:"晩夏光腕に時計の日焼け跡",w:"「思い出」は中身が見えない。腕時計の日焼け跡という具体物にすると、夏がもう終わることが自然に伝わる。",k:"そのことば、写真に写せる？"},
+{c:"描写",t:"固有名詞・数字でリアリティを出す",p:"「誰の」「どこの」「いくつの」を書くと、一気に句が本物らしくなる。ぼんやりした「人」「声」より、具体的な名前や数のほうが景が立つ。",b:"秋の駅誰かを待っている人",a:"秋の駅三番線の父の傘",w:"「誰か」「人」では読む人が何も想像できない。「三番線」「父の傘」で、待つ人と待たれる人の関係まで見えてくる。",k:"誰の？どこの？いくつ？を書けている？"},
+{c:"描写",t:"視覚以外の五感を使う",p:"俳句は目で見たことばかりになりがち。音・匂い・手触り・味・温度を一つ入れると、句が立体的になる。",b:"梅雨の庭紫陽花の色青く咲く",a:"梅雨深し濡れ縁の木の柔らかさ",w:"紫陽花の色は誰もが見る景色。濡れ縁の木が柔らかくなった手触りで、長雨の湿気を体で感じる句になった。",k:"音・匂い・触感・味のどれかが入っている？"},
+{c:"描写",t:"動詞は少なく（目安は一つ）",p:"動詞が多いと、動作の説明になり焦点が散る。いちばん大事な動きを一つだけ残す。",b:"夕焼けを見つめて歩き立ち止まる",a:"夕焼や踏切に立つ影ふたつ",w:"見つめる・歩く・立ち止まるの三つの動作を「立つ」一つに。動詞が減ったぶん、影が二つという発見が入った。",k:"動詞を数えてみよう。三つ以上ない？"},
+{c:"描写",t:"一物仕立て ― 季語だけを深く見る",p:"季語ひとつを17音まるごとで描く方法。季語の“誰も気づいていない一面”を見つけられるかが勝負。上級者向け。",b:"向日葵が咲いていますね夏の庭",a:"向日葵の首の太さを雨叩く",w:"「咲いている」はただの報告。向日葵の茎の太さ、そこに雨が当たる音まで見つめると、季語そのものの力強さが出る。",k:"季語の“新しい顔”を見つけた？"},
+{c:"描写",t:"比喩の「ような」は慎重に",p:"「〜のような」は便利だが、手垢のついた比喩（月＝お皿、雪＝綿）だと一気に凡人に。使うなら誰も見たことのない比喩を。迷ったら比喩を捨てて取り合わせに。",b:"秋の月まるでお皿のようだなあ",a:"名月や流しに皿の一枚目",w:"「月＝お皿」はよくある見立て。比喩をやめて、名月の夜に洗い物をする暮らしの景と取り合わせた。月と皿が言葉にしなくても響き合う。",k:"その比喩、前に聞いたことがない？"},
+{c:"描写",t:"擬人化はたいてい逆効果",p:"「花が笑う」「風がささやく」などの擬人化はありがちで甘くなりやすい。ものはものとして、そのまま正確に描くほうが強い。",b:"春風が優しく僕にささやいた",a:"春風や袖口に付くパンの粉",w:"「ささやく」は使い古された擬人化。春風の中にいる自分の袖口という小さな発見に変えると、春の軽やかさが本物になる。",k:"ものに人間のふるまいをさせていない？"},
+{c:"描写",t:"オノマトペは自分の耳で",p:"「しとしと」「ザーザー」など辞書にある擬音はありきたり。使うなら、自分が本当に聞いた音を新しく作るくらいの気持ちで。",b:"しとしとと雨降る夜の静けさよ",a:"春の雨こつりこつりと雨樋に",w:"「しとしと」は雨の決まり文句。雨樋に落ちる一滴ずつの音を自分の耳で聞いて、新しい擬音にした。",k:"そのオノマトペ、自分の耳で聞いた音？"},
+// 季語
+{c:"季語",t:"季重なりを避ける",p:"一句に季語が二つ以上あると、主役が分からなくなる。上級者は主従をつけて使うこともあるが、まずは季語は一つと決める。",b:"春風や桜吹雪の中をゆく",a:"春風や改札抜ける紙袋",w:"春風と桜（桜吹雪）はどちらも春の季語。春風を主役に一つ残し、紙袋という生活の物を取り合わせた。",k:"季語が二つ入っていない？"},
+{c:"季語",t:"季語に説明させない",p:"季語には季節・気温・気分の情報がすでに入っている。「暑い夏」「寒い冬」のように季語の意味を言い直すのはもったいない。",b:"炎天下暑くて汗が止まらない",a:"炎天や交番前の水たまり",w:"「炎天」はもう暑い。暑い・汗を言い直さず、炎天なのになぜか残る水たまりの不思議を描いた。",k:"季語の意味を別のことばで言い直していない？"},
+{c:"季語",t:"季語の本意を知る",p:"季語にはそのことばが長く背負ってきた気分（本意）がある。たとえば「秋の暮」はさびしさ、「春の宵」は華やぎ。本意を知ると、合う季語・合わない季語が分かる。",b:"春の宵ひとりぼっちで泣いている",a:"秋の暮ひとりの靴の音高し",w:"「春の宵」はしっとりした華やぎの季語で、孤独とは向きが合わない。さびしさを詠むなら「秋の暮」が本意に合う。",k:"季語の持つ気分と、句の気分は合っている？"},
+{c:"季語",t:"季語は“動かない”ものを選ぶ",p:"季語を別の季語に入れ替えても成り立つ句は「季語が動く」と言われ、弱い。この景にはこの季語しかない、という一つを選ぶ。",b:"夏の夜コンビニの灯にひとり立つ",a:"夜の秋コンビニの灯に羽音して",w:"「夏の夜」は「冬の夜」でも「春の夜」でも成り立ってしまう。晩夏の夜にふと秋を感じる「夜の秋」にして、灯りに寄る虫と結びつけた。",k:"季語をほかの季語にしても成り立たない？"},
+// 型
+{c:"型",t:"取り合わせ ― 季語＋12音",p:"季語（5音）と、季語と直接関係のない12音のフレーズを組み合わせる、初心者にいちばん勧められる型。二つの間の“距離”がほどよいと、映像がカットのように切り替わって響き合う。",b:"夏祭り屋台が出ていて楽しいね",a:"夏祭り母の財布の小銭入れ",w:"「夏祭り＋屋台」は近すぎて何も起こらない。12音を母の財布に飛ばすと、季語と離れているのに祭りの日の家族が見える。",k:"12音が季語の説明になっていない？"},
+{c:"型",t:"切れ字「や」は一句に一つ",p:"「や」「かな」「けり」は感動の中心を示す強い切れ字。一句に二つ入れると感動が分散する。特に「〜や」と「〜かな」の併用は避ける。",b:"秋の暮や一人の帰り道かな",a:"秋の暮ひとりの靴の音高し",w:"「や」と「かな」で二回感動している。切れ字を外し、靴音の高さという発見を言い切って終わらせた。",k:"や・かな・けりが二つ入っていない？"},
+{c:"型",t:"三段切れを避ける",p:"上五・中七・下五がそれぞれ切れて、名詞を三つ並べただけの句になると、つながりのない景がバラバラに置かれる。切れは一か所に。",b:"青空や白い雲あり蝉時雨",a:"蝉時雨白き雲より生まれけり",w:"「青空」「白い雲」「蝉時雨」がぶつ切りに並んでいた。蝉時雨を主役にして、雲から生まれるように降ってくる、と一本につなげた。",k:"三つのパーツがぶつ切りになっていない？"},
+{c:"型",t:"中八を避ける（字余りは上五で）",p:"真ん中が8音になる「中八」はリズムが崩れて目立つ。字余りがどうしても必要なら、上五でするほうが目立たない。下五の字余りも重たくなりやすい。",b:"初雪やコンビニの前の子どもたち",a:"初雪やコンビニ前の子らの声",w:"「こんびにのまえの」は8音。「の」を一つ減らして7音にし、下五も「子らの声」として耳に届く情報に変えた。",k:"中七が8音になっていない？"},
+{c:"型",t:"下五はしっかり着地させる",p:"句の最後は印象が一番残る場所。「〜だなあ」「〜しました」などのゆるい終わり方より、名詞でしっかり止める（体言止め）か、言い切る。",b:"冬の夜窓の外には雪がふる",a:"冬の夜窓の向こうに雪の音",w:"「雪がふる」は当たり前の報告で終わる。「雪の音」と名詞で止めると、静かな夜に耳をすます余韻が残る。",k:"最後の5音で余韻が生まれている？"},
+{c:"型",t:"上五をもったいなく使わない",p:"上五で「夏の日に」「ある朝に」のように何も情報のない5音を使うのはもったいない。5音あれば一つ具体物が入る。",b:"ある朝に庭の朝顔咲きにけり",a:"朝顔や今日は紺色ふたつ咲く",w:"「ある朝に」は情報がほぼゼロ。季語の朝顔を上五に置き、浮いた音数で「紺色がふたつ」という観察を入れた。",k:"上五に情報のない5音を置いていない？"},
+// ことば
+{c:"ことば",t:"語順はカメラワーク",p:"ことばの順番＝読む人の目線の動き。遠くから近く、大きいものから小さいものへ、など映像の流れに沿って並べると景がすっと入る。",b:"一粒の雨落ちてくる夏の山",a:"夏山や一粒の雨頬に来る",w:"「一粒」から「夏の山」へ、小→大と急に引くと映像が混乱する。大きな夏山から頬の一粒へとズームしていく順に並べ替えた。",k:"読む人の目線は自然に動いている？"},
+{c:"ことば",t:"「て」で因果を説明しない",p:"「〜て」「〜ので」「〜から」は理由や順番を説明してしまう。因果をつなぐより、二つの景を並べて読む人にゆだねる。",b:"雨が降って紫陽花の色濃くなる",a:"夜の雨紫陽花の藍深みゆく",w:"「雨が降って→色が濃くなる」は理屈の説明。夜の雨と藍が深まる景を並べると、理屈ではなく実感として伝わる。",k:"て・ので・から、で理由をつないでいない？"},
+{c:"ことば",t:"助詞一字にこだわる",p:"「は」「が」「の」「を」「に」の一字で、景の見え方は大きく変わる。添削で助詞一つだけ直されて化けるのはよくあること。全部の助詞を入れ替えて読み比べてみる。",b:"冬の月窓は明るく照らしけり",a:"冬の月窓を明るく照らしけり",w:"「窓は」だと窓が主役になり、何が照らすのかがぼやける。「窓を」にすると月が窓を照らす景がはっきりする。",k:"助詞を一つずつ入れ替えて読んでみた？"},
+{c:"ことば",t:"文語と口語を混ぜない",p:"「けり」「たる」などの文語と、「〜だね」「〜ている」などの口語が一句に混ざると、ちぐはぐな印象に。どちらかに統一する。",b:"春の雨傘をたたんでいたりけり",a:"春の雨傘をたたみて佇めり",w:"「ていた（口語）＋けり（文語）」が混ざっていた。文語に統一して落ち着いたしらべにした。口語で全部そろえる直し方もあり。",k:"文語と口語がまざっていない？"},
+{c:"ことば",t:"表記（漢字・ひらがな・カタカナ）も表現",p:"同じことばでも、漢字にすると硬く、ひらがなにすると柔らかく、カタカナにすると乾いた感じになる。句の気分に合わせて表記を選ぶ。",b:"蒲公英や幼子の手の小さき掌",a:"たんぽぽや幼き指のやはらかさ",w:"漢字が多いと幼い子の柔らかさと合わない。「たんぽぽ」をひらき、「手」と「掌」の重なりもやめて、指のやわらかさ一点に絞った。",k:"漢字とひらがなのバランスは句の気分と合っている？"},
+{c:"ことば",t:"主語・視点を一つに",p:"一句の中で見ている人がころころ変わると、読む人はどこに立てばいいか分からない。「誰が」「どこから」見ているかを一つに決める。",b:"君が見る花火を僕は見上げけり",a:"遠花火君の横顔ばかり見る",w:"君の視点と僕の視点が混ざっていた。僕の視点に固定し、花火ではなく君の横顔を見ている、という一点に絞った。",k:"誰の目から見た景か一つに決まっている？"}
+];
+const GL=[
+["上五・中七・下五","5・7・5の三つのパーツ。「かみご・なかしち・しもご」"],["季語","季節を表すことば。歳時記に載っている。一句に一つが基本"],["季重なり","一句に季語が二つ以上入ること"],["切れ・切れ字","句の中で意味やリズムが切れる所。「や」「かな」「けり」などの切れ字はその代表"],["取り合わせ","季語と、季語と直接関係のないフレーズを組み合わせる型"],["一物仕立て","季語ひとつだけを一句まるごとで描く型"],["措辞（そじ）","句の中のことばの選び方・配置。取り合わせの12音部分を指すことも多い"],["中八","中七が8音になること。リズムが崩れやすい"],["字余り・字足らず","定型より音が多い・少ないこと"],["三段切れ","上五・中七・下五がそれぞれ切れて、ぶつ切りになること"],["体言止め","名詞で句を終えること"],["本意（ほい）","季語が長い歴史のなかで背負ってきた本来の気分"],["季語が動く","別の季語に替えても成り立ってしまう状態。季語の選び方が甘いサイン"],["推敲","何度も読み直してことばを練り直すこと"],["歳時記","季語を季節ごとに集め、解説と例句をのせた本"],["兼題","前もって出される句のお題。番組では写真や季語がお題になる"]
+];
+// season words for checker
+const KIGO={
+"春":"春,春風,春雨,春の雨,春の宵,春光,桜,花見,花冷え,梅,菜の花,たんぽぽ,蒲公英,蝶,燕,卒業,入学,雛,霞,朧,陽炎,蛙,つくし,土筆,椿,藤,チューリップ,麗か,うららか,遅日,長閑,のどか,残雪,啓蟄,彼岸,花粉,新入生,風光る,山笑ふ,山笑う,春一番,鶯,桃の花,木の芽,若布",
+"夏":"夏,炎天,炎帝,向日葵,ひまわり,紫陽花,あじさい,蝉,蝉時雨,花火,遠花火,夕立,梅雨,五月雨,金魚,浴衣,風鈴,蛍,ビール,夏祭り,祭,夕焼,夕焼け,入道雲,雲の峰,汗,日焼け,プール,扇風機,冷房,麦茶,かき氷,新緑,若葉,青葉,薫風,朝顔,夏山,夏の海,晩夏,晩夏光,夜の秋,端居,昼寝,甚平,ラムネ,西瓜,すいか,虹,雷,水着,サングラス,蟻,蚊,螢",
+"秋":"秋,秋の暮,秋の夜,秋風,秋晴,月,名月,満月,十五夜,紅葉,もみじ,コスモス,虫,鈴虫,こおろぎ,蜩,ひぐらし,稲,稲刈,新米,柿,栗,葡萄,林檎,梨,台風,野分,赤とんぼ,蜻蛉,とんぼ,運動会,夜長,爽やか,露,霧,鰯雲,天高し,菊,彼岸花,曼珠沙華,芒,すすき,秋刀魚,さんま,紅葉狩,新酒,残暑",
+"冬":"冬,冬の夜,冬の月,雪,初雪,雪の音,霜,氷,木枯,木枯らし,凩,息白し,白息,マフラー,手袋,こたつ,炬燵,おでん,鍋,焚火,大晦日,年の暮,師走,クリスマス,聖夜,冬至,柚子湯,冬麗,小春,小春日,寒し,寒い,冬籠,水仙,枯葉,落葉,時雨,北風,ストーブ,風邪,咳,湯たんぽ,節分,寒椿,冬木立,霙,雪だるま",
+"新年":"元旦,元日,初日,初詣,正月,お年玉,雑煮,門松,初夢,書初,鏡餅,年賀状,福袋,去年今年,初春"
+};
+const KLIST=[];for(const s in KIGO)KIGO[s].split(",").forEach(w=>KLIST.push([w,s]));
+KLIST.sort((a,b)=>b[0].length-a[0].length);
+
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let stars=new Set(LS.get("akapen-stars",[]));
+let cat="すべて",onlyStar=false;
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function renderCats(){
+  const cs=["すべて",...new Set(T.map(x=>x.c))];
+  $("#cats").innerHTML=cs.map(c=>`<button class="chip ${c===cat?"on":""}" data-c="${c}">${c}</button>`).join("");
+}
+function renderCards(){
+  const q=$("#q").value.trim();
+  const list=T.map((x,i)=>({...x,i})).filter(x=>(cat==="すべて"||x.c===cat)&&(!onlyStar||stars.has(x.i))&&(!q||(x.t+x.p+x.b+x.a+x.w+x.c).includes(q)));
+  $("#cards").innerHTML=list.length?list.map(x=>`
+  <article class="card" id="t${x.i}">
+    <button class="star ${stars.has(x.i)?"on":""}" data-s="${x.i}" title="弱点として☆">${stars.has(x.i)?"★":"☆"}</button>
+    <div class="no">其の${x.i+1}</div>
+    <h3>${x.t}</h3><span class="cat">${x.c}</span>
+    <p>${x.p}</p>
+    <div class="ba">
+      <div><div class="lbl">直す前</div><div class="ku before">${x.b}</div></div>
+      <div><div class="lbl">添削例</div><div class="ku after">${x.a}</div></div>
+      <div class="why">${x.w}</div>
+      <div class="chk">✓ ${x.k}</div>
+    </div>
+  </article>`).join(""):`<p style="color:var(--ink2)">該当するテクニックがありません。</p>`;
+}
+$("#cats").addEventListener("click",e=>{const c=e.target.dataset.c;if(!c)return;cat=c;renderCats();renderCards()});
+$("#q").addEventListener("input",renderCards);
+$("#onlyStar").addEventListener("click",e=>{onlyStar=!onlyStar;e.target.classList.toggle("on",onlyStar);renderCards()});
+$("#cards").addEventListener("click",e=>{const s=e.target.dataset.s;if(s===undefined)return;const i=+s;stars.has(i)?stars.delete(i):stars.add(i);LS.set("akapen-stars",[...stars]);renderCards()});
+function jump(i){cat="すべて";onlyStar=false;$("#onlyStar").classList.remove("on");$("#q").value="";renderCats();renderCards();location.hash="techniques";show("techniques");
+  setTimeout(()=>{const el=document.getElementById("t"+i);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600)}},60)}
+
+// drill
+let order=[],pos=0,dScore=LS.get("akapen-score",{ok:0,all:0});
+function shuffle(){order=T.map((_,i)=>i).sort(()=>Math.random()-.5);pos=0}
+function drill(){const x=T[order[pos]];$("#dQ").textContent=x.b;$("#dA").value="";$("#dRev").classList.remove("on");$("#dHintT").style.display="none";$("#dHintT").textContent="ヒント："+x.k;
+  $("#dAfter").textContent=x.a;$("#dWhy").textContent=x.w;$("#dLink").textContent="其の"+(order[pos]+1)+"「"+x.t+"」";$("#dLink").onclick=e=>{e.preventDefault();jump(order[pos])};
+  $("#dScore").textContent=`第${pos+1}問／全${T.length}問　これまでの自己採点：${dScore.ok}／${dScore.all} できた`}
+$("#dHint").onclick=()=>$("#dHintT").style.display="block";
+$("#dShow").onclick=()=>$("#dRev").classList.add("on");
+$("#dNext").onclick=()=>{pos++;if(pos>=order.length)shuffle();drill()};
+$("#dRev").addEventListener("click",e=>{const v=e.target.dataset.self;if(v===undefined)return;dScore.all++;if(v==="1")dScore.ok++;LS.set("akapen-score",dScore);pos++;if(pos>=order.length)shuffle();drill()});
+
+// checker
+const tIdx=t=>T.findIndex(x=>x.t===t);
+function link(t){const i=tIdx(t);return i<0?"":` → <a href="#techniques" data-j="${i}">其の${i+1}「${t}」</a>`}
+function moraCount(s){const k=s.replace(/[^ぁ-ゖァ-ヺー]/g,"");return [...k].filter(c=>!"ゃゅょぁぃぅぇぉゎャュョァィゥェォヮ".includes(c)).length}
+function check(){
+  const raw=$("#cT").value.trim();if(!raw){$("#cRes").innerHTML='<div class="r info">句を入れてください。</div>';return}
+  const txt=raw.replace(/[\s　]+/g,"");const out=[];
+  // mora
+  const yomi=$("#cY").value.trim()||raw;const parts=yomi.split(/[\s　]+/).filter(Boolean);
+  const hasKanji=/[一-龯々]/.test(yomi);
+  if(parts.length===3&&!hasKanji){const m=parts.map(moraCount),tg=[5,7,5];
+    out.push(`<div class="r ${m.join()==="5,7,5"?"ok":"warn"}"><b>音数</b><div class="mora">${m.map((n,i)=>`<span class="${n!==tg[i]?"bad":""}">${n}</span>`).join("")}</div>${m[1]>7?"中七が"+m[1]+"音です（中八）。"+link("中八を避ける（字余りは上五で）"):m[2]>5?"下五が字余り。重たくなっていないか確認を。"+link("下五はしっかり着地させる"):m.join()==="5,7,5"?"定型どおり。":"字余り・字足らずがあります。意図したものか確認を。"}</div>`)}
+  else out.push(`<div class="r info"><b>音数</b>　上五・中七・下五をスペースで区切り、漢字があれば「よみ」欄にひらがなで入れると音数を数えます。</div>`);
+  // kigo
+  let rest=txt;const found=[];for(const [w,s] of KLIST){if(rest.includes(w)){found.push([w,s]);rest=rest.split(w).join("＿")}}
+  if(found.length===0)out.push(`<div class="r warn"><b>季語</b>　簡易辞書では季語が見つかりませんでした。無季になっていないか、歳時記で確認を。</div>`);
+  else if(found.length===1)out.push(`<div class="r ok"><b>季語</b>　「${found[0][0]}」（${found[0][1]}）</div>`);
+  else out.push(`<div class="r warn"><b>季重なりかも</b>　${found.map(f=>`「${f[0]}」（${f[1]}）`).join("・")}　主役の季語を一つに。${link("季重なりを避ける")}</div>`);
+  const seasons=new Set(found.map(f=>f[1]));if(seasons.size>1)out.push(`<div class="r warn"><b>季節がまざっている</b>　${[...seasons].join("と")}の季語が同居しています。</div>`);
+  // emotion
+  const emo=["嬉し","うれし","悲し","かなし","寂し","さびし","淋し","さみし","楽し","たのし","切な","せつな","懐かし","なつかし","美し","うつくし","きれい","綺麗","好き","幸せ","しあわせ","感動","恋し","こいし","怖","こわ","嫌"].filter(w=>txt.includes(w));
+  if(emo.length)out.push(`<div class="r warn"><b>感情語</b>　「${emo.join("」「")}」 気持ちは“もの”や“しぐさ”に託せないか。${link("感情語を使わない")}</div>`);
+  // explanation
+  const exp=["ので","から","だから","ため","なぜ","けれど","でも"].filter(w=>txt.includes(w));
+  if(exp.length)out.push(`<div class="r warn"><b>説明・理屈のことば</b>　「${exp.join("」「")}」 理由をつながず、景を並べてみては。${link("「て」で因果を説明しない")}</div>`);
+  const te=(txt.match(/て/g)||[]).length;
+  if(te>=2)out.push(`<div class="r warn"><b>「て」が${te}回</b>　動作の説明が続いていないか。${link("動詞は少なく（目安は一つ）")}</div>`);
+  // simile
+  if(/よう|様な|ごと|如|みたい|まるで/.test(txt))out.push(`<div class="r warn"><b>比喩</b>　直喩が入っています。誰も使っていない比喩か、比喩なしでも言えないか。${link("比喩の「ような」は慎重に")}</div>`);
+  // kireji
+  const ya=(raw.split(/[\s　]+/)[0]||"").endsWith("や")||/や[\s　]/.test(raw)?1:0;
+  const kana=/かな$/.test(txt)?1:0,keri=/けり/.test(txt)?1:0;
+  if(ya+kana+keri>=2)out.push(`<div class="r warn"><b>切れ字が重なっている</b>　「や」「かな」「けり」のうち2つ以上。感動の中心を一つに。${link("切れ字「や」は一句に一つ")}</div>`);
+  // bungo/kougo
+  const bun=/けり|たる|なり|ぬ$|をり|ゆく|けむ|べし|めり|たり/.test(txt),kou=/だね|だよ|です|ます|ている|ていた|でいる|だなあ|だった|ちゃう/.test(txt);
+  if(bun&&kou)out.push(`<div class="r warn"><b>文語と口語がまざっているかも</b>　${link("文語と口語を混ぜない")}</div>`);
+  if(/だなあ|だね|でした|ました|ですね/.test(txt))out.push(`<div class="r warn"><b>ゆるい終わり方</b>　報告や話しことばで終わっていないか。${link("下五はしっかり着地させる")}</div>`);
+  // abstract
+  const abs=["思い出","未来","希望","青春","夢","人生","心","気持ち","愛","幸福","永遠"].filter(w=>txt.includes(w));
+  if(abs.length)out.push(`<div class="r warn"><b>抽象的なことば</b>　「${abs.join("」「")}」 写真に写せるものに置き換えられないか。${link("抽象語を具体的な“もの”へ")}</div>`);
+  if(/ある日|ある朝|ある夜|今日も|いつも/.test(txt))out.push(`<div class="r warn"><b>情報の少ないことば</b>　「ある日」「いつも」などに音数を使っていないか。${link("上五をもったいなく使わない")}</div>`);
+  if(/誰か|人々|みんな/.test(txt))out.push(`<div class="r warn"><b>ぼんやりした人物</b>　誰なのかを具体的に。${link("固有名詞・数字でリアリティを出す")}</div>`);
+  const warns=out.filter(s=>s.includes('r warn')).length;
+  out.push(`<div class="r info"><b>最後に自分で確かめたいこと</b><br>・最初に浮かんだ発想のままになっていない？${link("最初に浮かんだ発想は捨てる")}<br>・17音で写せる一瞬に絞れている？${link("一瞬を切り取る（時間を詰め込まない）")}<br>・語順は目線の動きに沿っている？${link("語順はカメラワーク")}</div>`);
+  if(!warns)out.unshift(`<div class="r ok"><b>機械チェックでは指摘なし</b>　あとは発想と語順を自分の目で。</div>`);
+  $("#cRes").innerHTML=out.join("");
+}
+$("#cGo").onclick=check;
+$("#cEx").onclick=()=>{$("#cT").value="初雪や コンビニの前の 子どもたち";$("#cY").value="はつゆきや こんびにのまえの こどもたち";check()};
+$("#cRes").addEventListener("click",e=>{const j=e.target.dataset.j;if(j!==undefined){e.preventDefault();jump(+j)}});
+
+$("#gl").innerHTML=GL.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join("");
+
+// routing
+const views=["history","techniques","drill","checker","glossary"];
+function show(v){if(!views.includes(v))v="history";document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===v));
+  document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+v))}
+window.addEventListener("hashchange",()=>{show(location.hash.slice(1));window.scrollTo({top:0})});
+renderCats();renderCards();shuffle();drill();show(location.hash.slice(1));
+</script>
+</body>
+</html>

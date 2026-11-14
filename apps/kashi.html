@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一句から歌へ — 愛・恋・友情の歌詞帖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4efe6;--card:#fffdf8;--ink:#2a2420;--sub:#6f655c;--line:#e2d7c5;
+  --shu:#b5452f;--shu-soft:#f6e3dd;
+  --koi:#c25a7c;--ai:#c0712e;--yu:#3f7fa6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:5;background:rgba(244,239,230,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 16px 0}
+header h1{margin:0;font-family:"Noto Serif JP",serif;font-size:18px;letter-spacing:.1em;display:flex;align-items:center;gap:8px}
+.seal{display:inline-grid;place-items:center;width:24px;height:24px;background:var(--shu);color:#fff;border-radius:4px;font-size:13px;letter-spacing:0}
+nav{display:flex;margin-top:8px}
+nav a{flex:1;text-align:center;padding:8px 4px 10px;color:var(--sub);text-decoration:none;font-size:14px;font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav a.on{color:var(--ink);border-color:var(--shu)}
+main{max-width:780px;margin:0 auto;padding:16px 14px 80px}
+html.js section.view{display:none}
+html.js section.view.on{display:block}
+.nojs{background:#fdf0d8;border:1px solid #e8c97a;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+html.js .nojs{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-family:"Noto Serif JP",serif;font-size:18px;margin:0 0 8px;letter-spacing:.05em}
+h3{font-size:15px;margin:14px 0 6px}
+.muted{color:var(--sub);font-size:13px}
+.btn{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block}
+.btn.pri{background:var(--shu);border-color:var(--shu);color:#fff;font-weight:500}
+.btn.sm{font-size:12px;padding:5px 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.t-恋{--c:var(--koi)}.t-愛{--c:var(--ai)}.t-友情{--c:var(--yu)}
+.chip{display:inline-block;font-size:12px;padding:1px 9px;border-radius:20px;color:#fff;background:var(--c,#8a8076);vertical-align:1px;margin-right:4px}
+.chip.o{background:transparent;color:var(--sub);border:1px solid var(--line)}
+
+/* home */
+.hero{font-family:"Noto Serif JP",serif;font-size:15px;line-height:2}
+.songs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.song-card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;padding:14px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.song-card .ttl{font-family:"Noto Serif JP",serif;font-size:22px;font-weight:700;letter-spacing:.08em;margin:4px 0}
+.song-card .seed{font-family:"Noto Serif JP",serif;font-size:14px;color:var(--sub)}
+.wazas{counter-reset:w;list-style:none;padding:0;margin:0}
+.wazas li{counter-increment:w;padding:8px 0 8px 36px;position:relative;border-top:1px dashed var(--line)}
+.wazas li:first-child{border-top:0}
+.wazas li::before{content:counter(w);position:absolute;left:0;top:9px;width:24px;height:24px;border-radius:50%;background:var(--shu);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.wazas b{font-family:"Noto Serif JP",serif}
+
+/* song */
+.song-head{border-top:4px solid var(--c)}
+.song-head .ttl{font-family:"Noto Serif JP",serif;font-size:28px;font-weight:700;letter-spacing:.1em;margin:2px 0 6px}
+.seedbox{display:flex;gap:14px;align-items:flex-start;background:#faf6ee;border-radius:10px;padding:12px}
+.tate{writing-mode:vertical-rl;font-family:"Noto Serif JP",serif;font-size:22px;letter-spacing:.16em;line-height:1.5;height:220px;flex:0 0 auto}
+.philo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.philo > div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.philo b{display:block;font-family:"Noto Serif JP",serif;font-size:15px}
+.tarot{display:flex;gap:10px;align-items:flex-start}
+.tcard{flex:0 0 46px;height:72px;border-radius:6px;background:linear-gradient(160deg,#2f2a4a,#5a4b7a);color:#f3e6b8;display:grid;place-items:center;font-family:"Noto Serif JP",serif;font-size:11px;text-align:center;line-height:1.3;border:2px solid #d8c48a;padding:2px}
+.toggles{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px}
+.toggles button{font:inherit;font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.toggles button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sec{margin:16px 0 4px;font-size:12px;font-weight:700;color:var(--c);letter-spacing:.1em}
+.ly{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:8px;cursor:pointer;flex-wrap:wrap}
+.ly:hover{background:#faf6ee}
+.ly.sel{background:var(--shu-soft)}
+.ly .tx{font-family:"Noto Serif JP",serif;font-size:18px;letter-spacing:.04em;flex:1 1 auto}
+.ly .tx .sp{display:inline-block;width:.8em}
+.ly .rd{flex-basis:100%;font-size:12px;color:var(--sub);display:none;padding-left:2px}
+.show-rd .ly .rd{display:block}
+.ly .mo{font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;display:none;white-space:nowrap}
+.show-mo .ly .mo{display:inline}
+.ly .tg{display:none;gap:3px;flex-wrap:wrap}
+.show-tg .ly .tg{display:inline-flex}
+.tag{font-size:10.5px;padding:0 6px;border-radius:4px;background:#efe7da;color:#5e5348;white-space:nowrap}
+.tag.季語{background:#e5efe2;color:#2f6b45}.tag.哲学{background:#ece4f3;color:#5b3f86}.tag.動作{background:#f8e5d6;color:#9a4d1b}.tag.時間{background:#e1ebf3;color:#2f5f86}.tag.五感{background:#f6e1e7;color:#94405c}.tag.切れ{background:#f3e9c8;color:#7a5d0f}.tag.モノ{background:#eae6df;color:#5b5047}
+.ly .nt{flex-basis:100%;font-size:13px;color:var(--ink);background:#fff;border-left:3px solid var(--shu);padding:6px 10px;margin:4px 0 2px;border-radius:0 6px 6px 0;display:none;font-family:"Noto Sans JP"}
+.ly.sel .nt{display:block}
+
+/* philosophy page */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.pc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:12px}
+.pc .pn{font-family:"Noto Serif JP",serif;font-weight:700;font-size:16px}
+.pc .use{font-size:13px;background:#faf6ee;padding:6px 9px;border-radius:6px;margin-top:6px}
+
+/* make */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.seg button{font:inherit;font-size:13px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
+.plan{background:#faf6ee;border-radius:10px;padding:10px 14px;font-size:14px}
+.plan ol{margin:4px 0;padding-left:20px}
+.plan li{margin:3px 0}
+ul.tight li{margin:2px 0}
+textarea,input[type=text]{width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+textarea{font-family:"Noto Serif JP",serif;min-height:260px;line-height:1.9;resize:vertical}
+.ana{list-style:none;margin:0;padding:0;font-size:13px}
+.ana li{display:flex;gap:8px;padding:3px 0;border-bottom:1px dotted var(--line);align-items:baseline}
+.ana .n{flex:0 0 46px;text-align:right;color:var(--sub);font-variant-numeric:tabular-nums}
+.ana .l{font-family:"Noto Serif JP",serif;flex:1}
+.ana .sec2{color:var(--shu);font-weight:700}
+.checks{list-style:none;padding:0;margin:8px 0 0}
+.checks li{display:flex;gap:8px;padding:6px 0;font-size:13.5px;border-top:1px dashed var(--line)}
+.ic{flex:0 0 20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;margin-top:2px}
+.ic.ok{background:#4f9a6c}.ic.warn{background:var(--shu)}.ic.tip{background:#c79a2b}.ic.info{background:#8a8076}
+.drafts .d{border-top:1px solid var(--line);padding:8px 0}
+.drafts .d:first-child{border-top:0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:30}
+.toast.on{opacity:1}
+
+
+.sch{margin:14px 0 6px;font-family:"Noto Serif JP",serif;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}
+.sch .num{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);font-size:14px}
+.sch .pg{font-size:12px;color:var(--sub);font-weight:400}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px}
+.si{display:flex;gap:10px;align-items:baseline;background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.si .p{flex:0 0 28px;text-align:right;font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums}
+.si .w{font-family:"Noto Serif JP",serif;font-weight:700;font-size:16px;white-space:nowrap}
+.si .d{font-size:12px;color:var(--sub);line-height:1.4}
+.si .kwl{display:block;font-size:11.5px;color:#5b3f86;line-height:1.5;margin-top:2px}
+.si mark{background:#f3d9a8;color:inherit;padding:0 1px}
+.kwc{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 10px}
+.kwc button{font:inherit;font-size:12.5px;padding:3px 10px;border-radius:20px;border:1px solid #d9cbe8;background:#f5f0fa;color:#5b3f86;cursor:pointer}
+.si .mk{font-size:10px;color:var(--shu);margin-left:2px}
+.ks{font-size:10.5px;padding:0 6px;border-radius:4px;color:#fff;white-space:nowrap}
+.ks.春{background:#c9667e}.ks.夏{background:#3f8f6b}.ks.秋{background:#c0712e}.ks.冬{background:#4a6f9c}
+.c1{--c:#8a6d2f}.c2{--c:#6a5aa0}.c3{--c:#4b4b55}.c4{--c:#c0712e}
+.modal{position:fixed;inset:0;background:rgba(30,25,20,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:18px 18px 26px;max-height:85vh;overflow:auto}
+.sheet .big{font-family:"Noto Serif JP",serif;font-size:30px;font-weight:700;letter-spacing:.08em}
+@media (orientation:landscape){.modal{align-items:center}.sheet{border-radius:16px}}
+@media (orientation:portrait){.sgrid{grid-template-columns:1fr;gap:4px}.si{padding:5px 8px}.si .w{font-size:15px}}
+/* 縦向き：コンパクト */
+@media (orientation:portrait){
+  body{font-size:14px;line-height:1.65}
+  header{padding:6px 12px 0}
+  header h1{font-size:15px}
+  .seal{width:20px;height:20px;font-size:11px}
+  nav{margin-top:4px}
+  nav a{padding:5px 2px 7px;font-size:13px}
+  main{padding:10px 10px 60px}
+  .card{padding:12px;margin-bottom:10px}
+  h2{font-size:16px}
+  .song-head .ttl{font-size:24px}
+  .tate{font-size:19px;height:180px}
+  .philo{grid-template-columns:1fr;gap:6px}
+  .ly{padding:4px 6px}
+  .ly .tx{font-size:16px}
+  .songs{grid-template-columns:1fr;gap:8px}
+  .song-card{padding:10px 12px}
+  .song-card .ttl{font-size:19px}
+  textarea{min-height:200px}
+}
+/* 横向き：広く */
+@media (orientation:landscape){
+  header{display:flex;align-items:flex-end;gap:16px;padding:6px 20px 0}
+  header h1{padding-bottom:8px;white-space:nowrap}
+  nav{flex:1;max-width:560px;margin-left:auto;margin-top:0}
+  main{max-width:1180px;padding:16px 24px 60px}
+  .song-wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;align-items:start}
+  .song-wrap > .left{position:sticky;top:64px}
+  .make-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+  .home-wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+}
+@media (orientation:landscape) and (max-height:500px){
+  header{position:static}
+  .song-wrap > .left{position:static}
+  .tate{height:170px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="seal">歌</span>一句から歌へ</h1>
+  <nav>
+    <a href="#home" data-v="home">歌詞</a>
+    <a href="#waza" data-v="waza">技と哲学</a>
+    <a href="#make" data-v="make">作る</a>
+    <a href="#sym" data-v="sym">シンボル</a>
+  </nav>
+</header>
+
+<main>
+<div class="nojs">この画面ではプログラムが動いていません。Safari や Chrome で開いてください。</div>
+
+<!-- ============ 歌詞一覧 ============ -->
+<section class="view" id="v-home">
+ <div class="home-wrap">
+  <div>
+    <div class="card">
+      <h2>一句から歌へ</h2>
+      <p class="hero" style="margin:0">まず俳句を一つ作る。<br>その十七音を「種」にして、哲学をひとつ土に混ぜ、<br>Aメロ・Bメロ・サビへと育てる。</p>
+      <p class="muted">恋・愛・友情をテーマに、種の一句から書いたオリジナル歌詞を3曲収録しています。タップすると、各行にどの技を使ったかが表示されます。</p>
+    </div>
+    <div class="songs" id="songList"></div>
+  </div>
+  <div class="card">
+    <h2>俳句 → 歌詞 7つの技</h2>
+    <ol class="wazas">
+      <li><b>種の一句から書く</b><br>いきなり歌詞にせず、核になる場面を十七音で作る。それがサビやAメロの芯になる。</li>
+      <li><b>一曲一季</b><br>季語で季節を一つに揃える。春の曲に冬の物を混ぜない。季節が世界観になる。</li>
+      <li><b>一行に動作は一つ</b><br>「起きて・見て・思った」と並べない。いちばん映る一瞬を切り取る。</li>
+      <li><b>気持ちはモノに預ける</b><br>「寂しい」と書く代わりに、ぬるくなったラムネや濡れた切符を置く。</li>
+      <li><b>時間は数と「まま」で流す</b><br>「三つ目の駅」「十年たって」「握ったまま」。途中経過は書かない。</li>
+      <li><b>哲学は直接言わない</b><br>比喩・問い・否定で忍ばせる。「愛してると言わないかわりに」。</li>
+      <li><b>最初のモノで終わる</b><br>冒頭に出したモノを最後に戻す。俳句の「切れ」のような余韻が残る。</li>
+    </ol>
+  </div>
+ </div>
+</section>
+
+<!-- ============ 曲 ============ -->
+<section class="view" id="v-song"><div id="songBody"></div></section>
+
+<!-- ============ 技と哲学 ============ -->
+<section class="view" id="v-waza">
+  <div class="card">
+    <h2>愛・恋・友情の哲学とタロット</h2>
+    <p class="muted" style="margin-top:0">哲学の考え方を一枚のタロットに重ね、歌詞でどう使えるかを添えました。哲学の要約は私の言葉で書いたものです。</p>
+    <div class="seg" id="pSeg"></div>
+    <div class="pgrid" id="pGrid"></div>
+  </div>
+  <div class="card">
+    <h2>歌詞に効く俳句の型</h2>
+    <h3>取り合わせ</h3>
+    <p>関係なさそうな二つ（動作・モノ と 季語）を並べ、そのあいだに気持ちを生む。サビの1行目・2行目の関係に使える。<br><span class="muted">例：「朧月／きみの横顔」</span></p>
+    <h3>切れ</h3>
+    <p>名詞で止めて、一瞬の無音を作る。メロディでは休符になる場所。<br><span class="muted">例：「夏の果　またなと手を振る」</span></p>
+    <h3>五・七のリズム</h3>
+    <p>日本語は5音と7音が口に乗りやすい。メロディを先に作る場合も、言葉を5・7のまとまりに区切るとはめやすい。曲画面の「音数」ボタンで各行の音数を確認できます。</p>
+    <h3>カメラワーク</h3>
+    <p>Aメロは近景（指・切符・やかん）、サビで遠景（月・花火・冬）に引く。映像の広がりがサビの開放感になる。</p>
+  </div>
+</section>
+
+<!-- ============ 作る ============ -->
+<section class="view" id="v-make">
+ <div class="make-wrap">
+  <div>
+    <div class="card">
+      <h2>① テーマと哲学を選ぶ</h2>
+      <div class="seg" id="mTheme"></div>
+      <div class="seg" id="mPhil"></div>
+      <div id="mPhilInfo"></div>
+    </div>
+    <div class="card">
+      <h2>② 季節を決める</h2>
+      <div class="seg" id="mSeason"></div>
+      <div class="muted" id="mKigo"></div>
+    </div>
+    <div class="card">
+      <h2>③ 設計図</h2>
+      <div class="plan" id="mPlan"></div>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <h2>④ 書く</h2>
+      <input type="text" id="mTitle" placeholder="タイトル">
+      <p class="muted" style="margin:8px 0 4px">［サビ］のように［］で囲んだ行はセクション名として扱います。音数は漢字1字を2音として数える<b>目安</b>です。</p>
+      <textarea id="mText" placeholder="［種の一句］&#10;傘たたむ指のためらひ朧月&#10;&#10;［Aメロ］&#10;改札で 傘をたたんだ&#10;…"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="mCopy">コピー</button>
+        <button class="btn" id="mNew">新しく書く</button>
+        <button class="btn pri" id="mSave" style="margin-left:auto">保存</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>⑤ 確かめる</h2>
+      <ul class="ana" id="mAna"></ul>
+      <ul class="checks" id="mChecks"></ul>
+    </div>
+    <div class="card">
+      <h2>保存した歌詞</h2>
+      <div class="drafts" id="mDrafts"></div>
+    </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ シンボル（写真の本の目次） ============ -->
+<section class="view" id="v-sym">
+  <div class="card">
+    <h2>絵画のシンボル 目次ノート</h2>
+    <p class="muted" style="margin-top:0">写真の本の目次（4章・48項目）と、各項目のキーワードをまとめました。数字は本のページです。季節のマークは歳時記で季語になるもの。項目をタップすると、自分用メモを書いたり歌詞に入れたりできます。</p>
+    <input type="text" id="sq" placeholder="検索（例：愛、復活、忠誠、死）">
+    <div class="kwc" id="sQuick"></div>
+    <div class="seg" id="sSeg"></div>
+    <div id="sList"></div>
+  </div>
+  <div class="card">
+    <h2>本のメモ</h2>
+    <ul class="tight" style="margin:0;padding-left:20px;font-size:13.5px">
+      <li>扉絵（1ページ）：《書斎の聖ヒエロニムス》アントネッロ・ダ・メッシーナ、1475年頃、油彩／シナノキ、45.7×36.2cm</li>
+      <li>表紙側の図版：84ページ「蝶」で解説している《アモルとプシュケ》より</li>
+      <li>巻末：参考文献 258／画像出典一覧 263／謝辞 266／索引 267</li>
+    </ul>
+  </div>
+</section>
+</main>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 歌詞データ =====================
+   各行: [歌詞, よみ, タグ(空白区切り), 解説] */
+const SONGS=[
+{id:'oboro',title:'朧',theme:'恋',season:'春',
+ seed:{t:'傘たたむ指のためらひ朧月',r:'かさたたむ ゆびのためらい おぼろづき',note:'動作は「たたむ」一つ。迷いを「ためらひ」と指に預け、朧月で“輪郭のはっきりしない恋”に重ねた。'},
+ phil:{name:'プラトン『饗宴』のエロス',body:'人はもともと一つだった体を二つに分けられ、失われた片割れを探し続ける。恋とは「欠けているもの」を求める力だ、という考え。'},
+ tarot:{name:'月',body:'ぼんやりした光、見えない不安、揺らぎ。近づいても正体がつかめない恋の象徴として使った。'},
+ sections:[
+  ['Aメロ',[
+   ['改札で 傘をたたんだ','かいさつで かさをたたんだ','モノ 動作','場所を名詞一つで示し、動作は「たたんだ」だけ。五・七で俳句のリズム。'],
+   ['きみの指が 少しためらう','きみのゆびが すこしためらう','動作','「迷っている」と心を書かず、指の動きで見せる。'],
+   ['春の宵 濡れた切符を','はるのよい ぬれたきっぷを','季語 モノ','季語「春の宵」で季節と時間帯を一度に伝える。'],
+   ['ポケットの奥で 握ったまま','ぽけっとのおくで にぎったまま','動作 時間','「まま」で時間が止まらず流れていることを示す。']]],
+  ['Bメロ',[
+   ['半分だけの 月が滲んで','はんぶんだけの つきがにじんで','哲学 取り合わせ','プラトンの「片割れ」を半月に重ねた取り合わせ。'],
+   ['足りないのは どっちだろう','たりないのは どっちだろう','哲学','答えを書かず問いで終える。続きは聴き手が考える。']]],
+  ['サビ',[
+   ['朧月 きみの横顔','おぼろづき きみのよこがお','季語 切れ','上五に季語を置き、名詞で切る。メロディでは「月」のあとに一拍の休符。'],
+   ['輪郭だけを 覚えてしまう','りんかくだけを おぼえてしまう','五感','朧＝輪郭がぼやける、という季語の性質を歌詞で裏返した。'],
+   ['近づくほど 見えなくなる','ちかづくほど みえなくなる','哲学','タロット「月」の逆説。距離が縮むほど正体が見えない。'],
+   ['それでも半分を 探してる','それでもはんぶんを さがしてる','哲学','エロス＝欠けたものを求める力。「恋しい」と言わずに表す。']]],
+  ['2番 Aメロ',[
+   ['三つ目の 駅を過ぎても','みっつめの えきをすぎても','時間','駅の数で時間経過を見せる。途中は書かない。'],
+   ['降りようと 言い出せなくて','おりようと いいだせなくて','動作','台詞を言えない、という「しなかった動作」。'],
+   ['窓に映る ふたつの影が','まどにうつる ふたつのかげが','モノ','二人を直接ではなく窓の影で映すカメラワーク。'],
+   ['重なって また離れる','かさなって またはなれる','動作 哲学','一つになりたい／なれない。饗宴の片割れの比喩を動きで。']]],
+  ['ラスト',[
+   ['傘ひとつ ぶんの距離','かさひとつ ぶんのきょり','モノ 切れ','冒頭の「傘」に戻る。最初のモノで終える技。'],
+   ['朧月','おぼろづき','季語','季語一語の体言止め。歌い終わりに余韻を残す。']]]
+ ]},
+{id:'tomoshi',title:'灯を替える',theme:'愛',season:'冬',
+ seed:{t:'湯たんぽの湯を替へにゆく夜半の音',r:'ゆたんぽの ゆをかえにゆく よわのおと',note:'季語は「湯たんぽ」一つ。愛を語らず、夜中に湯を替える小さな行為と音だけで描いた。'},
+ phil:{name:'フロム『愛するということ』',body:'愛は「落ちる」ものではなく、学び、続けて「する」もの。与えること・気づかうことを日々くり返す、能動的な力だという考え。'},
+ tarot:{name:'節制',body:'天使が二つの杯のあいだで水を移しかえる。こぼさないよう少しずつ調整し続ける、暮らしの中の愛として使った。'},
+ sections:[
+  ['Aメロ',[
+   ['きみが眠った あとの台所','きみがねむった あとのだいどころ','時間 モノ','「あと」で時間を進め、場所は台所という生活の場に。'],
+   ['やかんが鳴る前に 火を止める','やかんがなるまえに ひをとめる','動作 五感','起こさないための小さな動作。これがこの曲の「愛」の定義。'],
+   ['湯たんぽの 湯を替えにゆく','ゆたんぽの ゆをかえにゆく','季語 動作','種の一句をそのまま歌詞に。'],
+   ['それだけのこと 毎晩のこと','それだけのこと まいばんのこと','時間','くり返しの言葉で、続けることの重さを出す。']]],
+  ['Bメロ',[
+   ['落ちるんじゃなく 灯すものだと','おちるんじゃなく ともすものだと','哲学','フロムの考えを「落ちる／灯す」の対比に言いかえた。'],
+   ['いつか読んだ 本の隅','いつかよんだ ほんのすみ','モノ 切れ','哲学を語りすぎず「本の隅」というモノに置いて止める。']]],
+  ['サビ',[
+   ['ふたつのコップに 注ぎ分ける','ふたつのこっぷに つぎわける','動作 哲学','タロット「節制」の、二つの器のあいだで水を移す絵。'],
+   ['こぼれた分は 拭けばいい','こぼれたぶんは ふけばいい','動作','完璧ではなく、調整し続けることが愛だという肯定。'],
+   ['白い息 重ねた冬を','しろいいき かさねたふゆを','季語 五感','「息白し」の言いかえ。重ねた年月を冬の数で。'],
+   ['数えないまま 春を待つ','かぞえないまま はるをまつ','季語 時間','「春待つ」は冬の季語。一曲一季を守りながら希望で終える。']]],
+  ['2番 Aメロ',[
+   ['付箋の字が 似てきたこと','ふせんのじが にてきたこと','時間 モノ','長い年月を「字が似てくる」という小さな変化で見せる。'],
+   ['同じところで 笑うこと','おなじところで わらうこと','動作','「こと」で並べ、積み重ねを淡々と。'],
+   ['蜜柑の皮 ふたつ並べて','みかんのかわ ふたつならべて','季語 モノ','二人いることを「皮がふたつ」で示す。'],
+   ['今年もここで 年が暮れる','ことしもここで としがくれる','季語 時間','「年の暮」。一年の時間経過を季語に背負わせる。']]],
+  ['大サビ',[
+   ['愛してると 言わないかわりに','あいしてると いわないかわりに','哲学','感情語を「言わない」と打ち消して使う技。言葉より行為。'],
+   ['今夜も 湯を替えにゆく','こんやも ゆをかえにゆく','動作','最初の行為に戻って終える。愛は「する」もの。']]]
+ ]},
+{id:'natsunohate',title:'夏の果',theme:'友情',season:'夏',
+ seed:{t:'ペダルから足を離して夏の果',r:'ぺだるから あしをはなして なつのはて',note:'坂を下る一瞬の動作と、終わりゆく夏の取り合わせ。自由さと別れの予感を同時に置いた。'},
+ phil:{name:'アリストテレスのフィリア（友愛）',body:'友情には「役に立つから」「楽しいから」「相手そのものが善いから」の三つがある。最上の友情は、相手が相手であることを願う関係だ、という考え。'},
+ tarot:{name:'太陽／カップの3',body:'太陽は子どものような無垢さ、カップの3は杯を掲げて祝い合う三人。損得のない、ただ一緒にいた時間の象徴に。'},
+ sections:[
+  ['Aメロ',[
+   ['坂のてっぺん ペダルから','さかのてっぺん ぺだるから','モノ','場所と物だけで夏の少年たちを立ち上げる。'],
+   ['足を離して 風になる','あしをはなして かぜになる','動作','種の一句の動作。「風になる」で比喩に広げる。'],
+   ['ラムネの瓶の ビー玉の音','らむねのびんの びーだまのおと','季語 五感','「の」が続くのは俳句では避けがちだが、歌ではリズムとして使える。'],
+   ['飲み干せないまま ぬるくなる','のみほせないまま ぬるくなる','時間','「まま」で時間経過。終わってほしくない夏をぬるさで。']]],
+  ['Bメロ',[
+   ['得だからでも 楽しいからでもなく','とくだからでも たのしいからでもなく','哲学','アリストテレスの三つの友愛のうち、前の二つを打ち消す。'],
+   ['お前がお前で いてほしいだけ','おまえがおまえで いてほしいだけ','哲学','最上の友愛＝相手が相手であることを願う。']]],
+  ['サビ',[
+   ['遠花火 音だけ遅れて','とおはなび おとだけおくれて','季語 五感 切れ','光と音のずれ。離れていても届くもの、の比喩。'],
+   ['届くくらいの 距離でいい','とどくくらいの きょりでいい','哲学','べったりではない友情の距離感を肯定する。'],
+   ['乾杯のかわりに ぶつけた缶が','かんぱいのかわりに ぶつけたかんが','動作 モノ','タロット「カップの3」の、杯を掲げる三人の絵。'],
+   ['夜の真ん中で 鳴った','よるのまんなかで なった','五感 切れ','短く切って、音の余韻を休符にする。']]],
+  ['2番 Aメロ',[
+   ['十年たって 同じ坂','じゅうねんたって おなじさか','時間','数字で一気に時間を飛ばす。途中は書かない。'],
+   ['自転車はもう ないけれど','じてんしゃはもう ないけれど','モノ 時間','失われたものを一つだけ置く。'],
+   ['変わったものを 数えるより','かわったものを かぞえるより','哲学','比べるのをやめる、という友情の態度。'],
+   ['変わらない癖で 笑えばいい','かわらないくせで わらえばいい','動作','タロット「太陽」の無垢さを、昔と同じ笑い方で。']]],
+  ['ラスト',[
+   ['夏の果 またなと手を振る','なつのはて またなとてをふる','季語 動作 切れ','上五で季語を置いて切り、動作を一つ。種の一句の季語に戻る。'],
+   ['振り返らないのが 約束','ふりかえらないのが やくそく','哲学 切れ','名詞で止める。信頼しているから振り返らない。']]]
+ ]}
+];
+
+/* ===================== 哲学カード ===================== */
+const PHILS=[
+ {th:'恋',n:'プラトン『饗宴』のエロス',tarot:'月',b:'人は二つに分けられた片割れを探している。恋は欠けたものを求める力。',u:'半分・片方・欠けた月・片方の手袋 など「半分のモノ」で表す。'},
+ {th:'恋',n:'スタンダールの「結晶作用」',tarot:'星',b:'恋をすると、相手に理想の輝きを次々と重ねてしまう。塩の結晶が枝を覆うように。',u:'霜・露・ガラスの光など、小さくきらめくモノに託す。'},
+ {th:'恋',n:'バルト『恋愛のディスクール』の「待つこと」',tarot:'吊るされた男',b:'恋する人は、相手の連絡や到着を待つ宙づりの時間を生きている。',u:'既読・改札・時計・止まった時間。「まま」「まだ」で宙づりを表す。'},
+ {th:'愛',n:'フロム『愛するということ』',tarot:'節制',b:'愛は落ちるものではなく、学び、続ける技術。与え、気づかう能動的な行為。',u:'料理・湯を替える・毛布をかけ直す など、くり返す小さな動作で。'},
+ {th:'愛',n:'アガペー（無償の愛）',tarot:'女帝',b:'見返りを求めず、相手の価値に関係なく注がれる愛。',u:'水・陽だまり・土 など、分け隔てなく広がるモノで。'},
+ {th:'愛',n:'仏教の慈悲',tarot:'星',b:'相手の喜びを願い（慈）、苦しみを取り除きたいと願う（悲）こと。',u:'灯り・手当て・背中をさする など、そっと寄り添う動作で。'},
+ {th:'友情',n:'アリストテレスのフィリア',tarot:'太陽',b:'友愛には「有用」「快楽」「善」の三種類。最上の友情は、相手そのものの善を願う。',u:'「得だからでも楽しいからでもなく」のように、前の二つを打ち消す。'},
+ {th:'友情',n:'モンテーニュの友情',tarot:'カップの2',b:'なぜその人と友なのか、理由は説明できない。ただ「彼が彼で、私が私だったから」。',u:'理由を書かず、出会った場面だけを描く。'},
+ {th:'友情',n:'エピクロスの友情',tarot:'カップの3',b:'幸せに生きるための最大の財産は友情だ、という考え。',u:'乾杯・分け合う食べ物・同じ夜空 など、分かち合いの場面で。'}
+];
+
+/* 季節ごとの季語（作る画面用） */
+const KIGO={
+ '春':['春の宵','朧月','花冷え','春雨','陽炎','桜','落花','春風','卒業','蝶','菜の花','春の夜','行く春','雲雀','しゃぼん玉'],
+ '夏':['夏の果','遠花火','ラムネ','夕立','蝉','風鈴','向日葵','短夜','入道雲','蛍','青嵐','かき氷','浴衣','夏休み','西日'],
+ '秋':['秋風','月','夜長','秋の暮','虫の声','鰯雲','金木犀','露','霧','流れ星','コスモス','紅葉','秋思','天の川','新米'],
+ '冬':['湯たんぽ','息白し','木枯','冬の星','年の暮','時雨','雪','蜜柑','マフラー','手袋','春待つ','冬の夜','焚火','霜','クリスマス']
+};
+const SEASON_OF={};Object.entries(KIGO).forEach(([s,a])=>a.forEach(k=>SEASON_OF[k]=s));
+['花火','夕焼','雷','梅雨','秋の夜','冬木','落葉','寒月','初雪','聖夜'].forEach((k,i)=>SEASON_OF[k]=['夏','夏','夏','夏','秋','冬','冬','冬','冬','冬'][i]);
+
+/* ===================== util ===================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1600)}
+const SMALL='ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ';
+function mora(s){let n=0;for(const ch of s){if(/[ぁ-ゖァ-ヺー]/.test(ch)&&!SMALL.includes(ch))n++}return n}
+function moraEst(s){let n=0,k=false;for(const ch of s){if(/[ぁ-ゖァ-ヺー]/.test(ch)){if(!SMALL.includes(ch))n++}else if(/[一-鿿々]/.test(ch)){n+=2;k=true}else if(/[A-Za-z0-9]/.test(ch)){n+=1}}return {n,k}}
+
+/* ===================== routing ===================== */
+const VIEWS=['home','song','waza','make','sym'];let cur='home',curSong=null;
+function go(v,arg){
+  if(v&&v.startsWith('song-')){arg=v.slice(5);v='song'}
+  if(!VIEWS.includes(v))v='home';
+  if(v==='song'){const s=SONGS.find(x=>x.id===arg)||SONGS[0];curSong=s;renderSong(s)}
+  cur=v;
+  VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===(v==='song'?'home':v)));
+  try{history.replaceState(null,'','#'+(v==='song'?'song-'+curSong.id:v))}catch(e){}
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-go]');
+  if(a){e.preventDefault();go(a.dataset.go);return}
+  const n=e.target.closest('a[href^="#"]');
+  if(n){e.preventDefault();go(n.getAttribute('href').slice(1))}
+});
+
+/* ===================== home ===================== */
+$('#songList').innerHTML=SONGS.map(s=>`
+  <button class="song-card t-${s.theme}" data-go="song-${s.id}">
+    <span class="chip">${s.theme}</span><span class="chip o">${s.season}</span><span class="chip o">${esc(s.tarot.name)}</span>
+    <div class="ttl">${esc(s.title)}</div>
+    <div class="seed">${esc(s.seed.t)}</div>
+  </button>`).join('');
+
+/* ===================== song ===================== */
+let opts=store.get('kashi.opts',{tg:true,mo:false,rd:false});
+function renderSong(s){
+  const body=s.sections.map(([name,lines])=>`
+    <div class="sec">${esc(name)}</div>
+    ${lines.map(([t,r,tags,note])=>{
+      const parts=r.split(' ').map(mora);
+      return `<div class="ly">
+        <span class="tx">${esc(t).replace(/ /g,'<span class="sp"></span>')}</span>
+        <span class="mo">${parts.join('・')}</span>
+        <span class="tg">${tags.split(' ').map(g=>`<span class="tag ${g}">${g}</span>`).join('')}</span>
+        <span class="rd">${esc(r)}</span>
+        <span class="nt">${esc(note)}</span>
+      </div>`}).join('')}`).join('');
+  $('#songBody').innerHTML=`
+  <div class="song-wrap t-${s.theme}">
+   <div class="left">
+    <div class="card song-head">
+      <a class="btn sm" href="#home">← 一覧</a>
+      <div style="margin-top:8px"><span class="chip">${s.theme}</span><span class="chip o">${s.season}</span></div>
+      <div class="ttl">${esc(s.title)}</div>
+      <div class="seedbox">
+        <div class="tate">${esc(s.seed.t)}</div>
+        <div><div class="muted" style="font-weight:700">種の一句</div><div class="muted">${esc(s.seed.r)}</div><p style="margin:6px 0 0;font-size:13.5px">${esc(s.seed.note)}</p></div>
+      </div>
+      <div class="philo">
+        <div><span class="muted">哲学</span><b>${esc(s.phil.name)}</b>${esc(s.phil.body)}</div>
+        <div><span class="muted">タロットの比喩</span>
+          <div class="tarot"><div class="tcard">${esc(s.tarot.name)}</div><div><b>${esc(s.tarot.name)}</b>${esc(s.tarot.body)}</div></div></div>
+      </div>
+    </div>
+   </div>
+   <div class="card" id="lyrics">
+     <div class="toggles">
+       <button data-o="tg">技のタグ</button><button data-o="mo">音数</button><button data-o="rd">よみ</button><button id="cpSong">歌詞をコピー</button>
+     </div>
+     <div class="muted">行をタップすると、その行の技の解説が出ます。</div>
+     ${body}
+   </div>
+  </div>`;
+  applyOpts();
+  $('#lyrics').querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{opts[b.dataset.o]=!opts[b.dataset.o];store.set('kashi.opts',opts);applyOpts()});
+  $('#lyrics').querySelectorAll('.ly').forEach(l=>l.onclick=()=>l.classList.toggle('sel'));
+  $('#cpSong').onclick=async()=>{
+    const txt=s.title+'\n\n'+s.sections.map(([n,ls])=>'［'+n+'］\n'+ls.map(l=>l[0]).join('\n')).join('\n\n');
+    try{await navigator.clipboard.writeText(txt);toast('コピーしました')}catch(e){toast('コピーできませんでした')}
+  };
+}
+function applyOpts(){
+  const L=$('#lyrics');if(!L)return;
+  L.classList.toggle('show-tg',!!opts.tg);L.classList.toggle('show-mo',!!opts.mo);L.classList.toggle('show-rd',!!opts.rd);
+  L.querySelectorAll('[data-o]').forEach(b=>b.classList.toggle('on',!!opts[b.dataset.o]));
+}
+
+/* ===================== 技と哲学 ===================== */
+let pTh='すべて';
+function renderPhil(){
+  $('#pSeg').innerHTML=['すべて','恋','愛','友情'].map(t=>`<button class="${t===pTh?'on':''} ${t!=='すべて'?'t-'+t:''}" data-t="${t}">${t}</button>`).join('');
+  $('#pSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{pTh=b.dataset.t;renderPhil()});
+  $('#pGrid').innerHTML=PHILS.filter(p=>pTh==='すべて'||p.th===pTh).map(p=>`
+    <div class="pc t-${p.th}"><span class="chip">${p.th}</span><span class="chip o">${esc(p.tarot)}</span>
+      <div class="pn">${esc(p.n)}</div><div style="font-size:13.5px">${esc(p.b)}</div>
+      <div class="use"><b>歌詞での使い方</b>：${esc(p.u)}</div></div>`).join('');
+}
+renderPhil();
+
+/* ===================== 作る ===================== */
+let mk=store.get('kashi.make',{theme:'恋',phil:0,season:'春',title:'',text:'',id:null});
+function philsOf(th){return PHILS.map((p,i)=>({...p,i})).filter(p=>p.th===th)}
+function renderMake(){
+  $('#mTheme').innerHTML=['恋','愛','友情'].map(t=>`<button class="t-${t} ${t===mk.theme?'on':''}" data-t="${t}">${t}</button>`).join('');
+  $('#mTheme').querySelectorAll('button').forEach(b=>b.onclick=()=>{mk.theme=b.dataset.t;mk.phil=philsOf(mk.theme)[0].i;saveMk();renderMake()});
+  const ps=philsOf(mk.theme);if(!ps.some(p=>p.i===mk.phil))mk.phil=ps[0].i;
+  $('#mPhil').innerHTML=ps.map(p=>`<button class="t-${p.th} ${p.i===mk.phil?'on':''}" data-i="${p.i}">${esc(p.tarot)}</button>`).join('');
+  $('#mPhil').querySelectorAll('button').forEach(b=>b.onclick=()=>{mk.phil=+b.dataset.i;saveMk();renderMake()});
+  const p=PHILS[mk.phil];
+  $('#mPhilInfo').innerHTML=`<div class="pc t-${p.th}"><div class="pn">${esc(p.n)}</div><div style="font-size:13.5px">${esc(p.b)}</div><div class="use"><b>歌詞での使い方</b>：${esc(p.u)}</div></div>`;
+  $('#mSeason').innerHTML=Object.keys(KIGO).map(s=>`<button class="${s===mk.season?'on':''}" data-s="${s}">${s}</button>`).join('');
+  $('#mSeason').querySelectorAll('button').forEach(b=>b.onclick=()=>{mk.season=b.dataset.s;saveMk();renderMake()});
+  $('#mKigo').innerHTML='季語の候補：'+KIGO[mk.season].map(k=>`<button class="btn sm" data-k="${esc(k)}" style="margin:2px">${esc(k)}</button>`).join('');
+  $('#mKigo').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>insertText(b.dataset.k));
+  $('#mPlan').innerHTML=`<ol>
+    <li><b>種の一句</b>：${mk.season}の季語を一つ使って、${mk.theme}の一場面を五七五で。動作は一つ。</li>
+    <li><b>Aメロ</b>：種の一句を4行にほどく。近くのモノ（手・物・場所）と小さな動作だけ。気持ちは書かない。</li>
+    <li><b>Bメロ</b>：「${esc(p.n)}」の考えを、比喩か問いで1〜2行に。<span class="muted">（${esc(p.u)}）</span></li>
+    <li><b>サビ</b>：上五に季語を置いて切る。遠景に引き、タロット「${esc(p.tarot)}」の絵を重ねる。</li>
+    <li><b>2番</b>：数字や「まま」で時間を進める。何が変わって、何が変わらないか。</li>
+    <li><b>ラスト</b>：Aメロ冒頭のモノか、種の一句の季語に戻って終える。</li></ol>
+    <button class="btn sm" id="mTpl">この設計図で書き始める</button>`;
+  $('#mTpl').onclick=()=>{
+    if(mk.text.trim()&&!$('#mTpl').dataset.armed){$('#mTpl').dataset.armed=1;$('#mTpl').textContent='今の歌詞を置き換えます。もう一度押す';return}
+    mk.text=`［種の一句］\n\n\n［Aメロ］\n\n\n\n\n［Bメロ］\n\n\n［サビ］\n\n\n\n\n［2番 Aメロ］\n\n\n\n\n［ラスト］\n\n`;
+    $('#mText').value=mk.text;saveMk();analyze();renderMake();
+  };
+  $('#mTitle').value=mk.title;$('#mText').value=mk.text;
+  analyze();renderDrafts();
+}
+function insertText(t){
+  const ta=$('#mText');const s=ta.selectionStart??ta.value.length,e=ta.selectionEnd??s;
+  ta.value=ta.value.slice(0,s)+t+ta.value.slice(e);ta.focus();ta.selectionStart=ta.selectionEnd=s+t.length;
+  mk.text=ta.value;saveMk();analyze();
+}
+function saveMk(){store.set('kashi.make',mk)}
+$('#mText').addEventListener('input',()=>{mk.text=$('#mText').value;saveMk();analyze()});
+$('#mTitle').addEventListener('input',()=>{mk.title=$('#mTitle').value;saveMk()});
+
+const FEEL=['好き','嬉し','悲し','寂し','淋し','楽し','切な','恋し','愛しい','幸せ','つらい','辛い','苦し','会いたい','逢いたい','せつな','さびし','かなし','うれし'];
+function analyze(){
+  const lines=mk.text.split('\n');
+  const ana=[];let actions=0;
+  lines.forEach(l=>{
+    const t=l.trim();if(!t)return;
+    const m=t.match(/^［(.+)］$/)||t.match(/^\[(.+)\]$/);
+    if(m){ana.push(`<li><span class="n"></span><span class="l sec2">${esc(m[1])}</span></li>`);return}
+    const {n,k}=moraEst(t.replace(/[\s　]/g,''));
+    ana.push(`<li><span class="n">${k?'約':''}${n}</span><span class="l">${esc(t)}</span></li>`);
+  });
+  $('#mAna').innerHTML=ana.join('')||'<li class="muted">書き始めると、各行の音数が出ます。</li>';
+  const body=lines.filter(l=>!/^[［\[]/.test(l.trim())).join('\n');
+  const out=[];
+  if(!body.trim()){$('#mChecks').innerHTML='';return}
+  // 季節
+  const found=Object.keys(SEASON_OF).filter(k=>body.includes(k)).filter((k,_,arr)=>!arr.some(o=>o!==k&&o.includes(k)));
+  const ss=[...new Set(found.map(k=>SEASON_OF[k]))];
+  if(!found.length)out.push(['tip','季語が見当たりません（候補リストにない季語かも）。一曲に一つ、季節の軸を。']);
+  else if(ss.length===1)out.push(['ok',`季節は「${ss[0]}」で揃っています（${found.map(esc).join('・')}）。`]);
+  else out.push(['warn',`季節が混ざっています：${found.map(k=>esc(k)+'('+SEASON_OF[k]+')').join('、')}。一曲一季に揃えると世界観が締まります。`]);
+  if(ss.length&&!ss.includes(mk.season))out.push(['info',`選んだ季節は「${mk.season}」ですが、歌詞の季語は「${ss.join('・')}」です。`]);
+  // 感情語
+  const fe=FEEL.filter(w=>body.includes(w));
+  if(fe.length)out.push(['warn',`気持ちの言葉「${fe.join('」「')}」。モノや動作に預けられないか試してみて（あえて「言わない」と打ち消すのはアリ）。`]);
+  else out.push(['ok','気持ちを直接言う言葉は使っていません。']);
+  // て の多さ
+  const te=lines.filter(l=>((l.match(/て/g)||[]).length)>=2).length;
+  if(te)out.push(['tip',`「て」が2回以上ある行が${te}行。動作が多いと説明的に。一行一動作に。`]);
+  // 冒頭と最後の回収
+  const real=lines.map(l=>l.trim()).filter(l=>l&&!/^[［\[]/.test(l));
+  if(real.length>=4){
+    const first=real.slice(0,3).join(''),last=real.slice(-2).join('');
+    const nouns=(first.match(/[一-鿿]{1,3}|[ァ-ヺー]{2,}/g)||[]);
+    const back=nouns.filter(w=>last.includes(w));
+    if(back.length)out.push(['ok',`最初に出た「${[...new Set(back)].join('・')}」で終わっています（冒頭の回収）。`]);
+    else out.push(['tip','最初の数行に出したモノや季語に、最後の行で戻ると余韻が出ます。']);
+  }
+  // 哲学
+  out.push(['info',`哲学「${esc(PHILS[mk.phil].n)}」：Bメロかサビで、直接言わずに比喩・問い・否定で入っているか見直してみて。`]);
+  $('#mChecks').innerHTML=out.map(([lv,t])=>`<li><span class="ic ${lv}">${{ok:'✓',warn:'!',tip:'?',info:'i'}[lv]}</span><span>${t}</span></li>`).join('');
+}
+$('#mCopy').onclick=async()=>{try{await navigator.clipboard.writeText((mk.title?mk.title+'\n\n':'')+mk.text);toast('コピーしました')}catch(e){toast('コピーできませんでした')}};
+$('#mNew').onclick=()=>{mk.title='';mk.text='';mk.id=null;saveMk();renderMake();toast('新しい歌詞を書き始めます')};
+$('#mSave').onclick=()=>{
+  if(!mk.text.trim()){toast('歌詞が空です');return}
+  const ds=store.get('kashi.drafts',[]);
+  const item={id:mk.id||Date.now(),title:mk.title||'無題',text:mk.text,theme:mk.theme,phil:mk.phil,season:mk.season,date:new Date().toISOString()};
+  const i=ds.findIndex(d=>d.id===item.id);if(i>=0)ds[i]=item;else ds.unshift(item);
+  mk.id=item.id;saveMk();store.set('kashi.drafts',ds);renderDrafts();toast('保存しました');
+};
+function renderDrafts(){
+  const ds=store.get('kashi.drafts',[]);
+  $('#mDrafts').innerHTML=ds.length?ds.map(d=>{const dt=new Date(d.date);return `<div class="d t-${d.theme}"><span class="chip">${d.theme}</span><span class="chip o">${d.season}</span><b class="" style="font-family:'Noto Serif JP',serif">${esc(d.title)}</b>
+    <div class="muted">${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()}・${esc(PHILS[d.phil]?PHILS[d.phil].tarot:'')}</div>
+    <div class="row" style="margin-top:4px"><button class="btn sm" data-open="${d.id}">開く</button><button class="btn sm" data-del="${d.id}">削除</button></div></div>`}).join('')
+    :'<p class="muted" style="margin:0">まだありません。この端末のブラウザにだけ保存されます。</p>';
+  $('#mDrafts').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{const d=ds.find(x=>x.id==b.dataset.open);mk={theme:d.theme,phil:d.phil,season:d.season,title:d.title,text:d.text,id:d.id};saveMk();renderMake();window.scrollTo(0,0)});
+  $('#mDrafts').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(!b.dataset.armed){b.dataset.armed=1;b.textContent='本当に削除？';b.classList.add('pri');return}
+    store.set('kashi.drafts',ds.filter(x=>x.id!=b.dataset.del));renderDrafts();toast('削除しました')});
+}
+
+
+/* ===================== シンボル（写真の本の目次） ===================== */
+const SYM_CH=[
+ {n:1,t:'権力を表すシンボル',p:12,items:[[16,'馬','戦と生活のパートナー'],[21,'ハヤブサ','エリートの象徴'],[26,'天秤','揺るぎない法のシンボル'],[30,'竜','二面性を持つ伝説の生き物'],[34,'鷲','数々の紋章に登場する気高き鳥'],[40,'月桂冠','偉大な才能の祝福'],[45,'柱','未知の世界への入り口'],[50,'不死鳥','東西で高位の女性を象徴した鳥'],[55,'象と城','シュールな組み合わせの謎'],[58,'雄牛','ワッツとピカソが描いた悲劇'],[63,'洋梨','王が恐れた果物'],[68,'ライオン','大帝国を象徴した百獣の王']]},
+ {n:2,t:'信仰を表すシンボル',p:74,items:[[78,'光輪','円盤形の後光が大陸各地で見られる理由'],[84,'蝶','夢と現実の間で移ろう可憐な虫'],[88,'ナツメヤシ','勝利と生命の木'],[92,'車輪','ブッダの教えとアショーカ王の信念'],[96,'ハト','時代を超えて平和のメッセージを運ぶ鳥'],[100,'百合','汚れなき無垢の花'],[105,'蓮','水が生んだ宇宙と文明の象徴'],[110,'卵','自然が作り出した芸術的形状'],[114,'ウサギ','相反する意味を持つトリックスター'],[119,'ゴシキヒワ','キリストの血を浴びた小鳥'],[123,'虹','信仰・科学・芸術・自由を祝福する7色の架け橋'],[128,'ブドウ','キリストの血、バッカスの酒']]},
+ {n:3,t:'不穏さをまとうシンボル',p:132,items:[[136,'鏡','霊界との交信ツール'],[142,'髑髏','すべての人に訪れる運命'],[148,'フクロウ','闇に生きる鳥'],[152,'猫','かわいいだけじゃない捕食者'],[156,'プロビデンスの目','フィクションが作り上げた秘密結社とのつながり'],[161,'キツネ','人間社会に紛れ込むペテン師'],[166,'大鎌','農民反乱に使われた凶暴な武器'],[170,'迷宮','ミノタウロスを閉じ込めた迷宮'],[174,'蛇','異なる領域を行き来する生き物'],[179,'ケシ','薬にも毒にもなる赤い花'],[184,'鉤十字','負の歴史を背負わされた幸福のシンボル'],[188,'シャボン玉','運命のシャボン玉が割れてしまう前に……']]},
+ {n:4,t:'希望を表すシンボル',p:192,items:[[196,'ウロボロス','終わりのないシンボル'],[200,'噴水','楽園と都市を潤す水'],[206,'クジャク','圧倒的な主役の風格'],[212,'魚','跳ねる運命、踊る名声'],[216,'ユニコーン','純粋で独特な架空の生き物'],[222,'薔薇','愛と欲望の花'],[228,'蘭','幽谷に香る孤高の花'],[232,'犬','多彩な一面を見せる愛すべき相棒'],[238,'オウム','希代の大冒険の証は、巨匠が手掛けた肖像画に'],[243,'向日葵','愛情と忠誠の花'],[248,'カーネーション','悲しみの花か喜びの花か'],[252,'真珠','さまよう真珠「ラ・ペレグリーナ」の歴史']]}
+];
+/* 歳時記で季語になるもの */
+const SYM_SEASON={'蝶':'春','シャボン玉':'春','百合':'夏','蓮':'夏','虹':'夏','噴水':'夏','ケシ':'夏','薔薇':'夏','向日葵':'夏','カーネーション':'夏','ブドウ':'秋','洋梨':'秋','蘭':'秋','フクロウ':'冬','ハヤブサ':'冬','鷲':'冬'};
+/* 愛・恋・友情の歌詞に使うヒント（私の提案） */
+const SYM_HINT={
+ '蝶':['恋','夢と現実のあいだを移ろう姿は、つかめない恋に。《アモルとプシュケ》は恋の物語。'],
+ '薔薇':['恋','愛と欲望の両面。棘とセットで、甘さと痛みを一度に出せる。'],
+ '向日葵':['愛','いつも同じ方を向く花＝変わらない愛情や忠誠。'],
+ '犬':['友情','そばにいる相棒。言葉のいらない友情に。'],
+ 'ウロボロス':['愛','自分の尾をくわえた蛇の輪。終わらない関係、くり返す日々に。'],
+ 'シャボン玉':['恋','割れる前の一瞬のきらめき。はかない時間に。'],
+ '鏡':['恋','相手の中に自分を見る。映る／映らないで距離を表せる。'],
+ 'ハト':['友情','仲直りや、離れた相手へ言葉を運ぶものとして。'],
+ 'カーネーション':['愛','悲しみと喜びの両方を持つ花。家族への愛にも。'],
+ '真珠':['愛','長い時間をかけて育つもの。さまよう宝石として別れと再会にも。'],
+ '蓮':['愛','泥から清らかに咲く。苦しい場所から生まれる愛に。'],
+ '迷宮':['恋','抜け出せない気持ち、出口を探す恋に。'],
+ '天秤':['友情','対等さ。どちらにも傾かない関係に。']
+};
+
+const SYM_KW={
+'馬':'威厳/品格/自然のエネルギー支配/統率力/情熱',
+'ハヤブサ':'ホルス/ファラオ/鷹狩り/上流階級/忠誠心/自制心/愛',
+'天秤':'公正/公平/裁判/正義',
+'竜':'異教/外敵/皇帝/生命力/「陽」の属性',
+'鷲':'最高権力者/天上/福音記者ヨハネ/軍の誇り',
+'月桂冠':'詩人の才/インスピレーション/勝利/政治的手腕/吉兆/不朽の名声',
+'柱':'安定/強さ/栄光/野望/天の権威',
+'不死鳥':'エリザベス1世/中国の皇后/復活/吉兆/「陰」の属性',
+'象と城':'象部隊/帝国支配/異国/知恵/商売',
+'雄牛':'野蛮/欲望/豊穣/生贄',
+'洋梨':'聖母子の愛情/フランス王ルイ・フィリップ',
+'ライオン':'大英帝国/守護獣/野生の力/イエス・キリスト/聖マルコ/アショーカ王/ヘンリー1世',
+'光輪':'神ミトラ/神性/太陽/栄光/権威',
+'蝶':'夢心地/自然との一体化/長寿/魂/復活/変貌/地獄の炎/神の恩寵',
+'ナツメヤシ':'アポロン/勝利/永遠/老衰への抵抗/豊穣/殉教者/領土拡大主義',
+'車輪':'発明/仏法の浸透/平和/転輪聖王/輪廻/運命',
+'ハト':'メッセンジャー/聖霊/平和/故人の魂',
+'百合':'純潔/美/聖母マリア/三位一体/受胎告知/ミノア文明/フランス王家',
+'蓮':'豊穣/清らかさ/高潔な魂/宇宙の起源/水利技術',
+'卵':'起源/創造/魂の入れ物/墓/復活/画家ピエロの絵画論',
+'ウサギ':'不浄/知恵/処女性/多産/春/トリックスター/月/自己犠牲/繁栄',
+'ゴシキヒワ':'キリストの苦難/魂/治癒/母性',
+'虹':'天と地の架け橋/色彩/最後の審判/平和の約束/光学/アイデンティティの自由',
+'ブドウ':'最後の晩餐/血液/多産と豊穣/忠誠/死と復活/デュオニュソス/バッカス/恍惚状態',
+'鏡':'魔術/冥府/霊界/虚栄/真実/光',
+'髑髏':'死/メメント・モリ/死の舞踏/アダム/慎み深さ',
+'フクロウ':'死/無知/邪悪/不吉/不潔/病気/偏見/知恵',
+'猫':'害獣駆除/不運/黒魔術/魔女の使い魔',
+'プロビデンスの目':'神の摂理/厄除け/監視/秘密結社',
+'キツネ':'悪魔/欺瞞',
+'大鎌':'死神/時の翁',
+'迷宮':'監禁/神の秩序/巡礼/人生',
+'蛇':'神秘/多産/医術/脅威/知恵',
+'ケシ':'悲しみ/慰め/死/眠り/豊作',
+'鉤十字':'幸福/吉祥/ナチス/人種差別',
+'シャボン玉':'死/空虚/儚さ',
+'ウロボロス':'無限/再生/永劫回帰/循環/宇宙/錬金術',
+'噴水':'楽園/庭園/活力/神の恩寵/自然を支配する力/都市文明/富/清らかさ/若返り',
+'クジャク':'不滅/復活/豊穣/異国情緒/美',
+'魚':'成功/富/野心/勉学/登竜門/イエス・キリスト/キリスト教徒',
+'ユニコーン':'浄化/イエス・キリスト/ロマンス/希少性/空想/無垢/非凡',
+'薔薇':'愛/官能/退廃/贅沢/薔薇戦争/犠牲/ヴァニタス/神聖さ',
+'蘭':'慎み深さ/孤独/自立/悲劇/文人',
+'犬':'忠誠心/知性/貞節/憂鬱/堕落/官能性',
+'オウム':'珍しさ/富/清浄さ/異国情緒/受胎告知/無知/無責任/退廃/贅沢',
+'向日葵':'献身的な愛情/忠誠心/新プラトン主義/クリュティエ/聖母マリア/絵画芸術/感謝/毛沢東',
+'カーネーション':'結婚/犠牲/悲しみ',
+'真珠':'富と名声/植民地政策/権威/完璧な美/帝国主義/天国/清らかさ/イエス・キリスト'
+};
+Object.keys(SYM_KW).forEach(k=>SYM_KW[k]=SYM_KW[k].split('/'));
+const kwHas=(w,q)=>(SYM_KW[w]||[]).some(k=>k.includes(q));
+let sCh=0;let sMemo=store.get('kashi.symmemo',{});
+function renderSym(){
+  const Q=['愛','忠誠','復活','死','儚さ','魂','豊穣','孤独','清らか','永遠'];
+  $('#sQuick').innerHTML='<span class="muted" style="font-size:12px;align-self:center">よく使う：</span>'+Q.map(k=>`<button data-q="${k}">${k}</button>`).join('')+($('#sq').value?'<button data-q="">✕ クリア</button>':'');
+  $('#sQuick').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{$('#sq').value=b.dataset.q;renderSym()});
+  $('#sSeg').innerHTML=['すべて','1章','2章','3章','4章','季語になる','メモあり'].map((t,i)=>`<button class="${i===sCh?'on':''}" data-i="${i}">${t}</button>`).join('');
+  $('#sSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{sCh=+b.dataset.i;renderSym()});
+  const q=$('#sq').value.trim();
+  $('#sList').innerHTML=SYM_CH.filter(c=>sCh===0||sCh>4||c.n===sCh).map(c=>{
+    const its=c.items.filter(([p,w,d])=>(!q||w.includes(q)||d.includes(q)||kwHas(w,q)||(SYM_HINT[w]&&SYM_HINT[w].join('').includes(q))||(sMemo[w]||'').includes(q))&&(sCh!==5||SYM_SEASON[w])&&(sCh!==6||sMemo[w]));
+    if(!its.length)return '';
+    return `<div class="sch c${c.n}"><span class="num">${c.n}</span>${esc(c.t)}<span class="pg">p.${c.p}〜</span></div>
+      <div class="sgrid">${its.map(([p,w,d])=>`<button class="si" data-w="${esc(w)}"><span class="p">${p}</span><span><span class="w">${esc(w)}</span>${SYM_SEASON[w]?` <span class="ks ${SYM_SEASON[w]}">${SYM_SEASON[w]}</span>`:''}${SYM_HINT[w]?`<span class="mk">◆${SYM_HINT[w][0]}</span>`:''}${sMemo[w]?'<span class="mk">✎</span>':''}<br><span class="d">${esc(d)}</span>${SYM_KW[w]?`<span class="kwl">${SYM_KW[w].map(k=>q&&k.includes(q)?`<mark>${esc(k)}</mark>`:esc(k)).join(' / ')}</span>`:''}</span></button>`).join('')}</div>`;
+  }).join('')||'<p class="muted">見つかりませんでした。</p>';
+  $('#sList').querySelectorAll('.si').forEach(b=>b.onclick=()=>openSym(b.dataset.w));
+}
+$('#sq').addEventListener('input',renderSym);
+function openSym(w){
+  let it,ch;SYM_CH.forEach(c=>c.items.forEach(x=>{if(x[1]===w){it=x;ch=c}}));
+  const h=SYM_HINT[w];
+  $('#sheet').innerHTML=`<div class="row" style="justify-content:space-between"><span class="muted">第${ch.n}章 ${esc(ch.t)}・p.${it[0]}</span><button class="btn sm" id="sClose">閉じる</button></div>
+    <div class="big">${esc(w)} ${SYM_SEASON[w]?`<span class="ks ${SYM_SEASON[w]}" style="font-size:13px;vertical-align:middle">${SYM_SEASON[w]}の季語</span>`:''}</div>
+    <p style="margin:4px 0 6px">${esc(it[2])}</p>
+    ${SYM_KW[w]?`<div class="muted" style="font-weight:700">キーワード <span style="font-weight:400">（タップで同じキーワードを持つシンボルを探す）</span></div><div class="kwc">${SYM_KW[w].map(k=>`<button data-kw="${esc(k)}">${esc(k)}</button>`).join('')}</div>`:''}
+    ${h?`<div class="use" style="font-size:13.5px;background:#faf6ee;padding:8px 10px;border-radius:8px"><b>歌詞のヒント（${h[0]}）</b>：${esc(h[1])}<div class="muted" style="font-size:11px">※Claudeの提案です。本の内容とは別です。</div></div>`:''}
+    <h3>自分のメモ（本を読んで気づいたこと）</h3>
+    <textarea id="sMemoT" style="min-height:100px;font-family:inherit;font-size:15px" placeholder="例：絵の中での意味、使えそうな比喩など">${esc(sMemo[w]||'')}</textarea>
+    <div class="row" style="margin-top:8px"><button class="btn pri" id="sIns">歌詞に入れる</button><button class="btn" id="sSave">メモを保存</button></div>`;
+  $('#modal').classList.add('on');
+  $('#sClose').onclick=closeModal;
+  $('#sheet').querySelectorAll('[data-kw]').forEach(b=>b.onclick=()=>{$('#sq').value=b.dataset.kw;sCh=0;closeModal();renderSym();window.scrollTo(0,0);toast(`「${b.dataset.kw}」で検索`)});
+  $('#sSave').onclick=()=>{const v=$('#sMemoT').value.trim();if(v)sMemo[w]=v;else delete sMemo[w];store.set('kashi.symmemo',sMemo);renderSym();toast('メモを保存しました')};
+  $('#sIns').onclick=()=>{closeModal();go('make');insertText(w);toast(`「${w}」を歌詞に入れました`)};
+}
+function closeModal(){$('#modal').classList.remove('on')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+renderSym();
+
+document.documentElement.classList.add('js');
+renderMake();
+go((location.hash||'').slice(1)||'home');
+</script>
+</body>
+</html>
