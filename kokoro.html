@@ -2,7 +2,7 @@
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>心を詠む工房｜創作の手帖</title>
-<link rel="icon" type="image/svg+xml" href="../souzou-icon.svg">
+<link rel="icon" type="image/svg+xml" href="souzou-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
@@ -138,9 +138,9 @@ mark{background:#ffe48a;color:inherit}
 <div class="toast" id="toast"></div>
 
 <script>window.BOOKS=[];</script>
-<script src="../notes/data/b1.js"></script><script src="../notes/data/b2.js"></script><script src="../notes/data/b3.js"></script>
-<script src="../notes/data/b4.js"></script><script src="../notes/data/b5.js"></script><script src="../notes/data/b6.js"></script>
-<script src="../notes/kigo-data.js"></script>
+<script src="notes/data/b1.js"></script><script src="notes/data/b2.js"></script><script src="notes/data/b3.js"></script>
+<script src="notes/data/b4.js"></script><script src="notes/data/b5.js"></script><script src="notes/data/b6.js"></script>
+<script src="kigo-data.js"></script>
 <script src="kokoro-data.js"></script>
 <script>
 (function(){
@@ -246,7 +246,7 @@ document.addEventListener('click', e => {
 });
 function openNote(book, anchor){
   if (window.parent && window.parent !== window) { window.parent.postMessage({souzouGo: book, anchor}, '*'); }
-  else location.href = `../notes/${book}.html#${anchor}`;
+  else location.href = `notes/${book}.html#${anchor}`;
 }
 
 /* ---------- 書く ---------- */
