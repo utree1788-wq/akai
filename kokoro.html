@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>心を詠む工房｜創作の手帖</title>
+<link rel="icon" type="image/svg+xml" href="../souzou-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--paper:#f7f3ea;--paper2:#fffdf8;--ink:#2a2622;--ink2:#5d564e;--line:#e3dbcd;--ac:#9d174d;--ac2:#fbe7ef;
+--serif:"Shippori Mincho","Noto Serif JP",serif;--sans:"Zen Kaku Gothic New","Noto Sans JP",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.75}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:28px 18px 90px}
+.hero{border-bottom:1px solid var(--line);padding-bottom:16px}
+.hero .no{font-size:12px;letter-spacing:.2em;color:var(--ac);font-weight:700}
+.hero h1{font-family:var(--serif);font-size:clamp(26px,5vw,36px);margin:4px 0 2px;line-height:1.3}
+.hero p{margin:0;color:var(--ink2);font-size:14px}
+h2{font-family:var(--serif);font-size:21px;margin:30px 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-size:14px;font-family:var(--sans)}
+.box{background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--paper2);border-radius:999px;padding:4px 12px;font-size:14px}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.chip.sm{font-size:12.5px;padding:2px 10px}
+.themes{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.btn{border:1px solid var(--ac);background:var(--ac);color:#fff;border-radius:10px;padding:7px 14px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ac)}
+.btn.sm{padding:4px 10px;font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.theme-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.theme-head h3{font-family:var(--serif);font-size:24px;margin:0}
+.tag{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:.08em}
+.q{font-family:var(--serif);font-size:17px;margin:8px 0 0;padding-left:12px;border-left:3px solid var(--ac)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.sub{font-size:13px;font-weight:700;color:var(--ink2);margin:0 0 6px}
+.ex{font-family:var(--serif);font-size:20px;margin:2px 0}
+.ex-r{font-size:12.5px;color:var(--ink2)}
+.poem{font-family:var(--serif);white-space:pre-line;font-size:16px;line-height:1.9;margin:0}
+.muted{color:var(--ink2);font-size:13px}
+.kigo-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:8px}
+.kg{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;text-align:left}
+.kg:hover{border-color:var(--ac)}
+.kg b{font-family:var(--serif);font-size:16px}
+.kg i{font-style:normal;font-size:11px;color:var(--ink2);margin-left:4px}
+.kg span{display:block;font-size:12px;color:var(--ink2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lines{display:grid;gap:10px}
+.line{display:grid;grid-template-columns:1fr 150px 54px;gap:8px;align-items:center}
+@media(max-width:640px){.line{grid-template-columns:1fr 54px}.line .yomi{grid-column:1/2}}
+.line input{border:1px solid var(--line);background:#fffefb;border-radius:10px;padding:9px 11px;font-size:17px;font-family:var(--serif);width:100%}
+.line input.yomi{font-size:13px;font-family:var(--sans)}
+.line input:focus,textarea:focus{outline:2px solid var(--ac);outline-offset:1px}
+.mora{font-size:13px;font-weight:700;text-align:center;border-radius:8px;padding:6px 0;background:#eee6d8}
+.mora.ok{background:#d9f0dd;color:#166534}.mora.ng{background:#fde2e2;color:#991b1b}
+textarea{width:100%;border:1px solid var(--line);background:#fffefb;border-radius:10px;padding:10px 12px;font-size:16px;font-family:var(--serif);line-height:1.9;min-height:200px;resize:vertical}
+.checks{margin-top:12px;display:grid;gap:6px}
+.ck{font-size:14px;border-radius:10px;padding:7px 12px;background:#f1ece2}
+.ck.good{background:#e3f4e6}.ck.warn{background:#fff1d6}.ck.info{background:#eef2fb}
+.form-help{font-size:13.5px;color:var(--ink2);margin:8px 0 0;background:#fbf6ea;border-radius:10px;padding:8px 12px}
+.works{display:grid;gap:10px}
+.work{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.work .wt{font-size:12px;color:var(--ac);font-weight:700}
+.work pre{font-family:var(--serif);white-space:pre-wrap;margin:4px 0 8px;font-size:16px}
+.tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.tip{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.tip b{font-family:var(--serif);font-size:16px;display:block;margin-bottom:2px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:8px 16px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+mark{background:#ffe48a;color:inherit}
+</style>
+</head><body>
+<div class="wrap">
+  <header class="hero">
+    <div class="no">作るためのページ</div>
+    <h1>✒ 心を詠む工房</h1>
+    <p>哲学・心理（精神）・感情を、俳句と詩にするためのページ。お題を選ぶ → 季語と具体を拾う → 書いてチェック → 作品帳に保存。</p>
+  </header>
+
+  <h2><span class="n">1</span>お題を選ぶ</h2>
+  <div class="box">
+    <div class="row" style="justify-content:space-between">
+      <div class="seg" id="grp"></div>
+      <button class="btn ghost sm" id="rand">🎲 おまかせ</button>
+    </div>
+    <div class="themes" id="themes"></div>
+  </div>
+
+  <div id="themeBox"></div>
+
+  <h2><span class="n">3</span>書く</h2>
+  <div class="box">
+    <div class="row" style="justify-content:space-between">
+      <div class="seg" id="mode">
+        <button class="chip on" data-m="haiku">俳句</button>
+        <button class="chip" data-m="poem">詩</button>
+      </div>
+      <span class="muted" id="curTheme">お題：（未選択）</span>
+    </div>
+    <div style="margin-top:12px">
+      <p class="sub">型を選ぶ</p>
+      <div class="seg" id="forms"></div>
+      <p class="form-help" id="formHelp"></p>
+    </div>
+    <div id="haikuEd" style="margin-top:14px">
+      <div class="lines">
+        <div class="line"><input class="t" data-i="0" placeholder="上五（例：秋の水）" aria-label="上五"><input class="yomi" data-i="0" placeholder="よみ（任意）" aria-label="上五のよみ"><span class="mora" id="m0">－</span></div>
+        <div class="line"><input class="t" data-i="1" placeholder="中七" aria-label="中七"><input class="yomi" data-i="1" placeholder="よみ（任意）" aria-label="中七のよみ"><span class="mora" id="m1">－</span></div>
+        <div class="line"><input class="t" data-i="2" placeholder="下五" aria-label="下五"><input class="yomi" data-i="2" placeholder="よみ（任意）" aria-label="下五のよみ"><span class="mora" id="m2">－</span></div>
+      </div>
+      <p class="muted" style="margin:6px 0 0">漢字があるときは「よみ」をひらがなで入れると音数が出ます（季語辞典にある語は自動で読みます）。</p>
+    </div>
+    <div id="poemEd" style="margin-top:14px" hidden>
+      <textarea id="poem" placeholder="ここに詩を書きます。行を分けて書いてみましょう。" aria-label="詩"></textarea>
+    </div>
+    <div class="checks" id="checks"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="save">作品帳に保存</button>
+      <button class="btn ghost" id="copy">コピー</button>
+      <button class="btn ghost" id="clear">書き直す</button>
+    </div>
+  </div>
+
+  <h2><span class="n">4</span>作品帳</h2>
+  <div class="works" id="works"></div>
+
+  <h2>技法メモ</h2>
+  <div class="tips">
+    <div class="tip"><b>感情は「書かずに見せる」</b>「悲しい」と書く代わりに、そのとき体がしたこと・手にしていたモノを書く。読み手が自分で感情にたどり着くと、深く残ります。</div>
+    <div class="tip"><b>季語の本意を一つずらす</b>本意（季語が持つ心）を踏まえたうえで、自分だけの発見を一つ足す。「秋の暮＝寂しさ」に、寂しさとは別の具体を取り合わせると新しくなります。</div>
+    <div class="tip"><b>抽象語は一句に一つまで</b>「永遠」「自由」「孤独」などの大きな言葉は、具体と組み合わせて一つだけ。並べるほど説明になります。</div>
+    <div class="tip"><b>比喩の三つの型</b>直喩（〜のように）／隠喩（AはB、と言い切る）／擬人法（モノを人のように動かす）。俳句では隠喩と擬人法が短くまとまります。</div>
+    <div class="tip"><b>問いは答えずに置く</b>哲学的な句は、答えを言わず問いのまま置くと余韻が残ります（「散るために咲いてゐるのか」）。</div>
+    <div class="tip"><b>詩は「行替え」で呼吸をつくる</b>大事な言葉の前で行を替えると、読み手が一瞬立ち止まります。最後の一行は短く。</div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>window.BOOKS=[];</script>
+<script src="../notes/data/b1.js"></script><script src="../notes/data/b2.js"></script><script src="../notes/data/b3.js"></script>
+<script src="../notes/data/b4.js"></script><script src="../notes/data/b5.js"></script><script src="../notes/data/b6.js"></script>
+<script src="../notes/kigo-data.js"></script>
+<script src="kokoro-data.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 1600); };
+let store = {}; try { store = JSON.parse(localStorage.getItem('souzou-kokoro-v1') || '{}'); } catch(e) {}
+store.works = store.works || [];
+const save = () => { try { localStorage.setItem('souzou-kokoro-v1', JSON.stringify(store)); } catch(e) {} };
+
+/* ---------- 季語データ ---------- */
+const KIGO = []; let season = '';
+KIGO_RAW.split('\n').forEach(l => {
+  if (l.startsWith('#')) { season = l.slice(1); return; }
+  const [c, w, r, alt, m] = l.split('|'); if (!w) return;
+  KIGO.push({s: season, c, w, r, alt: alt ? alt.split(',') : [], m: m || ''});
+});
+const HONI = {}; KIGO_HONI.split('\n').forEach(l => { const i = l.indexOf('|'); if (i > 0) HONI[l.slice(0, i)] = l.slice(i + 1); });
+KIGO.forEach(k => k.h = HONI[k.w] || '');
+const FEEL = {}; KIGO_FEEL.forEach(f => FEEL[f[0]] = f[1]);
+const TERMS = []; KIGO.forEach(k => { TERMS.push([k.w, k]); k.alt.forEach(a => a && TERMS.push([a, k])); });
+TERMS.sort((a, b) => b[0].length - a[0].length);
+const READ = TERMS.map(([w, k]) => [w, k.r]);
+
+/* ---------- お題 ---------- */
+const GROUPS = ['すべて', '感情', '心理・精神', '哲学'];
+let grp = 'すべて', cur = null;
+function renderGroups(){
+  $('#grp').innerHTML = GROUPS.map(g => `<button class="chip ${g === grp ? 'on' : ''}" data-g="${g}">${g}</button>`).join('');
+  $('#themes').innerHTML = THEMES.filter(t => grp === 'すべて' || t.g === grp)
+    .map(t => `<button class="chip sm ${cur && cur.id === t.id ? 'on' : ''}" data-t="${t.id}">${esc(t.name)}</button>`).join('');
+}
+$('#grp').onclick = e => { const b = e.target.closest('[data-g]'); if (b) { grp = b.dataset.g; renderGroups(); } };
+$('#themes').onclick = e => { const b = e.target.closest('[data-t]'); if (b) pick(b.dataset.t); };
+$('#rand').onclick = () => { const list = THEMES.filter(t => grp === 'すべて' || t.g === grp); pick(list[Math.floor(Math.random() * list.length)].id); };
+
+let kSeason = 'すべて', kShown = 12, kSeed = 0;
+function pick(id){
+  cur = THEMES.find(t => t.id === id); kShown = 12; kSeed = Math.random();
+  renderGroups(); renderTheme();
+  $('#curTheme').textContent = 'お題：' + cur.name;
+  try { history.replaceState(null, '', '#' + id); } catch(e) {}
+  $('#themeBox').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function seeded(arr){ // 毎回同じ並びにならないよう、お題ごとに混ぜる
+  let x = Math.floor(kSeed * 233280) || 1;
+  return arr.map(v => { x = (x * 9301 + 49297) % 233280; return [x, v]; }).sort((a, b) => a[0] - b[0]).map(v => v[1]);
+}
+function kigoFor(t){
+  const res = t.feel.map(f => FEEL[f]).filter(Boolean);
+  return seeded(KIGO.filter(k => (kSeason === 'すべて' || k.s === kSeason) && k.h && res.some(r => r.test(k.h))));
+}
+function findNote(t){
+  const b = BOOKS.find(x => x.id === t.note[0]); if (!b) return null;
+  for (let si = 0; si < b.sections.length; si++) for (let ci = 0; ci < b.sections[si].cards.length; ci++)
+    if (b.sections[si].cards[ci].t.includes(t.note[1])) return {book: b, id: `c-${si}-${ci}`, title: b.sections[si].cards[ci].t};
+  return null;
+}
+function renderTheme(){
+  const t = cur; if (!t) { $('#themeBox').innerHTML = ''; return; }
+  const ks = kigoFor(t), nt = findNote(t);
+  $('#themeBox').innerHTML = `
+  <h2><span class="n">2</span>季語と具体を拾う</h2>
+  <div class="box">
+    <div class="theme-head">
+      <div><div class="tag">${esc(t.g)}</div><h3>${esc(t.name)}</h3></div>
+      ${nt ? `<button class="btn ghost sm" data-note="${nt.book.id}" data-anchor="${nt.id}">📖 ノートで読む：${esc(nt.book.title)}「${esc(nt.title)}」</button>` : ''}
+    </div>
+    <p class="q">問い：${esc(t.q)}</p>
+    <div class="grid2">
+      <div>
+        <p class="sub">感情を託せる具体（タップで書く欄に入る）</p>
+        <div class="seg">${t.gutai.map(g => `<button class="chip sm" data-ins="${esc(g)}">${esc(g)}</button>`).join('')}</div>
+        <p class="sub" style="margin-top:14px">例句</p>
+        <p class="ex">${esc(t.ex[0])}</p><p class="ex-r">${esc(t.ex[1])}</p>
+        <p class="muted" style="margin:4px 0 0">${esc(t.ex[2])}</p>
+      </div>
+      <div>
+        <p class="sub">例の詩</p>
+        <p class="poem">${esc(t.poem)}</p>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="row" style="justify-content:space-between">
+        <p class="sub" style="margin:0">合う季語（本意：${t.feel.map(esc).join('／')}）　${ks.length}語</p>
+        <div class="seg" id="kseason">${['すべて','春','夏','秋','冬','新年'].map(s => `<button class="chip sm ${s === kSeason ? 'on' : ''}" data-ks="${s}">${s}</button>`).join('')}</div>
+      </div>
+      <div class="kigo-list">${ks.slice(0, kShown).map(k => `<button class="kg" data-ins="${esc(k.w)}" title="タップで書く欄に入れる"><b>${esc(k.w)}</b><i>${k.s}・${esc(k.r)}</i><span>${esc(k.h)}</span></button>`).join('') || '<p class="muted">この季節には見つかりませんでした。</p>'}</div>
+      <div class="row" style="margin-top:8px">
+        ${ks.length > kShown ? `<button class="btn ghost sm" id="kmore">もっと見る</button>` : ''}
+        <button class="btn ghost sm" id="kshuf">ほかの季語</button>
+      </div>
+    </div>
+  </div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.ks) { kSeason = b.dataset.ks; kShown = 12; renderTheme(); }
+  else if (b.id === 'kmore') { kShown += 24; renderTheme(); }
+  else if (b.id === 'kshuf') { kSeed = Math.random(); kShown = 12; renderTheme(); }
+  else if (b.dataset.ins) insert(b.dataset.ins);
+  else if (b.dataset.note) openNote(b.dataset.note, b.dataset.anchor);
+});
+function openNote(book, anchor){
+  if (window.parent && window.parent !== window) { window.parent.postMessage({souzouGo: book, anchor}, '*'); }
+  else location.href = `../notes/${book}.html#${anchor}`;
+}
+
+/* ---------- 書く ---------- */
+const FORMS = {
+  haiku: [
+    ['取り合わせ', '季語（5音）と、季語とは別の具体（12音）を組み合わせる型。二つの間に「切れ」を置くと、読み手が両者の響き合いを感じとります。例：二膳目の箸をしまひぬ／秋の暮'],
+    ['一物仕立て', '一つのモノ（季語）だけを、じっと見つめて描きます。発見が一つあれば成立します。例：春眠の底に知らない駅ひとつ'],
+    ['問いかけ', '答えを言わずに問いのまま置く型。哲学的なお題に向きます。例：散るために咲いてゐるのか夕桜'],
+    ['対比', '大と小、生と死、動と静など、正反対のものを並べて心を浮かび上がらせます。例：嬰児と老婆のあひに木の実落つ']
+  ],
+  poem: [
+    ['短い詩（4行）', '具体 → 具体 → ずらし → 短い結び、の4行。最後の一行で視点を少しずらすと余韻が出ます。', '\n\n\n'],
+    ['呼びかけ', '「あなた」「きみ」など誰か（モノでもよい）に話しかける形。感情が自然に言葉になります。', 'あなたは\n\n\n'],
+    ['リフレイン', '同じ言葉や行を繰り返し、少しずつ変化させる形。歌詞にもつながります。', '〇〇だった\n\n〇〇だった\n\nそれでも 〇〇だった'],
+    ['問いと答え', '前半で問いを立て、後半で（答えにならない）答えを置く形。哲学的なお題に向きます。', 'なぜ\n\n\nたぶん\n'],
+    ['対比', '「〜のに」「〜から」で正反対のものを並べる形。アンビヴァレンス（揺れる気持ち）に向きます。', '近づけば\n\n離れれば\n']
+  ]
+};
+let mode = 'haiku', form = 0;
+function renderForms(){
+  $('#forms').innerHTML = FORMS[mode].map((f, i) => `<button class="chip sm ${i === form ? 'on' : ''}" data-f="${i}">${f[0]}</button>`).join('');
+  const f = FORMS[mode][form];
+  $('#formHelp').innerHTML = esc(f[1]) + (mode === 'poem' && f[2] ? ` <button class="btn ghost sm" id="tpl" style="margin-left:6px">ひな形を入れる</button>` : '');
+}
+$('#forms').onclick = e => { const b = e.target.closest('[data-f]'); if (b) { form = +b.dataset.f; renderForms(); } };
+$('#formHelp').addEventListener('click', e => {
+  if (e.target.id !== 'tpl') return;
+  const ta = $('#poem'); if (ta.value.trim()) ta.value += '\n\n'; ta.value += FORMS.poem[form][2]; ta.focus(); check();
+});
+$('#mode').onclick = e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  mode = b.dataset.m; form = 0;
+  $('#mode').querySelectorAll('[data-m]').forEach(x => x.classList.toggle('on', x === b));
+  $('#haikuEd').hidden = mode !== 'haiku'; $('#poemEd').hidden = mode !== 'poem';
+  renderForms(); check();
+};
+
+let lastField = null;
+document.addEventListener('focusin', e => { if (e.target.matches('.line input.t, #poem')) lastField = e.target; });
+function insert(word){
+  let el = lastField;
+  if (mode === 'poem') el = $('#poem');
+  else if (!el || el.id === 'poem') {
+    const ts = [...document.querySelectorAll('.line input.t')];
+    el = ts.find(x => !x.value) || ts[2];
+  }
+  const s = el.selectionStart ?? el.value.length, en = el.selectionEnd ?? el.value.length;
+  el.value = el.value.slice(0, s) + word + el.value.slice(en);
+  el.focus(); try { el.setSelectionRange(s + word.length, s + word.length); } catch(e) {}
+  check(); toast(`「${word}」を入れました`);
+}
+
+const SMALL = 'ゃゅょぁぃぅぇぉゎャュョァィゥェォヮ';
+const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+const mora = s => [...s].filter(c => !SMALL.includes(c)).length;
+const kanaOnly = s => /^[ぁ-んァ-ヶー]+$/.test(s);
+function autoRead(t){
+  let s = t.replace(/[\s　]/g, '');
+  for (const [w, r] of READ) if (s.includes(w)) s = s.split(w).join(r);
+  return kanaOnly(s) ? toHira(s) : null;
+}
+function findKigo(text){
+  const found = []; let m = text;
+  for (const [w, k] of TERMS) {
+    let i = m.indexOf(w);
+    while (i !== -1) { if (!found.some(f => f.k === k)) found.push({w, k}); m = m.slice(0, i) + '□'.repeat(w.length) + m.slice(i + w.length); i = m.indexOf(w); }
+  }
+  return found;
+}
+const EMO = /嬉し|うれし|悲し|哀し|かなし|寂し|淋し|さびし|さみし|楽し|たのし|怒り|怒る|憎し|憎い|恋し|切な|辛い|つらい|苦し|虚し|空し|むなし|幸せ|しあわせ|不安|孤独|絶望|希望|愛し|恐ろし|怖い|こわい|羨まし|妬まし|恥ずかし/g;
+function check(){
+  const out = [];
+  if (mode === 'haiku') {
+    const ts = [...document.querySelectorAll('.line input.t')].map(x => x.value.trim());
+    const ys = [...document.querySelectorAll('.line input.yomi')].map(x => x.value.trim());
+    const target = [5, 7, 5]; let total = 0, known = true;
+    ts.forEach((t, i) => {
+      const el = $('#m' + i); const r = ys[i] ? toHira(ys[i].replace(/[\s　]/g, '')) : (t ? autoRead(t) : null);
+      if (!t && !ys[i]) { el.textContent = '－'; el.className = 'mora'; known = false; return; }
+      if (r === null || !kanaOnly(r)) { el.textContent = '？'; el.className = 'mora'; el.title = 'よみを入れると数えます'; known = false; return; }
+      const n = mora(r); total += n; el.textContent = n + '音'; el.className = 'mora ' + (n === target[i] ? 'ok' : 'ng');
+    });
+    const text = ts.join('');
+    if (!text) { $('#checks').innerHTML = '<div class="ck info">お題を選んで、季語や具体をタップすると書く欄に入ります。</div>'; return; }
+    if (known) out.push(total === 17 ? ['good', '十七音です。'] : ['info', `合計 ${total} 音（定型は十七音）。字余り・字足らずは、ねらいがあれば効果にもなります。`]);
+    const kg = findKigo(text);
+    if (!kg.length) out.push(['warn', '季語が見つかりません（無季の句にするなら、それでも大丈夫です）。上の「合う季語」から選べます。']);
+    else if (kg.length === 1) out.push(['good', `季語：${kg[0].w}（${kg[0].k.s}）` + (kg[0].k.h ? `　本意：${kg[0].k.h}` : '')]);
+    else {
+      const ss = [...new Set(kg.map(f => f.k.s))];
+      out.push(['warn', `季語が ${kg.length} つあります（季重なり）：${kg.map(f => f.w + '（' + f.k.s + '）').join('、')}。` + (ss.length > 1 ? '季節もばらばらです。' : '') + 'どれか一つを主役にすると焦点が定まります。季語として使っていない語なら気にしなくて大丈夫です。']);
+    }
+    const kire = (text.match(/や|かな|けり/g) || []).length;
+    if (kire > 1) out.push(['warn', '切れ字（や・かな・けり）らしい言葉が複数あります。切れ字は一句に一つが基本です。']);
+    const emo = [...new Set(text.match(EMO) || [])];
+    if (emo.length) out.push(['warn', `感情の言葉「${emo.join('・')}」が入っています。しぐさやモノに置き換えると、読み手の心に届きやすくなります（ねらって使うなら大丈夫）。`]);
+    else out.push(['good', '感情を直接言う言葉は使っていません。']);
+  } else {
+    const v = $('#poem').value; const lines = v.split('\n').filter(l => l.trim());
+    if (!v.trim()) { $('#checks').innerHTML = '<div class="ck info">型の「ひな形を入れる」から始めることもできます。</div>'; return; }
+    out.push(['info', `${lines.length} 行・${v.replace(/\s/g, '').length} 字`]);
+    const emo = [...new Set(v.match(EMO) || [])];
+    if (emo.length) out.push(['warn', `感情の言葉「${emo.join('・')}」が入っています。一つは残して、ほかは具体（しぐさ・モノ・景色）に置き換えてみましょう。`]);
+    else out.push(['good', '感情を直接言う言葉は使っていません。']);
+    const kg = findKigo(v); if (kg.length) out.push(['info', `季節の言葉：${kg.slice(0, 6).map(f => f.w).join('、')}${kg.length > 6 ? ' ほか' : ''}`]);
+    const last = lines[lines.length - 1] || '';
+    if (lines.length >= 3 && last.length > 18) out.push(['info', '最後の一行が長めです。結びを短くすると余韻が残ります。']);
+  }
+  $('#checks').innerHTML = out.map(([c, t]) => `<div class="ck ${c}">${esc(t)}</div>`).join('');
+}
+document.addEventListener('input', e => { if (e.target.matches('.line input, #poem')) check(); });
+
+function currentText(){
+  if (mode === 'poem') return $('#poem').value.trim();
+  return [...document.querySelectorAll('.line input.t')].map(x => x.value.trim()).filter(Boolean).join(' ');
+}
+$('#save').onclick = () => {
+  const text = currentText(); if (!text) { toast('まだ何も書かれていません'); return; }
+  store.works.unshift({id: Date.now(), mode, theme: cur ? cur.name : '', form: FORMS[mode][form][0], text, date: new Date().toLocaleDateString('ja-JP')});
+  save(); renderWorks(); toast('作品帳に保存しました');
+};
+$('#copy').onclick = () => {
+  const text = currentText(); if (!text) { toast('まだ何も書かれていません'); return; }
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast('コピーしました'), () => toast('コピーできませんでした'));
+};
+let clearArm = false;
+$('#clear').onclick = () => {
+  if (!clearArm) { clearArm = true; $('#clear').textContent = 'もう一度押すと消します'; setTimeout(() => { clearArm = false; $('#clear').textContent = '書き直す'; }, 2500); return; }
+  document.querySelectorAll('.line input').forEach(x => x.value = ''); $('#poem').value = '';
+  clearArm = false; $('#clear').textContent = '書き直す'; check();
+};
+let delArm = null;
+function renderWorks(){
+  $('#works').innerHTML = store.works.length ? store.works.map(w => `<div class="work"><div class="wt">${w.mode === 'poem' ? '詩' : '俳句'}・${esc(w.form)}${w.theme ? '・お題：' + esc(w.theme) : ''}・${esc(w.date)}</div>
+    <pre>${esc(w.text)}</pre><div class="row"><button class="btn ghost sm" data-wcopy="${w.id}">コピー</button><button class="btn ghost sm" data-wdel="${w.id}">${delArm === w.id ? 'もう一度押すと削除' : '削除'}</button></div></div>`).join('')
+    : '<p class="muted">保存した作品がここに並びます（この端末のブラウザに保存されます）。</p>';
+}
+$('#works').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.wcopy) { const w = store.works.find(x => x.id == b.dataset.wcopy); (navigator.clipboard ? navigator.clipboard.writeText(w.text) : Promise.reject()).then(() => toast('コピーしました'), () => toast('コピーできませんでした')); }
+  if (b.dataset.wdel) {
+    const id = +b.dataset.wdel;
+    if (delArm !== id) { delArm = id; renderWorks(); setTimeout(() => { if (delArm === id) { delArm = null; renderWorks(); } }, 2500); return; }
+    store.works = store.works.filter(x => x.id !== id); delArm = null; save(); renderWorks(); toast('削除しました');
+  }
+};
+
+renderGroups(); renderForms(); renderWorks(); check();
+const h = location.hash.slice(1); if (h && THEMES.some(t => t.id === h)) pick(h);
+})();
+</script>
+</body></html>

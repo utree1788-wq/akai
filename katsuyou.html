@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>俳句の動詞の活用｜創作の手帖</title>
+<link rel="icon" type="image/svg+xml" href="../souzou-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--paper:#f7f3ea;--paper2:#fffdf8;--ink:#2a2622;--ink2:#5d564e;--line:#e3dbcd;--ac:#1e40af;--ac2:#e8eefc;--red:#b91c1c;
+--serif:"Shippori Mincho","Noto Serif JP",serif;--sans:"Zen Kaku Gothic New","Noto Sans JP",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.75}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:28px 18px 90px}
+.hero{border-bottom:1px solid var(--line);padding-bottom:16px}
+.hero .no{font-size:12px;letter-spacing:.2em;color:var(--ac);font-weight:700}
+.hero h1{font-family:var(--serif);font-size:clamp(26px,5vw,36px);margin:4px 0 2px;line-height:1.3}
+.hero p{margin:0;color:var(--ink2);font-size:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.tab{border:1px solid var(--line);background:var(--paper2);border-radius:999px;padding:6px 14px;font-size:14px}
+.tab[aria-selected=true]{background:var(--ac);border-color:var(--ac);color:#fff}
+h2{font-family:var(--serif);font-size:22px;margin:30px 0 10px;padding-left:12px;border-left:4px solid var(--ac);line-height:1.4}
+h3{font-family:var(--serif);font-size:18px;margin:18px 0 6px}
+.box{background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+p{margin:6px 0}
+.muted{color:var(--ink2);font-size:13.5px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14.5px;background:#fff;min-width:560px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;vertical-align:top}
+th{background:#f1ece2;font-weight:700;font-size:13.5px}
+td.l,th.l{text-align:left}
+td .r{display:block;font-size:11.5px;color:var(--ink2)}
+.em{color:var(--ac);font-weight:700}
+.chip{border:1px solid var(--line);background:var(--paper2);border-radius:999px;padding:3px 11px;font-size:13.5px}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.vlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-height:220px;overflow-y:auto;padding:2px}
+.search{width:100%;border:1px solid var(--line);background:#fffefb;border-radius:10px;padding:9px 12px;font-size:15px;margin-bottom:8px}
+.search:focus{outline:2px solid var(--ac);outline-offset:1px}
+.vhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.vhead b{font-family:var(--serif);font-size:28px}
+.badge{font-size:12.5px;background:var(--ac2);color:var(--ac);border-radius:999px;padding:2px 10px;font-weight:700}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
+.exb{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.exb .w{font-family:var(--serif);font-size:18px}
+.exb .m{font-size:12px;color:var(--ink2)}
+.exb.ng{border-color:#f3b4b4;background:#fff6f6}
+.pit{background:var(--paper2);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.pit b{font-family:var(--serif);font-size:16.5px}
+.ok{color:#166534;font-weight:700}.ng{color:var(--red);font-weight:700}
+.quiz{background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:18px}
+.quiz .qq{font-family:var(--serif);font-size:20px;margin:0 0 12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.opt{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;font-family:var(--serif);font-size:18px}
+.opt.right{background:#dcfce7;border-color:#16a34a}.opt.wrong{background:#fee2e2;border-color:#dc2626}
+.btn{border:1px solid var(--ac);background:var(--ac);color:#fff;border-radius:10px;padding:7px 14px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ac)}
+ul{margin:6px 0;padding-left:1.3em}
+li{margin:3px 0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:720px){.cols{grid-template-columns:1fr}}
+</style>
+</head><body>
+<div class="wrap">
+  <header class="hero">
+    <div class="no">作るためのページ</div>
+    <h1>🖋 俳句の動詞の活用（文語）</h1>
+    <p>俳句でよく使う文語（古典の言葉）の動詞が、どう形を変えるか。しくみ・助動詞のつなぎ方・まちがえやすい所を、表と例句で。</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" data-v="basic">しくみ</button>
+      <button class="tab" data-v="table">活用表を引く</button>
+      <button class="tab" data-v="aux">助動詞・切れ字のつなぎ方</button>
+      <button class="tab" data-v="pit">まちがえやすい所</button>
+      <button class="tab" data-v="adj">形容詞・形容動詞</button>
+      <button class="tab" data-v="quiz">練習問題</button>
+    </div>
+  </header>
+
+  <!-- しくみ -->
+  <section id="v-basic">
+    <h2>活用とは</h2>
+    <div class="box">
+      <p>動詞は、あとに続く言葉によって語尾の形を変えます。これを<span class="em">活用</span>といいます。文語（古語）には形が<span class="em">6つ</span>あり、俳句ではこの使い分けで「意味」と「調べ（響き）」が決まります。</p>
+      <div class="tbl-wrap"><table>
+        <tr><th>活用形</th><th>主な使い方</th><th>あとに続く主な言葉</th><th>「咲く」では</th></tr>
+        <tr><td><b>未然形</b></td><td class="l">まだそうなっていない</td><td class="l">ず（打消）・む（推量・意志）・ば（もし〜なら）</td><td>咲か<span class="r">咲かず／咲かむ</span></td></tr>
+        <tr><td><b>連用形</b></td><td class="l">用言に続く・文をつなぐ</td><td class="l">けり・ぬ・つ・たり・き・て</td><td>咲き<span class="r">咲きけり／咲きぬ</span></td></tr>
+        <tr><td><b>終止形</b></td><td class="l">言い切る</td><td class="l">（文の終わり）・べし・らむ・なり（伝聞）</td><td>咲く<span class="r">花咲く。</span></td></tr>
+        <tr><td><b>連体形</b></td><td class="l">名詞（体言）に続く</td><td class="l">体言・かな・ぞ／なむ／や／か の結び</td><td>咲く<span class="r">咲く花</span></td></tr>
+        <tr><td><b>已然形</b></td><td class="l">すでにそうなっている</td><td class="l">ば（〜ので・〜と）・ど／ども（〜けれど）・こその結び</td><td>咲け<span class="r">咲けば／咲けど</span></td></tr>
+        <tr><td><b>命令形</b></td><td class="l">命令・呼びかけ</td><td class="l">（言い切り）</td><td>咲け<span class="r">咲け、桜よ</span></td></tr>
+      </table></div>
+      <p class="muted">口語（今の言葉）と違うのは「已然形」があること。口語の仮定形「咲けば（もし咲いたら）」は、文語では未然形を使って「咲かば」になります。文語の「咲けば」は「咲いたので・咲くと」の意味です。</p>
+    </div>
+
+    <h2>活用の種類（9種類）</h2>
+    <div class="box">
+      <div class="tbl-wrap"><table>
+        <tr><th>種類</th><th>未然</th><th>連用</th><th>終止</th><th>連体</th><th>已然</th><th>命令</th><th class="l">例（俳句でよく使う語）</th></tr>
+        <tr><td><b>四段</b></td><td>a</td><td>i</td><td>u</td><td>u</td><td>e</td><td>e</td><td class="l">咲く・鳴く・散る・思ふ・待つ</td></tr>
+        <tr><td><b>上一段</b></td><td>i</td><td>i</td><td>iる</td><td>iる</td><td>iれ</td><td>iよ</td><td class="l">見る・着る・似る・居る</td></tr>
+        <tr><td><b>上二段</b></td><td>i</td><td>i</td><td>u</td><td>uる</td><td>uれ</td><td>iよ</td><td class="l">落つ・起く・過ぐ・恋ふ・老ゆ</td></tr>
+        <tr><td><b>下一段</b></td><td>e</td><td>e</td><td>eる</td><td>eる</td><td>eれ</td><td>eよ</td><td class="l">蹴る（これ一語だけ）</td></tr>
+        <tr><td><b>下二段</b></td><td>e</td><td>e</td><td>u</td><td>uる</td><td>uれ</td><td>eよ</td><td class="l">消ゆ・燃ゆ・流る・暮る・植う</td></tr>
+        <tr><td><b>カ変</b></td><td>こ</td><td>き</td><td>く</td><td>くる</td><td>くれ</td><td>こ（こよ）</td><td class="l">来（く）</td></tr>
+        <tr><td><b>サ変</b></td><td>せ</td><td>し</td><td>す</td><td>する</td><td>すれ</td><td>せよ</td><td class="l">す・恋す・旅す</td></tr>
+        <tr><td><b>ナ変</b></td><td>な</td><td>に</td><td>ぬ</td><td>ぬる</td><td>ぬれ</td><td>ね</td><td class="l">死ぬ・往ぬ（去ぬ）</td></tr>
+        <tr><td><b>ラ変</b></td><td>ら</td><td>り</td><td>り</td><td>る</td><td>れ</td><td>れ</td><td class="l">あり・居り（をり）・侍り</td></tr>
+      </table></div>
+    </div>
+
+    <h2>種類の見分け方</h2>
+    <div class="cols">
+      <div class="box">
+        <h3 style="margin-top:0">① まず「覚える語」か確かめる</h3>
+        <ul>
+          <li><b>上一段</b>：干る・射る・鋳る・着る・似る・煮る・見る・居る・率る（「ひいきにみゐる」）＋ 用ゐる・顧みる・試みる など</li>
+          <li><b>下一段</b>：蹴る</li>
+          <li><b>カ変</b>：来（く）　<b>サ変</b>：す・おはす（「〜す」の複合語も）</li>
+          <li><b>ナ変</b>：死ぬ・往ぬ（去ぬ）　<b>ラ変</b>：あり・居り・侍り・いまそかり</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3 style="margin-top:0">② それ以外は「ず」をつける</h3>
+        <ul>
+          <li>ず の直前が <b>a</b> 段 → <b>四段</b>（咲か-ず、思は-ず）</li>
+          <li>ず の直前が <b>i</b> 段 → <b>上二段</b>（落ち-ず、恋ひ-ず）</li>
+          <li>ず の直前が <b>e</b> 段 → <b>下二段</b>（消え-ず、流れ-ず）</li>
+        </ul>
+        <p class="muted">口語で「〜iる」になる語（落ちる・起きる）の多くは上二段、「〜eる」になる語（消える・流れる）の多くは下二段です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 活用表 -->
+  <section id="v-table" hidden>
+    <h2>活用表を引く</h2>
+    <div class="box">
+      <input class="search" id="vq" type="search" placeholder="動詞を探す（例：落つ、きゆ、思ふ）" aria-label="動詞を探す">
+      <div class="seg" id="vtype"></div>
+      <div class="vlist" id="vlist"></div>
+    </div>
+    <div class="box" id="vcard"></div>
+  </section>
+
+  <!-- 助動詞 -->
+  <section id="v-aux" hidden>
+    <h2>俳句でよく使う助動詞と、つなぐ形</h2>
+    <div class="box">
+      <div class="tbl-wrap"><table>
+        <tr><th>助動詞</th><th>意味</th><th>つなぐ形</th><th class="l">例</th></tr>
+        <tr><td><b>けり</b></td><td>詠嘆（〜だなあ）・過去</td><td>連用形</td><td class="l">咲き<b>けり</b>　落ち<b>けり</b>　※切れ字にもなる</td></tr>
+        <tr><td><b>ぬ</b></td><td>完了（〜てしまった）</td><td>連用形</td><td class="l">散り<b>ぬ</b>　消え<b>ぬ</b>　秋来<b>ぬ</b></td></tr>
+        <tr><td><b>つ</b></td><td>完了（〜た・意志的）</td><td>連用形</td><td class="l">書き<b>つ</b>　見<b>つ</b></td></tr>
+        <tr><td><b>たり</b></td><td>完了・存続（〜ている）</td><td>連用形</td><td class="l">咲き<b>たり</b>　見え<b>たり</b>　連体：咲き<b>たる</b>花</td></tr>
+        <tr><td><b>り</b></td><td>完了・存続（〜ている）</td><td>サ変の未然形・四段の已然形</td><td class="l">咲け<b>り</b>　散れ<b>る</b>花　せ<b>り</b>　※四段とサ変にしかつかない</td></tr>
+        <tr><td><b>き</b></td><td>過去（自分が体験した）</td><td>連用形（カ変・サ変は特殊）</td><td class="l">見<b>し</b>夢（連体形「し」）　咲き<b>し</b>花＝咲いた花</td></tr>
+        <tr><td><b>ず</b></td><td>打消（〜ない）</td><td>未然形</td><td class="l">咲か<b>ず</b>　連体：咲か<b>ぬ</b>花　已然：咲か<b>ね</b>ど</td></tr>
+        <tr><td><b>む（ん）</b></td><td>推量・意志（〜だろう・〜よう）</td><td>未然形</td><td class="l">咲か<b>む</b>　ゆか<b>む</b></td></tr>
+        <tr><td><b>べし</b></td><td>推量・当然（〜にちがいない）</td><td>終止形（ラ変は連体形）</td><td class="l">咲く<b>べし</b>　落つ<b>べし</b>　ある<b>べし</b></td></tr>
+        <tr><td><b>らむ</b></td><td>現在推量（今ごろ〜しているだろう）</td><td>終止形（ラ変は連体形）</td><td class="l">咲く<b>らむ</b></td></tr>
+        <tr><td><b>なり</b></td><td>断定（〜である）</td><td>体言・連体形</td><td class="l">夢<b>なり</b>　散る<b>なり</b></td></tr>
+        <tr><td><b>ごとし</b></td><td>比況（〜のようだ）</td><td>体言＋の／が・連体形</td><td class="l">夢の<b>ごとし</b>　散るが<b>ごとし</b></td></tr>
+      </table></div>
+    </div>
+    <h2>切れ字・係り結びとつなぐ形</h2>
+    <div class="cols">
+      <div class="box">
+        <h3 style="margin-top:0">切れ字</h3>
+        <ul>
+          <li><b>や</b>：体言・連体形などにつく。「古池<b>や</b>」　句の途中で切って、詠嘆と間（ま）を生む</li>
+          <li><b>かな</b>：体言・連体形につく。「夜長<b>かな</b>」「散る<b>かな</b>」　句末で深い詠嘆</li>
+          <li><b>けり</b>：連用形につく。「落ち<b>けり</b>」　はっと気づいた感動</li>
+        </ul>
+        <p class="muted">切れ字は一句に一つが基本。「や」と「かな」を同じ句に入れると、詠嘆が二重になり焦点がぼやけます。</p>
+      </div>
+      <div class="box">
+        <h3 style="margin-top:0">係り結び</h3>
+        <ul>
+          <li><b>ぞ・なむ・や・か</b> があると、文の終わりが<b>連体形</b>になる：「花<b>ぞ</b>散<b>る</b>」「何<b>か</b>残<b>る</b>」</li>
+          <li><b>こそ</b> があると、文の終わりが<b>已然形</b>になる：「月<b>こそ</b>澄<b>め</b>」</li>
+        </ul>
+        <p class="muted">四段動詞は終止形と連体形が同じ形なので見分けにくいですが、上二段・下二段では差が出ます：「涙<b>ぞ</b>落<b>つる</b>」「灯<b>こそ</b>消<b>ゆれ</b>」。</p>
+      </div>
+    </div>
+    <h2>終止形止めと連体形止め</h2>
+    <div class="box">
+      <p>句の終わりを<b>終止形</b>にすると、きっぱり言い切る強さが出ます。<b>連体形</b>で止めると（文法的には言い切らない形なので）、ふくらみと余韻が残ります。</p>
+      <div class="ex-grid">
+        <div class="exb"><div class="w">……椿落<b>つ</b></div><div class="m">終止形止め。落ちた事実をきっぱり。</div></div>
+        <div class="exb"><div class="w">……椿落<b>つる</b></div><div class="m">連体形止め。落ちる瞬間に心が残る余韻。</div></div>
+        <div class="exb"><div class="w">……灯の消<b>ゆ</b></div><div class="m">終止形止め。</div></div>
+        <div class="exb"><div class="w">……灯の消<b>ゆる</b></div><div class="m">連体形止め。消えていく時間の長さ。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- まちがえやすい -->
+  <section id="v-pit" hidden>
+    <h2>俳句でまちがえやすい所</h2>
+    <div class="pit"><b>①「り」は四段とサ変にしかつかない</b>
+      <p><span class="ok">○</span> 咲けり・散れる花・せり　<span class="ng">×</span> 見えり・流れり・落ちり</p>
+      <p class="muted">下二段・上二段などで「〜ている」と言いたいときは「たり」を使います：見え<b>たり</b>・流れ<b>たる</b>水・落ち<b>たる</b>椿。</p></div>
+    <div class="pit"><b>②「し」は過去（〜た）。今そうなっている意味ではない</b>
+      <p>「咲きし花」は「（以前に）咲いた花」。「いま咲いている花」と言いたいなら「咲ける花」「咲きたる花」「咲く花」。</p>
+      <p class="muted">「し」を存続（〜ている）の意味で使うのは誤用とする立場が多い一方、慣用として許容する人もいます。迷ったら「たる」「る」に置き換えると確実です。</p></div>
+    <div class="pit"><b>③ 上二段・下二段の連体形は「〜る」がつく</b>
+      <p><span class="ok">○</span> 落つる椿・消ゆる灯・老ゆる母・燃ゆる火　<span class="ng">×（文語として）</span> 落ちる椿・消える灯</p>
+      <p class="muted">「落ちる」「消える」は口語の形。口語で詠むならそれでよく、文語で詠むなら「落つる」「消ゆる」にそろえます。</p></div>
+    <div class="pit"><b>④「ぬ」には二種類ある</b>
+      <p><b>完了の「ぬ」</b>（連用形＋ぬ）：咲き<b>ぬ</b>＝咲いた／<b>打消の「ぬ」</b>（未然形＋ぬ）：咲か<b>ぬ</b>花＝咲かない花</p>
+      <p class="muted">直前が i 段なら完了、a 段なら打消（四段の場合）。「秋来ぬ」は「き（連用）＋ぬ」で「秋が来た」。「こぬ」と読めば「来ない」になります。</p></div>
+    <div class="pit"><b>⑤ 口語と文語をまぜない</b>
+      <p><span class="ng">△</span> 咲いてゐる花の消えゆく……（口語「咲いて」＋文語「ゐる」「ゆく」）</p>
+      <p class="muted">一句の中では文語なら文語、口語なら口語でそろえると調べが整います。わざとまぜる場合は、ねらいをはっきりさせて。</p></div>
+    <div class="pit"><b>⑥ ハ行・ワ行・ヤ行の動詞は旧かなに注意</b>
+      <p>思ふ → 思<b>は</b>ず・思<b>ひ</b>・思<b>へ</b>ば／植う（ワ行）→ 植<b>ゑ</b>／老ゆ（ヤ行）→ 老<b>い</b>／悔ゆ → 悔<b>い</b>／恋ふ → 恋<b>ひ</b></p>
+      <p class="muted">旧かなで書くなら「匂い」ではなく「匂ひ」、「植えて」ではなく「植ゑて」。新かなで書く句なら「匂い」でかまいません。一句の中ではどちらかにそろえます。</p></div>
+    <div class="pit"><b>⑦ 文語の仮定は「未然形＋ば」</b>
+      <p>咲か<b>ば</b>＝もし咲いたら／咲け<b>ば</b>＝咲いたので・咲くと（いつも）</p></div>
+    <div class="pit"><b>⑧ 音便は文語では使わないのが基本</b>
+      <p>口語：咲いて・飛んで・言って　→　文語：咲き<b>て</b>・飛び<b>て</b>・言ひ<b>て</b></p>
+      <p class="muted">中世以降の文語には音便もありますが、文語の俳句では音便なしの形が端正に響きます。</p></div>
+    <div class="pit"><b>⑨「生きる」「得る」などの文語の形</b>
+      <p>生きる → 生<b>く</b>（上二段：生き・生く・生くる）／得る → <b>う</b>（ア行下二段：え・う・うる）／寝る → <b>ぬ</b>（下二段：ね・ぬ・ぬる）／経る → <b>ふ</b>（下二段）</p></div>
+  </section>
+
+  <!-- 形容詞 -->
+  <section id="v-adj" hidden>
+    <h2>形容詞（ク活用・シク活用）</h2>
+    <div class="box">
+      <div class="tbl-wrap"><table>
+        <tr><th>種類</th><th>未然</th><th>連用</th><th>終止</th><th>連体</th><th>已然</th><th>命令</th></tr>
+        <tr><td><b>ク活用</b><span class="r">白し</span></td><td>白から</td><td>白く／白かり</td><td>白し</td><td>白き／白かる</td><td>白けれ</td><td>白かれ</td></tr>
+        <tr><td><b>シク活用</b><span class="r">寂し</span></td><td>寂しから</td><td>寂しく／寂しかり</td><td>寂し</td><td>寂しき／寂しかる</td><td>寂しけれ</td><td>寂しかれ</td></tr>
+      </table></div>
+      <ul>
+        <li>見分け方：「なる」をつけて「〜く なる」ならク活用（白くなる）、「〜しく なる」ならシク活用（寂しくなる）。</li>
+        <li>右側の「〜かり」系（カリ活用）は、助動詞につなぐときに使います：白<b>かり</b>けり・寂し<b>から</b>ず・なか<b>りし</b>（なかった）。</li>
+        <li>俳句では連体形「〜き」で名詞につなぐ形がよく使われます：白<b>き</b>息・寂し<b>き</b>灯。</li>
+      </ul>
+    </div>
+    <h2>形容動詞（ナリ活用）</h2>
+    <div class="box">
+      <div class="tbl-wrap"><table>
+        <tr><th>種類</th><th>未然</th><th>連用</th><th>終止</th><th>連体</th><th>已然</th><th>命令</th></tr>
+        <tr><td><b>ナリ活用</b><span class="r">静かなり</span></td><td>静かなら</td><td>静かなり／静かに</td><td>静かなり</td><td>静かなる</td><td>静かなれ</td><td>静かなれ</td></tr>
+        <tr><td><b>タリ活用</b><span class="r">茫々たり</span></td><td>茫々たら</td><td>茫々たり／茫々と</td><td>茫々たり</td><td>茫々たる</td><td>茫々たれ</td><td>茫々たれ</td></tr>
+      </table></div>
+      <p class="muted">口語の「静かな夜」は、文語では「静かなる夜」。</p>
+    </div>
+  </section>
+
+  <!-- クイズ -->
+  <section id="v-quiz" hidden>
+    <h2>練習問題</h2>
+    <div class="quiz" id="quiz"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* 行ごとの a i u e o */
+const ROW = {ア:'あいうえお',カ:'かきくけこ',ガ:'がぎぐげご',サ:'さしすせそ',ザ:'ざじずぜぞ',タ:'たちつてと',ダ:'だぢづでど',ナ:'なにぬねの',
+  ハ:'はひふへほ',バ:'ばびぶべぼ',マ:'まみむめも',ヤ:'やいゆえよ',ラ:'らりるれろ',ワ:'わゐうゑを'};
+const TYPES = ['四段','上一段','上二段','下一段','下二段','カ変','サ変','ナ変','ラ変'];
+/* [辞書形, よみ, 種類, 行, 語幹(表記), 語幹(よみ), 意味] */
+const V = [
+ ['咲く','さく','四段','カ','咲','さ','花が開く'],['鳴く','なく','四段','カ','鳴','な','鳥や虫が声を出す'],['吹く','ふく','四段','カ','吹','ふ','風が吹く'],
+ ['行く','ゆく','四段','カ','行','ゆ','行く・過ぎ去る'],['聞く','きく','四段','カ','聞','き','聞く'],['置く','おく','四段','カ','置','お','置く・（露・霜が）おりる'],
+ ['急ぐ','いそぐ','四段','ガ','急','いそ','急ぐ'],['照らす','てらす','四段','サ','照ら','てら','照らす'],['消す','けす','四段','サ','消','け','消す'],
+ ['待つ','まつ','四段','タ','待','ま','待つ'],['立つ','たつ','四段','タ','立','た','立つ・（季節が）始まる'],['飛ぶ','とぶ','四段','バ','飛','と','飛ぶ'],
+ ['遊ぶ','あそぶ','四段','バ','遊','あそ','遊ぶ'],['呼ぶ','よぶ','四段','バ','呼','よ','呼ぶ'],['住む','すむ','四段','マ','住','す','住む'],
+ ['澄む','すむ','四段','マ','澄','す','澄む'],['沈む','しづむ','四段','マ','沈','しづ','沈む'],['包む','つつむ','四段','マ','包','つつ','包む'],
+ ['散る','ちる','四段','ラ','散','ち','散る'],['降る','ふる','四段','ラ','降','ふ','（雨・雪が）降る'],['照る','てる','四段','ラ','照','て','照る'],
+ ['眠る','ねむる','四段','ラ','眠','ねむ','眠る'],['光る','ひかる','四段','ラ','光','ひか','光る'],['帰る','かへる','四段','ラ','帰','かへ','帰る'],
+ ['残る','のこる','四段','ラ','残','のこ','残る'],['渡る','わたる','四段','ラ','渡','わた','渡る'],['思ふ','おもふ','四段','ハ','思','おも','思う'],
+ ['舞ふ','まふ','四段','ハ','舞','ま','舞う'],['匂ふ','にほふ','四段','ハ','匂','にほ','美しく照り映える・香る'],['歌ふ','うたふ','四段','ハ','歌','うた','歌う'],
+ ['言ふ','いふ','四段','ハ','言','い','言う'],['笑ふ','わらふ','四段','ハ','笑','わら','笑う'],['問ふ','とふ','四段','ハ','問','と','たずねる'],
+ ['酔ふ','ゑふ','四段','ハ','酔','ゑ','酔う'],['しまふ','しまふ','四段','ハ','しま','しま','片づける・終える'],['揺らぐ','ゆらぐ','四段','ガ','揺ら','ゆら','揺れる'],
+ ['見る','みる','上一段','マ','見','み','見る'],['着る','きる','上一段','カ','着','き','着る'],['似る','にる','上一段','ナ','似','に','似る'],
+ ['煮る','にる','上一段','ナ','煮','に','煮る'],['干る','ひる','上一段','ハ','干','ひ','乾く'],['射る','いる','上一段','ヤ','射','い','（光や矢が）射る'],
+ ['居る','ゐる','上一段','ワ','居','ゐ','座っている・いる'],['用ゐる','もちゐる','上一段','ワ','用ゐ','もちゐ','用いる'],['顧みる','かへりみる','上一段','マ','顧み','かへりみ','振り返る'],
+ ['試みる','こころみる','上一段','マ','試み','こころみ','試す'],
+ ['起く','おく','上二段','カ','起','お','起きる'],['生く','いく','上二段','カ','生','い','生きる'],['尽く','つく','上二段','カ','尽','つ','尽きる'],
+ ['過ぐ','すぐ','上二段','ガ','過','す','過ぎる'],['落つ','おつ','上二段','タ','落','お','落ちる'],['満つ','みつ','上二段','タ','満','み','満ちる'],
+ ['朽つ','くつ','上二段','タ','朽','く','朽ちる'],['閉づ','とづ','上二段','ダ','閉','と','閉じる'],['恥づ','はづ','上二段','ダ','恥','は','恥じる'],
+ ['恋ふ','こふ','上二段','ハ','恋','こ','恋しく思う'],['侘ぶ','わぶ','上二段','バ','侘','わ','つらく思う・わびしく暮らす'],['老ゆ','おゆ','上二段','ヤ','老','お','年をとる'],
+ ['悔ゆ','くゆ','上二段','ヤ','悔','く','悔やむ'],['降る（おる）','おる','上二段','ラ','降','お','（高い所から）おりる'],
+ ['蹴る','ける','下一段','カ','蹴','け','蹴る'],
+ ['消ゆ','きゆ','下二段','ヤ','消','き','消える'],['見ゆ','みゆ','下二段','ヤ','見','み','見える'],['燃ゆ','もゆ','下二段','ヤ','燃','も','燃える'],
+ ['冷ゆ','ひゆ','下二段','ヤ','冷','ひ','冷える'],['越ゆ','こゆ','下二段','ヤ','越','こ','越える'],['覚ゆ','おぼゆ','下二段','ヤ','覚','おぼ','思われる・感じる'],
+ ['聞こゆ','きこゆ','下二段','ヤ','聞こ','きこ','聞こえる'],['枯る','かる','下二段','ラ','枯','か','枯れる'],['流る','ながる','下二段','ラ','流','なが','流れる'],
+ ['暮る','くる','下二段','ラ','暮','く','暮れる'],['晴る','はる','下二段','ラ','晴','は','晴れる'],['濡る','ぬる','下二段','ラ','濡','ぬ','濡れる'],
+ ['忘る','わする','下二段','ラ','忘','わす','忘れる'],['明く','あく','下二段','カ','明','あ','（夜が）明ける'],['受く','うく','下二段','カ','受','う','受ける'],
+ ['告ぐ','つぐ','下二段','ガ','告','つ','告げる'],['投ぐ','なぐ','下二段','ガ','投','な','投げる'],['捨つ','すつ','下二段','タ','捨','す','捨てる'],
+ ['果つ','はつ','下二段','タ','果','は','終わる・果てる'],['出づ','いづ','下二段','ダ','出','い','出る'],['寄す','よす','下二段','サ','寄','よ','寄せる'],
+ ['失す','うす','下二段','サ','失','う','消える・なくなる'],['求む','もとむ','下二段','マ','求','もと','求める'],['数ふ','かぞふ','下二段','ハ','数','かぞ','数える'],
+ ['与ふ','あたふ','下二段','ハ','与','あた','与える'],['植う','うう','下二段','ワ','植','う','植える'],['据う','すう','下二段','ワ','据','す','据える'],
+ ['寝（ぬ）','ぬ','下二段','ナ','','','寝る'],['経（ふ）','ふ','下二段','ハ','','','（時が）経つ・通る'],['得（う）','う','下二段','ア','','','得る'],
+ ['来（く）','く','カ変','カ','','','来る'],['す','す','サ変','サ','','','する'],['恋す','こひす','サ変','サ','恋','こひ','恋をする'],
+ ['旅す','たびす','サ変','サ','旅','たび','旅をする'],['死ぬ','しぬ','ナ変','ナ','死','し','死ぬ'],['往ぬ','いぬ','ナ変','ナ','往','い','去る・行ってしまう'],
+ ['あり','あり','ラ変','ラ','あ','あ','ある・いる'],['居り','をり','ラ変','ラ','居','を','いる'],['侍り','はべり','ラ変','ラ','侍','はべ','おります']
+].map(a => ({d:a[0], r:a[1], t:a[2], g:a[3], s:a[4], rs:a[5], m:a[6]}));
+const FORMN = ['未然形','連用形','終止形','連体形','已然形','命令形'];
+function conj(v, reading){
+  const s = reading ? v.rs : v.s, R = ROW[v.g], A = R[0], I = R[1], U = R[2], E = R[3];
+  switch (v.t) {
+    case '四段': return [A, I, U, U, E, E].map(x => s + x);
+    case '上一段': return ['', '', 'る', 'る', 'れ', 'よ'].map(x => s + x);
+    case '上二段': return [I, I, U, U + 'る', U + 'れ', I + 'よ'].map(x => s + x);
+    case '下一段': return reading ? ['け','け','ける','ける','けれ','けよ'] : ['蹴','蹴','蹴る','蹴る','蹴れ','蹴よ'];
+    case '下二段': return [E, E, U, U + 'る', U + 'れ', E + 'よ'].map(x => s + x);
+    case 'カ変': return reading || true ? ['こ','き','く','くる','くれ','こ・こよ'] : null;
+    case 'サ変': return ['せ','し','す','する','すれ','せよ'].map(x => s + x);
+    case 'ナ変': return ['な','に','ぬ','ぬる','ぬれ','ね'].map(x => s + x);
+    case 'ラ変': return ['ら','り','り','る','れ','れ'].map(x => s + x);
+  }
+}
+const disp = v => conj(v, false), yomi = v => conj(v, true);
+function examples(v){
+  const f = disp(v), ex = [];
+  const first = x => x.split('・')[0];
+  ex.push([first(f[0]) + 'ず', '未然形＋ず（打消）', '〜ない']);
+  ex.push([first(f[0]) + 'む', '未然形＋む（推量・意志）', '〜だろう・〜よう']);
+  ex.push([first(f[0]) + 'ば', '未然形＋ば（仮定）', 'もし〜なら']);
+  ex.push([f[1] + 'けり', '連用形＋けり（詠嘆・過去）', '〜たなあ']);
+  ex.push([f[1] + 'ぬ', '連用形＋ぬ（完了）', '〜てしまった']);
+  ex.push([f[1] + 'たり', '連用形＋たり（完了・存続）', '〜ている・〜た']);
+  ex.push([f[1] + 'し（＋名詞）', '連用形＋し（過去「き」の連体形）', '〜た〇〇']);
+  ex.push([(v.t === 'ラ変' ? f[3] : f[2]) + 'べし', (v.t === 'ラ変' ? '連体形' : '終止形') + '＋べし', '〜にちがいない']);
+  ex.push([f[3] + '（＋名詞）', '連体形＋名詞', '〜する〇〇']);
+  ex.push([f[3] + 'かな', '連体形＋かな（切れ字）', '〜ことよ']);
+  ex.push([f[4] + 'ば', '已然形＋ば（確定）', '〜ので・〜と']);
+  ex.push([f[4] + 'ど', '已然形＋ど（逆接）', '〜けれど']);
+  if (v.t === '四段') ex.push([f[4] + 'り／' + f[4] + 'る（＋名詞）', '已然形＋り（存続）', '〜ている']);
+  else if (v.t === 'サ変') ex.push([f[0] + 'り', '未然形＋り（存続）', '〜ている']);
+  else ex.push([f[1] + 'たり／' + f[1] + 'たる（＋名詞）', '「り」はつかない → たり を使う', '〜ている', true]);
+  return ex;
+}
+/* --- 活用表の画面 --- */
+let vtype = 'すべて', vcur = V[0];
+function renderVList(){
+  const q = $('#vq').value.trim();
+  $('#vtype').innerHTML = ['すべて', ...TYPES].map(t => `<button class="chip ${t === vtype ? 'on' : ''}" data-vt="${t}">${t}</button>`).join('');
+  const list = V.filter(v => (vtype === 'すべて' || v.t === vtype) && (!q || v.d.includes(q) || v.r.includes(q) || v.m.includes(q)));
+  $('#vlist').innerHTML = list.map(v => `<button class="chip ${v === vcur ? 'on' : ''}" data-v="${V.indexOf(v)}">${esc(v.d)}</button>`).join('') || '<span class="muted">見つかりませんでした。</span>';
+}
+function renderVCard(){
+  const v = vcur, f = disp(v), y = yomi(v);
+  $('#vcard').innerHTML = `<div class="vhead"><b>${esc(v.d)}</b><span class="muted">${esc(v.r)}</span><span class="badge">${v.t}${v.t === '下一段' || v.t.endsWith('変') ? '' : '・' + v.g + '行'}</span><span class="muted">意味：${esc(v.m)}</span></div>
+    <div class="tbl-wrap" style="margin-top:10px"><table><tr>${FORMN.map(n => `<th>${n}</th>`).join('')}</tr>
+      <tr>${f.map((x, i) => `<td><b style="font-family:var(--serif);font-size:17px">${esc(x)}</b><span class="r">${esc(y[i])}</span></td>`).join('')}</tr></table></div>
+    <h3>助動詞・切れ字をつけると</h3>
+    <div class="ex-grid">${examples(v).map(e => `<div class="exb ${e[3] ? 'ng' : ''}"><div class="w">${esc(e[0])}</div><div class="m">${esc(e[1])}　${esc(e[2])}</div></div>`).join('')}</div>
+    ${v.t === 'ハ' || v.g === 'ハ' || v.g === 'ワ' || v.g === 'ヤ' ? `<p class="muted" style="margin-top:10px">旧かなでは表のとおり書きます（例：${esc(f[1])}）。読みは今の発音になります（「ひ」→い、「へ」→え、「は」→わ、「ゑ」→え など）。</p>` : ''}`;
+}
+$('#vq').addEventListener('input', renderVList);
+$('#vtype').onclick = e => { const b = e.target.closest('[data-vt]'); if (b) { vtype = b.dataset.vt; renderVList(); } };
+$('#vlist').onclick = e => { const b = e.target.closest('[data-v]'); if (b) { vcur = V[+b.dataset.v]; renderVList(); renderVCard(); } };
+renderVList(); renderVCard();
+
+/* --- クイズ --- */
+let qs = [], qi = 0, score = 0, answered = false;
+function makeQuiz(){
+  qs = [];
+  const pool = V.filter(v => !['寝（ぬ）','経（ふ）','得（う）','来（く）','す'].includes(v.d));
+  for (let n = 0; n < 10; n++) {
+    const v = pool[Math.floor(Math.random() * pool.length)];
+    const kind = Math.random();
+    if (kind < 0.25) { // 種類
+      const opts = shuffle([v.t, ...shuffle(TYPES.filter(t => t !== v.t)).slice(0, 3)]);
+      qs.push({q: `「${v.d}」（${v.m}）の活用の種類は？`, a: v.t, opts, ex: `${v.d} は ${v.t}${v.t.endsWith('変') || v.t === '下一段' ? '' : '・' + v.g + '行'}。未然形は「${disp(v)[0]}」。`});
+    } else {
+      const fi = [0, 1, 3, 3, 4][Math.floor(Math.random() * 5)];
+      const f = disp(v); const ans = f[fi];
+      const wrong = new Set();
+      f.forEach(x => { if (x !== ans) wrong.add(x); });
+      // よくある誤り（口語形など）もまぜる
+      if (v.t === '上二段' || v.t === '下二段') wrong.add(f[1] + 'る');
+      const opts = shuffle([ans, ...shuffle([...wrong]).slice(0, 3)]);
+      qs.push({q: `「${v.d}」の${FORMN[fi]}は？`, a: ans, opts, ex: `${v.d}（${v.t}）：${FORMN.map((n, i) => n.replace('形', '') + '「' + f[i] + '」').join('　')}`});
+    }
+  }
+  qi = 0; score = 0; answered = false; renderQuiz();
+}
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function renderQuiz(){
+  if (qi >= qs.length) {
+    $('#quiz').innerHTML = `<p class="qq">${score} / ${qs.length} 問 正解</p><p class="muted">${score >= 8 ? 'よくできました。句の中で使ってみましょう。' : '「活用表を引く」で確かめてから、もう一度挑戦してみましょう。'}</p><button class="btn" id="qre">もう一度</button>`;
+    $('#qre').onclick = makeQuiz; return;
+  }
+  const q = qs[qi];
+  $('#quiz').innerHTML = `<p class="muted">第 ${qi + 1} 問 / ${qs.length}　正解 ${score}</p><p class="qq">${esc(q.q)}</p>
+    <div class="opts">${q.opts.map(o => `<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+    <p class="muted" id="qex" style="margin-top:12px"></p><div id="qnext"></div>`;
+  answered = false;
+}
+$('#quiz').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b || answered) { if (e.target.id === 'qnx') { qi++; renderQuiz(); } return; }
+  answered = true; const q = qs[qi];
+  const right = b.dataset.o === q.a; if (right) score++;
+  $('#quiz').querySelectorAll('.opt').forEach(o => { if (o.dataset.o === q.a) o.classList.add('right'); else if (o === b) o.classList.add('wrong'); });
+  $('#qex').textContent = (right ? '正解！ ' : 'ざんねん。 ') + q.ex;
+  $('#qnext').innerHTML = `<button class="btn" id="qnx" style="margin-top:8px">${qi + 1 < qs.length ? '次の問題' : '結果を見る'}</button>`;
+});
+
+/* --- タブ --- */
+const VIEWS = ['basic','table','aux','pit','adj','quiz'];
+function show(v){
+  VIEWS.forEach(x => $('#v-' + x).hidden = x !== v);
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.v === v));
+  if (v === 'quiz' && !qs.length) makeQuiz();
+  try { history.replaceState(null, '', '#' + v); } catch(e) {}
+}
+document.querySelector('.tabs').onclick = e => { const t = e.target.closest('.tab'); if (t) show(t.dataset.v); };
+const fromHash = () => { const h = location.hash.slice(1); show(VIEWS.includes(h) ? h : 'basic'); };
+window.addEventListener('hashchange', fromHash); fromHash();
+})();
+</script>
+</body></html>
