@@ -1,0 +1,46 @@
+/* ===== 追加：助詞・テクニック帖・ドリル・あゆみ ===== */
+.dj-cards{display:grid;gap:12px}
+.dj-cards .card{margin:0;position:relative}
+.dj-no{font-family:"Noto Serif JP",serif;color:var(--shu);font-weight:700;font-size:12px}
+.dj-cat{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.dj-star{position:absolute;top:10px;right:12px;background:none;border:0;font-size:20px;color:#cdbfa8;cursor:pointer;line-height:1}
+.dj-star.on{color:#c79a2b}
+.dj-after{color:var(--shu);font-weight:600}
+.dj-why{font-size:13px;background:var(--shu-soft);border-radius:8px;padding:8px 10px;margin:6px 0}
+.dj-chk{font-size:12.5px;color:#2f7a51}
+.dj-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--sub)}
+.dj-flash{outline:3px solid var(--shu);outline-offset:2px}
+.dj-q{font-family:"Noto Serif JP",serif;font-size:22px;letter-spacing:.08em;margin:4px 0 12px;line-height:1.5}
+.dj-rev{display:none;margin-top:12px}.dj-rev.on{display:block}
+.dj-hint{display:none;font-size:14px;color:var(--sub);margin:8px 0 0}.dj-hint.on{display:block}
+/* 助詞の表 */
+.dj-tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.dj-tbl th,.dj-tbl td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.dj-tbl th{font-size:12px;color:var(--sub);font-weight:500;border-top:0}
+.dj-tbl td:first-child{font-family:"Noto Serif JP",serif;font-weight:700;color:var(--shu);font-size:17px;white-space:nowrap}
+@media(max-width:560px){.dj-tbl .hide-s{display:none}}
+.dj-tbl-wrap{overflow-x:auto}
+/* 入れ替えラボ */
+.dj-frame{font-family:"Noto Serif JP",serif;font-size:22px;letter-spacing:.08em;margin:6px 0 10px}
+.dj-slot{display:inline-block;min-width:1.5em;border-bottom:2px solid var(--shu);color:var(--shu);text-align:center;font-weight:700}
+.dj-res{font-size:14px;background:#faf6ee;border-radius:8px;padding:10px 12px;min-height:44px}
+.dj-mark{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;margin-right:6px;vertical-align:1px}
+.dj-mark.m2{background:#4f9a6c}.dj-mark.m1{background:#c79a2b}.dj-mark.m0{background:#8a8076}
+/* あゆみ */
+.dj-tl{position:relative;margin:6px 0 0 6px;padding-left:20px;border-left:2px solid var(--line)}
+.dj-tl .ev{position:relative;margin:0 0 16px}
+.dj-tl .ev::before{content:"";position:absolute;left:-27px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--card);border:2px solid var(--shu)}
+.dj-tl .yr{font-family:"Noto Serif JP",serif;font-weight:700;color:var(--shu);font-size:14px}
+.dj-tl p{margin:2px 0 0;font-size:14px}
+.dj-ladder{display:flex;flex-direction:column-reverse;gap:6px}
+.dj-rung{display:flex;justify-content:space-between;gap:10px;padding:7px 12px;border-radius:6px;background:#f3ecdf;font-size:14px}
+.dj-rung b{font-family:"Noto Serif JP",serif}
+.dj-rung.top{background:var(--ink);color:#fff}
+.dj-seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dj-seasons div{text-align:center;padding:8px 2px;border-radius:8px;font-family:"Noto Serif JP",serif;font-weight:700;color:#fff}
+.dj-seasons small{display:block;font-family:"Noto Sans JP";font-weight:400;font-size:11px}
+dl.dj-gl{display:grid;grid-template-columns:130px 1fr;gap:8px 14px;margin:0;font-size:14px}
+dl.dj-gl dt{font-family:"Noto Serif JP",serif;font-weight:700;color:var(--shu)}
+dl.dj-gl dd{margin:0}
+@media(max-width:560px){dl.dj-gl{grid-template-columns:1fr}dl.dj-gl dd{margin-bottom:6px}}
+nav a{flex:1 0 auto;padding-left:10px;padding-right:10px}
