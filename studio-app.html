@@ -85,13 +85,13 @@ const BASE = location.hostname === "utree1788-wq.github.io"
   ? "./" : "https://utree1788-wq.github.io/akai/";
 
 const PAGES = [
-  { id:"sfx",     label:"SFX LAB",       file:"sfx.html",          color:"var(--c1)" },
-  { id:"score",   label:"譜面ノート",     file:"scorenote.html",    color:"var(--c2)" },
-  { id:"drums",   label:"ドラム音色図鑑", file:"drumsounds.html",   color:"var(--c3)" },
-  { id:"rhythm",  label:"律動一覧表",     file:"律動一覧表.html",    color:"var(--c4)" },
-  { id:"drumlab", label:"ドラム合体ラボ", file:"drumlab.html",      color:"var(--c5)", sep:true },
-  { id:"fill",    label:"フィル表",       file:"fill.html",         color:"var(--c6)" },
-  { id:"riff",    label:"リフ表",         file:"riff.html",         color:"var(--c7)" },
+  { id:"sfx",     label:"SFX LAB",       file:"sfx.html",            color:"var(--c1)" },
+  { id:"sfxnote", label:"効果音ノート",   file:"sfx-note/index.html", color:"var(--c5)" },
+  { id:"score",   label:"譜面ノート",     file:"scorenote.html",      color:"var(--c2)" },
+  { id:"drums",   label:"ドラム音色図鑑", file:"drumsounds.html",     color:"var(--c3)" },
+  { id:"rhythm",  label:"律動一覧表",     file:"律動一覧表.html",      color:"var(--c4)" },
+  { id:"fill",    label:"フィル表",       file:"fill.html",           color:"var(--c6)" },
+  { id:"riff",    label:"リフ表",         file:"riff.html",           color:"var(--c7)" },
 ];
 
 const tabs = document.getElementById("tabs");
@@ -122,7 +122,7 @@ function show(id){
     f.onload = () => { if(current.id === p.id) loading.classList.add("hide"); };
     stage.appendChild(f);
     frames[p.id] = f;
-    if(p.id === "sfx" && window.SFXBridge) SFXBridge.hook(f);
+    if((p.id === "sfx" || p.id === "sfxnote") && window.SFXBridge) SFXBridge.hook(f);
   } else {
     loading.classList.add("hide");
   }
@@ -130,15 +130,15 @@ function show(id){
   tabs.querySelectorAll("button").forEach(b =>
     b.setAttribute("aria-selected", b.dataset.id === p.id));
   document.documentElement.style.setProperty("--accent", p.color);
-  document.body.classList.toggle("on-sfx", p.id === "sfx");
+  document.body.classList.toggle("on-sfx", p.id === "sfx" || p.id === "sfxnote");
   document.title = p.label + " ｜ AKAI STUDIO";
   history.replaceState(null, "", "#" + p.id);
   try{ localStorage.setItem("akaiHubLast", p.id); }catch(e){}
   frames[p.id].focus();
 }
 
-// SFX LAB で作った音 → ドラム合体ラボへ（送ったら合体ラボのタブへ移動）
-if(window.SFXBridge) SFXBridge.makeButton(document.getElementById("sfxSend"), { onSent: () => show("drumlab") });
+// SFX LAB・効果音ノートで作った音 → ドラム音色図鑑へ（送ったら音色図鑑のタブへ移動）
+if(window.SFXBridge) SFXBridge.makeButton(document.getElementById("sfxSend"), { onSent: () => show("drums") });
 
 document.getElementById("reload").onclick = () => {
   const f = frames[current.id]; loading.classList.remove("hide"); f.src = f.src;
@@ -151,6 +151,8 @@ addEventListener("keydown", e => {
   if(e.altKey && /^[1-7]$/.test(e.key)) show(PAGES[+e.key-1].id);
 });
 addEventListener("hashchange", () => show(location.hash.slice(1)));
+// 前のバージョンの「ドラム合体ラボ」は、ドラム音色図鑑にまとめました
+if(location.hash === "#drumlab") history.replaceState(null, "", "#drums");
 
 let start = location.hash.slice(1);
 if(!start){ try{ start = localStorage.getItem("akaiHubLast"); }catch(e){} }

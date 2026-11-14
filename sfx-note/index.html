@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#26215C">
+<meta name="description" content="効果音制作の本を一覧・フローチャート・シンセ・エフェクターでまとめたノートアプリ">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="効果音ノート">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>効果音の作り方ノート</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f1e1c;--sub:#5f5d58;--mute:#8a877f;--line:#e2dfd6;--acc:#0f6e56;--accbg:#e1f5ee;--q:#534ab7;--qbg:#eeedfe;--warm:#993c1d;--warmbg:#faece7;--end:#444441;--endbg:#f1efe8}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1b1a;--card:#262624;--ink:#ecebe6;--sub:#b4b2a9;--mute:#888780;--line:#3a3a37;--acc:#5dcaa5;--accbg:#0e3a2f;--q:#afa9ec;--qbg:#2b2752;--warm:#f0997b;--warmbg:#4a1b0c;--end:#d3d1c7;--endbg:#33332f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px}
+header h1{font-size:16px;margin:0;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.back{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:14px;text-decoration:none}
+main{max-width:720px;margin:0 auto;padding:16px 16px calc(90px + env(safe-area-inset-bottom))}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:5;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs a{flex:1;text-align:center;padding:10px 0 8px;font-size:12px;color:var(--mute);text-decoration:none}
+nav.tabs a b{display:block;font-size:18px;line-height:1.1;font-weight:500}
+nav.tabs a.on{color:var(--acc)}
+h2{font-size:18px;margin:8px 0 4px}
+h3{font-size:15px;margin:20px 0 8px;color:var(--sub);font-weight:600}
+p.lead{color:var(--sub);font-size:14px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);text-decoration:none}
+.card small{display:block;color:var(--mute);font-size:12px}
+.card strong{font-size:15px;font-weight:600}
+input.search{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;margin-bottom:12px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details>summary{list-style:none;padding:12px 14px;cursor:pointer;font-weight:600;font-size:15px}
+details>summary::-webkit-details-marker{display:none}
+details>summary small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+.sec{border-top:1px solid var(--line);padding:10px 14px}
+.sec .no{display:inline-block;min-width:34px;font-weight:700;color:var(--acc)}
+.sec .tt{font-weight:600}
+.sec ul{margin:6px 0 4px;padding-left:20px;font-size:14px;color:var(--sub)}
+.sec a.go{font-size:13px;color:var(--acc)}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:var(--accbg);color:var(--acc);margin-left:6px;vertical-align:2px}
+.flow{display:flex;flex-direction:column;align-items:stretch}
+.node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}
+.node .h{font-weight:600;font-size:15px;display:flex;gap:8px;align-items:baseline}
+.node .h .n{color:var(--mute);font-size:12px;font-weight:500;min-width:16px}
+.node .d{display:none;font-size:14px;color:var(--sub);margin-top:6px}
+.node.open .d{display:block}
+.node .s{font-size:12px;color:var(--mute)}
+.node.q{background:var(--qbg);border-color:transparent}.node.q .h{color:var(--q)}
+.node.a{background:var(--accbg);border-color:transparent}.node.a .h{color:var(--acc)}
+.node.w{background:var(--warmbg);border-color:transparent}.node.w .h{color:var(--warm)}
+.node.e{background:var(--endbg);border-color:transparent}.node.e .h{color:var(--end)}
+.arrow{align-self:center;height:22px;width:2px;background:var(--mute);position:relative;margin:2px 0 6px}
+.arrow:after{content:"";position:absolute;bottom:-5px;left:-4px;border:5px solid transparent;border-top:6px solid var(--mute);border-bottom:0}
+.arrow span{position:absolute;left:10px;top:0;font-size:12px;color:var(--mute);white-space:nowrap}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.branch .col{display:flex;flex-direction:column}
+.blabel{font-size:12px;font-weight:700;color:var(--q);text-align:center;margin-bottom:4px}
+.note{font-size:13px;color:var(--sub);background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:8px 12px;margin:12px 0}
+.wiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:18px}
+.wiz .qq{font-weight:600;margin-bottom:10px}
+.wiz button{font-size:15px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-right:8px;cursor:pointer}
+.wiz .res{background:var(--accbg);color:var(--acc);border-radius:10px;padding:10px 12px;font-weight:600}
+.wiz .res small{display:block;font-weight:400;color:var(--sub)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--mute);margin:0 0 12px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.seg{display:flex;gap:6px;margin:4px 0 14px}
+.seg button{flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;cursor:pointer}
+.seg button.on{background:var(--acc);color:var(--card);border-color:var(--acc)}
+.role{font-size:13px;background:var(--qbg);color:var(--q);border-radius:10px;padding:8px 12px;margin-bottom:12px}
+.cl{counter-reset:c;list-style:none;padding:0;margin:0}
+.cl li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 44px;margin-bottom:8px;position:relative;font-size:14px}
+.cl li:before{counter-increment:c;content:counter(c);position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--accbg);color:var(--acc);font-size:12px;font-weight:700;text-align:center;line-height:22px}
+.cl li b{display:block;font-size:15px}
+.hidden{display:none!important}
+.pb{font-size:13px;padding:6px 10px;border-radius:99px;border:1px solid var(--acc);background:var(--card);color:var(--acc);cursor:pointer;margin:3px 4px 3px 0;font-family:inherit;text-align:left}
+.pb.sm{font-size:12px;padding:3px 9px;margin-top:6px}
+.pb.playing{background:var(--acc);color:var(--card)}
+.pbs{display:flex;flex-wrap:wrap}
+.specwrap{position:sticky;top:52px;z-index:4;background:var(--bg);padding:6px 0 8px;margin:-6px 0 8px}
+#spec{width:100%;height:64px;display:block;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.specnote{font-size:11px;color:var(--mute);margin-top:2px}
+.kb{position:relative;height:130px;margin:12px 0 4px;user-select:none;-webkit-user-select:none;touch-action:none}
+.wk{position:absolute;top:0;width:calc(100%/15 - 2px);height:100%;background:#fff;border:1px solid #bbb;border-radius:0 0 6px 6px;font-size:10px;color:#888;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
+.bk{position:absolute;top:0;width:calc(100%/15*.6);height:60%;background:#222;border-radius:0 0 4px 4px;z-index:2}
+.wk.down{background:var(--accbg)}.bk.down{background:var(--acc)}
+.xy{position:relative;height:150px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0;touch-action:none;overflow:hidden;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:25% 25%}
+.xy .dot{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--acc);opacity:.85;pointer-events:none}
+.xy .xl,.xy .yl{position:absolute;font-size:11px;color:var(--mute)}.xy .xl{bottom:4px;left:50%;transform:translateX(-50%)}.xy .yl{top:4px;left:6px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.panel h4{margin:0 0 6px;font-size:14px}
+.ctl{display:block;margin:6px 0;font-size:13px;color:var(--sub)}
+.ctl span{display:flex;justify-content:space-between}.ctl b{color:var(--ink);font-weight:600}
+.ctl input[type=range]{width:100%;accent-color:var(--acc)}
+.ctl select{width:100%;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px;margin-top:2px}
+.ctl.chk{display:inline-flex;gap:6px;align-items:center;margin-right:14px}
+.pre{display:flex;flex-wrap:wrap;gap:6px}
+.pre button{font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-family:inherit}
+.pre button.on{border-color:var(--acc);color:var(--acc)}
+.hint{font-size:12px;color:var(--mute);margin:4px 0 8px}
+.wave{width:100%;height:70px;display:block;margin-top:8px;background:var(--bg);border-radius:8px}
+.fxh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.panel.fx.on{border-color:var(--acc)}
+.sw{position:relative;width:44px;height:26px;flex:none}.sw input{opacity:0;width:0;height:0}.sw span{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.15s}.sw span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s}.sw input:checked+span{background:var(--acc)}.sw input:checked+span:before{transform:translateX(18px)}
+.recb{font-size:13px;padding:5px 12px;border-radius:99px;border:1px solid #c33;background:var(--card);color:#c33;cursor:pointer;font-family:inherit}.recb.on{background:#c33;color:#fff}
+.clip{border-top:1px solid var(--line);padding:8px 0;font-size:13px}.clip audio{width:100%;margin:4px 0;height:36px}
+.fxind{font-size:12px;font-weight:700;color:var(--card);background:var(--acc);border-radius:99px;padding:2px 9px;text-decoration:none}
+.cmp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:12px}
+.cmp small{display:block;color:var(--mute);font-size:12px}
+
+.pill{font-size:11px;font-weight:700;color:var(--q);background:var(--card);border-radius:99px;padding:0 7px;flex:none}
+.node .h{flex-wrap:wrap}
+.legend i{border:1px solid var(--mute)}
+
+/* ---- color system ---- */
+:root{--k0:#D85A30;--b0:#FAECE7;--k1:#534AB7;--b1:#EEEDFE;--k2:#185FA5;--b2:#E6F1FB;--k3:#993556;--b3:#FBEAF0;--k4:#3B6D11;--b4:#EAF3DE;--k5:#854F0B;--b5:#FAEEDA;--k6:#0F6E56;--b6:#E1F5EE;--k7:#A32D2D;--b7:#FCEBEB;--k8:#5F5E5A;--b8:#F1EFE8}
+@media (prefers-color-scheme:dark){:root{--k0:#F0997B;--b0:#4A1B0C;--k1:#AFA9EC;--b1:#26215C;--k2:#85B7EB;--b2:#042C53;--k3:#ED93B1;--b3:#4B1528;--k4:#97C459;--b4:#173404;--k5:#EF9F27;--b5:#412402;--k6:#5DCAA5;--b6:#04342C;--k7:#F09595;--b7:#501313;--k8:#D3D1C7;--b8:#2C2C2A}}
+.ch0{--cc:var(--k0);--cb:var(--b0)}.ch1{--cc:var(--k1);--cb:var(--b1)}.ch2{--cc:var(--k2);--cb:var(--b2)}.ch3{--cc:var(--k3);--cb:var(--b3)}.ch4{--cc:var(--k4);--cb:var(--b4)}.ch5{--cc:var(--k5);--cb:var(--b5)}.ch6{--cc:var(--k6);--cb:var(--b6)}.ch7{--cc:var(--k7);--cb:var(--b7)}.ch8{--cc:var(--k8);--cb:var(--b8)}
+body{--cc:var(--acc);--cb:var(--accbg)}
+.card.cc,a.card[class*="ch"]{border-left:5px solid var(--cc);background:var(--cb)}
+a.card[class*="ch"] small{color:var(--cc);font-weight:600}
+details[class*="ch"]{border-left:5px solid var(--cc)}
+details[class*="ch"]>summary{background:var(--cb);color:var(--cc)}
+details[class*="ch"] .sec .no{color:var(--cc)}
+details[class*="ch"] .sec a.go{color:var(--cc);font-weight:600}
+.pb{border-color:var(--cc);color:var(--cc);background:var(--card)}
+.pb.playing{background:var(--cc);color:var(--card)}
+.grp{border-left:5px solid var(--cc);background:var(--cb);border-radius:0 12px 12px 0;padding:8px 10px 6px 12px;margin:0 0 12px}
+.grp h3{margin:0 0 6px;color:var(--cc)}
+header{border-bottom:3px solid var(--cc)}
+header h1{color:var(--cc)}
+.back{border-color:var(--cc);color:var(--cc)}
+#spec{border-color:var(--cc)}
+nav.tabs a[data-t="home"].on{color:var(--k8)}nav.tabs a[data-t="list"].on{color:var(--k1)}nav.tabs a[data-t="flows"].on{color:var(--k2)}nav.tabs a[data-t="examples"].on{color:var(--k0)}nav.tabs a[data-t="sounds"].on{color:var(--k6)}
+nav.tabs a.on{border-top:3px solid currentColor;margin-top:-3px}
+/* flow node types: 判断=紫 作業=青 ポイント=オレンジ 完成=緑 */
+.node.q{background:var(--b1);border:1.5px solid var(--k1)}.node.q .h{color:var(--k1)}
+.node.a{background:var(--b2);border:1.5px solid var(--k2)}.node.a .h{color:var(--k2)}
+.node.w{background:var(--b0);border:1.5px solid var(--k0)}.node.w .h{color:var(--k0)}
+.node.e{background:var(--b4);border:1.5px solid var(--k4)}.node.e .h{color:var(--k4)}
+.node .h:after{margin-left:auto;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;color:var(--card);flex:none;align-self:center}
+.node.q .h:after{content:"判断";background:var(--k1)}.node.a .h:after{content:"作業";background:var(--k2)}.node.w .h:after{content:"ポイント";background:var(--k0)}.node.e .h:after{content:"完成";background:var(--k4)}
+.node .h .n{color:inherit;opacity:.7}
+.node .d{color:var(--ink)}
+.node .pb{border-color:currentColor}
+.node.q .pb{color:var(--k1)}.node.a .pb{color:var(--k2)}.node.w .pb{color:var(--k0)}.node.e .pb{color:var(--k4)}
+.arrow{background:var(--sub);width:3px}.arrow:after{border-top-color:var(--sub)}
+.blabel{color:var(--card)!important;background:var(--k1);border-radius:99px;padding:2px 0}
+.pill{color:var(--card)!important;background:var(--k1)}
+.legend span{display:inline-flex;align-items:center;font-weight:600}
+.legend i{width:14px;height:14px;border-width:1.5px!important}
+.seg button.b1.on{background:var(--k2);border-color:var(--k2);color:#fff}.seg button.b2.on{background:var(--k0);border-color:var(--k0);color:#fff}
+.seg button.b1{color:var(--k2);border-color:var(--k2)}.seg button.b2{color:var(--k0);border-color:var(--k0)}
+.role{background:var(--cb2,var(--b1));color:var(--cc2,var(--k1));border-left:5px solid var(--cc2,var(--k1));border-radius:0 10px 10px 0;font-weight:600}
+.mode-basic{--cc2:var(--k2);--cb2:var(--b2)}.mode-adv{--cc2:var(--k0);--cb2:var(--b0)}
+.panel.fx{border-left:5px solid var(--cc)}.panel.fx h4{color:var(--cc)}.panel.fx.on{border-color:var(--cc);background:var(--cb)}
+.panel.fx .ctl input[type=range]{accent-color:var(--cc)}.panel.fx .sw input:checked+span{background:var(--cc)}
+.panel h4{color:var(--cc)}
+.colorkey{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.colorkey span{font-size:12px;font-weight:600;padding:2px 10px;border-radius:99px;background:var(--cb);color:var(--cc);border:1px solid var(--cc)}
+</style>
+</head>
+<body>
+<header><a class="back hidden" id="back" href="#home">戻る</a><h1 id="ttl">効果音の作り方ノート</h1><a href="#fx" id="fxind" class="fxind hidden"></a></header>
+<main id="app"></main>
+<nav class="tabs" id="tabs">
+<a href="#home" data-t="home"><b>⌂</b>ホーム</a>
+<a href="#list" data-t="list"><b>≡</b>一覧</a>
+<a href="#flows" data-t="flows"><b>↧</b>フロー</a>
+<a href="#examples" data-t="examples"><b>★</b>実例</a>
+<a href="#sounds" data-t="sounds"><b>♪</b>音</a>
+</nav>
+<script>
+let AC,M,AN,RV,CMP,NB,BB;
+function A(){
+  if(!AC){
+    AC=new (window.AudioContext||window.webkitAudioContext)();
+    CMP=AC.createDynamicsCompressor();CMP.threshold.value=-10;CMP.ratio.value=12;CMP.attack.value=.003;CMP.release.value=.25;
+    M=AC.createGain();M.gain.value=.8;
+    AN=AC.createAnalyser();AN.fftSize=4096;AN.smoothingTimeConstant=.7;
+    M.connect(CMP);CMP.connect(AN);AN.connect(AC.destination);
+    NB=mkNoise(false);BB=mkNoise(true);
+    RV=AC.createConvolver();RV.buffer=imp(2.8,3);RV.connect(M);
+    buildFX();M.disconnect();M.connect(FX.in);FX.out.connect(CMP);
+    requestAnimationFrame(drawSpec);
+  }
+  if(AC.state!=='running')AC.resume();
+  return AC;
+}
+function mkNoise(brown){const n=AC.sampleRate*3,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);let l=0;for(let i=0;i<n;i++){const w=Math.random()*2-1;if(brown){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w*.8}return b}
+function imp(sec,dec){const n=Math.floor(AC.sampleRate*sec),b=AC.createBuffer(2,n,AC.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,dec)}return b}
+const R=(a,b)=>a+Math.random()*(b-a);
+function out(node,o={}){let n=node;if(o.pan!==undefined&&AC.createStereoPanner){const p=AC.createStereoPanner();p.pan.value=o.pan;n.connect(p);n=p}const g=AC.createGain();g.gain.value=o.vol??1;n.connect(g);g.connect(o.dest||M);if(o.rev){const s=AC.createGain();s.gain.value=o.rev;g.connect(s);s.connect(RV)}return g}
+function noise(t,dur,brown){const s=AC.createBufferSource();s.buffer=brown?BB:NB;s.loop=true;s.start(t,Math.random()*2);s.stop(t+dur+.1);return s}
+function osc(type,f,t,dur){const o=AC.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);o.start(t);o.stop(t+dur+.1);return o}
+function filt(type,f,q=1,gain=0){const b=AC.createBiquadFilter();b.type=type;b.frequency.value=f;b.Q.value=q;b.gain.value=gain;return b}
+function vca(t,a,peak,d,hold=0){const g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);if(hold)g.gain.setValueAtTime(peak,t+a+hold);g.gain.exponentialRampToValueAtTime(.0001,t+a+hold+d);return g}
+function chain(...n){for(let i=0;i<n.length-1;i++)n[i].connect(n[i+1]);return n[n.length-1]}
+function shaper(k){const s=AC.createWaveShaper(),n=2048,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=(1+k)*x/(1+k*Math.abs(x))}s.curve=c;s.oversample='2x';return s}
+function lfo(t,dur,type,rate,depth,param){const l=osc(type,rate,t,dur),g=AC.createGain();g.gain.value=depth;l.connect(g);g.connect(param);return l}
+function bus(o={}){const g=AC.createGain();out(g,o);return g}
+function delayBus(time,fb,o={}){const inp=AC.createGain(),d=AC.createDelay(2),f=AC.createGain(),lp=filt('lowpass',2500);d.delayTime.value=time;f.gain.value=fb;inp.connect(d);d.connect(lp);lp.connect(f);f.connect(d);out(inp,o);out(lp,o);return inp}
+
+function thump(t,f0=120,f1=40,dur=.3,vol=1,o={}){const s=osc('sine',f0,t,dur);s.frequency.exponentialRampToValueAtTime(f1,t+dur*.6);out(chain(s,vca(t,.002,vol,dur)),o)}
+function nb(t,dur,type,f,q,vol,o={},a=.002,brown=false){const n=noise(t,dur+a,brown);out(chain(n,filt(type,f,q),vca(t,a,vol,dur)),o)}
+function tone(t,type,f,dur,vol,o={},a=.005){const s=osc(type,f,t,dur);out(chain(s,filt('lowpass',6000),vca(t,a,vol,dur)),o);return s}
+function metal(t,mul=1,dur=1.6,vol=.4,o={}){[523,1397,2331,3520,4870].forEach((f,i)=>{const s=osc('sine',f*mul,t,dur);out(chain(s,vca(t,.001,vol/(i+1.2),dur/(1+i*.3))),o)});nb(t,.03,'highpass',3000,1,.3*vol,o)}
+function hiss(t,dur,vol=.05){const n=noise(t,dur),g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.1);g.gain.setValueAtTime(vol,t+dur-.2);g.gain.linearRampToValueAtTime(0,t+dur);out(chain(n,filt('highpass',2500,.5),g))}
+function swoosh(t,dur,f0,f1,vol,o={}){const n=noise(t,dur),f=filt('bandpass',f0,1.5);f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);out(chain(n,f,vca(t,dur*.6,vol,dur*.5)),o)}
+
+function windS(t,dur=5,brown=false,o={}){const n=noise(t,dur,brown),f=filt('lowpass',300,brown?10:14),g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(brown?.9:.55,t+1);g.gain.setValueAtTime(brown?.9:.55,t+dur-1.5);g.gain.linearRampToValueAtTime(0,t+dur);let x=t;f.frequency.setValueAtTime(300,t);while(x<t+dur-.3){x+=R(.35,.8);f.frequency.linearRampToValueAtTime(R(250,brown?900:1500),x)}out(chain(n,f,g),{rev:.15,...o})}
+function footStep(t,o={},v=1,var_=true){const f=var_?R(450,750):600;nb(t,.1,'bandpass',f,1.2,.7*v,o);thump(t,var_?R(100,130):115,55,.09,.6*v,o);nb(t+.07,.06,'bandpass',f*2.4,1.5,.35*v,o)}
+function cuteStep(t,p=1){const s=osc('sine',900*p,t,.15);s.frequency.exponentialRampToValueAtTime(380*p,t+.08);out(chain(s,vca(t,.002,.45,.13)))}
+function boomCore(t,o={},vol=1){const n=noise(t,1.8,true),f=filt('lowpass',500,.7);f.frequency.setValueAtTime(1800,t);f.frequency.exponentialRampToValueAtTime(220,t+1.2);out(chain(n,f,shaper(25),vca(t,.004,.55*vol,1.5)),o);thump(t,70,28,1.3,.9*vol,o)}
+function pew(t,f0=1800,f1=140,dur=.3,vol=.3,o={}){const s=osc('square',f0,t,dur);s.frequency.exponentialRampToValueAtTime(f1,t+dur);lfo(t,dur,'sine',40,60,s.frequency);out(chain(s,filt('lowpass',4000),vca(t,.002,vol,dur)),o)}
+function formantVoice(t,f0,dur,forms,vol=.5,o={},type='sawtooth'){const s=osc(type,f0,t,dur),mix=AC.createGain();forms.forEach(([f,q,g])=>{const b=filt('bandpass',f,q),gg=AC.createGain();gg.gain.value=g;s.connect(b);b.connect(gg);gg.connect(mix)});out(chain(mix,vca(t,.03,vol,dur*.4,dur*.5)),o);return s}
+
+const SND={
+wind:["シンセの風（0-2）",t=>windS(t)],
+windBreath:["息で作った風（0-3）",t=>windS(t,5,true)],
+noiseRaw:["ただのノイズ",t=>{const n=noise(t,1.5),g=AC.createGain();g.gain.value=.25;out(chain(n,g,vca(t,.005,1,.2,1.2)))}],
+noiseEnv:["ノイズ＋エンベロープ",t=>nb(t,1.2,'allpass',1000,1,.35,{},.5)],
+noiseFilt:["ノイズ＋フィルター",t=>{const n=noise(t,2),f=filt('lowpass',300,14);out(chain(n,f,vca(t,.5,.6,.8,.6)))}],
+rhythmEven:["等間隔の打撃",t=>{for(let i=0;i<6;i++){nb(t+i*.22,.1,'bandpass',2000,1,.6);thump(t+i*.22,200,90,.1,.5)}}],
+rhythmGroove:["リズミカルな打撃",t=>{[0,.15,.3,.6,.7,.8,1.1].forEach((x,i)=>{nb(t+x,.1,'bandpass',2000,1,i==6?.9:.5);thump(t+x,200,90,.1,i==6?.9:.4)})}],
+accent:["小・小・大のアクセント",t=>{footStep(t,{},.5);footStep(t+.35,{},.5);boomCore(t+.8,{rev:.3},.8);nb(t+.8,.3,'bandpass',1500,.8,.8,{rev:.3})}],
+adsr:["ADSRの例（押す→保つ→離す）",t=>{const s=osc('sawtooth',220,t,2.6),g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.4,t+.3);g.gain.linearRampToValueAtTime(.2,t+.6);g.gain.setValueAtTime(.2,t+1.5);g.gain.linearRampToValueAtTime(0,t+2.4);out(chain(s,filt('lowpass',2500),g))}],
+charge:["溜め技→放つ",t=>{const s=osc('sawtooth',150,t,2.3),f=filt('lowpass',500,6);s.frequency.exponentialRampToValueAtTime(900,t+2.2);f.frequency.exponentialRampToValueAtTime(5000,t+2.2);const l=osc('sine',6,t,2.3);l.frequency.linearRampToValueAtTime(18,t+2.2);const lg=AC.createGain();lg.gain.setValueAtTime(5,t);lg.gain.linearRampToValueAtTime(60,t+2.2);l.connect(lg);lg.connect(s.frequency);out(chain(s,f,vca(t,1.5,.3,.1,.7)));swoosh(t,2.2,400,4000,.25);boomCore(t+2.3,{rev:.3},.7);pew(t+2.3,2500,100,.5,.3,{rev:.3})}],
+lfoTrem:["LFO→音量（トレモロ）",t=>{const s=osc('sawtooth',330,t,2),g=AC.createGain();g.gain.value=.2;lfo(t,2,'sine',7,.2,g.gain);out(chain(s,filt('lowpass',2000),g,vca(t,.02,1,.2,1.7)))}],
+lfoVib:["LFO→ピッチ（ビブラート）",t=>{const s=osc('sawtooth',330,t,2);lfo(t,2,'sine',6,25,s.frequency);out(chain(s,filt('lowpass',2000),vca(t,.02,.3,.2,1.7)))}],
+lfoFilt:["LFO→フィルター（ワウ）",t=>{const s=osc('sawtooth',110,t,2),f=filt('lowpass',800,10);lfo(t,2,'sine',4,700,f.frequency);out(chain(s,f,vca(t,.02,.35,.2,1.7)))}],
+ambNight:["夜の環境音（虫）",t=>{const d=4;nb(t,d,'lowpass',250,.7,.25,{},1,true);for(let x=0;x<d-.3;x+=R(.3,.5)){for(let k=0;k<4;k++){const tt=t+x+k*.03;out(chain(osc('sine',4600,tt,.03),vca(tt,.003,.08,.02)),{pan:R(-.6,.6),rev:.2})}}}],
+door:["ドアが閉まる（3つの要素）",t=>{nb(t,.03,'highpass',2500,1,.6);thump(t+.03,110,60,.3,.9);nb(t+.03,.25,'lowpass',350,.8,.8,{rev:.15},.002,true);nb(t+.08,.03,'highpass',3000,1,.5)}],
+decide:["決定音（記号）",t=>{tone(t,'square',1047,.07,.15);tone(t+.07,'square',1568,.15,.15)}],
+cancel:["キャンセル音",t=>{tone(t,'square',784,.07,.15);tone(t+.08,'square',523,.15,.15)}],
+warn:["警告音",t=>{for(let i=0;i<4;i++)tone(t+i*.18,'square',i%2?660:880,.16,.15,{},.002)}],
+clear:["クエスト完了",t=>{[523,659,784].forEach((f,i)=>tone(t+i*.11,'triangle',f,.15,.35));[523,659,784,1047].forEach(f=>tone(t+.36,'triangle',f,1.2,.18,{rev:.3}))}],
+coin:["コイン",t=>{tone(t,'square',988,.07,.14);tone(t+.07,'square',1319,.4,.14)}],
+taiko:["太鼓（和の雰囲気）",t=>{thump(t,95,60,.7,1,{rev:.2});nb(t,.15,'lowpass',600,.7,.5,{rev:.2})}],
+armorStep:["鎧の戦士の足音（複合）",t=>{for(let i=0;i<4;i++){footStep(t+i*.5);metal(t+i*.5+.02,1.6,.25,.12)}}],
+farBoom:["遠くの爆発（音が遅れて届く）",t=>{boomCore(t+1.2,{rev:.6,vol:.5})}],
+heliRotor:["ヘリ：メインローター",t=>heliS(t,{rotor:1})],
+heliEngine:["ヘリ：エンジン",t=>heliS(t,{engine:1})],
+heli:["ヘリコプター（合成）",t=>heliS(t,{rotor:1,tail:1,engine:1})],
+wSine:["サイン波",t=>tone(t,'sine',440,1.2,.4,{},.02)],
+wTri:["三角波",t=>tone(t,'triangle',440,1.2,.4,{},.02)],
+wSq:["矩形波",t=>tone(t,'square',440,1.2,.2,{},.02)],
+wSaw:["ノコギリ波",t=>tone(t,'sawtooth',440,1.2,.25,{},.02)],
+screamRaw:["加工前のノコギリ波",t=>{const s=osc('sawtooth',1000,t,1.5);out(chain(s,vca(t,.03,.15,.3,1.1)))}],
+scream:["再現した叫び声",t=>screamS(t)],
+vowels:["ノコギリ波で「あいうえお」",t=>{[[800,1200],[300,2300],[350,1300],[500,1900],[500,850]].forEach((F,i)=>formantVoice(t+i*.55,140,.5,[[F[0],6,1.2],[F[1],8,.8]],.7))}],
+magic:["電気の魔法（集まる→溜まる→放つ）",t=>{for(let i=0;i<18;i++)nb(t+R(0,1.4),.03,'highpass',R(2000,6000),1,R(.2,.5),{pan:R(-.8,.8)});swoosh(t,1.5,300,3000,.3);const s=osc('sawtooth',80,t,1.6);s.frequency.exponentialRampToValueAtTime(400,t+1.5);lfo(t,1.6,'square',30,30,s.frequency);out(chain(s,filt('lowpass',1500,4),vca(t,1,.2,.1,.5)));pew(t+1.6,4000,200,.4,.3,{rev:.4});nb(t+1.6,.4,'highpass',1500,.7,.6,{rev:.4})}],
+micTap:["マイクを叩く音",t=>{thump(t,150,60,.15,.9);nb(t,.06,'lowpass',2500,1,.5);thump(t+.4,130,55,.15,.7);nb(t+.4,.05,'lowpass',2500,1,.4)}],
+metalHit:["金属を叩く（原音）",t=>metal(t)],
+metalHitRev:["金属＋長いリバーブ",t=>metal(t,1,2.5,.4,{rev:1.5})],
+metalLow:["金属を4オクターブ下げる",t=>metal(t,.0625*2,3,.6,{rev:.4})],
+ringmod:["リングモジュレーター",t=>{const c=osc('sine',300,t,1.6),m=osc('sine',1170,t,1.6),g=AC.createGain();g.gain.value=0;m.connect(g.gain);c.frequency.linearRampToValueAtTime(900,t+1.5);out(chain(c,g,vca(t,.01,.6,.4,1.1)))}],
+scratch:["スクラッチ風",t=>{const s=osc('sawtooth',200,t,1.4);[0,.2,.35,.6,.75,1].forEach((x,i)=>s.frequency.linearRampToValueAtTime(i%2?600:120,t+x+.1));out(chain(s,filt('bandpass',900,2),vca(t,.01,.6,.2,1.1)))}],
+filterSweep:["ノイズ＋レゾナンスのスイープ",t=>{const n=noise(t,2.5),f=filt('lowpass',200,20);f.frequency.exponentialRampToValueAtTime(6000,t+1.2);f.frequency.exponentialRampToValueAtTime(200,t+2.4);out(chain(n,f,vca(t,.05,.4,.3,2)))}],
+cushionPunch:["クッション殴打＋風切り",t=>{swoosh(t,.2,600,2500,.35);nb(t+.2,.18,'lowpass',500,.8,1,{},.002,true);thump(t+.2,110,50,.2,.8)}],
+underground:["地下でうごめく音",t=>{const n=noise(t,3.5,true),f=filt('lowpass',90,18);lfo(t,3.5,'sine',.7,50,f.frequency);out(chain(n,f,vca(t,.8,1,1,1.5)),{rev:.3});thump(t+.5,60,35,1.5,.4)}],
+airgun:["空気でっぽう「ポン！」",t=>{[1,1.26,1.5,2].forEach((p,i)=>{const tt=t+i*.3,s=osc('sine',700*p,tt,.1);s.frequency.exponentialRampToValueAtTime(220*p,tt+.07);out(chain(s,vca(tt,.002,.6,.09)));nb(tt,.04,'bandpass',1500*p,1,.3)})}],
+stereoMono:["モノラルの風",t=>windS(t,3.5)],
+stereoWide:["左右に広がる風",t=>{windS(t,3.5,false,{pan:-1});windS(t,3.5,false,{pan:1})}],
+proxOff:["マイクから離れた声",t=>formantVoice(t,120,1.2,[[700,5,1],[1200,7,.6]],.5,{},'sawtooth')],
+proxOn:["近接効果（低音が増える）",t=>{const s=formantVoice(t,120,1.2,[[700,5,1],[1200,7,.6],[150,1,1.5]],.6)}],
+monster:["モンスターボイス",t=>{const s=osc('sawtooth',70,t,1.8);s.frequency.linearRampToValueAtTime(95,t+.4);s.frequency.linearRampToValueAtTime(55,t+1.7);lfo(t,1.8,'sine',9,8,s.frequency);const n=noise(t,1.8,true),mix=AC.createGain();s.connect(mix);const ng=AC.createGain();ng.gain.value=.6;n.connect(ng);ng.connect(mix);out(chain(mix,filt('bandpass',500,1.5),shaper(20),filt('lowpass',2500),vca(t,.08,.5,.6,1)),{rev:.4})}],
+footNoisy:["ノイズ除去前の足音",t=>{hiss(t,2.3,.07);nb(t,2.3,'lowpass',150,.7,.25,{},.1,true);for(let i=0;i<4;i++)footStep(t+.2+i*.5,{pan:i%2?.15:-.15})}],
+footFoley:["フォーリー録音の足音",t=>{for(let i=0;i<4;i++)footStep(t+i*.5,{pan:i%2?.15:-.15})}],
+metalRaw:["EQ前（金属音）",t=>{nb(t,.5,'allpass',1000,1,.5,{},.001,true);metal(t,1,.8,.3)}],
+metalEq:["EQ後（低域カット・2kHz強調）",t=>{const b=bus();const hp=filt('highpass',100,.7),pk=filt('peaking',2000,2,9),hs=filt('highshelf',5000,1,-8);chain(hp,pk,hs,b);const n=noise(t,.6,true);chain(n,vca(t,.001,.5,.5),hp);[523,1397,2331,3520].forEach((f,i)=>{chain(osc('sine',f,t,.8),vca(t,.001,.3/(i+1.2),.8/(1+i*.3)),hp)})}],
+varSame:["同じ足音のくり返し",t=>{for(let i=0;i<5;i++){nb(t+i*.4,.1,'bandpass',600,1.2,.7);thump(t+i*.4,115,55,.09,.6);nb(t+i*.4+.07,.06,'bandpass',1440,1.5,.35)}}],
+varVar:["バリエーションあり",t=>{for(let i=0;i<5;i++)footStep(t+i*.4,{pan:R(-.2,.2)},R(.7,1))}],
+envHard:["アタックが硬いショット音",t=>{nb(t,.5,'lowpass',3000,.7,1);thump(t,180,50,.3,1)}],
+envSoft:["アタックを柔らかくした音",t=>{nb(t,.5,'lowpass',3000,.7,.8,{},.06);const s=osc('sine',120,t,.4);s.frequency.exponentialRampToValueAtTime(50,t+.2);out(chain(s,vca(t,.06,.7,.3)))}],
+panSweep:["左から右へ歩く",t=>{for(let i=0;i<7;i++)footStep(t+i*.45,{pan:-1+i/3},.9)}],
+heartBasic:["鼓動（基礎編・マイクを叩く）",t=>{for(let i=0;i<3;i++){const x=t+i*.9;const b=bus();const lp=filt('lowpass',250,1);lp.connect(b);thumpTo(x,90,45,.18,.9,lp);thumpTo(x+.25,70,40,.22,.6,lp)}}],
+heartGame:["鼓動（発展編・2段階で焦らせる）",t=>{const T=[0,1,2,3,4,4.5,5,5.5,6,6.5,7,7.5];T.forEach(x=>{thump(t+x,150,40,.3,1);thump(t+x+.18,120,40,.25,.6)});const s=osc('sawtooth',55,t,8);out(chain(s,filt('lowpass',200),vca(t,2,.12,1,5)))}],
+footCute:["サイン波の可愛い足音",t=>{for(let i=0;i<6;i++)cuteStep(t+i*.28,i%2?1:1.12)}],
+footCuteReal:["サイン波＋生音",t=>{for(let i=0;i<6;i++){cuteStep(t+i*.28,i%2?1:1.12);nb(t+i*.28,.05,'bandpass',800,1.2,.25)}}],
+fallRaw:["「ド」と「サァ」",t=>{thump(t,90,35,.4,1);nb(t,.25,'lowpass',400,1,.8,{},.002,true);nb(t+.7,.6,'bandpass',2500,.8,.35,{},.05)}],
+fallBasic:["人が倒れる（基礎編）",t=>{thump(t,90,35,.4,1);nb(t,.25,'lowpass',400,1,.8,{},.002,true);nb(t+.12,.6,'bandpass',2500,.8,.35,{},.05)}],
+fallGame:["人が倒れる（発展編・スロー）",t=>{const d=delayBus(.22,.5,{rev:.4});const o={dest:d};thump(t,100,35,.5,1,o);nb(t,.3,'lowpass',500,1,.9,o,.002,true);thump(t+.35,80,30,.5,.9,o);nb(t+.35,.3,'lowpass',400,1,.8,o,.002,true);nb(t+.45,.7,'bandpass',2200,.8,.35,o,.05)}],
+laserTape:["マスキングテープ風「ビュオオン」",t=>laserTapeS(t)],
+laserGun:["レーザーガン（発展編）",t=>{metal(t,1.8,.12,.25);nb(t,.03,'highpass',3000,1,.5);metal(t+.35,1.8,.12,.3);swoosh(t+.7,.15,800,3000,.4);metal(t+.85,2,.1,.35);nb(t+1.4,.15,'lowpass',3000,.7,1,{rev:.25});thump(t+1.4,160,50,.2,.8);pew(t+1.4,1800,120,.3,.35,{rev:.25})}],
+clap:["手を叩く音（原音）",t=>{[0,.008,.017].forEach(x=>nb(t+x,.06,'bandpass',1200,.8,.7))}],
+boomBasic:["爆発音（基礎編）",t=>boomCore(t,{rev:.2})],
+boomGame:["爆発音（発展編）",t=>{const s=osc('sine',5000,t,.15);s.frequency.exponentialRampToValueAtTime(300,t+.12);out(chain(s,vca(t,.002,.3,.12)));boomCore(t+.05,{rev:.35});const n=noise(t,2.5),f=filt('lowpass',1200,2);f.frequency.exponentialRampToValueAtTime(150,t+2.4);out(chain(n,f,vca(t+.1,.2,.35,1.8)));for(let i=0;i<8;i++)nb(t+R(.3,1.5),.03,'highpass',R(2000,5000),1,R(.1,.3),{pan:R(-.7,.7)})}],
+pew:["エネルギー弾",t=>pew(t,1800,140,.3,.35,{rev:.2})],
+};
+function thumpTo(t,f0,f1,dur,vol,dest){const s=osc('sine',f0,t,dur);s.frequency.exponentialRampToValueAtTime(f1,t+dur*.6);chain(s,vca(t,.002,vol,dur),dest);const n=noise(t,.1,true);chain(n,vca(t,.002,vol*.6,.08),dest)}
+function heliS(t,p){const d=5,fade=g=>{g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+.8);g.gain.setValueAtTime(1,t+d-1);g.gain.linearRampToValueAtTime(0,t+d);return g};
+  if(p.rotor){const n=noise(t,d,true),f=filt('lowpass',450,1),am=AC.createGain();am.gain.value=.5;lfo(t,d,'triangle',6,.5,am.gain);out(chain(n,f,am,fade(AC.createGain())),{vol:1.2})}
+  if(p.tail){const n=noise(t,d),f=filt('bandpass',1800,2),am=AC.createGain();am.gain.value=.08;lfo(t,d,'sine',22,.08,am.gain);out(chain(n,f,am,fade(AC.createGain())))}
+  if(p.engine){const s=osc('sawtooth',120,t,d);s.frequency.exponentialRampToValueAtTime(240,t+d);const w=osc('sine',3100,t,d);w.frequency.linearRampToValueAtTime(3600,t+d);const wg=AC.createGain();wg.gain.value=.25;w.connect(wg);const mix=AC.createGain();s.connect(mix);wg.connect(mix);out(chain(mix,filt('lowpass',2500),fade(AC.createGain())),{vol:.12})}}
+function screamS(t){const s=osc('sawtooth',850,t,1.6);s.frequency.exponentialRampToValueAtTime(1150,t+.1);for(let x=.15;x<1.1;x+=.05)s.frequency.linearRampToValueAtTime(R(1050,1200),t+x);s.frequency.exponentialRampToValueAtTime(650,t+1.5);
+  const mix=AC.createGain();[[1000,3,1],[2700,4,.6],[3600,5,.4]].forEach(([f,q,g])=>{const b=filt('bandpass',f,q),gg=AC.createGain();gg.gain.value=g;s.connect(b);b.connect(gg);gg.connect(mix)});
+  out(chain(mix,shaper(6),filt('lowpass',5000),vca(t,.04,.35,.35,1.1)),{rev:.35})}
+function laserTapeS(t){const s=osc('sawtooth',2400,t,.9),s2=osc('sawtooth',2420,t,.9);[s,s2].forEach(o=>o.frequency.exponentialRampToValueAtTime(280,t+.75));const mix=AC.createGain();s.connect(mix);s2.connect(mix);const d=AC.createDelay(.05);d.delayTime.value=.004;lfo(t,.9,'sine',4,.003,d.delayTime);mix.connect(d);const sum=AC.createGain();mix.connect(sum);d.connect(sum);out(chain(sum,filt('bandpass',1500,.8),vca(t,.01,.45,.6,.15)),{rev:.25})}
+
+let rafOn=false;
+function drawSpec(){const cv=document.getElementById('spec');if(cv&&AN){const c=cv.getContext('2d'),w=cv.width=cv.clientWidth*devicePixelRatio,h=cv.height=cv.clientHeight*devicePixelRatio;const d=new Uint8Array(AN.frequencyBinCount);AN.getByteFrequencyData(d);c.clearRect(0,0,w,h);const cs=getComputedStyle(document.documentElement);c.fillStyle=cs.getPropertyValue('--acc');const N=96,ny=AC.sampleRate/2;for(let i=0;i<N;i++){const f0=30*Math.pow(16000/30,i/N),f1=30*Math.pow(16000/30,(i+1)/N);let m=0;for(let k=Math.floor(f0/ny*d.length);k<=Math.min(d.length-1,Math.ceil(f1/ny*d.length));k++)m=Math.max(m,d[k]);const bh=m/255*h;c.fillRect(i*w/N+1,h-bh,w/N-2,bh)}c.fillStyle=cs.getPropertyValue('--mute');c.font=(10*devicePixelRatio)+'px sans-serif';[[100,'100'],[1000,'1k'],[5000,'5k'],[10000,'10k']].forEach(([f,l])=>c.fillText(l,Math.log(f/30)/Math.log(16000/30)*w+2,11*devicePixelRatio))}requestAnimationFrame(drawSpec)}
+function play(k,btn){try{const t=A().currentTime+.03;SND[k][1](t);if(btn){btn.classList.add('playing');setTimeout(()=>btn.classList.remove('playing'),900)}}catch(e){console.error(e);const s=document.getElementById('specnote');if(s)s.textContent='音を鳴らせませんでした：'+e.message}}
+function stopAll(){if(AC){AC.close();AC=null}}
+
+/* ---------- Synth ---------- */
+const SP={w1:'sawtooth',w2:'off',det:7,mix2:.5,oct:0,A:.01,D:.3,S:.6,Rl:.3,ft:'lowpass',cut:2500,res:1,fenv:0,pAmt:0,pTime:.15,lfoT:'none',lfoR:5,lfoD:.3,dist:0,dly:0,rv:.15,vol:.6,glide:0};
+const PRESETS={
+"風（0-2）":{w1:'noise',w2:'off',ft:'lowpass',cut:400,res:16,A:.4,D:.4,S:1,Rl:1.5,fenv:0,pAmt:0,lfoT:'none',dist:0,rv:.2,oct:0},
+"鼓動ベース（6-5）":{w1:'sine',w2:'off',ft:'lowpass',cut:400,res:1,A:.001,D:.25,S:0,Rl:.1,pAmt:24,pTime:.06,lfoT:'none',dist:.1,rv:.05,oct:-2},
+"サイン足音（6-6）":{w1:'sine',w2:'off',ft:'lowpass',cut:8000,res:1,A:.002,D:.12,S:0,Rl:.05,pAmt:12,pTime:.05,lfoT:'none',dist:0,rv:.05,oct:1},
+"レーザー":{w1:'square',w2:'sawtooth',det:15,ft:'lowpass',cut:5000,res:3,A:.001,D:.35,S:0,Rl:.1,pAmt:36,pTime:.3,lfoT:'pitch',lfoR:30,lfoD:.15,dist:0,rv:.2,oct:1},
+"溜め技（1-2）":{w1:'sawtooth',w2:'square',det:10,ft:'lowpass',cut:1500,res:6,A:1.5,D:.2,S:1,Rl:.4,pAmt:-12,pTime:1.5,lfoT:'pitch',lfoR:9,lfoD:.4,dist:.2,rv:.25,oct:0},
+"叫び声の素（2-2）":{w1:'sawtooth',w2:'off',ft:'lowpass',cut:5000,res:2,A:.03,D:.3,S:.8,Rl:.4,pAmt:5,pTime:.12,lfoT:'pitch',lfoR:7,lfoD:.15,dist:.5,rv:.35,oct:2},
+"決定音（記号）":{w1:'square',w2:'off',ft:'lowpass',cut:6000,res:1,A:.001,D:.15,S:0,Rl:.05,pAmt:0,lfoT:'none',dist:0,rv:.05,oct:1},
+"ワウ（LFO→フィルター）":{w1:'sawtooth',w2:'sawtooth',det:12,ft:'lowpass',cut:900,res:10,A:.01,D:.3,S:.8,Rl:.3,pAmt:0,lfoT:'filter',lfoR:4,lfoD:.8,dist:.1,rv:.2,oct:-1},
+"パッド":{w1:'sawtooth',w2:'sawtooth',det:14,ft:'lowpass',cut:1800,res:1,A:.6,D:.5,S:.8,Rl:1.5,pAmt:0,lfoT:'volume',lfoR:3,lfoD:.15,dist:0,rv:.5,oct:0},
+"モンスター":{w1:'sawtooth',w2:'noise',mix2:.4,ft:'bandpass',cut:500,res:2,A:.05,D:.5,S:.8,Rl:.5,pAmt:-7,pTime:.4,lfoT:'pitch',lfoR:9,lfoD:.3,dist:.8,rv:.35,oct:-3}
+};
+const voices={};let delayIn=null;
+function synthBus(){A();if(!delayIn||delayIn.context!==AC){delayIn=delayBus(.3,.4)}return delayIn}
+function noteOn(m){const ac=A();noteOff(m,true);const t=ac.currentTime+.005,f=440*Math.pow(2,(m-69)/12+SP.oct);
+  const v={srcs:[],m};const mix=AC.createGain();
+  const mk=(w,ff,lv)=>{if(w==='off')return;let s;if(w==='noise'){s=AC.createBufferSource();s.buffer=NB;s.loop=true;s.start(t)}else{s=AC.createOscillator();s.type=w;s.frequency.setValueAtTime(ff*Math.pow(2,SP.pAmt/12),t);s.frequency.exponentialRampToValueAtTime(ff,t+Math.max(.005,SP.pTime));s.start(t)}const g=AC.createGain();g.gain.value=lv;s.connect(g);g.connect(mix);v.srcs.push(s)};
+  mk(SP.w1,f,1);mk(SP.w2,f*Math.pow(2,SP.det/1200),SP.mix2);
+  const fl=filt(SP.ft,SP.cut,SP.res);if(SP.fenv){fl.frequency.setValueAtTime(Math.min(18000,SP.cut*(1+SP.fenv*8)),t);fl.frequency.exponentialRampToValueAtTime(SP.cut,t+SP.D+.05)}
+  const g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+SP.A);g.gain.linearRampToValueAtTime(Math.max(SP.S,.0001),t+SP.A+SP.D);
+  let last=chain(mix,fl);if(SP.dist>0)last=chain(last,shaper(SP.dist*40));const lvl=AC.createGain();lvl.gain.value=SP.vol*(SP.w1==='square'||SP.w1==='sawtooth'?.35:.6);chain(last,g,lvl);
+  if(SP.lfoT!=='none'){const l=AC.createOscillator();l.frequency.value=SP.lfoR;const lg=AC.createGain();l.connect(lg);l.start(t);v.srcs.push(l);
+    if(SP.lfoT==='pitch'){lg.gain.value=SP.lfoD*f*.3;v.srcs.forEach(s=>s.frequency&&s!==l&&lg.connect(s.frequency))}
+    else if(SP.lfoT==='filter'){lg.gain.value=SP.lfoD*SP.cut;lg.connect(fl.frequency)}
+    else{const tg=AC.createGain();tg.gain.value=1-SP.lfoD/2;lg.gain.value=SP.lfoD/2;lg.connect(tg.gain);lvl.disconnect();lvl.connect(tg);lvl._o=tg}}
+  const o=lvl._o||lvl;out(o,{rev:SP.rv});if(SP.dly>0){const s=AC.createGain();s.gain.value=SP.dly;o.connect(s);s.connect(synthBus())}
+  v.g=g;v.fl=fl;voices[m]=v;
+  if(SP.S<=.001){setTimeout(()=>{if(voices[m]===v)noteOff(m)},(SP.A+SP.D)*1000+60)}
+  hl(m,true)}
+function noteOff(m,quick){const v=voices[m];if(!v)return;delete voices[m];const t=AC.currentTime,rl=quick?.01:SP.Rl;v.g.gain.cancelScheduledValues(t);v.g.gain.setValueAtTime(v.g.gain.value,t);v.g.gain.linearRampToValueAtTime(0,t+rl);v.srcs.forEach(s=>{try{s.stop(t+rl+.05)}catch(e){}});hl(m,false)}
+function liveFilter(){Object.values(voices).forEach(v=>{v.fl.frequency.setTargetAtTime(SP.cut,AC.currentTime,.02);v.fl.Q.setTargetAtTime(SP.res,AC.currentTime,.02)})}
+function hl(m,on){const k=document.querySelector(`[data-m="${m}"]`);if(k)k.classList.toggle('down',on)}
+
+/* ---------- Sampler ---------- */
+const SM={buf:null,name:'',start:0,len:1,pitch:0,rev:false,cut:18000,res:1,A:.002,Rl:.2,rv:.1,dist:0,loop:false};const svoices={};
+function makeBreath(){A();const sr=AC.sampleRate,n=sr*3,b=AC.createBuffer(1,n,sr),d=b.getChannelData(0);let l=0,h=0;for(let i=0;i<n;i++){const w=Math.random()*2-1;l+=.08*(w-l);h=w-l;const env=Math.min(1,i/(sr*.3))*Math.min(1,(n-i)/(sr*.4))*(0.7+.3*Math.sin(i/sr*3));d[i]=(l*1.2+h*.5)*env}return b}
+function makeClap(){A();const sr=AC.sampleRate,n=sr*.4,b=AC.createBuffer(1,n,sr),d=b.getChannelData(0);let l=0;for(let i=0;i<n;i++){const t=i/sr,w=Math.random()*2-1;l+=.3*(w-l);const e=[0,.008,.017].reduce((a,x)=>a+(t>=x?Math.exp(-(t-x)*60):0),0);d[i]=(w-l)*e*.6}return b}
+function revBuf(b){const c=AC.createBuffer(b.numberOfChannels,b.length,b.sampleRate);for(let ch=0;ch<b.numberOfChannels;ch++){const s=b.getChannelData(ch),d=c.getChannelData(ch);for(let i=0;i<s.length;i++)d[i]=s[s.length-1-i]}return c}
+function sOn(m){if(!SM.buf)return;const ac=A();sOff(m,true);const t=ac.currentTime+.005;const s=AC.createBufferSource();s.buffer=SM.rev?(SM._rb||(SM._rb=revBuf(SM.buf))):SM.buf;s.playbackRate.value=Math.pow(2,(m-60+SM.pitch)/12);
+  const dur=SM.buf.duration,st=SM.start*dur,ln=Math.max(.02,SM.len*(dur-st));if(SM.loop){s.loop=true;s.loopStart=st;s.loopEnd=st+ln}
+  const fl=filt('lowpass',SM.cut,SM.res),g=AC.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+SM.A);let last=chain(s,fl);if(SM.dist>0)last=chain(last,shaper(SM.dist*40));chain(last,g);out(g,{rev:SM.rv,vol:.9});
+  s.start(t,st,SM.loop?undefined:ln);svoices[m]={s,g,fl};hl(m,true);s.onended=()=>{if(svoices[m]&&svoices[m].s===s){delete svoices[m];hl(m,false)}}}
+function sOff(m,q){const v=svoices[m];if(!v)return;delete svoices[m];const t=AC.currentTime,r=q?.01:SM.Rl;v.g.gain.cancelScheduledValues(t);v.g.gain.setValueAtTime(v.g.gain.value,t);v.g.gain.linearRampToValueAtTime(0,t+r);try{v.s.stop(t+r+.05)}catch(e){}hl(m,false)}
+function sLive(){Object.values(svoices).forEach(v=>{v.fl.frequency.setTargetAtTime(SM.cut,AC.currentTime,.02);v.fl.Q.setTargetAtTime(SM.res,AC.currentTime,.02)})}
+
+</script>
+<script>
+const CH=[
+{no:"0",name:"“体験” ゼロから効果音を作ってみよう",secs:[
+["0-2","7つのSTEPで初めての効果音を作る",["FL Studioのシンセ「3xOsc」で風の音を作る","ノイズ波形＋エンベロープ＋フィルター（MOD X／MOD Y）","ツマミを回しながら“演奏”して録音し、WAVで書き出す"],"f-wind-synth"],
+["0-3","スマートフォンを使って風の音を作る",["録音アプリ（PCM録音）で自分の息を録る","44.1kHz以上・マイク感度「高」、3秒以上強く吹く","Samplerに読み込み、SMP START／LENGTH／CROSSFADEで整える","あとは0-2と同じエンベロープとフィルターで風に変える"],"f-wind-phone"]]},
+{no:"1",name:"“役割” 効果音の意図",secs:[
+["1-1","点としての役割",["効果音は単発・瞬間的で、時間軸に「アクセント」を打つ","見せ場は強く、常時鳴る音（格闘ゲームの足音など）は控えめに","発音タイミングの並べ方で“リズム”を表現できる"]],
+["1-2","線としての役割",["点をつなげると線になる＝“状態表現”（溜め技など）","ADSRエンベロープ：Attack／Hold／Decay／Sustain／Release","LFOで音量（トレモロ）・ピッチ・フィルターに揺れを付ける"]],
+["1-3","没入感を高める役割",["GAME WORLD SOUND（ゲーム世界内の音）とPLAYER SOUND（世界外の音）","リアリティ＝発生する音の「構造・材質・空間」の再現","架空のモノでも構造・材質・空間を想定して作る"]],
+["1-4","記号としての役割",["PLAYER SOUNDはキャラクターには聞こえない音","音階を使う（決定・警告・クエスト完了など）","楽器で文化・国・時代を出す（太鼓、琴、二胡など）","現実音を記号として使う"]],
+["1-5","没入感と記号の複合役割",["世界を演出しつつプレイヤーに情報も伝える音（鎧の戦士の足音など）","ゲームに合わせて両者の比重を調節する"]],
+["1-6","ウソとしての役割",["“ウソ”＝誇張。良い意味の裏切り感で爽快感・緊張感を生む","適当に鳴らすのではなく、狙いのあるウソにする"]],
+["1-7","誘導の役割",["映像に2通りの解釈があるとき、音で解釈を誘導できる","例：A／Bどちらのボタンでも閉じられるウィンドウの音"]],
+["コラム","フォーリー出張記（オーディオドラマの現場）",["放送局のフォーリースタジオでの制作体験"]]]},
+{no:"2",name:"“再現” 論理的な効果音の作り方",secs:[
+["2-1","構造を分析する",["音はいくつもの要素の組み合わせ（ドアの音＝ラッチの衝突×2＋本体が枠に当たる音…）","実例：ヘリコプター＝メインローター＋テイルローター＋エンジン","エンジンは掃除機・ドライヤー・電気ドリルのモーター音を合成"],"f-heli"],
+["2-2","周波数スペクトルを分析する",["スペクトルで音の分布を見て、同じ帯域になるよう調整","波形ごとの倍音：サイン波（なし）／三角波・矩形波（奇数倍）／ノコギリ波（整数倍＝人の声と同じ）","実例：ノコギリ波から女性の叫び声を再現"],"f-scream"],
+["2-3","“本物の音”を体験する",["音が聴こえる「条件・仕組み・音要素」を知る","富士総合火力演習：着弾から約8秒後に爆発音が届いた","カエルの単体の鳴き声は「ゲコゲコ」ではない？という考察"]],
+["2-4","オノマトペを使ってイメージする",["依頼のサウンドリストにはオノマトペがよく書かれている","まず自分の声でまねて録音し、2-2の手順で再現する","「あかさたな」各行・促音「っ」・長音「ー」の音のイメージ","ノコギリ波を「あいうえお」に加工して人の声らしくする"]],
+["2-5","創造と組み立て",["架空の音は「仕組み」を想定して組み立てる","例：電気の魔法＝エネルギーの出どころ→溜まり方→放ち方を決める"]]]},
+{no:"3",name:"“創造” 実験的な効果音の作り方",secs:[
+["3-1","実験を行う前に",["偶然に100%頼らず、あえて制限を設けて楽しむ（機材をアナログシンセだけにする等）","マスターにリミッターを挿して音量オーバーと耳を守る"],"f-experiment"],
+["3-2","マイクを発生音として使う",["マイクそのもの（グリルなど）を叩いたりこすったりして音源にする"]],
+["3-3","エフェクトをかける",["リバーブで原音とまったく違う音へ","Fruity Reeverb 2：MID／SIDE、DEC（減衰時間）など","Valhalla Shimmer、RAUM（Grounded／Airy／Cosmic）"]],
+["3-4","周波数を変化させる",["再生速度・ピッチ（RANGE最大48＝4オクターブ）","Fruity Scratcherでスクラッチ","3xOscのノイズ＋フィルター／レゾナンス＋オートメーション","Effectorのリングモジュレーター（大音量に注意）"]],
+["3-5","モノに触れ、音を出す",["PCから離れて身の回りのモノで音を出す","クッションを丸めて叩く→殴打音、爪でひっかく→斬撃の味付け","Samplerでピッチを大きく下げ＋フィルター→地下でうごめく音","空気でっぽうの「ポン！」をキーボードで演奏","音のバリエーションは3種類以上作る"]],
+["3-6","音のアンテナを張る",["日常の音に気を配りアイデアをためる","MIDIコントローラーで実験の効率を上げる"]]]},
+{no:"4",name:"“採集” 音を録音する",secs:[
+["4-1","ハンディレコーダーを活用する",["マイク一体型で持ち運びが楽","ハンドリングノイズ対策：グリップや専用リモコン","ZOOM H2n、H6＋ショットガンマイク、H3-VR（360度のAmbisonics）"],"f-record"],
+["4-2","マイクの録音方式でステレオイメージを作る",["AB方式（間隔を空ける）・XY方式（90度で交差）・ORTF方式","MS方式：仮想的なステレオ。ZOOM MS Decoderで後から幅を調整","マイクの角度で音のバランスと音質が劇的に変わる"]],
+["4-3","マイクの焦点を合わせる",["単一指向性（カーディオイド）：正面に強い。近づけると低域が増える「近接効果」","超指向性（ショットガン）・無指向性・双指向性","ポーラーパターンと周波数特性グラフの読み方","壁の反射音は斜め上から構えて避ける"]],
+["4-4","最新技術を使って録音の効率を上げる",["32bit float録音で音割れの心配を減らす","スマホアプリでレコーダーをリモート操作（F3 Controlなど）","Ambisonics Playerで向きの調整やバイノーラル変換"]],
+["4-5","フィールドレコーディング前に行う10の掟",["電池・声でメモ・虫対策・予備機材・バックアップ機能・不要な音を出さない・ヘッドフォン・ケーブル最小限・写真・フォルダを空に","録った音はPCへ移し、命名ルールで分類保存"],"f-record"],
+["4章末","モンスターボイスを作る",["現実にない声なので、大きさや特徴を考えて作る"]]]},
+{no:"5",name:"“調整” 効果音を編集する",secs:[
+["5-1","不要な音を除去する",["継続ノイズ：Edisonの「ノイズプロファイル」で分析して除去","録音時の対策：エアコンを消す、窓を閉める、PCから離れる、マイキング","突発ノイズ：iZotope RXのSpectral Repair／Attenuate。範囲は狭く、何回かに分けて"],"f-edit"],
+["5-2","求める音の長さに調整する",["SamplerのSTART OFFSETで再生位置を調整","タイムストレッチ（e3 generic）：PITCHとMUL（長さ）","Loop tunerでループ素材にする"]],
+["5-3","求める音質に調整する",["いちばんよく使う作業＝周波数特性を整える","Fruity Parametric EQ 2（ヒートマップ表示、BW＝Q値）","例（金属音）：100Hz以下カット、5kHzから高域を抑える、2kHzをブースト"]],
+["5-4","音のバリエーションを調整する",["同じ足音が続く機械っぽさを避ける","Samplerのフォルマントをイベントで変化させる"]],
+["5-5","エンベロープで音の輪郭を調整する",["音を柔らかくする（アタックを遅く）／硬くする","余韻を残す、出だしを抑えるなど"]],
+["5章末","パンニングで空間を作る",["オーディオドラマでは大げさなパンで家の構造やカメラの向きが浮かぶ"]]]},
+{no:"6",name:"“実践” 効果音を考えながら作る",secs:[
+["6-1","フローチャートで考える効果音の作り方",["2つのフローチャート：自分主体（素材作り）とゲーム主体","5つのテーマを基礎編・発展編で実践"]],
+["6-2","初めての効果音制作フローチャート（初級編）",["①存在する？②録音できる？③似た素材がある？で④⑤⑥に分かれる","⑦完成した音はライブラリーへ。ファイル名は大きなカテゴリから付ける"],"flow-basic"],
+["6-3","ゲームが求める音を作るためのフローチャート（発展編）",["①役割を考える（記号・没入感・感情）→②再現・創造・録音→③実装後に調整","役割が複数なら比率でバランスを取る"],"flow-game"],
+["6-4","もしフローチャートで判断できなかったら…",["考えるより先に手を動かす。まずは第0章から"]],
+["6-5","実例① 心臓の鼓動音",["基礎：⑤ マイクを叩く音＋フィルター","発展：記号3：感情7 シンセ＋2段階テンポ"],"ex-heart"],
+["6-6","実例② 足音",["基礎：④ フォーリー録音→ノイズ除去→フェード","発展：記号＋感情 サイン波で可愛い足音"],"ex-foot"],
+["6-7","実例③ 人が倒れる音",["基礎：⑤ ベッドとリュックで「ドサァ」","発展：感情＋リアリティ ディレイでスローモーション"],"ex-fall"],
+["6-8","実例④ レーザーガンの発射音",["基礎：⑥ マスキングテープを剥がす音を加工","発展：リアリティ5：記号5 エアソフトガン＋エネルギー弾"],"ex-laser"],
+["6-9","実例⑤ 爆発音",["基礎：⑤ 手を叩く音を4オクターブ下げて歪ませる","発展：記号5：装飾5 音を重ねて仕上げる"],"ex-boom"],
+["6章末","効果音素材を購入する選択肢",["総合・カテゴリ音源／単発音源／特化型音源の長所と短所","使用権（著作権）を事前に確認する"]]]}
+];
+
+const FLOWS={
+"f-wind-synth":{t:"0-2 シンセで風の音（7STEP）",g:"flows",lead:"3xOscのノイズを、フィルターを回しながら“演奏”して風にする",steps:[
+["a","音源を呼び出す","空のテンプレートのSamplerを3xOscに入れ替える（右クリック→Replace）"],
+["a","ノイズ音を使う","1段目の波形をサイコロ型のノイズに。2・3段目の音量はゼロ"],
+["a","エンベロープを有効にする","線グラフのアイコン→Volumeタブ→「Envelope」ボタンを点灯。ふわっと鳴ってふわっと消える"],
+["a","フィルターを設定する","MOD X（フィルター）をゼロ、MOD Y（レゾナンス）を最大に"],
+["w","風を“演奏”する","Qキーを押しながらMOD Xをゆっくり回す。回し方で風の強弱が変わる"],
+["a","録音して確認する","録音ボタンで演奏を記録。気に入らなければCtrl+Zでやり直し"],
+["e","WAVで書き出す","FILE→Export→Wave file"]]},
+"f-wind-phone":{t:"0-3 スマホで風の音",g:"flows",lead:"シンセの代わりに自分の息を録音して音源にする",steps:[
+["a","録音アプリを入れる","おすすめは「PCM録音」（iPhone／Android）"],
+["a","設定する","サンプルレートは44.1kHzか48kHz、マイク感度は「高」"],
+["w","息を吹きかけて録音","マイクに向かって3秒以上強く吹き続ける。メーターが常に最大になるように"],
+["a","PCのSamplerに読み込む","波形が“長方形の海苔”のような形か確認（音量注意）"],
+["a","再生範囲を整える","SMP STARTで頭の空白を、LENGTHで終わりの空白を削る。CROSSFADEでループ"],
+["a","エンベロープとフィルター","0-2と同じ：Envelope点灯、MOD Xゼロ、MOD Y最大"],
+["e","演奏して完成","MOD Xを回す。シンセ版より荒々しく、低音感のある強風になる"]]},
+"f-logic":{t:"第2章 論理的な作り方の流れ",g:"flows",lead:"再現したい音を4つの方法で分析し、最後に組み立てる",steps:[
+["q","どんな音を再現する？","実在する音か、架空の音かを確認"],
+["a","2-1 構造を分析する","音の要素がいくつあるかを分解（ドア＝ラッチ衝突×2＋本体の衝突）"],
+["a","2-2 周波数スペクトルを分析する","どの帯域に音があるか、倍音の並び方を見る"],
+["a","2-3 本物の音を体験する","聴こえる条件・仕組み・音要素を知る。難しければモデルガンや動画で代用"],
+["a","2-4 オノマトペでイメージする","文字や自分の声で音を表し、それを録音して再現の手がかりに"],
+["e","2-5 創造と組み立て","架空の音は仕組みを想定（出どころ→溜まり方→放ち方）して組み立てる"]]},
+"f-heli":{t:"2-1 ヘリコプターの音（構造分析）",g:"flows",lead:"ヘリの音を要素に分けて、一つずつ作って合成する",steps:[
+["q","音の構造を分析","メインローター／テイルローター／エンジンに分解。上昇時もローターの回転数はほぼ変わらない（羽根の角度で揚力を得る）"],
+["a","メインローター","空気を切る音を作り、Phaserでうねりを加える（MIXは少し下げる）"],
+["a","回転のリズムを合わせる","毎分300〜400回転＝毎秒5〜7回転。テンポ60で5〜7連符のバタバタ感にSPEEDを調整"],
+["a","音圧を上げる","Compressionのプリセット「Burning」、amt・L・Hを最大"],
+["a","テイルローター","同じ考え方で小さな後部プロペラの音を作る"],
+["a","エンジン（ターボシャフト）","低→高のなめらかなピッチ変化と高周波。掃除機＋ドライヤー＋電気ドリルのモーター音を合成"],
+["e","合成してホバリング音に","すべての要素を重ねて完成"]]},
+"f-scream":{t:"2-2 女性の叫び声（スペクトル分析）",g:"flows",lead:"本物の叫び声のスペクトルに、ノコギリ波を近づけていく",steps:[
+["a","お手本をスペクトルで見る","Edisonに読み込み、イコライザーアイコンでスペクトル表示"],
+["a","ノコギリ波を音源に","人の声と同じ整数倍の倍音をもつ波形。基本の高さを叫び声に合わせる"],
+["a","ピッチエンベロープ","押すと急に上がり、離すと下がる（ATTACK9時・TENSION16時・HOLD／DECAY最小）"],
+["a","フィルターで高域を削る","MOD Xで5kHz付近より上をカット。MOD Yで付近を強調"],
+["a","EQで不要な帯域をカット","Fruity Parametric EQ 2でお手本のスペクトルに近づける"],
+["a","音の高さにランダムな揺らぎ","ピアノロールでノートを置き、Pitchノブにオートメーションを書く"],
+["w","感情と空間を足す","Fruity Blood Overdriveで荒々しさ、Fruity Reeverb 2で空間"],
+["e","スペクトルを比べて完成","お手本とほぼ同じ形になればOK"]]},
+"f-experiment":{t:"第3章 実験で音を作る流れ",g:"flows",lead:"制限を決めて、偶然を楽しみながら素材を増やす",steps:[
+["q","制限を決める","例：アナログシンセだけ／ディレイだけ／自分で録った音だけ"],
+["a","安全の準備","マスターにリミッター（Fruity Limiter）を挿し、0dBを超えないように"],
+["a","音を出す","マイクを叩く（3-2）、身近なモノに触れる（3-5）"],
+["a","エフェクトで変える","リバーブの形や長さで空間を変える（3-3）"],
+["a","周波数を変える","ピッチ・再生速度・スクラッチ・フィルター・リングモジュレーター（3-4）"],
+["w","アイデアを実践","例：クッションを叩く音＋風切り音→殴打音"],
+["e","3種類以上のバリエーションで保存","思わぬところで使えるのでライブラリー化しておく"]]},
+"f-record":{t:"第4章 録音の流れと10の掟",g:"flows",lead:"機材と方式を選び、10の掟を守って録音し、ライブラリーへ",steps:[
+["q","何をどう録る？","ステレオの広がりが欲しいか、一点を狙いたいかを決める"],
+["a","機材を選ぶ（4-1）","ハンディレコーダー。必要なら外部マイク・ショットガンマイク・360度レコーダー"],
+["a","録音方式を選ぶ（4-2）","AB（広い・リアル）／XY（中心が安定）／ORTF／MS（後から幅を調整）"],
+["a","指向性で焦点を合わせる（4-3）","単一・超指向性で狙う、無指向性で全体、双指向性で前後。近接効果と反射に注意"],
+["a","効率を上げる（4-4）","32bit float録音、スマホからリモート操作"],
+["w","10の掟を確認（4-5）","下のチェックリスト"],
+["e","PCへ移してライブラリー化","その日のうちに分類し、命名ルールでリネーム保存"]],
+check:[["電池の残量を確認する",""],["録音直後に声で情報を入れる","場所・対象・状況をしゃべって残す"],["虫の対策をする","虫よけ、刺されたときの薬"],["予備の録音機器を用意する",""],["バックアップ機能を活用する",""],["不要な音を発生させない","服のこすれ、足音など"],["ヘッドフォンを必ず着ける",""],["ケーブルは最小限にする",""],["写真を撮影する","録音場所の記録"],["レコーダーのフォルダは空にする","出発前に整理しておく"]],
+name:"se_fieldrec_地名_場所_何の音_様子_付随する音_備考_マイク_録音方式_番号.wav"},
+"f-edit":{t:"第5章 編集の流れ",g:"flows",lead:"録った音をそのまま使わず、順番に整えていく",steps:[
+["a","不要な音を除去（5-1）","継続ノイズ→Edisonのノイズプロファイル。突発ノイズ→iZotope RXのSpectral Repair"],
+["a","長さを調整（5-2）","START OFFSETで頭出し、タイムストレッチ（PITCH・MUL）、ループ化"],
+["a","音質を調整（5-3）","Parametric EQ 2で周波数特性を整える（例：金属音は2kHzブースト）"],
+["a","バリエーションを作る（5-4）","フォルマントを変えて同じ音が続く機械っぽさを消す"],
+["a","輪郭を調整（5-5）","エンベロープでアタックを柔らかく／硬く、余韻を調整"],
+["e","定位を決める","パンニングで空間や向きを表現"]]}
+};
+
+const EX={
+"ex-heart":{t:"6-5 実例① 心臓の鼓動音",
+basic:{route:"①YES → ②NO（自分の心臓は聴診器などがないと録れない） → ⑤シンセや別の音で再現",steps:[
+["q","フローチャートを当てはめる","実在する音だが、一般的には録音できない→⑤"],
+["a","再現のための考察","擬音で「ドックン」とイメージし、音の要素に分ける"],
+["a","アイデアを実験","マイクの側面を握りこぶしで叩いて録音（「クンッ」）。叩き分けて鼓動を表現"],
+["a","録った音を調整","フィルターで高域を削り、音をこもらせる。録音時の「サー」も消える"],
+["e","完成","体の中で響く鼓動音になる"]]},
+adv:{route:"役割：カウントダウンを伝える“記号”＋焦らせる“感情”。比率は記号3：感情7",steps:[
+["q","役割を考える","危機感を与えることが優先なので、感情の役割を強めに"],
+["a","シンセでベースを作る","キック系シンセで鼓動の素材を作る。エンベロープでアタックを調整、1オクターブ下げる"],
+["a","「ドックン」を作る","2つの音を組み合わせて鼓動の形に"],
+["w","2段階のテンポで焦らせる","10〜6秒は1秒に1回、5〜1秒は1秒に2回。ピアノロールに打ち込む"],
+["e","完成","時間の感覚を崩し、プレイヤーに焦りを感じさせる"]]}},
+"ex-foot":{t:"6-6 実例② 足音",
+basic:{route:"①YES → ②YES（スマホでも録れる） → ④フィールド録音・フォーリー",steps:[
+["q","フローチャートを当てはめる","実在して録音もできる→④"],
+["a","録音前の準備","音源から離れてノイズを減らす。周りの音（虫・鳥・車）に注意"],
+["a","録音環境を決める","ノイズを減らしやすい夜間に。例：9月上旬の午前1時、ベランダ"],
+["a","足音をフォーリー録音","実際に歩いて録る"],
+["a","ノイズを除去","FL Studioの「ノイズプロファイル」で周囲の環境音を消す"],
+["e","フェードアウトで仕上げ","足音部分を範囲選択し、フェードで必要な部分だけ残す"]]},
+adv:{route:"役割：操作感を伝える“記号”＋可愛らしさ・気持ちよさの“感情”（横スクロールの架空キャラ）",steps:[
+["q","役割を考える","記号を伝えやすいシンセで素材を作り、感情を乗せる"],
+["a","サイン波を用意","3xOscでサイン波を鳴らす"],
+["a","エンベロープで歯切れよく","「ポワッ」とした柔らかい足音に"],
+["a","ピアノロールにリズムを打ち込む","歩くテンポで並べる"],
+["e","生音を重ねて完成","サイン波の足音に生音を重ねてリアリティを足す"]]}},
+"ex-fall":{t:"6-7 実例③ 人が倒れる音",
+basic:{route:"①YES → ②NO（誇張した倒れる音は実際に倒れても録れない） → ⑤別の音で再現",steps:[
+["q","フローチャートを当てはめる","欲しいのは“誇張された”倒れる音→⑤"],
+["a","擬音で分解する","「ドサァ」＝「ド」（低域の強い衝突）＋「サァ」（軽い摩擦音）"],
+["a","「ド」を録る","ベッドを手で叩く、リュックサックをベッドに叩きつける"],
+["a","「サァ」を録る","ベッドをリュックでこする（ジッパーが鳴らないよう内側へ）"],
+["a","トリミングと音量調整","イメージに近い部分だけ切り出し、ノーマライズ"],
+["e","タイムラインに並べて完成","衝突音と摩擦音を組み合わせる"]]},
+adv:{route:"役割：爽快感・インパクトの“感情”＋グラフィックに合ったリアリティの“装飾”（格闘ゲームのフィニッシュ）",steps:[
+["q","役割を考える","フィニッシュ時だけ鳴る特別な音なので爽快感が必要"],
+["a","基礎編の生音をベースに","リュックをベッドに叩きつけた音を使う"],
+["a","4つの倒れる音を組み合わせる","1回目の叩きつけ＋2回目の倒れる音をタイミングよく配置"],
+["w","ディレイでスローモーション","Fruity Delay 2でやまびこのような効果"],
+["e","リバーブで仕上げ","特別な演出に合った倒れる音に"]]}},
+"ex-laser":{t:"6-8 実例④ レーザーガンの発射音",
+basic:{route:"①NO（現実には存在しない） → ③YES（マスキングテープを剥がす音を思い出した） → ⑥素材の組み合わせ・加工",steps:[
+["q","フローチャートを当てはめる","存在しない音だが、似た素材がある→⑥"],
+["a","ライブラリー素材を使う","マスキングテープを剥がす「ビュオオオォン」という音"],
+["a","長さと高さを合わせる","Samplerで鍵盤に割り当て、キーボードで弾いてピッチを試す"],
+["a","エフェクトで加工","Fruity Flangusのプリセット（Modulation）、Fruity Delay 3"],
+["e","完成","テープの音がレーザーガンの発射音に"]]},
+adv:{route:"役割：リアリティの“装飾”＋架空だと伝える“記号”。比率は5：5（SFだが見た目は現実のハンドガン）",steps:[
+["q","役割を考える","撃つまでの動作はリアルに、弾の発射はSF感のある架空の音に"],
+["a","マガジンとスライドの音","エアソフトガンでマガジンを入れ、スライドを引く音を録る（金属音を足す）"],
+["a","射撃音","実銃とエアソフトガンの射撃音を混ぜる"],
+["a","エネルギー弾を生音で作る","身近な生音（掃除機など）を加工してシンセに近い音色に。デフォルメしすぎない"],
+["e","重ねて完成","マガジンのセットから撃つまでを一連の流れに"]]}},
+"ex-boom":{t:"6-9 実例⑤ 爆発音",
+basic:{route:"①YES → ②NO（実際の爆発は危険で録れない） → ⑤別の音で再現",steps:[
+["q","フローチャートを当てはめる","録音は難しく危険→⑤"],
+["a","アイデアを考える","以前は段ボールを叩く音を使った。今回は手を叩く音で試す"],
+["a","手を叩く音を録る","シンプルに手拍子を録音"],
+["a","ピッチを4オクターブ下げる","重さが出てくる"],
+["a","ディストーションで迫力","PRE AMP最大、x100をオンにして強く歪ませる"],
+["e","長さを整えて完成","エンベロープで音の長さを調整し、ピアノロールで高さ違いを重ねる"]]},
+adv:{route:"役割：爆発を知らせる“記号”＋世界観に合う質感の“装飾”。比率は5：5（ステージのギミックの爆発）",steps:[
+["q","役割を考える","リアリティ＝構造・材質・空間を表現する"],
+["a","基礎編の爆発音をベースに","生音から作った爆発音を土台に"],
+["a","風の音を足す","マイクに息を吹きかけた音を重ねる"],
+["a","「チュン！」という音を作る","シンセのピッチスライド機能で高域から低域へ"],
+["e","すべて重ねて完成","ゲームの世界観に合った爆発音に"]]}}
+};
+
+const BASIC={
+q1:{q:"①作りたい音は現実世界に存在しますか？",yes:"q2",no:"q3"},
+q2:{q:"②その音を録音することは可能ですか？",yes:"r4",no:"r56"},
+q3:{q:"③サウンドライブラリーの中に似たような素材はありますか？",yes:"r6",no:"r5"},
+r4:{r:"④フィールドレコーディングやフォーリーを行う",s:"ロケ地で録るフィールドレコーディングか、身近なモノや体で演技するフォーリー（第4章）"},
+r5:{r:"⑤シンセサイザーや別の音で再現・創造する",s:"第2章の論理的な方法・第3章の実験的な方法を使う"},
+r56:{r:"⑤シンセ・別の音で再現 または ⑥素材の組み合わせ・加工",s:"録音が難しいときは⑤か⑥へ"},
+r6:{r:"⑥ライブラリー素材の組み合わせや加工、調整をして作る",s:"買った素材を使うときは著作権（使用条件）を確認"}
+};
+
+const app=document.getElementById('app'),ttl=document.getElementById('ttl'),back=document.getElementById('back');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function flowHTML(steps,key){const sm=STEPSND[key]||{};
+  return '<div class="flow">'+steps.map((s,i)=>(i?'<div class="arrow"></div>':'')+
+   `<div class="node ${s[0]}" onclick="this.classList.toggle('open')"><div class="h"><span class="n">${i+1}</span>${esc(s[1])}</div><div class="d">${esc(s[2])}</div>${sm[i]?pb(sm[i],1):''}</div>`).join('')+'</div>';
+}
+const legend='<div class="legend"><span><i style="background:var(--k1);border-color:var(--k1)!important"></i>判断・考える</span><span><i style="background:var(--k2);border-color:var(--k2)!important"></i>作業</span><span><i style="background:var(--k0);border-color:var(--k0)!important"></i>ポイント</span><span><i style="background:var(--k4);border-color:var(--k4)!important"></i>完成</span><span style="font-weight:400">タップで詳細</span></div>';
+
+const V={
+home(){
+  setHead("効果音の作り方ノート",false,"home");
+  return `<p class="lead">スキャンした本（全7章・139ページ）の内容を、章ごとの一覧と作り方のフローチャートにまとめました。</p>
+  <h3>フローチャート</h3><div class="grid">
+  <a class="card ch2" href="#flow-basic"><small>6-2 初級編</small><strong>初めての効果音制作</strong></a>
+  <a class="card ch0" href="#flow-game"><small>6-3 発展編</small><strong>ゲームが求める音</strong></a>
+  <a class="card ch1" href="#flows"><small>第0〜5章</small><strong>章ごとの作り方</strong></a>
+  <a class="card ch7" href="#examples"><small>6-5〜6-9</small><strong>実例5つ</strong></a></div>
+  <h3>音で体験</h3><div class="grid"><a class="card ch6" href="#sounds"><small>約80種類</small><strong>効果音を聴く</strong></a><a class="card ch2" href="#synth"><small>ADSR・フィルター・LFO</small><strong>シンセサイザー</strong></a><a class="card ch4" href="#sampler"><small>自分の音を加工</small><strong>サンプラー</strong></a><a class="card ch3" href="#fx"><small>9種類＋プリセット</small><strong>エフェクター</strong></a></div>
+  <h3>一覧（章ごとに色分け）</h3><div class="colorkey">${CH.map(c=>`<span class="ch${c.no}">${c.no}章 ${esc(c.name.match(/“(.*?)”/)[1])}</span>`).join('')}</div><div class="grid">${CH.map(c=>`<a class="card ch${c.no}" href="#list" onclick="window._open='${c.no}'"><small>第${c.no}章</small><strong>${esc(c.name.replace(/“.*?” /,''))}</strong></a>`).join('')}</div>
+  <div class="note">スキャンには0-1が入っていませんでした。ページの順番がバラバラだったので、本の章順に並べ直しています。</div>`;
+},
+list(){
+  setHead("章・節の一覧",false,"list");
+  const op=window._open; window._open=null;
+  return SPEC+`<input class="search" id="q" placeholder="キーワードで探す（例：リバーブ、足音）" oninput="filtList(this.value)">`+
+  CH.map(c=>`<details class="ch${c.no}" data-ch ${op===c.no?'open':''}><summary>第${c.no}章 ${esc(c.name)}<small>${c.secs.length}項目</small></summary>`+
+   c.secs.map(s=>`<div class="sec" data-txt="${esc((s[0]+s[1]+s[2].join('')).toLowerCase())}"><span class="no">${s[0]}</span><span class="tt">${esc(s[1])}</span><ul>${s[2].map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${SECSND[s[0]]?`<div class="pbs">${SECSND[s[0]].map(x=>pb(x,1)).join('')}</div>`:''}${s[3]?`<a class="go" href="#${s[3]}">フローチャートを見る →</a>`:''}</div>`).join('')+`</details>`).join('');
+},
+flows(){
+  setHead("フローチャート一覧",false,"flows");
+  const item=(h,s,t)=>`<a class="card ch${pageCh(h)}" href="#${h}"><small>${s}</small><strong>${t}</strong></a>`;
+  return `<h3>第6章の判断フロー</h3><div class="grid">${item('flow-basic','6-2 初級編・診断つき','初めての効果音制作')}${item('flow-game','6-3 発展編','ゲームが求める音')}</div>
+  <h3>第0章 体験</h3><div class="grid">${item('f-wind-synth','0-2','シンセで風の音')}${item('f-wind-phone','0-3','スマホで風の音')}</div>
+  <h3>第2章 再現（論理的）</h3><div class="grid">${item('f-logic','2-1〜2-5','論理的な作り方の流れ')}${item('f-heli','2-1','ヘリコプターの音')}${item('f-scream','2-2','女性の叫び声')}</div>
+  <h3>第3〜5章</h3><div class="grid">${item('f-experiment','第3章 創造','実験で音を作る')}${item('f-record','第4章 採集','録音の流れと10の掟')}${item('f-edit','第5章 調整','編集の流れ')}</div>`;
+},
+examples(){
+  setHead("第6章の実例",false,"examples");
+  return `<p class="lead">各テーマを「基礎編（自分が求める素材）」と「発展編（ゲームが求める音）」の2回作っています。</p>
+  <div class="grid">${Object.entries(EX).map(([k,e],i)=>`<a class="card ch${[7,2,1,3,0][i]}" href="#${k}"><small>${e.t.slice(0,3)}</small><strong>${esc(e.t.slice(4))}</strong></a>`).join('')}</div>
+  <h3>どのルートを通ったか</h3>`+Object.entries(EX).map(([k,e],i)=>`<a class="card ch${[7,2,1,3,0][i]}" style="margin-bottom:8px" href="#${k}"><strong>${esc(e.t.slice(4).replace(/実例. /,''))}</strong><small>基礎：${esc(e.basic.route.split('→').pop())}</small><small>発展：${esc(e.adv.route.split('。')[0].replace('役割：',''))}</small></a>`).join('');
+},
+"flow-basic"(){
+  setHead("6-2 初めての効果音制作",true,"flows");
+  return `${SPEC}<p class="lead">自分が作りたい音の“素材”を作るためのフロー（本のp.228）。</p>
+  <div class="wiz" id="wiz"></div>
+  ${legend}
+  <div class="flow">
+   <div class="node q open"><div class="h">①作りたい音は現実世界に存在しますか？</div><div class="d">鳥の鳴き声・ドアを閉める音・波の音などは「存在する」。巨大モンスターの足音・魔法・ビームサーベルなどは「存在しない」。</div></div>
+   <div class="arrow"></div>
+   <div class="branch">
+    <div class="col"><div class="blabel">YES（存在する）</div>
+     <div class="node q" onclick="this.classList.toggle('open')"><div class="h">②録音できますか？</div><div class="d">ドアやキーボードは録りやすい。ヘリや戦車はハードルが高い。マイクの性能でも変わる。</div></div>
+     <div class="arrow"></div>
+     <div class="node a" onclick="this.classList.toggle('open')"><div class="h"><span class="pill">YES</span>④録音して作る</div><div class="d">フィールドレコーディング（ロケ地）かフォーリー（身近なモノや体で演技）。ハンディレコーダーが活躍。</div>${pb("footFoley",1)}</div>
+     <div class="node a" style="margin-top:8px" onclick="this.classList.toggle('open')"><div class="h"><span class="pill">NO</span>⑤か⑥へ</div><div class="d">録音が難しいときはシンセや別の音で再現（⑤）するか、素材を加工（⑥）する。</div></div>
+    </div>
+    <div class="col"><div class="blabel">NO（存在しない）</div>
+     <div class="node q" onclick="this.classList.toggle('open')"><div class="h">③似た素材がありますか？</div><div class="d">自分で作った音も、買った効果音も含む“サウンドライブラリー”の中を探す。</div></div>
+     <div class="arrow"></div>
+     <div class="node a" onclick="this.classList.toggle('open')"><div class="h"><span class="pill">NO</span>⑤シンセや別の音で再現・創造</div><div class="d">シンセ、または別のモノの音で代用する。第2章・第3章の方法。</div>${pb("boomBasic",1)}</div>
+     <div class="node a" style="margin-top:8px" onclick="this.classList.toggle('open')"><div class="h"><span class="pill">YES</span>⑥素材を組み合わせ・加工</div><div class="d">ライブラリー素材を組み合わせ、加工・調整して作る。買った素材は使用条件を確認。</div>${pb("laserTape",1)}</div>
+    </div>
+   </div>
+   <div class="arrow"></div>
+   <div class="node e" onclick="this.classList.toggle('open')"><div class="h">⑦完成した音はサウンドライブラリーへ</div><div class="d">次からは③の素材になる。ファイル名は大きなカテゴリから付け、プロジェクトや設定も残していつでも作り直せるように。</div></div>
+  </div>
+  <div class="note">命名例：se_fieldrec_genjinotaki_waterfall_heavy_zpc1_AB_01（源氏の滝でZPC-1を使いAB方式で録った、激しく打ち付ける滝の音）</div>`;
+},
+"flow-game"(){
+  setHead("6-3 ゲームが求める音",true,"flows");
+  return `${SPEC}<p class="lead">ゲームに組み込むことを前提に、役割から作り方を決めるフロー（本のp.233）。</p><div class="pbs" style="margin-bottom:10px">${pb('decide')}${pb('ambNight')}${pb('heartGame')}</div>${legend}
+  <div class="flow">
+  <div class="node q open"><div class="h"><span class="n">1</span>役割を考える</div><div class="d">何が起きたかをすばやく伝える“記号”か、リアリティで“没入感”を深めるか、爽快感・恐怖・悲しみなどの“感情”を刺激するか。複数なら優先順位を付けて比率を決める（例：記号3：感情7）。</div></div>
+  <div class="arrow"></div>
+  <div class="branch" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+   ${[["記号","シンセサイザー","周波数の強弱がはっきりして耳に届きやすい"],["没入感","生音録音","生音が主体で現実感が強い"],["感情","音の演技・心理効果","フォーリーやツマミ操作で演技すると感情が生まれる"]].map(r=>`<div class="col"><div class="node q" style="padding:8px"><div class="h" style="font-size:14px">${r[0]}</div></div><div class="arrow"></div><div class="node a" style="padding:8px" onclick="this.classList.toggle('open')"><div class="h" style="font-size:13px">${r[1]}</div><div class="d" style="font-size:12px">${r[2]}</div></div></div>`).join('')}
+  </div>
+  <div class="arrow"></div>
+  <div class="node a" onclick="this.classList.toggle('open')"><div class="h"><span class="n">2</span>再現・創造・録音する</div><div class="d">決めた方法で音を形にする。いちばん向いている組み合わせは上の縦の線。ほかの組み合わせも使えるが、効果は弱めになる。</div></div>
+  <div class="arrow"></div>
+  <div class="node e" onclick="this.classList.toggle('open')"><div class="h"><span class="n">3</span>実装後に調整をする</div><div class="d">ゲームに組み込んで、役割を果たせているか確認。ズレがあれば尺・ピッチ・音量／音圧・エフェクトを調整。</div></div>
+  </div>
+  <div class="note">6-4：どちらのフローでも判断がつかないときは、考えるより先に手を動かす。第0章の手順で1つ完成させれば、判断できるようになる。</div>`;
+}
+};
+
+function exView(k){
+  const e=EX[k]; setHead(e.t,true,"examples");
+  const mode=window._mode||'basic';
+  const b=e[mode];
+  return SPEC+`<div class="seg mode-${mode}"><button class="b1 ${mode==='basic'?'on':''}" onclick="window._mode='basic';render()">基礎編</button><button class="b2 ${mode==='adv'?'on':''}" onclick="window._mode='adv';render()">発展編</button></div>
+  <div class="cmp"><small>聴き比べ（基礎→発展）</small><div class="pbs">${(EXCMP[k]||[]).map(x=>pb(x)).join('')}</div></div><div class="role mode-${mode}">${esc(b.route)}</div>${legend}${flowHTML(b.steps,k+'/'+mode)}
+  <div class="note"><a href="${mode==='basic'?'#flow-basic':'#flow-game'}" style="color:var(--acc)">${mode==='basic'?'初級編':'発展編'}のフローチャートを見る →</a></div>`;
+}
+function flowView(k){
+  const f=FLOWS[k]; setHead(f.t,true,f.g);
+  let h=SPEC+`<p class="lead">${esc(f.lead)}</p>${legend}${flowHTML(f.steps,k)}`;
+  if(f.check){h+=`<h3>フィールドレコーディング前に行う10の掟</h3><ol class="cl">${f.check.map(c=>`<li><b>${esc(c[0])}</b>${esc(c[1])}</li>`).join('')}</ol><div class="note">命名ルール（6-2より）：${esc(f.name)}</div>`}
+  return h;
+}
+function pageCh(h){if(/^f-wind/.test(h))return 0;if(/^(f-logic|f-heli|f-scream)$/.test(h))return 2;if(h==='f-experiment')return 3;if(h==='f-record')return 4;if(h==='f-edit')return 5;if(/^(ex-|flow-|examples)/.test(h))return 6;if(h==='list')return 1;if(h==='flows')return 2;if(/^(sounds|synth|sampler|fx)$/.test(h))return 6;return 8}
+function setHead(t,b,tab){document.body.className='ch'+pageCh((location.hash||'#home').slice(1));ttl.textContent=t;back.classList.toggle('hidden',!b);document.title=t==='効果音の作り方ノート'?t:t+'｜効果音の作り方ノート';document.querySelectorAll('#tabs a').forEach(a=>a.classList.toggle('on',a.dataset.t===tab));back.href='#'+tab}
+function filtList(v){v=v.trim().toLowerCase();document.querySelectorAll('[data-ch]').forEach(d=>{let any=false;d.querySelectorAll('.sec').forEach(s=>{const m=!v||s.dataset.txt.includes(v);s.classList.toggle('hidden',!m);any=any||m});d.classList.toggle('hidden',!any);if(v)d.open=any})}
+function wiz(id){
+  const w=document.getElementById('wiz'); if(!w)return; const n=BASIC[id];
+  if(n.q){w.innerHTML=`<div class="qq">診断：${esc(n.q)}</div><button onclick="wiz('${n.yes}')">YES</button><button onclick="wiz('${n.no}')">NO</button>`+(id!=='q1'?`<button onclick="wiz('q1')">最初から</button>`:'')}
+  else{w.innerHTML=`<div class="res">${esc(n.r)}<small>${esc(n.s)}</small></div><div style="margin-top:10px"><button onclick="wiz('q1')">もう一度</button></div>`}
+}
+function render(){
+  const h=(location.hash||'#home').slice(1);
+  if(V[h])app.innerHTML=V[h]();else if(FLOWS[h])app.innerHTML=flowView(h);else if(EX[h])app.innerHTML=exView(h);else app.innerHTML=V.home();
+  if(h==='flow-basic')wiz('q1');
+  if(h==='synth')synthInit();
+  if(h==='sampler')samplerInit();
+  if(h==='fx')fxInit();
+  Object.keys(voices).forEach(m=>noteOff(+m,true));Object.keys(svoices).forEach(m=>sOff(+m,true));
+}
+const STEPSND={
+'f-wind-synth':{1:'noiseRaw',2:'noiseEnv',3:'noiseFilt',4:'wind',6:'wind'},
+'f-wind-phone':{4:'noiseRaw',6:'windBreath'},
+'f-logic':{1:'door',2:'wSaw',3:'farBoom',4:'vowels',5:'magic'},
+'f-heli':{1:'heliRotor',5:'heliEngine',6:'heli'},
+'f-scream':{1:'screamRaw',2:'screamRaw',6:'scream',7:'scream'},
+'f-experiment':{2:'micTap',3:'metalHitRev',4:'ringmod',5:'cushionPunch',6:'airgun'},
+'f-record':{2:'stereoWide',3:'proxOn',6:'ambNight'},
+'f-edit':{0:'footNoisy',2:'metalEq',3:'varVar',4:'envSoft',5:'panSweep'},
+'ex-heart/basic':{2:'micTap',3:'heartBasic',4:'heartBasic'},'ex-heart/adv':{1:'heartGame',3:'heartGame',4:'heartGame'},
+'ex-foot/basic':{3:'footNoisy',4:'footFoley',5:'footFoley'},'ex-foot/adv':{1:'wSine',2:'footCute',4:'footCuteReal'},
+'ex-fall/basic':{1:'fallRaw',5:'fallBasic'},'ex-fall/adv':{1:'fallBasic',3:'fallGame',4:'fallGame'},
+'ex-laser/basic':{1:'laserTape',4:'laserTape'},'ex-laser/adv':{1:'metalHit',3:'pew',4:'laserGun'},
+'ex-boom/basic':{2:'clap',3:'boomBasic',4:'boomBasic',5:'boomBasic'},'ex-boom/adv':{1:'boomBasic',2:'windBreath',4:'boomGame'}
+};
+const EXCMP={'ex-heart':['heartBasic','heartGame'],'ex-foot':['footFoley','footCute','footCuteReal'],'ex-fall':['fallRaw','fallBasic','fallGame'],'ex-laser':['laserTape','laserGun'],'ex-boom':['clap','boomBasic','boomGame']};
+const SECSND={'0-2':['noiseRaw','noiseFilt','wind'],'0-3':['windBreath'],'1-1':['rhythmEven','rhythmGroove','accent'],'1-2':['adsr','charge','lfoTrem','lfoVib','lfoFilt'],'1-3':['ambNight','door'],'1-4':['decide','cancel','warn','clear','coin','taiko'],'1-5':['armorStep'],'1-6':['fallGame','boomGame'],'1-7':['decide','cancel'],'2-1':['door','heliRotor','heliEngine','heli'],'2-2':['wSine','wTri','wSq','wSaw','screamRaw','scream'],'2-3':['farBoom'],'2-4':['vowels'],'2-5':['magic'],'3-1':['filterSweep'],'3-2':['micTap'],'3-3':['metalHit','metalHitRev'],'3-4':['metalLow','scratch','filterSweep','ringmod'],'3-5':['cushionPunch','underground','airgun'],'4-2':['stereoMono','stereoWide'],'4-3':['proxOff','proxOn'],'4-5':['ambNight'],'4章末':['monster'],'5-1':['footNoisy','footFoley'],'5-3':['metalRaw','metalEq'],'5-4':['varSame','varVar'],'5-5':['envHard','envSoft'],'5章末':['panSweep'],'6-5':['heartBasic','heartGame'],'6-6':['footFoley','footCute'],'6-7':['fallBasic','fallGame'],'6-8':['laserTape','laserGun'],'6-9':['boomBasic','boomGame']};
+const GROUPS=[["第0章 風の音",['noiseRaw','noiseEnv','noiseFilt','wind','windBreath']],["第1章 役割（点・線）",['rhythmEven','rhythmGroove','accent','adsr','charge','lfoTrem','lfoVib','lfoFilt']],["第1章 役割（没入感・記号）",['ambNight','door','armorStep','decide','cancel','warn','clear','coin','taiko']],["第2章 再現",['heliRotor','heliEngine','heli','wSine','wTri','wSq','wSaw','screamRaw','scream','farBoom','vowels','magic']],["第3章 実験",['micTap','metalHit','metalHitRev','metalLow','scratch','filterSweep','ringmod','cushionPunch','underground','airgun']],["第4章 録音",['stereoMono','stereoWide','proxOff','proxOn','monster']],["第5章 編集（ビフォー・アフター）",['footNoisy','footFoley','metalRaw','metalEq','varSame','varVar','envHard','envSoft','panSweep']],["第6章 実例",['heartBasic','heartGame','footCute','footCuteReal','fallRaw','fallBasic','fallGame','laserTape','pew','laserGun','clap','boomBasic','boomGame']]];
+const pb=(k,small)=>SND[k]?`<button class="pb${small?' sm':''}" onclick="event.stopPropagation();play('${k}',this)">▶ ${esc(SND[k][0])}</button>`:'';
+const SPEC='<div class="specwrap"><canvas id="spec"></canvas><div class="specnote" id="specnote">鳴らすと周波数スペクトルが動きます（左が低音・右が高音）</div></div>';
+
+const KMAP={z:48,s:49,x:50,d:51,c:52,v:53,g:54,b:55,h:56,n:57,j:58,m:59,q:60,2:61,w:62,3:63,e:64,r:65,5:66,t:67,6:68,y:69,7:70,u:71,i:72};
+function kbHTML(){let h='<div class="kb">';const bl=[1,3,6,8,10];let wi=0;for(let m=48;m<=72;m++){const n=m%12;if(!bl.includes(n)){h+=`<div class="wk" data-m="${m}" style="left:${wi*100/15}%">${n===0?'C'+(Math.floor(m/12)-1):''}</div>`;wi++}}wi=0;for(let m=48;m<=72;m++){const n=m%12;if(bl.includes(n))h+=`<div class="bk" data-m="${m}" style="left:${wi*100/15-100/15*.3}%"></div>`;else wi++}return h+'</div>'}
+let KB={on:()=>{},off:()=>{}};
+function kbInit(on,off){KB={on,off};const kb=document.querySelector('.kb');if(!kb)return;const act={};
+  kb.addEventListener('pointerdown',e=>{const k=e.target.closest('[data-m]');if(!k)return;e.preventDefault();kb.setPointerCapture(e.pointerId);const m=+k.dataset.m;act[e.pointerId]=m;KB.on(m)});
+  kb.addEventListener('pointermove',e=>{if(act[e.pointerId]===undefined)return;const el=document.elementFromPoint(e.clientX,e.clientY);const k=el&&el.closest&&el.closest('[data-m]');if(k&&+k.dataset.m!==act[e.pointerId]){KB.off(act[e.pointerId]);act[e.pointerId]=+k.dataset.m;KB.on(+k.dataset.m)}});
+  const up=e=>{if(act[e.pointerId]!==undefined){KB.off(act[e.pointerId]);delete act[e.pointerId]}};kb.addEventListener('pointerup',up);kb.addEventListener('pointercancel',up)}
+const held={};
+addEventListener('keydown',e=>{if(e.repeat||e.target.tagName==='INPUT'&&e.target.type!=='range')return;const m=KMAP[e.key.toLowerCase()];if(m!==undefined&&document.querySelector('.kb')&&!held[m]){held[m]=1;KB.on(m)}});
+addEventListener('keyup',e=>{const m=KMAP[e.key.toLowerCase()];if(m!==undefined&&held[m]){delete held[m];KB.off(m)}});
+
+function xyHTML(lbx,lby){return `<div class="xy" id="xy"><div class="dot" id="xydot"></div><span class="xl">← ${lbx} →</span><span class="yl">↑ ${lby}</span></div>`}
+function xyInit(get,set){const p=document.getElementById('xy'),d=document.getElementById('xydot');if(!p)return;const place=()=>{const [x,y]=get();d.style.left=x*100+'%';d.style.top=(1-y)*100+'%'};window._xyPlace=place;place();
+  const mv=e=>{const r=p.getBoundingClientRect();const x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,1-(e.clientY-r.top)/r.height));set(x,y);place()};
+  p.addEventListener('pointerdown',e=>{e.preventDefault();p.setPointerCapture(e.pointerId);mv(e)});p.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')mv(e)})}
+const lg=(v,a,b)=>Math.log(v/a)/Math.log(b/a),ex=(x,a,b)=>a*Math.pow(b/a,x);
+
+function ctl(obj,key,label,min,max,step,fmt,live){const v=obj[key];return `<label class="ctl"><span>${label}<b id="v_${key}">${fmt?fmt(v):v}</b></span><input type="range" min="${min}" max="${max}" step="${step}" value="${v}" data-k="${key}" data-live="${live||''}"></label>`}
+function sel(obj,key,label,opts){return `<label class="ctl"><span>${label}</span><select data-k="${key}">${opts.map(o=>`<option value="${o[0]}" ${obj[key]==o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></label>`}
+function bindCtl(obj,fmts,onLive){document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{obj[k]=el.tagName==='SELECT'?el.value:(el.type==='checkbox'?el.checked:parseFloat(el.value));const b=document.getElementById('v_'+k);if(b)b.textContent=fmts[k]?fmts[k](obj[k]):obj[k];if(onLive)onLive(k)})})}
+const fHz=v=>v>=1000?(v/1000).toFixed(1)+'kHz':Math.round(v)+'Hz',fS=v=>(+v).toFixed(2)+'秒',fP=v=>Math.round(v*100)+'%',fSt=v=>(v>0?'+':'')+v;
+const WAVES=[['sine','サイン波'],['triangle','三角波'],['square','矩形波'],['sawtooth','ノコギリ波'],['noise','ノイズ']];
+
+V.sounds=function(){setHead("音を聴く",false,"sounds");
+  return SPEC+`<div class="grid" style="margin-bottom:14px"><a class="card ch2" href="#synth"><small>3xOscのような</small><strong>シンセサイザー</strong></a><a class="card ch4" href="#sampler"><small>自分の録音も使える</small><strong>サンプラー</strong></a><a class="card ch3" href="#fx"><small>EQ・歪み・ディレイ・リバーブ…</small><strong>エフェクター</strong></a><a class="card ch3" href="#fx"><small>エフェクト後の音を</small><strong>録音する</strong></a></div>
+  <p class="lead">本の内容をブラウザのシンセで再現した効果音です。本物の録音ではなく、本で紹介されている考え方（ノイズ・エンベロープ・フィルター・重ね合わせ）で作っています。音量に注意してください。</p>`+
+  GROUPS.map((g,i)=>`<div class="grp ch${[0,1,1,2,3,4,5,6][i]}"><h3>${g[0]}</h3><div class="pbs">${g[1].map(k=>pb(k)).join('')}</div></div>`).join('');
+};
+V.synth=function(){setHead("シンセサイザー",true,"sounds");back.href='#sounds';
+  return SPEC+`<div class="pre">${Object.keys(PRESETS).map(p=>`<button onclick="loadPreset('${p}')">${p}</button>`).join('')}</div>
+  ${kbHTML()}<p class="hint">鍵盤をタップ（PCならQ〜Iキー＝C4〜、Z〜Mキー＝C3〜。本と同じ配置）。風のプリセットでは、鍵盤を押しながら下のパッドを動かすと“演奏”できます。</p>
+  ${xyHTML('フィルター（カットオフ）','レゾナンス')}
+  <div class="panel ch2" style="border-left:5px solid var(--cc)"><h4>オシレーター</h4>${sel(SP,'w1','波形1',WAVES)}${sel(SP,'w2','波形2',[['off','なし'],...WAVES])}${ctl(SP,'det','波形2のずれ',0,50,1,v=>v+'cent')}${ctl(SP,'mix2','波形2の音量',0,1,.05,fP)}${ctl(SP,'oct','オクターブ',-3,3,1,fSt)}</div>
+  <div class="panel ch1" style="border-left:5px solid var(--cc)"><h4>エンベロープ（ADSR）</h4>${ctl(SP,'A','Attack',.001,2,.001,fS)}${ctl(SP,'D','Decay',.01,2,.01,fS)}${ctl(SP,'S','Sustain',0,1,.01,fP)}${ctl(SP,'Rl','Release',.01,3,.01,fS)}</div>
+  <div class="panel ch0" style="border-left:5px solid var(--cc)"><h4>フィルター</h4>${sel(SP,'ft','種類',[['lowpass','ローパス'],['highpass','ハイパス'],['bandpass','バンドパス']])}${ctl(SP,'cut','カットオフ（MOD X）',60,16000,1,fHz,1)}${ctl(SP,'res','レゾナンス（MOD Y）',.5,25,.1,v=>(+v).toFixed(1),1)}${ctl(SP,'fenv','フィルターエンベロープ',0,1,.01,fP)}</div>
+  <div class="panel ch3" style="border-left:5px solid var(--cc)"><h4>ピッチエンベロープ</h4>${ctl(SP,'pAmt','始まりの高さ',-36,36,1,v=>fSt(v)+'半音')}${ctl(SP,'pTime','戻るまでの時間',.005,2,.005,fS)}</div>
+  <div class="panel ch5" style="border-left:5px solid var(--cc)"><h4>LFO</h4>${sel(SP,'lfoT','かける先',[['none','なし'],['volume','音量（トレモロ）'],['pitch','ピッチ（ビブラート）'],['filter','フィルター（ワウ）']])}${ctl(SP,'lfoR','速さ',.2,40,.1,v=>(+v).toFixed(1)+'Hz')}${ctl(SP,'lfoD','深さ',0,1,.01,fP)}</div>
+  <a class="card" href="#fx" style="margin-bottom:10px"><small>EQ・歪み・ワウ・コーラス・ディレイ・リバーブなど</small><strong>エフェクターを開く →</strong></a>${recHTML()}<div class="panel ch7" style="border-left:5px solid var(--cc)"><h4>エフェクト（この音色だけ）</h4>${ctl(SP,'dist','ディストーション',0,1,.01,fP)}${ctl(SP,'dly','ディレイ',0,1,.01,fP)}${ctl(SP,'rv','リバーブ',0,1.5,.01,fP)}${ctl(SP,'vol','音量',0,1,.01,fP)}</div>`};
+function synthInit(){bindCtl(SP,{det:v=>v+'cent',mix2:fP,oct:fSt,A:fS,D:fS,S:fP,Rl:fS,cut:fHz,res:v=>(+v).toFixed(1),fenv:fP,pAmt:v=>fSt(v)+'半音',pTime:fS,lfoR:v=>(+v).toFixed(1)+'Hz',lfoD:fP,dist:fP,dly:fP,rv:fP,vol:fP},k=>{if(k==='cut'||k==='res'){liveFilter();window._xyPlace&&_xyPlace()}});kbInit(noteOn,noteOff);xyInit(xyG,xyS)}
+const xyG=()=>[lg(SP.cut,60,16000),(SP.res-.5)/24.5],xyS=(x,y)=>{SP.cut=ex(x,60,16000);SP.res=.5+y*24.5;liveFilter();syncCtl(SP,['cut','res'])};
+function syncCtl(obj,keys){keys.forEach(k=>{const el=document.querySelector(`[data-k="${k}"]`);if(el){el.value=obj[k];el.dispatchEvent(new Event('input'))}})}
+function loadPreset(p){Object.assign(SP,{w2:'off',det:7,mix2:.5,fenv:0,pAmt:0,pTime:.15,lfoT:'none',lfoR:5,lfoD:.3,dist:0,dly:0,rv:.15,oct:0},PRESETS[p]);render();document.querySelectorAll('.pre button').forEach(b=>b.classList.toggle('on',b.textContent===p))}
+
+V.sampler=function(){setHead("サンプラー",true,"sounds");back.href='#sounds';
+  return SPEC+`<div class="panel ch4" style="border-left:5px solid var(--cc)"><h4>音を読み込む</h4><p class="hint" style="margin-top:0">スマホで録った息や身近なモノの音など、自分の音声ファイル（mp3・wav・m4aなど）を選べます。0-3の「スマホで風の音」もここで試せます。</p>
+  <input type="file" accept="audio/*" id="sfile"><div class="pre" style="margin-top:8px"><button onclick="loadBuiltin('breath')">内蔵：息の音</button><button onclick="loadBuiltin('clap')">内蔵：手拍子</button></div>
+  <div class="hint" id="sname">${SM.buf?'読み込み中：'+esc(SM.name):'まだ音が読み込まれていません'}</div><canvas id="wave" class="wave"></canvas></div>
+  ${kbHTML()}<p class="hint">C4（Qキー）が元の高さ。左へ行くほど低く、右へ行くほど高く鳴ります。</p>
+  ${xyHTML('フィルター','レゾナンス')}
+  <div class="panel ch2" style="border-left:5px solid var(--cc)"><h4>再生範囲（0-3のSMP START・LENGTH）</h4>${ctl(SM,'start','開始位置',0,.95,.01,fP)}${ctl(SM,'len','長さ',.02,1,.01,fP)}<label class="ctl chk"><input type="checkbox" data-k="loop" ${SM.loop?'checked':''}> ループ再生</label><label class="ctl chk"><input type="checkbox" data-k="rev" ${SM.rev?'checked':''}> 逆再生</label></div>
+  <div class="panel ch0" style="border-left:5px solid var(--cc)"><h4>加工</h4>${ctl(SM,'pitch','ピッチ',-48,24,1,v=>fSt(v)+'半音')}${ctl(SM,'cut','フィルター',60,18000,1,fHz,1)}${ctl(SM,'res','レゾナンス',.5,25,.1,v=>(+v).toFixed(1),1)}${ctl(SM,'A','アタック',.001,1,.001,fS)}${ctl(SM,'Rl','リリース',.01,3,.01,fS)}${ctl(SM,'dist','ディストーション',0,1,.01,fP)}${ctl(SM,'rv','リバーブ',0,1.5,.01,fP)}</div>
+  <a class="card" href="#fx" style="margin-bottom:10px"><small>EQ・歪み・ワウ・コーラス・ディレイ・リバーブなど</small><strong>エフェクターを開く →</strong></a>${recHTML()}<div class="note">試してみよう：手拍子を読み込み、ピッチを-48半音（4オクターブ下）、ディストーションを上げると6-9の爆発音になります。息の音はフィルターを下げ、レゾナンスを上げてパッドを動かすと風になります。</div>`};
+function samplerInit(){bindCtl(SM,{start:fP,len:fP,pitch:v=>fSt(v)+'半音',cut:fHz,res:v=>(+v).toFixed(1),A:fS,Rl:fS,dist:fP,rv:fP},k=>{if(k==='cut'||k==='res'){sLive();window._xyPlace&&_xyPlace()}if(k==='start'||k==='len')drawWave()});kbInit(sOn,sOff);xyInit(sxyG,sxyS);drawWave();
+  document.getElementById('sfile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const ab=await f.arrayBuffer();A();SM.buf=await AC.decodeAudioData(ab);SM._rb=null;SM.name=f.name;document.getElementById('sname').textContent='読み込み中：'+f.name;drawWave();sOn(60);setTimeout(()=>sOff(60),1500)}catch(err){document.getElementById('sname').textContent='このファイルは読み込めませんでした'}})}
+const sxyG=()=>[lg(SM.cut,60,18000),(SM.res-.5)/24.5],sxyS=(x,y)=>{SM.cut=ex(x,60,18000);SM.res=.5+y*24.5;sLive();syncCtl(SM,['cut','res'])};
+function loadBuiltin(k){SM.buf=k==='breath'?makeBreath():makeClap();SM._rb=null;SM.name=k==='breath'?'内蔵：息の音':'内蔵：手拍子';if(k==='breath'){Object.assign(SM,{pitch:0,cut:500,res:12,loop:true,start:.1,len:.8,A:.3,Rl:1})}else{Object.assign(SM,{pitch:0,cut:18000,res:1,loop:false,start:0,len:1,A:.002,Rl:.3})}render();sOn(60);setTimeout(()=>sOff(60),1200)}
+function drawWave(){const cv=document.getElementById('wave');if(!cv)return;const c=cv.getContext('2d'),w=cv.width=cv.clientWidth*devicePixelRatio,h=cv.height=cv.clientHeight*devicePixelRatio;c.clearRect(0,0,w,h);const cs=getComputedStyle(document.documentElement);if(!SM.buf){c.fillStyle=cs.getPropertyValue('--line');c.fillRect(0,h/2,w,1);return}
+  const d=SM.buf.getChannelData(0),st=Math.floor(d.length/w);c.fillStyle=cs.getPropertyValue('--mute');for(let x=0;x<w;x++){let mx=0;for(let i=0;i<st;i+=4)mx=Math.max(mx,Math.abs(d[x*st+i]||0));c.fillRect(x,h/2-mx*h/2,1,mx*h)}
+  const a=SM.start*w,b=a+SM.len*(w-a);c.fillStyle=cs.getPropertyValue('--acc');c.globalAlpha=.25;c.fillRect(a,0,b-a,h);c.globalAlpha=1;c.fillRect(a,0,2*devicePixelRatio,h);c.fillRect(b-2,0,2*devicePixelRatio,h)}
+
+/* ---------- Effector (master insert) ---------- */
+const FXP={
+eq:{on:false,hp:20,low:0,mid:0,midF:1000,midQ:1,high:0,lp:20000},
+dist:{on:false,drive:.4,bits:16,mix:1},
+wah:{on:false,base:700,depth:.8,rate:2,q:6},
+ring:{on:false,freq:440,mix:1},
+mod:{on:false,time:4,depth:.6,rate:.5,fb:.5,mix:.5},
+trem:{on:false,rate:5,depth:.6,pan:0},
+dly:{on:false,time:.3,fb:.4,mix:.35,tone:4000},
+rev:{on:false,size:2.5,mix:.4,pre:.02},
+comp:{on:true,th:-10,ratio:12},
+master:{vol:.8}
+};
+const FXORDER=['eq','dist','wah','ring','mod','trem','dly','rev'];
+const FXSERIAL={eq:1,dist:1,wah:1,ring:1,trem:1};
+let FX=null,REC=null,MR=null,CLIPS=[],recChunks=[];
+function blk(){const b={in:AC.createGain(),out:AC.createGain(),dry:AC.createGain(),wet:AC.createGain()};b.in.connect(b.dry);b.dry.connect(b.out);b.wet.connect(b.out);return b}
+function buildFX(){const F={};const T=AC.currentTime;
+  {const b=blk(),hp=filt('highpass',20,.7),ls=filt('lowshelf',120),pk=filt('peaking',1000,1),hs=filt('highshelf',6000),lp=filt('lowpass',20000,.7);chain(b.in,hp,ls,pk,hs,lp,b.wet);Object.assign(b,{hp,ls,pk,hs,lp});F.eq=b}
+  {const b=blk(),sh=AC.createWaveShaper(),tr=AC.createGain();sh.oversample='4x';chain(b.in,sh,tr,b.wet);Object.assign(b,{sh,tr});F.dist=b}
+  {const b=blk(),bp=filt('bandpass',700,6),l=AC.createOscillator(),lg=AC.createGain(),mk=AC.createGain();mk.gain.value=2.2;l.start();l.connect(lg);lg.connect(bp.frequency);chain(b.in,bp,mk,b.wet);Object.assign(b,{bp,l,lg});F.wah=b}
+  {const b=blk(),g=AC.createGain(),o=AC.createOscillator();g.gain.value=0;o.start();o.connect(g.gain);chain(b.in,g,b.wet);Object.assign(b,{o});F.ring=b}
+  {const b=blk(),d=AC.createDelay(.1),fb=AC.createGain(),l=AC.createOscillator(),lg=AC.createGain();l.start();l.connect(lg);lg.connect(d.delayTime);chain(b.in,d,b.wet);d.connect(fb);fb.connect(d);Object.assign(b,{d,fb,l,lg});F.mod=b}
+  {const b=blk(),g=AC.createGain(),p=AC.createStereoPanner(),l=AC.createOscillator(),lv=AC.createGain(),lp=AC.createGain();l.start();l.connect(lv);lv.connect(g.gain);l.connect(lp);lp.connect(p.pan);chain(b.in,g,p,b.wet);Object.assign(b,{g,p,l,lv,lp});F.trem=b}
+  {const b=blk(),d=AC.createDelay(2),fb=AC.createGain(),tn=filt('lowpass',4000);chain(b.in,d,tn,b.wet);tn.connect(fb);fb.connect(d);Object.assign(b,{d,fb,tn});F.dly=b}
+  {const b=blk(),pre=AC.createDelay(.5),cv=AC.createConvolver();cv.buffer=imp(2.5,3);chain(b.in,pre,cv,b.wet);Object.assign(b,{pre,cv,_size:2.5});F.rev=b}
+  F.in=AC.createGain();let last=F.in;FXORDER.forEach(k=>{last.connect(F[k].in);last=F[k].out});F.out=last;F._d=null;FX=F;fxApply()}
+function distCurve(drive,bits){const n=4096,c=new Float32Array(n),k=drive*60+.5,L=Math.pow(2,bits-1);for(let i=0;i<n;i++){const x=i*2/n-1;let y=Math.tanh(k*x)/Math.tanh(k);if(bits<16)y=Math.round(y*L)/L;c[i]=y}return c}
+function fxApply(){if(!FX)return;const t=AC.currentTime,S=(p,v)=>p.setTargetAtTime(v,t,.02);
+  FXORDER.forEach(k=>{const b=FX[k],P=FXP[k],mix=P.mix??1;if(!P.on){S(b.dry.gain,1);S(b.wet.gain,0)}else if(FXSERIAL[k]){S(b.dry.gain,1-mix);S(b.wet.gain,mix)}else{S(b.dry.gain,1);S(b.wet.gain,mix)}});
+  const e=FXP.eq,E=FX.eq;S(E.hp.frequency,e.hp);S(E.ls.gain,e.low);S(E.pk.gain,e.mid);S(E.pk.frequency,e.midF);S(E.pk.Q,e.midQ);S(E.hs.gain,e.high);S(E.lp.frequency,e.lp);
+  const d=FXP.dist;const key=d.drive+'_'+d.bits;if(FX._d!==key){FX.dist.sh.curve=distCurve(d.drive,d.bits);FX._d=key}S(FX.dist.tr.gain,1/(1+d.drive*1.5));
+  const w=FXP.wah;S(FX.wah.bp.frequency,w.base);S(FX.wah.bp.Q,w.q);S(FX.wah.l.frequency,w.rate);S(FX.wah.lg.gain,w.base*w.depth*.9);
+  S(FX.ring.o.frequency,FXP.ring.freq);
+  const m=FXP.mod;S(FX.mod.d.delayTime,m.time/1000);S(FX.mod.lg.gain,m.time/1000*m.depth*.9);S(FX.mod.l.frequency,m.rate);S(FX.mod.fb.gain,m.fb*.9);
+  const r=FXP.trem;S(FX.trem.l.frequency,r.rate);if(r.pan){S(FX.trem.g.gain,1);S(FX.trem.lv.gain,0);S(FX.trem.lp.gain,r.depth)}else{S(FX.trem.g.gain,1-r.depth/2);S(FX.trem.lv.gain,r.depth/2);S(FX.trem.lp.gain,0)}
+  const y=FXP.dly;S(FX.dly.d.delayTime,y.time);S(FX.dly.fb.gain,y.fb);S(FX.dly.tn.frequency,y.tone);
+  const v=FXP.rev;S(FX.rev.pre.delayTime,v.pre);if(Math.abs(FX.rev._size-v.size)>.05){clearTimeout(FX._rt);FX._rt=setTimeout(()=>{FX.rev.cv.buffer=imp(v.size,3);FX.rev._size=v.size},150)}
+  const c=FXP.comp;S(CMP.threshold,c.on?c.th:0);S(CMP.ratio,c.on?c.ratio:1);S(M.gain,FXP.master.vol);
+  const ind=document.getElementById('fxind');if(ind){const n=FXORDER.filter(k=>FXP[k].on).length;ind.textContent=n?'FX '+n:'';ind.classList.toggle('hidden',!n)}}
+const FXPRE={
+"オフ（原音）":{},
+"洞窟（3-3）":{rev:{on:true,size:5,mix:.8,pre:.05},eq:{on:true,hp:80,low:2,mid:0,midF:1000,midQ:1,high:-6,lp:9000}},
+"電話・無線":{eq:{on:true,hp:400,low:0,mid:6,midF:1500,midQ:1,high:0,lp:3200},dist:{on:true,drive:.3,bits:16,mix:.7}},
+"水中":{eq:{on:true,hp:20,low:3,mid:0,midF:1000,midQ:1,high:-12,lp:600},mod:{on:true,time:8,depth:.8,rate:.3,fb:.3,mix:.5},rev:{on:true,size:2,mix:.3,pre:.02}},
+"ロボット（3-4 リングモジュ）":{ring:{on:true,freq:120,mix:.8},dist:{on:true,drive:.2,bits:16,mix:.5}},
+"8bitゲーム風":{dist:{on:true,drive:.1,bits:4,mix:1},eq:{on:true,hp:150,low:0,mid:0,midF:1000,midQ:1,high:0,lp:7000}},
+"スローモーション（6-7）":{dly:{on:true,time:.22,fb:.55,mix:.5,tone:2500},rev:{on:true,size:3,mix:.35,pre:.02}},
+"巨大化（重く・歪ませる）":{eq:{on:true,hp:20,low:9,mid:-3,midF:800,midQ:1,high:-4,lp:12000},dist:{on:true,drive:.7,bits:16,mix:.8}},
+"宇宙（シマー風）":{mod:{on:true,time:6,depth:.7,rate:.25,fb:.6,mix:.5},dly:{on:true,time:.45,fb:.55,mix:.35,tone:6000},rev:{on:true,size:6,mix:.7,pre:.03}},
+"ワウ（自動）":{wah:{on:true,base:800,depth:.85,rate:3,q:8}},
+"フランジャー":{mod:{on:true,time:2,depth:.9,rate:.4,fb:.8,mix:.6}},
+"左右に揺れる":{trem:{on:true,rate:1,depth:1,pan:1}},
+"遠くで鳴る（2-3）":{eq:{on:true,hp:60,low:0,mid:-4,midF:2000,midQ:1,high:-10,lp:2500},rev:{on:true,size:4,mix:.6,pre:.12}}
+};
+const FXDEF=JSON.parse(JSON.stringify(FXP));
+function fxPreset(p){FXORDER.forEach(k=>Object.assign(FXP[k],JSON.parse(JSON.stringify(FXDEF[k])),FXPRE[p][k]||{}));A();fxApply();render()}
+function fxCtl(b,k,label,min,max,step,fmt){const v=FXP[b][k];return `<label class="ctl"><span>${label}<b id="fv_${b}_${k}">${fmt?fmt(v):v}</b></span><input type="range" min="${min}" max="${max}" step="${step}" value="${v}" data-fx="${b}.${k}"></label>`}
+const FXFMT={};const FXCOL={eq:2,dist:7,wah:5,ring:3,mod:1,trem:0,dly:6,rev:4,comp:8};
+function fxPanel(b,title,note,body){return `<div class="panel fx ch${FXCOL[b]}${FXP[b].on?' on':''}" id="fxp_${b}"><div class="fxh"><h4>${title}</h4><label class="sw"><input type="checkbox" data-fxon="${b}" ${FXP[b].on?'checked':''}><span></span></label></div><div class="hint" style="margin:0 0 4px">${note}</div>${body}</div>`}
+const fDb=v=>(v>0?'+':'')+(+v).toFixed(1)+'dB',fMs=v=>Math.round(v*1000)+'ms',fX=v=>(+v).toFixed(2);
+Object.assign(FXFMT,{'eq.hp':fHz,'eq.lp':fHz,'eq.low':fDb,'eq.mid':fDb,'eq.high':fDb,'eq.midF':fHz,'eq.midQ':fX,'dist.drive':fP,'dist.bits':v=>v>=16?'オフ':v+'bit','dist.mix':fP,'wah.base':fHz,'wah.depth':fP,'wah.rate':v=>(+v).toFixed(1)+'Hz','wah.q':fX,'ring.freq':fHz,'ring.mix':fP,'mod.time':v=>(+v).toFixed(1)+'ms','mod.depth':fP,'mod.rate':v=>(+v).toFixed(2)+'Hz','mod.fb':fP,'mod.mix':fP,'trem.rate':v=>(+v).toFixed(1)+'Hz','trem.depth':fP,'dly.time':fMs,'dly.fb':fP,'dly.mix':fP,'dly.tone':fHz,'rev.size':fS,'rev.mix':fP,'rev.pre':fMs,'comp.th':v=>v+'dB','comp.ratio':v=>v+':1','master.vol':fP});
+const FXTEST=['wind','footFoley','metalHit','vowels','scream','laserTape','clap','decide','heli','envHard'];
+V.fx=function(){setHead("エフェクター",true,"sounds");back.href='#sounds';
+  return SPEC+`<p class="lead">ここで設定したエフェクトは、アプリで鳴るすべての音（効果音・シンセ・サンプラー）にかかります。上から順に音が通ります。</p>
+  <div class="panel"><h4>プリセット</h4><div class="pre">${Object.keys(FXPRE).map(p=>`<button onclick="fxPreset('${p}')">${p}</button>`).join('')}</div></div>
+  <div class="panel"><h4>試す音</h4><div class="pbs">${FXTEST.map(k=>pb(k,1)).join('')}</div>${kbHTML()}<p class="hint">鍵盤はシンセの音（シンセ画面で選んだ音色）で鳴ります。</p></div>
+  ${recHTML()}
+  ${fxPanel('eq','① イコライザー（5-3）','いらない帯域を削り、欲しい帯域を持ち上げる',fxCtl('eq','hp','ローカット',20,1000,1,fHz)+fxCtl('eq','low','低域（120Hz）',-18,18,.5,fDb)+fxCtl('eq','midF','中域の周波数',150,8000,1,fHz)+fxCtl('eq','mid','中域の量',-18,18,.5,fDb)+fxCtl('eq','midQ','中域の幅（Q）',.3,10,.1,fX)+fxCtl('eq','high','高域（6kHz）',-18,18,.5,fDb)+fxCtl('eq','lp','ハイカット',500,20000,1,fHz))}
+  ${fxPanel('dist','② ディストーション／ビット','歪ませて荒々しさ・迫力を出す（2-2の叫び声、6-9の爆発）',fxCtl('dist','drive','ドライブ',0,1,.01,fP)+fxCtl('dist','bits','ビット数を下げる',2,16,1,FXFMT['dist.bits'])+fxCtl('dist','mix','かかり具合',0,1,.01,fP))}
+  ${fxPanel('wah','③ オートワウ','フィルターをLFOで揺らす（1-2の線の表現）',fxCtl('wah','base','中心の周波数',150,4000,1,fHz)+fxCtl('wah','depth','深さ',0,1,.01,fP)+fxCtl('wah','rate','速さ',.1,12,.1,FXFMT['wah.rate'])+fxCtl('wah','q','鋭さ',1,20,.1,fX))}
+  ${fxPanel('ring','④ リングモジュレーター（3-4）','金属的・ロボット的な音に（大きな音に注意）',fxCtl('ring','freq','周波数',20,3000,1,fHz)+fxCtl('ring','mix','かかり具合',0,1,.01,fP))}
+  ${fxPanel('mod','⑤ コーラス／フランジャー','短いディレイを揺らしてうねりを作る（2-1のPhaser的な効果）',fxCtl('mod','time','ディレイ時間',.5,20,.1,FXFMT['mod.time'])+fxCtl('mod','depth','深さ',0,1,.01,fP)+fxCtl('mod','rate','速さ',.05,8,.01,FXFMT['mod.rate'])+fxCtl('mod','fb','フィードバック',0,1,.01,fP)+fxCtl('mod','mix','かかり具合',0,1,.01,fP))}
+  ${fxPanel('trem','⑥ トレモロ／オートパン','音量や左右の位置を周期的に揺らす',fxCtl('trem','rate','速さ',.1,20,.1,FXFMT['trem.rate'])+fxCtl('trem','depth','深さ',0,1,.01,fP)+`<label class="ctl chk"><input type="checkbox" data-fxchk="trem.pan" ${FXP.trem.pan?'checked':''}> 左右に揺らす（オートパン）</label>`)}
+  ${fxPanel('dly','⑦ ディレイ','やまびこ。6-7のスローモーション表現',fxCtl('dly','time','間隔',.02,1.5,.01,fMs)+fxCtl('dly','fb','くり返し',0,.9,.01,fP)+fxCtl('dly','tone','音色（こもらせる）',500,12000,1,fHz)+fxCtl('dly','mix','かかり具合',0,1,.01,fP))}
+  ${fxPanel('rev','⑧ リバーブ（3-3）','空間の響き。長くすると洞窟やホールに',fxCtl('rev','size','響きの長さ',.3,8,.1,fS)+fxCtl('rev','pre','プリディレイ',0,.3,.005,fMs)+fxCtl('rev','mix','かかり具合',0,1.5,.01,fP))}
+  ${fxPanel('comp','⑨ コンプレッサー／リミッター（3-1）','音量のばらつきを抑え、0dBを超えないように守る',fxCtl('comp','th','スレッショルド',-40,0,1,FXFMT['comp.th'])+fxCtl('comp','ratio','レシオ',1,20,.5,FXFMT['comp.ratio']))}
+  <div class="panel"><h4>マスター音量</h4>${fxCtl('master','vol','音量',0,1,.01,fP)}</div>`};
+function fxInit(){A();if(!FX)buildFX();kbInit(noteOn,noteOff);recInit();
+  document.querySelectorAll('[data-fx]').forEach(el=>el.addEventListener('input',()=>{const [b,k]=el.dataset.fx.split('.');FXP[b][k]=parseFloat(el.value);const o=document.getElementById(`fv_${b}_${k}`);if(o)o.textContent=FXFMT[b+'.'+k]?FXFMT[b+'.'+k](FXP[b][k]):FXP[b][k];if(!FXP[b].on&&b!=='master'){FXP[b].on=true;const c=document.querySelector(`[data-fxon="${b}"]`);if(c)c.checked=true;document.getElementById('fxp_'+b).classList.add('on')}fxApply()}));
+  document.querySelectorAll('[data-fxon]').forEach(el=>el.addEventListener('change',()=>{const b=el.dataset.fxon;FXP[b].on=el.checked;document.getElementById('fxp_'+b).classList.toggle('on',el.checked);fxApply()}));
+  document.querySelectorAll('[data-fxchk]').forEach(el=>el.addEventListener('change',()=>{const [b,k]=el.dataset.fxchk.split('.');FXP[b][k]=el.checked?1:0;fxApply()}))}
+
+/* ---------- Recorder (in-app) ---------- */
+function recHTML(){return `<div class="panel"><div class="fxh"><h4>録音（アプリ内）</h4><button class="recb${MR&&MR.state==='recording'?' on':''}" id="recb" onclick="recToggle()">${MR&&MR.state==='recording'?'■ 停止':'● 録音'}</button></div><p class="hint" style="margin:0 0 6px">エフェクト後の音をそのまま録音します。録った音はここで再生したり、サンプラーに送ってさらに加工できます（アプリを閉じると消えます）。</p><div id="clips">${clipsHTML()}</div></div>`}
+function clipsHTML(){return CLIPS.length?CLIPS.map((c,i)=>`<div class="clip"><span>${esc(c.name)}</span><audio controls src="${c.url}"></audio><div class="pre"><button onclick="clipToSampler(${i})">サンプラーへ送る</button><button onclick="clipDel(${i})">削除</button></div></div>`).join(''):'<div class="hint">まだ録音はありません</div>'}
+function recInit(){}
+function recToggle(){A();if(!REC){REC=AC.createMediaStreamDestination();CMP.connect(REC)}
+  if(MR&&MR.state==='recording'){MR.stop();return}
+  if(!window.MediaRecorder){document.getElementById('clips').innerHTML='<div class="hint">このブラウザでは録音できません</div>';return}
+  recChunks=[];try{MR=new MediaRecorder(REC.stream)}catch(e){document.getElementById('clips').innerHTML='<div class="hint">このブラウザでは録音できません</div>';return}
+  MR.ondataavailable=e=>{if(e.data.size)recChunks.push(e.data)};MR.onstop=()=>{const blob=new Blob(recChunks,{type:MR.mimeType||'audio/webm'});CLIPS.unshift({blob,url:URL.createObjectURL(blob),name:'録音 '+new Date().toLocaleTimeString('ja-JP')});updRec()};MR.start();updRec()}
+function updRec(){document.querySelectorAll('#recb').forEach(b=>{const on=MR&&MR.state==='recording';b.textContent=on?'■ 停止':'● 録音';b.classList.toggle('on',on)});const c=document.getElementById('clips');if(c)c.innerHTML=clipsHTML()}
+async function clipToSampler(i){const c=CLIPS[i];try{A();const ab=await c.blob.arrayBuffer();SM.buf=await AC.decodeAudioData(ab);SM._rb=null;SM.name=c.name;Object.assign(SM,{start:0,len:1,loop:false});location.hash='#sampler'}catch(e){alertBox('この録音はサンプラーで読み込めませんでした')}}
+function clipDel(i){URL.revokeObjectURL(CLIPS[i].url);CLIPS.splice(i,1);updRec()}
+function alertBox(t){const c=document.getElementById('clips');if(c)c.insertAdjacentHTML('afterbegin',`<div class="hint" style="color:var(--warm)">${t}</div>`)}
+
+let last='';
+addEventListener('hashchange',()=>{const h=location.hash;if(EX[h.slice(1)]&&last!==h)window._mode='basic';last=h;render();scrollTo(0,0)});
+render();
+</script>
+<script>
+if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+</script>
+</body>
+</html>

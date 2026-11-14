@@ -1,7 +1,7 @@
 // ======================================================================
-// SFX LAB → ドラム合体ラボ 橋渡し
-//   SFX LAB が最後に作った（鳴らした）効果音をつかまえて、
-//   ボタン1つで合体ラボへ送る／ドラッグで渡す。SFX LAB 本体は変更しません。
+// SFX LAB・効果音ノート → ドラム音色図鑑 橋渡し
+//   SFX LAB・効果音ノートで最後に作った音（書き出し・録音）をつかまえて、
+//   ボタン1つでドラム音色図鑑へ送る／ドラッグで渡す。元のアプリ本体は変更しません。
 // ======================================================================
 (function(){
   const SR = 44100;
@@ -16,7 +16,20 @@
         P.__akaiHooked = true;
       }catch(e){}
     };
-    iframe.addEventListener('load', install); install();
+    const installRec = () => {
+      try{
+        const W = iframe.contentWindow, MR = W && W.MediaRecorder; if(!MR || MR.__akai) return;
+        const Wrapped = function(stream, o){
+          const r = new MR(stream, o), chunks = [];
+          r.addEventListener('dataavailable', e => { if(e.data && e.data.size) chunks.push(e.data); });
+          r.addEventListener('stop', async () => { try{ const ab = await new Blob(chunks).arrayBuffer(); const ctx = new OfflineAudioContext(1, 44100, 44100); const buf = await ctx.decodeAudioData(ab); if(buf.length > 200){ last = buf; lastName = guessName(W) + '（録音）'; update(); } }catch(e){} });
+          return r;
+        };
+        Wrapped.prototype = MR.prototype; Wrapped.isTypeSupported = t => MR.isTypeSupported(t); Wrapped.__akai = true;
+        W.MediaRecorder = Wrapped;
+      }catch(e){}
+    };
+    iframe.addEventListener('load', () => { install(); installRec(); }); install(); installRec();
   }
   function guessName(W){
     try{ const d = W.document; const el = d.querySelector('#plabel') || d.querySelector('.on b, .sel b, h2'); const t = (el && el.textContent || '').trim(); if(t && !/鳴らす/.test(t)) return t.slice(0, 24); }catch(e){}
@@ -40,21 +53,21 @@
     return 'POCKETDTM_SAMPLE:' + JSON.stringify({name:lastName, sr:SR, b64:btoa(bin)});
   }
   function send(){
-    const s = payload(); if(!s){ msg('まずSFX LABで音を鳴らしてください'); return false; }
+    const s = payload(); if(!s){ msg('まず音を作って（鳴らす・録音する）ください'); return false; }
     try{ const bc = new BroadcastChannel('drumlab'); bc.postMessage(s); setTimeout(() => bc.close(), 800); }catch(e){}
     try{ localStorage.setItem('drumlab-inbox', Date.now() + '|' + s); }catch(e){}
-    msg(`「${lastName}」をドラム合体ラボへ送りました（合体ラボで選んでいる楽器の音になります）`); return true;
+    msg(`「${lastName}」をドラム音色図鑑へ送りました（マイキットで選んでいる楽器の音になります）`); return true;
   }
   let btn = null, tip = null;
-  function update(){ if(!btn) return; btn.disabled = !last; btn.title = last ? `「${lastName}」を合体ラボへ（クリックで送る／ドラッグで渡す）` : 'SFX LABで音を鳴らすと送れるようになります'; btn.querySelector('small').textContent = last ? lastName : 'まず音を鳴らす'; }
+  function update(){ if(!btn) return; btn.disabled = !last; btn.title = last ? `「${lastName}」をドラム音色図鑑へ（クリックで送る／ドラッグで渡す）` : '音を作る（鳴らす・録音する）と送れるようになります'; btn.querySelector('small').textContent = last ? lastName : 'まず音を鳴らす'; }
   function msg(t){ if(!tip) return; tip.textContent = t; tip.style.opacity = 1; clearTimeout(tip._t); tip._t = setTimeout(() => tip.style.opacity = 0, 3200); }
   function makeButton(parent, opt = {}){
     btn = document.createElement('button');
-    btn.innerHTML = '🥁 合体ラボへ<small></small>';
+    btn.innerHTML = '🥁 ドラム音色図鑑へ<small></small>';
     btn.style.cssText = 'display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:4px 10px;border-radius:8px;border:1px solid #ff4fd8;background:linear-gradient(90deg,#ff4fd833,#8b5cff33);color:#fff;font:600 12px system-ui,sans-serif;cursor:grab;white-space:nowrap;' + (opt.css || '');
     btn.querySelector('small').style.cssText = 'font-size:10px;opacity:.7;max-width:150px;overflow:hidden;text-overflow:ellipsis';
     btn.draggable = true;
-    btn.addEventListener('dragstart', e => { const s = payload(); if(!s){ e.preventDefault(); msg('まずSFX LABで音を鳴らしてください'); return; } e.dataTransfer.setData('text/plain', s); e.dataTransfer.effectAllowed = 'copy'; });
+    btn.addEventListener('dragstart', e => { const s = payload(); if(!s){ e.preventDefault(); msg('まず音を作って（鳴らす・録音する）ください'); return; } e.dataTransfer.setData('text/plain', s); e.dataTransfer.effectAllowed = 'copy'; });
     btn.onclick = () => { if(send() && opt.onSent) opt.onSent(); };
     tip = document.createElement('div');
     tip.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#140030;border:1px solid #3ff3ff;color:#fff;padding:9px 14px;font:13px system-ui,sans-serif;z-index:99;opacity:0;transition:opacity .3s;pointer-events:none;max-width:92vw';
