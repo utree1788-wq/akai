@@ -105,6 +105,13 @@ body.compact .ch{margin:16px 0 6px}body.compact .ch .ep{font-size:30px}body.comp
 .dl1{flex:none;background:none;border:1px solid rgba(63,243,255,.45);color:var(--cy);font-size:17px;width:34px;height:34px;padding:0}
 #vt{position:fixed;left:50%;bottom:200px;transform:translateX(-50%);z-index:40;background:rgba(20,6,40,.95);border:1px solid var(--cy);color:var(--ink);padding:9px 14px;font:13px "DotGothic16";opacity:0;transition:.2s;pointer-events:none}#vt.on{opacity:1}
 @media (prefers-reduced-motion:reduce){.grain,.track{animation:none}}
+.mb{flex:none;background:none;border:1px solid rgba(255,230,109,.35);color:#8f7fa8;font-size:16px;width:34px;height:34px;padding:0;cursor:pointer}
+.mb.has{color:var(--yl);border-color:var(--yl);text-shadow:0 0 8px var(--yl)}
+.memo{flex-basis:100%;margin-top:8px}.memo:empty{display:none}
+.memo .pv{font-size:13px;line-height:1.6;color:var(--yl);background:rgba(255,230,109,.07);border-left:2px solid var(--yl);padding:5px 9px;white-space:pre-wrap;word-break:break-word;cursor:text}
+.memo textarea{display:block;width:100%;min-height:72px;resize:vertical;background:rgba(8,0,20,.88);color:var(--ink);border:1px solid var(--yl);padding:8px;font:14px/1.6 "Zen Kaku Gothic New",system-ui,sans-serif;outline:none;box-shadow:0 0 10px rgba(255,230,109,.25)}
+.memo .mh{display:flex;justify-content:space-between;align-items:center;font:12px "DotGothic16";color:var(--mu);margin-top:4px}
+.memo .mh button{background:none;border:1px solid var(--pk);color:var(--pk);font:12px "DotGothic16";padding:3px 10px;cursor:pointer}
 </style></head><body>
 <canvas id="bg"></canvas>
 <div class="side">サウンド特殊効果研究所　ＴＡＰＥ　Ｎｏ．３２６</div>
@@ -112,7 +119,7 @@ body.compact .ch{margin:16px 0 6px}body.compact .ch .ep{font-size:30px}body.comp
 <header>
 <h1 class="ttl">律動一覧表</h1>
 <div class="sub">ＲＨＹＴＨＭ　ＡＲＣＨＩＶＥ <span id="cnt"></span></div><a class="other" href="https://claude.ai/artifact/5rPPjNcNR97knoe4DN33eE">▸ 詳しい譜面の図鑑へ</a>
-<div class="srch"><input id="q" type="search" placeholder="検索：シャッフル／16ビート／05-03"><button class="tbtn" id="favT" aria-label="お気に入りだけ">★</button><button class="tbtn dl" id="dlAll" title="表示中のパターンをMIDIでまとめて保存">⤓ ZIP</button><button class="tbtn on" id="tape" title="テープの揺れ・こもり・ヒスノイズ">📼 ＶＨＳ</button></div>
+<div class="srch"><input id="q" type="search" placeholder="検索：シャッフル／16ビート／05-03"><button class="tbtn" id="favT" aria-label="お気に入りだけ">★</button><button class="tbtn" id="memoT" aria-label="メモがあるものだけ" title="メモがあるものだけ">✎</button><button class="tbtn dl" id="dlAll" title="表示中のパターンをMIDIでまとめて保存">⤓ ZIP</button><button class="tbtn on" id="tape" title="テープの揺れ・こもり・ヒスノイズ">📼 ＶＨＳ</button></div>
 <div class="chips" id="chips"></div>
 </header>
 <main id="list"></main>
@@ -155,7 +162,7 @@ d.querySelector('.pl').onclick=()=>toggle(p);d.querySelector('.dl1').onclick=()=
 d.querySelector('.rm').onclick=()=>{let x=d.querySelector('.exp');if(x){x.remove();return}x=document.createElement('div');x.className='grid exp';x.dataset.i=i;d.appendChild(x);drawGrid(x)};return d}
 function render(){const q=$('#q').value.trim().toLowerCase();const L=$('#list');L.innerHTML='';let n=0;
 DATA.forEach(c=>{if(curCh.startsWith('g:')&&c.g!==curCh.slice(2))return;if(curCh.startsWith('c:')&&c.n!==curCh.slice(2))return;
-const ps=c.p.filter(p=>{if(onlyFav&&!favs.has(p.id))return false;if(!q)return true;return (p.name+c.t+c.g+p.ts+p.id+code(p)).toLowerCase().includes(q)});
+const ps=c.p.filter(p=>{if(onlyFav&&!favs.has(p.id))return false;if(onlyMemo&&!memos[p.id])return false;if(!q)return true;return (p.name+c.t+c.g+p.ts+p.id+code(p)+(memos[p.id]||'')).toLowerCase().includes(q)});
 if(!ps.length)return;L.insertAdjacentHTML('beforeend','<div class="ch"><div class="ep">'+c.n+'</div><div class="et"><small>EPISODE '+c.n+' ／ '+c.g+'</small>第'+c.n+'話　'+c.t+'</div></div>');
 ps.forEach(p=>{n++;const i=flat.indexOf(p);if(MODE==='compact'){L.appendChild(rowEl(p,i));return}const d=document.createElement('div');d.className='card'+(playing===p?' playing':'');d.id='p'+p.id;
 d.innerHTML='<div class="top"><button class="pl" aria-label="再生">'+(playing===p?'■':'▶')+'</button><div class="meta"><div class="nm">'+p.name+'</div><div class="mt"><span class="id">'+code(p)+'</span><span>No.'+p.id+'</span><span>'+p.ts+'</span><span>♩='+(p.tempo==='All'?'FREE':p.tempo)+'</span>'+(p.swing?'<span class="sw">SWING</span>':'')+(bars(p)>1?'<span>'+bars(p)+'BARS</span>':'')+'</div></div><button class="todtm" title="DTMへ送る">→DTM</button><button class="dl1" aria-label="MIDIで保存" title="MIDIで保存">⤓</button><button class="st'+(favs.has(p.id)?' on':'')+'" aria-label="お気に入り">'+(favs.has(p.id)?'★':'☆')+'</button></div><div class="grid" data-i="'+i+'"></div>';
@@ -304,5 +311,28 @@ hitE*=Math.pow(.02,dt);document.documentElement.style.setProperty('--hit',hitE.t
 drawBG(now,dt);drawScope();
 if(playing&&ac){const s=Math.max(0,ac.currentTime-startT),hh=String(Math.floor(s/3600)).padStart(2,'0'),mm=String(Math.floor(s/60)%60).padStart(2,'0'),ss=String(Math.floor(s)%60).padStart(2,'0');$('#tc').textContent='SP '+hh+':'+mm+':'+ss}}
 requestAnimationFrame(frame);
+// ===== メモ =====
+let memos={};try{memos=JSON.parse(localStorage.getItem('rhythmMemo')||'{}')}catch(e){}
+let onlyMemo=false;
+function saveMemo(){try{localStorage.setItem('rhythmMemo',JSON.stringify(memos))}catch(e){}}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function memoUI(d){if(d.dataset.memo)return;const p=flat.find(x=>'p'+x.id===d.id);if(!p)return;d.dataset.memo=1;
+ const b=document.createElement('button');b.className='mb'+(memos[p.id]?' has':'');b.textContent='✎';b.title='メモ';b.setAttribute('aria-label','メモ');
+ const host=d.querySelector('.top')||d;const st=host.querySelector(':scope > .st');st?host.insertBefore(b,st):host.appendChild(b);
+ const box=document.createElement('div');box.className='memo';
+ if(d.querySelector('.top'))d.querySelector('.top').after(box);else d.appendChild(box);
+ const dr=d.draggable;
+ const show=edit=>{const m=memos[p.id]||'';
+  if(edit){box.innerHTML='<textarea placeholder="このリズムのメモ（使いどころ・アレンジのアイデア・曲名など）"></textarea><div class="mh"><span>入力すると自動で保存されます</span><button>閉じる</button></div>';
+   const ta=box.querySelector('textarea');ta.value=m;
+   ta.oninput=()=>{const v=ta.value;if(v.trim())memos[p.id]=v;else delete memos[p.id];saveMemo();b.classList.toggle('has',!!memos[p.id])};
+   ta.onfocus=()=>{d.draggable=false};ta.onblur=()=>{d.draggable=dr};
+   ta.onkeydown=e=>e.stopPropagation();ta.onclick=e=>e.stopPropagation();
+   box.querySelector('.mh button').onclick=e=>{e.stopPropagation();show(false)};ta.focus()}
+  else{box.innerHTML=m?'<div class="pv">📝 '+esc(m)+'</div>':'';const pv=box.querySelector('.pv');if(pv)pv.onclick=e=>{e.stopPropagation();show(true)}}};
+ b.onclick=e=>{e.stopPropagation();show(!box.querySelector('textarea'))};
+ show(false)}
+new MutationObserver(()=>document.querySelectorAll('#list .card').forEach(memoUI)).observe($('#list'),{childList:true});
+$('#memoT').onclick=e=>{onlyMemo=!onlyMemo;e.currentTarget.classList.toggle('on',onlyMemo);render()};
 render();
 </script></body></html>
