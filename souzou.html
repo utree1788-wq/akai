@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>創作の手帖</title>
+<meta name="theme-color" content="#221d18">
+<link rel="manifest" href="souzou-manifest.json">
+<link rel="icon" type="image/svg+xml" href="souzou-icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="souzou-icon-192.png">
+<link rel="apple-touch-icon" href="souzou-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--paper:#f7f3ea;--paper2:#fffdf8;--ink:#2a2622;--ink2:#5d564e;--line:#e3dbcd;--side:#221d18;--side2:#2f2822;--sideInk:#efe7da;--sideMute:#a99d8c;--red:#c2410c;
+--serif:"Shippori Mincho","Noto Serif JP",serif;--sans:"Zen Kaku Gothic New","Noto Sans JP",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+button{font:inherit;color:inherit;cursor:pointer}
+.shell{display:grid;grid-template-columns:268px 1fr;height:100vh;height:100dvh}
+aside{background:var(--side);color:var(--sideInk);overflow-y:auto;padding:max(18px,env(safe-area-inset-top)) 12px max(24px,env(safe-area-inset-bottom))}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 16px;border:0;background:none;text-align:left;width:100%}
+.brand .seal{width:42px;height:42px;border-radius:10px;flex:none;display:block}
+.brand b{font-family:var(--serif);font-size:20px;display:block;line-height:1.2}
+.brand small{color:var(--sideMute);font-size:11px}
+.grp{font-size:11px;letter-spacing:.14em;color:var(--sideMute);padding:16px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:10px;color:var(--sideInk)}
+.nav:hover{background:var(--side2)}
+.nav[aria-current=page]{background:var(--sideInk);color:var(--ink)}
+.nav .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:16px;flex:none}
+.nav .tx{min-width:0}
+.nav .nm{display:block;font-size:14.5px;font-weight:700;line-height:1.3}
+.nav .og{display:block;font-size:11px;opacity:.7;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scrim{display:none}
+main{position:relative;min-width:0;overflow:hidden}
+.frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:var(--paper)}
+.frame.on{display:block}
+#home{position:absolute;inset:0;overflow-y:auto;display:none}
+#home.on{display:block}
+.topbar{display:none}
+.wrap{max-width:980px;margin:0 auto;padding:36px 24px 80px}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,6vw,46px);margin:0;line-height:1.2}
+.hero p{color:var(--ink2);margin:8px 0 0}
+.search{width:100%;margin:22px 0 6px;border:1px solid var(--line);background:var(--paper2);border-radius:12px;padding:12px 14px;font:inherit;font-size:16px}
+.search:focus{outline:2px solid var(--red);outline-offset:1px}
+.hint{font-size:12.5px;color:var(--ink2)}
+.results{margin:14px 0 0;display:grid;gap:8px}
+.res{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--paper2);border-radius:12px;padding:10px 14px}
+.res:hover{border-color:var(--ink2)}
+.res .bk{font-size:12px;font-weight:700}
+.res .tt{font-family:var(--serif);font-weight:700;font-size:16px;display:block;margin:2px 0}
+.res .sn{font-size:13px;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+mark{background:#ffe58a;color:inherit}
+h2{font-family:var(--serif);font-size:22px;margin:36px 0 4px}
+.sub{color:var(--ink2);font-size:13.5px;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.pc{border:1px solid var(--line);background:var(--paper2);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:132px;border-top:5px solid var(--c)}
+.pc:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(40,30,20,.08)}
+.pc .ic{font-size:22px}
+.pc b{font-family:var(--serif);font-size:17px;line-height:1.35}
+.pc span{font-size:12.5px;color:var(--ink2);line-height:1.55}
+.pc em{font-style:normal;font-size:11px;color:var(--c);font-weight:700;margin-top:auto}
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  aside{position:fixed;inset:0 auto 0 0;width:min(300px,86vw);z-index:30;transform:translateX(-102%);transition:transform .22s ease;box-shadow:8px 0 30px rgba(0,0,0,.3)}
+  body.menu aside{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:25;display:none}
+  body.menu .scrim{display:block}
+  .topbar{display:flex;align-items:center;gap:8px;background:var(--side);color:var(--sideInk);padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top))}
+  .topbar button{border:0;background:var(--side2);border-radius:8px;padding:6px 12px;color:var(--sideInk)}
+  .topbar .cur{flex:1;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wrap{padding:22px 16px 60px}
+}
+</style>
+</head><body>
+<div class="shell">
+  <div class="topbar"><button id="menuBtn" aria-label="メニューを開く">☰ メニュー</button><span class="cur" id="curName">ホーム</span></div>
+  <aside id="side" aria-label="ページ一覧"></aside>
+  <div class="scrim" id="scrim"></div>
+  <main id="main"><div id="home"></div></main>
+</div>
+<script>window.BOOKS=[];</script>
+<script src="notes/data/b1.js"></script><script src="notes/data/b3.js"></script><script src="notes/data/b2.js"></script>
+<script src="notes/data/b4.js"></script><script src="notes/data/b5.js"></script><script src="notes/data/b6.js"></script>
+<script>
+(function(){
+BOOKS.sort((a,b)=>a.no-b.no);
+const PAGES = [
+  ...BOOKS.map(b => ({id:b.id, group:'pdf', name:b.title, origin:'PDF「'+b.title+'」まとめ・原本'+b.pages+'p', icon:b.icon, color:b.color, src:'notes/'+b.id+'.html', desc:b.sub})),
+  {id:'tarot', group:'app', name:'愛・恋・友情の哲学', origin:'元のアプリ：愛・恋・友情の哲学（タロットの比喩）', icon:'🃏', color:'#6d28d9', src:'apps/tarot-philosophy.html', desc:'タロットの比喩で読む、愛・恋・友情の哲学'},
+  {id:'kashi', group:'app', name:'一句から歌へ', origin:'元のアプリ：一句から歌へ（歌詞帖）', icon:'🎤', color:'#db2777', src:'apps/kashi.html', desc:'俳句の技法×愛・恋・友情の哲学で歌詞を書く'},
+  {id:'haiku', group:'app', name:'俳句の手帖', origin:'元のアプリ：俳句の手帖', icon:'🖌', color:'#15803d', src:'apps/haiku/index.html', desc:'書き方・五七五チェック・季語辞典・句帳・助詞・テクニック'},
+  {id:'akapen', group:'app', name:'赤ペン俳句道場', origin:'元のアプリ：赤ペン俳句道場（プレバト流テクニック帖）', icon:'✒', color:'#dc2626', src:'apps/akapen-haiku.html', desc:'プレバト流の添削テクニック帖'},
+  {id:'phil', group:'app', name:'哲学用語ノート', origin:'元のアプリ：哲学用語ノート', icon:'📚', color:'#0e7490', src:'apps/philosophy-glossary.html', desc:'哲学用語のノート'},
+  {id:'hiyu', group:'app', name:'比喩ノート', origin:'元のアプリ：比喩ノート（鬱・感情・不快回避）', icon:'🌫', color:'#475569', src:'apps/hiyu-note.html', desc:'歌詞・物語用の比喩アイデア集'}
+];
+const GROUPS = [['pdf','まとめノート（PDF 6冊）'],['app','これまでのアプリ']];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* サイドバー */
+const side = document.getElementById('side');
+side.innerHTML = `<button class="brand nav" data-go="home" style="padding:4px 8px 16px"><img class="seal" src="souzou-icon-192.png" alt=""><span><b>創作の手帖</b><small>物語・感情・言葉のノートをひとつに</small></span></button>
+  <button class="nav" data-go="home"><span class="ic" style="background:#3a322a">🏠</span><span class="tx"><span class="nm">ホーム・横断検索</span><span class="og">すべてのまとめノートを検索</span></span></button>
+  ${GROUPS.map(g => `<div class="grp">${g[1]}</div>` + PAGES.filter(p => p.group === g[0]).map(p =>
+    `<button class="nav" data-go="${p.id}"><span class="ic" style="background:${p.color}">${p.icon}</span><span class="tx"><span class="nm">${esc(p.name)}</span><span class="og">${esc(p.origin)}</span></span></button>`).join('')).join('')}`;
+
+/* ホーム */
+const home = document.getElementById('home');
+home.innerHTML = `<div class="wrap">
+  <header class="hero"><h1>創作の手帖</h1><p>物語・神話・心理・日本の思想・脚本・感情のまとめノートと、これまでの創作アプリを一か所に。</p></header>
+  <input class="search" id="gq" type="search" placeholder="6冊のまとめノートをまとめて検索（例：嫉妬、伏線、もののあはれ、ペルソナ）" aria-label="まとめノートを横断検索">
+  <div class="hint" id="ghint">キーワードを入れると、該当する項目にジャンプできます。</div>
+  <div class="results" id="gres"></div>
+  ${GROUPS.map(g => `<h2>${g[1]}</h2><p class="sub">${g[0]==='pdf' ? '送ってくれた6つのPDFを、それぞれ別のページにまとめました。原本ページ（手書きの書き込みつき）も見られます。' : '元のアプリをそのままの形で、それぞれ別のページに入れています。'}</p>
+    <div class="cards">${PAGES.filter(p => p.group === g[0]).map(p => `<button class="pc" style="--c:${p.color}" data-go="${p.id}"><span class="ic">${p.icon}</span><b>${esc(p.name)}</b><span>${esc(p.desc)}</span><em>${esc(p.origin)}</em></button>`).join('')}</div>`).join('')}
+</div>`;
+
+/* 横断検索 */
+const INDEX = [];
+BOOKS.forEach(b => b.sections.forEach((s, si) => s.cards.forEach((c, ci) => INDEX.push({b, s, c, id:`c-${si}-${ci}`, hay:(c.t + ' ' + c.b.join(' ') + ' ' + c.kw.join(' ')).toLowerCase()}))));
+const gq = document.getElementById('gq'), gres = document.getElementById('gres'), ghint = document.getElementById('ghint');
+function hl(t, q){ const e = esc(t); if (!q) return e; const r = esc(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); return e.replace(new RegExp(r, 'gi'), m => `<mark>${m}</mark>`); }
+gq.addEventListener('input', () => {
+  const q = gq.value.trim().toLowerCase();
+  if (!q) { gres.innerHTML = ''; ghint.textContent = 'キーワードを入れると、該当する項目にジャンプできます。'; return; }
+  const hits = INDEX.filter(x => x.hay.includes(q)).sort((a, b) => (b.c.t.toLowerCase().includes(q)) - (a.c.t.toLowerCase().includes(q)));
+  ghint.textContent = hits.length ? `${hits.length} 件見つかりました` : '見つかりませんでした。別の言葉で試してみてください。';
+  gres.innerHTML = hits.slice(0, 60).map(x => {
+    const line = [x.c.t, ...x.c.b].find(l => l.toLowerCase().includes(q)) || x.c.b[0];
+    return `<button class="res" data-go="${x.b.id}" data-anchor="${x.id}"><span class="bk" style="color:${x.b.color}">${x.b.icon} ${esc(x.b.title)} ／ ${esc(x.s.h)}</span><span class="tt">${hl(x.c.t, gq.value.trim())}</span><span class="sn">${hl(line, gq.value.trim())}</span></button>`;
+  }).join('');
+});
+
+/* ページ切り替え（iframeは一度開いたら保持して状態を残す） */
+const main = document.getElementById('main');
+const frames = {};
+function go(id, anchor){
+  const p = PAGES.find(x => x.id === id);
+  home.classList.toggle('on', !p);
+  Object.values(frames).forEach(f => f.classList.remove('on'));
+  if (p) {
+    let f = frames[id];
+    const url = p.src + (anchor ? '#' + anchor : '');
+    if (!f) {
+      f = document.createElement('iframe'); f.className = 'frame'; f.title = p.name;
+      f.allow = 'autoplay; clipboard-read; clipboard-write; fullscreen; microphone; midi';
+      f.src = url; main.appendChild(f); frames[id] = f;
+    } else if (anchor) {
+      try { f.contentWindow.location.hash = anchor; } catch(e) { f.src = url; }
+    }
+    f.classList.add('on');
+  }
+  document.querySelectorAll('aside .nav[data-go]').forEach(n => n.setAttribute('aria-current', n.dataset.go === (p ? id : 'home') && !n.classList.contains('brand') ? 'page' : 'false'));
+  document.getElementById('curName').textContent = p ? p.name : 'ホーム';
+  document.title = (p ? p.name + '｜' : '') + '創作の手帖';
+  document.body.classList.remove('menu');
+  const h = p ? '#' + id : location.pathname + location.search;
+  if ((p && location.hash !== h) || (!p && location.hash)) { try { history.replaceState(null, '', h); } catch(e) {} }
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go]'); if (!t) return;
+  go(t.dataset.go, t.dataset.anchor);
+});
+document.getElementById('menuBtn').onclick = () => document.body.classList.add('menu');
+document.getElementById('scrim').onclick = () => document.body.classList.remove('menu');
+function fromHash(){ const st = location.hash.replace(/^#\/?/, ''); go(PAGES.some(p => p.id === st) ? st : 'home'); }
+const START_HASH = location.hash;
+window.addEventListener('hashchange', fromHash);
+fromHash();
+/* 検索URL：?q=キーワード（または #q=キーワード）で開くと、ホームの横断検索に入った状態で開く */
+(function(){
+  let q = '';
+  try { q = new URLSearchParams(location.search).get('q') || ''; } catch(e) {}
+  const m = START_HASH.match(/^#q=(.*)$/);
+  if (!q && m) { try { q = decodeURIComponent(m[1]); } catch(e) { q = m[1]; } }
+  if (q) { go('home'); gq.value = q; gq.dispatchEvent(new Event('input')); }
+})();
+})();
+</script>
+</body></html>

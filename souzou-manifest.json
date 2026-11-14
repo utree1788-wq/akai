@@ -1,8 +1,8 @@
 {
-  "id": "./index.html",
+  "id": "./souzou.html",
   "name": "創作の手帖",
   "short_name": "創作の手帖",
-  "start_url": "./index.html",
+  "start_url": "./souzou.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#221d18",
