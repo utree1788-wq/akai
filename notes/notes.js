@@ -13,7 +13,7 @@ const key = id => B.id + ':' + id;
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pad = n => String(n).padStart(2, '0');
-const img = p => `../scans/${B.id}/${pad(p)}.jpg`;
+const img = p => `../${B.id}/${pad(p)}.jpg`;
 
 const extraTabs = [];
 if (B.id === 'emotion') extraTabs.push(['mix', '🎨 感情の色ミックス']);
