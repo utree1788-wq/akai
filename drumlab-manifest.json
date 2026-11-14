@@ -1,0 +1,22 @@
+{
+  "id": "./drumlab-app.html",
+  "name": "ドラム合体ラボ",
+  "short_name": "合体ラボ",
+  "start_url": "./drumlab-app.html",
+  "scope": "./drumlab-app",
+  "display": "standalone",
+  "background_color": "#0b0218",
+  "theme_color": "#140030",
+  "icons": [
+    {
+      "src": "drumlab-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "drumlab-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

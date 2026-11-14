@@ -1,0 +1,22 @@
+{
+  "id": "./riff-app.html",
+  "name": "リフ・パターン表",
+  "short_name": "リフ表",
+  "start_url": "./riff-app.html",
+  "scope": "./riff-app",
+  "display": "standalone",
+  "background_color": "#0b0218",
+  "theme_color": "#140030",
+  "icons": [
+    {
+      "src": "riff-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "riff-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

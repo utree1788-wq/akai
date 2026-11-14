@@ -6,7 +6,10 @@
 <link rel="icon" href="sfx-icon-192.png">
 <link rel="apple-touch-icon" href="sfx-icon-192.png">
 <meta name="theme-color" content="#140030">
-<style>html,body{margin:0;height:100%;background:#0b0218;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}</style>
+<style>html,body{margin:0;height:100%;background:#0b0218;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}#bridge{position:fixed;right:10px;bottom:10px;z-index:50;box-shadow:0 0 14px #ff4fd866}</style>
 </head><body>
-<iframe src="sfx.html" title="SFX LAB 効果音ラボ" allow="midi; autoplay; fullscreen; clipboard-read; clipboard-write; microphone" allowfullscreen></iframe>
+<iframe id="sfx" src="sfx.html" title="SFX LAB 効果音ラボ" allow="midi; autoplay; fullscreen; clipboard-read; clipboard-write; microphone" allowfullscreen></iframe>
+<div id="bridge"></div>
+<script src="sfx-bridge.js"></script>
+<script>if(window.SFXBridge){ SFXBridge.hook(document.getElementById('sfx')); SFXBridge.makeButton(document.getElementById('bridge'), {css:'background:#140030'}); }</script>
 </body></html>

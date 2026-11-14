@@ -12,6 +12,7 @@
   :root{
     --bg:#14161c; --panel:#1c1f27; --line:#2a2e39; --text:#e9ebf0; --sub:#8a90a0;
     --c1:#ff7a59; --c2:#5aa9ff; --c3:#ffc94d; --c4:#5fd39a;
+    --c5:#ff4fd8; --c6:#ffe66d; --c7:#3ff3ff;
     --accent:var(--c1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -35,11 +36,14 @@
   nav button[aria-selected="true"]{color:#111;background:var(--c);border-color:var(--c)}
   nav button[aria-selected="true"] .dot{background:#111}
   nav button kbd{font:inherit;font-size:10px;opacity:.55}
+  nav .sep{width:1px;background:var(--line);margin:4px 2px;flex:none}
 
-  .tools{display:flex;gap:6px}
-  .tools button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);
+  .tools{display:flex;gap:6px;align-items:center}
+  .tools > button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);
     background:transparent;color:var(--sub);cursor:pointer;font-size:15px}
-  .tools button:hover{color:var(--text);border-color:#3a3f4d}
+  .tools > button:hover{color:var(--text);border-color:#3a3f4d}
+  #sfxSend{display:none}
+  body.on-sfx #sfxSend{display:block}
 
   main{flex:1;position:relative;background:#fff}
   iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
@@ -52,7 +56,7 @@
   /* スマホでは下にタブ */
   @media (max-width:640px){
     header{padding:8px 10px}
-    nav{position:fixed;left:0;right:0;bottom:0;z-index:5;justify-content:space-around;
+    nav{position:fixed;left:0;right:0;bottom:0;z-index:5;justify-content:flex-start;
       background:var(--panel);border-top:1px solid var(--line);
       padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
     nav button{flex-direction:column;gap:3px;padding:6px 8px;border:none;border-radius:10px;font-size:11px}
@@ -66,22 +70,28 @@
   <div class="brand">AKAI <span>STUDIO</span></div>
   <nav role="tablist" id="tabs"></nav>
   <div class="tools">
+    <div id="sfxSend"></div>
+    <button id="dtm" title="ポケットDTMを別ウィンドウで開く（横に並べてドラッグで曲に入れられます）">🎹</button>
     <button id="reload" title="このページを再読み込み">↻</button>
     <button id="popout" title="このページだけ別ウィンドウで開く">↗</button>
   </div>
 </header>
 <main id="stage"><div class="loading" id="loading">読み込み中…</div></main>
 
+<script src="sfx-bridge.js"></script>
 <script>
 // 元のアプリの場所（同じ akai フォルダに置けば相対パスで動きます）
 const BASE = location.hostname === "utree1788-wq.github.io"
   ? "./" : "https://utree1788-wq.github.io/akai/";
 
 const PAGES = [
-  { id:"sfx",    label:"SFX LAB",      file:"sfx.html",        color:"var(--c1)" },
-  { id:"score",  label:"譜面ノート",    file:"scorenote.html",      color:"var(--c2)" },
-  { id:"drums",  label:"ドラム音色図鑑", file:"drumsounds.html", color:"var(--c3)" },
-  { id:"rhythm", label:"律動一覧表",   file:"律動一覧表.html",     color:"var(--c4)" },
+  { id:"sfx",     label:"SFX LAB",       file:"sfx.html",          color:"var(--c1)" },
+  { id:"score",   label:"譜面ノート",     file:"scorenote.html",    color:"var(--c2)" },
+  { id:"drums",   label:"ドラム音色図鑑", file:"drumsounds.html",   color:"var(--c3)" },
+  { id:"rhythm",  label:"律動一覧表",     file:"律動一覧表.html",    color:"var(--c4)" },
+  { id:"drumlab", label:"ドラム合体ラボ", file:"drumlab.html",      color:"var(--c5)", sep:true },
+  { id:"fill",    label:"フィル表",       file:"fill.html",         color:"var(--c6)" },
+  { id:"riff",    label:"リフ表",         file:"riff.html",         color:"var(--c7)" },
 ];
 
 const tabs = document.getElementById("tabs");
@@ -91,6 +101,7 @@ const frames = {};
 let current = null;
 
 PAGES.forEach((p, i) => {
+  if(p.sep){ const s = document.createElement("span"); s.className = "sep"; tabs.appendChild(s); }
   const b = document.createElement("button");
   b.role = "tab"; b.dataset.id = p.id; b.style.setProperty("--c", p.color);
   b.innerHTML = `<span class="dot"></span>${p.label}<kbd>${i+1}</kbd>`;
@@ -111,6 +122,7 @@ function show(id){
     f.onload = () => { if(current.id === p.id) loading.classList.add("hide"); };
     stage.appendChild(f);
     frames[p.id] = f;
+    if(p.id === "sfx" && window.SFXBridge) SFXBridge.hook(f);
   } else {
     loading.classList.add("hide");
   }
@@ -118,20 +130,25 @@ function show(id){
   tabs.querySelectorAll("button").forEach(b =>
     b.setAttribute("aria-selected", b.dataset.id === p.id));
   document.documentElement.style.setProperty("--accent", p.color);
+  document.body.classList.toggle("on-sfx", p.id === "sfx");
   document.title = p.label + " ｜ AKAI STUDIO";
   history.replaceState(null, "", "#" + p.id);
   try{ localStorage.setItem("akaiHubLast", p.id); }catch(e){}
   frames[p.id].focus();
 }
 
+// SFX LAB で作った音 → ドラム合体ラボへ（送ったら合体ラボのタブへ移動）
+if(window.SFXBridge) SFXBridge.makeButton(document.getElementById("sfxSend"), { onSent: () => show("drumlab") });
+
 document.getElementById("reload").onclick = () => {
   const f = frames[current.id]; loading.classList.remove("hide"); f.src = f.src;
 };
 document.getElementById("popout").onclick = () => window.open(BASE + encodeURI(current.file), "_blank");
+document.getElementById("dtm").onclick = () => window.open(BASE + "dtm-app.html", "_blank");
 
-// 数字キー 1〜4 で切り替え（ページの外にフォーカスがあるとき）
+// Alt＋数字キー 1〜7 で切り替え
 addEventListener("keydown", e => {
-  if(e.altKey && /^[1-4]$/.test(e.key)) show(PAGES[+e.key-1].id);
+  if(e.altKey && /^[1-7]$/.test(e.key)) show(PAGES[+e.key-1].id);
 });
 addEventListener("hashchange", () => show(location.hash.slice(1)));
 
