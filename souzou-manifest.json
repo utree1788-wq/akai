@@ -3,7 +3,7 @@
   "name": "創作の手帖",
   "short_name": "創作の手帖",
   "start_url": "./souzou.html",
-  "scope": "./",
+  "scope": "./souzou",
   "display": "standalone",
   "background_color": "#221d18",
   "theme_color": "#221d18",
