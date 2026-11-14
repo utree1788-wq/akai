@@ -1,0 +1,262 @@
+<DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>コード表現テク（Directline Studio）</title>
+<style>
+:root{--bg:#16131c;--panel:#201b29;--panel2:#2a2335;--line:#3a3248;--text:#f3eef8;--sub:#a99fb8;--acc:#ffd34d;--mint:#5fd3b0;--pink:#ff6fae}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"M PLUS Rounded 1c",system-ui,sans-serif;line-height:1.7}
+header{position:sticky;top:0;z-index:4;background:#120f17ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:8px 12px 6px}
+h1{margin:0;font-size:17px}
+h1 small{display:block;font-size:11px;color:var(--sub);font-weight:400}
+.toc{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:6px;padding-bottom:2px}
+.toc::-webkit-scrollbar{display:none}
+.toc a{flex:none;font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--panel)}
+.toc a:hover{color:var(--text)}
+main{max-width:860px;margin:0 auto;padding:12px 12px 140px}
+.lead{color:var(--sub);font-size:13px;margin:6px 0 14px}
+.lead b{color:var(--acc)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 14px;scroll-margin-top:96px}
+.card h2{margin:0 0 4px;font-size:16px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card h2 .no{color:var(--acc);font-size:13px}
+.tag{font-size:10px;border-radius:999px;padding:1px 8px;background:#3a2c52;color:#d8c8ff;font-weight:700}
+.card p{margin:6px 0;font-size:14px}
+.card ul{margin:6px 0;padding-left:20px;font-size:14px}
+.card li{margin:2px 0}
+.ex{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.exlabel{font-size:12px;color:var(--sub);margin:6px 0 4px}
+.exlabel b{color:var(--mint)}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{border:1px solid #5a4a72;background:var(--panel2);color:var(--text);border-radius:10px;padding:5px 10px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;line-height:1.25;text-align:left}
+.chip small{display:block;font-size:10px;font-weight:400;color:var(--sub)}
+.chip.now{background:var(--acc);color:#16131c;border-color:var(--acc)}
+.chip.now small{color:#4a3b10}
+.arrow{color:var(--sub);font-size:12px}
+.play{border:0;background:var(--pink);color:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.play.on{background:#7a2c58}
+.src{margin-top:8px;font-size:11px;color:var(--sub)}
+.src a{color:#9fd0ff}
+.mine{font-size:10px;color:#ffb37a;border:1px solid #6b4a33;border-radius:6px;padding:0 5px;margin-left:4px}
+.note{font-size:12px;color:var(--sub);background:#1a1622;border-radius:8px;padding:6px 10px;margin-top:8px}
+table{border-collapse:collapse;font-size:13px;margin:6px 0}
+td,th{border:1px solid var(--line);padding:3px 8px;text-align:left}
+th{background:#251f2f;color:var(--sub);font-weight:700}
+#dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#120f17f2;border-top:1px solid var(--line);padding:6px 10px 8px}
+#now{font-size:13px;min-height:20px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+#now b{color:var(--acc);font-size:15px}
+#now span{color:var(--sub);font-size:12px}
+#kb{position:relative;height:54px;margin-top:4px;user-select:none}
+.wk,.bk{position:absolute;top:0;border-radius:0 0 4px 4px}
+.wk{height:54px;background:#efe9f6;border:1px solid #9a8fb0}
+.bk{height:32px;background:#2a2335;z-index:2;border:1px solid #000}
+.wk.on{background:var(--acc)}
+.bk.on{background:#e0a800}
+.wk.bass{background:var(--mint)}
+.bk.bass{background:#2f9e8f}
+.hint{font-size:11px;color:var(--sub)}
+</style>
+</head>
+<body>
+<header>
+  <h1>コード表現テク<small>YouTube「Directline Studio」で紹介されているコード・和音の表現テクをまとめたページ（Cキー基準）</small></h1>
+  <nav class="toc" id="toc"></nav>
+</header>
+<main>
+  <p class="lead">コードをタップで試聴、<b>▶</b>で進行を再生。コードや▶ボタンは<b>ポケットDTMへドラッグ</b>すると、そのまま配置されます（スマホは上の「🎹 DTMへ送る」）。<br>
+  説明は Directline Studio の動画・公式ブログ記事の考え方を自分用に言い換えたものです。<span class="mine">例</span> の付いた譜例は、記事に具体的な音が載っていないため考え方から作った例です。正確な音は各動画で確認してください。</p>
+  <div id="list"></div>
+  <div class="note">出典：<a href="https://www.youtube.com/channel/UCBry-IGC_zBdmNkgMucqC7A" target="_blank" rel="noopener" style="color:#9fd0ff">Directline Studio（YouTube）</a> ／ <a href="https://piano.hikikatari.com/blog" target="_blank" rel="noopener" style="color:#9fd0ff">公式ブログ</a> ／ <a href="https://library.hikikatari.com/videos" target="_blank" rel="noopener" style="color:#9fd0ff">動画ライブラリ</a></div>
+</main>
+<div id="dock">
+  <div id="now"><b>—</b><span>コードをタップすると構成音が表示されます（黄＝上の音、緑＝ベース）</span></div>
+  <div id="kb"></div>
+</div>
+<script>
+/* ---------- 音名 ---------- */
+const PC={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const NAMES=['C','D♭','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
+function midi(s){ // "E♭4" "F#2" "C3"
+  const m=s.match(/^([A-G])([#♯b♭]?)(-?\d)$/); if(!m) return null;
+  let p=PC[m[1]]+(/[#♯]/.test(m[2])?1:/[b♭]/.test(m[2])?-1:0);
+  return 12*(+m[3]+1)+p;
+}
+const V=str=>str.split(/\s+/).map(midi).filter(x=>x!=null);
+/* ---------- コード記号 → 構成音（自動ボイシング用） ---------- */
+const Q=[['m7(b5)',[0,3,6,10]],['m7b5',[0,3,6,10]],['dim7',[0,3,6,9]],['dim',[0,3,6]],['aug',[0,4,8]],['7sus4',[0,5,7,10]],['sus4',[0,5,7]],['sus2',[0,2,7]],
+ ['m△7',[0,3,7,11]],['△7(13)',[0,4,7,11,21]],['△9',[0,4,7,11,14]],['△7',[0,4,7,11]],['M9',[0,4,7,11,14]],['M7',[0,4,7,11]],['m11',[0,3,7,10,14,17]],['m9',[0,3,7,10,14]],['m7(11)',[0,3,7,10,17]],['m7',[0,3,7,10]],['m6',[0,3,7,9]],['madd9',[0,3,7,14]],['m',[0,3,7]],
+ ['7(9,13)',[0,4,7,10,14,21]],['13',[0,4,7,10,14,21]],['9',[0,4,7,10,14]],['7',[0,4,7,10]],['6',[0,4,7,9]],['add9',[0,4,7,14]],['',[0,4,7]]];
+function parse(sym){
+  let s=sym.replace(/♭/g,'b').replace(/♯/g,'#'), bass=null;
+  const sl=s.lastIndexOf('/'); if(sl>0&&/^[A-G][#b]?$/.test(s.slice(sl+1))){bass=s.slice(sl+1);s=s.slice(0,sl);}
+  const m=s.match(/^([A-G])([#b]?)(.*)$/); if(!m) return null;
+  const root=PC[m[1]]+(m[2]=='#'?1:m[2]=='b'?-1:0);
+  const rest=m[3].replace(/maj/g,'M');
+  const q=Q.find(([k])=>k.replace(/b/g,'b')===rest)||Q.find(([k])=>rest.startsWith(k))||Q[Q.length-1];
+  let b=bass?PC[bass[0]]+(bass[1]=='#'?1:bass[1]=='b'?-1:0):root;
+  return {root:(root+12)%12,bass:(b+12)%12,iv:q[1]};
+}
+function autoVoice(sym){
+  const c=parse(sym); if(!c) return [];
+  const bass=36+c.bass; let base=48+c.root; if(base<52) base+=12; if(base>60) base-=12;
+  return [bass,...c.iv.map(i=>base+i)];
+}
+/* ---------- 音 ---------- */
+let ac=null,master=null;
+function audio(){ if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.5;const comp=ac.createDynamicsCompressor();master.connect(comp);comp.connect(ac.destination);} if(ac.state==='suspended')ac.resume(); return ac; }
+function tone(n,t,dur,vel,low){
+  const a=ac,g=a.createGain(),f=a.createBiquadFilter(),o1=a.createOscillator(),o2=a.createOscillator(),g2=a.createGain();
+  f.type='lowpass';f.frequency.value=low?900:2800;o1.type='triangle';o2.type=low?'sine':'sawtooth';
+  const hz=440*Math.pow(2,(n-69)/12);o1.frequency.value=hz;o2.frequency.value=hz*(low?1:1.003);g2.gain.value=low?.5:.1;
+  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(f);f.connect(master);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel,t+.012);g.gain.exponentialRampToValueAtTime(vel*.45,t+Math.min(dur,.6));
+  g.gain.setValueAtTime(vel*.45,t+dur);g.gain.exponentialRampToValueAtTime(.0001,t+dur+.35);
+  [o1,o2].forEach(o=>{o.start(t);o.stop(t+dur+.4)});
+}
+function playNotes(ns,dur=1.4){ audio(); const t=ac.currentTime+.02; const lo=Math.min(...ns);
+  ns.forEach((n,i)=>tone(n,t+i*.008,dur,n===lo&&ns.length>1?.26:.13,n===lo&&ns.length>1)); }
+/* ---------- 鍵盤 ---------- */
+const KLO=36,KHI=84;
+function buildKb(){const el=document.getElementById('kb');const wh=[];for(let n=KLO;n<=KHI;n++)if(![1,3,6,8,10].includes(n%12))wh.push(n);const W=100/wh.length;
+  wh.forEach((n,i)=>{const d=document.createElement('div');d.className='wk';d.dataset.n=n;d.style.left=i*W+'%';d.style.width=W+'%';el.appendChild(d)});
+  for(let n=KLO;n<=KHI;n++)if([1,3,6,8,10].includes(n%12)){const wi=wh.indexOf(n-1);const d=document.createElement('div');d.className='bk';d.dataset.n=n;d.style.left=((wi+1)*W-W*.3)+'%';d.style.width=W*.6+'%';el.appendChild(d)}}
+function showKb(ns){document.querySelectorAll('#kb .on,#kb .bass').forEach(e=>e.classList.remove('on','bass'));if(!ns.length)return;const lo=Math.min(...ns);
+  ns.forEach(n=>{let m=n;while(m>KHI)m-=12;while(m<KLO)m+=12;const e=document.querySelector(`#kb [data-n="${m}"]`);e&&e.classList.add(n===lo&&ns.length>1?'bass':'on')})}
+const nn=n=>NAMES[n%12]+(Math.floor(n/12)-1);
+function showNow(name,ns,memo){document.getElementById('now').innerHTML=`<b>${name}</b><span>${ns.map(nn).join(' ・ ')}${memo?'　'+memo:''}</span>`;showKb(ns)}
+/* ---------- データ ----------
+  コードは {s:記号, v:"ボイシング（任意）", m:"メモ"} / 文字列なら自動ボイシング */
+const C=(s,v,m)=>({s,v,m});
+const SECTIONS=[
+{id:'line',t:'同じコードを「点」ではなく「線」で弾く',tag:'ヴォイシング',
+ body:`<p>コードネームは変えずに、<b>弾き方</b>だけで響きを変える考え方。新しいコードを覚える前に、今あるコードの鳴らし方を増やす。</p>
+ <ul><li><b>一番低い音を毎回ルートにしない</b>：隣の音へ歩くように選ぶと、ベースが1本の線になる（転回形・分数コード）。</li>
+ <li><b>4度積みの形</b>（3度を含まない形）を、形を崩さずに平行移動すると、響きが揃って浮遊感が出る。</li>
+ <li>同じ形でも<b>キーを変える</b>と重なり方が変わり、印象も変わる。</li>
+ <li>足す順番は「ベース → 右手の形 → キー → メロディ」。毎回録音して元と聴き比べる。</li></ul>`,
+ ex:[{l:'元の弾き方（全部ルートが最低音）',seq:['C','F','G','Am']},
+     {l:'低音を隣へ歩かせる（C→A→B→A）',seq:[C('C','C3 E4 G4 C5'),C('F/A','A2 F4 A4 C5'),C('G/B','B2 G4 B4 D5'),C('Am','A2 E4 A4 C5')]},
+     {l:'右手を4度積み（D-G-C の形）で平行移動',mine:1,seq:[C('Csus2','C3 D4 G4 C5','D-G-C'),C('F△7(13)','F2 E4 A4 D5','E-A-D'),C('G7sus4','G2 G4 C5 F5','G-C-F'),C('Am7(11)','A2 A4 D5 G5','A-D-G')]}],
+ src:[['同じ C・F・G・Am で差がつく理由','https://piano.hikikatari.com/blog/3d4826092097817588e2d962cb423a2f']]},
+{id:'bass',t:'ベースラインを「階段」にしてから色を足す',tag:'コード付け',
+ body:`<p>おしゃれな進行は、テンションより先に<b>ベースの動き</b>から作る。</p>
+ <ul><li>まずダイアトニックコードだけでコードを付け、<b>ベースの音だけ書き出して跳んでいる所</b>を探す。</li>
+ <li>跳んでいる所に分数コードや経過和音を1つ挟んで、ベースを順次進行（階段）にする。例：C→Am の間に <b>C/B</b>（ド→シ→ラ）。上の音はほとんど変わらない。</li>
+ <li>最後に1〜2か所だけ <b>add9</b> や <b>m6</b> に差し替える（機能は変わらず響きだけ変わる）。入れすぎない。</li></ul>`,
+ ex:[{l:'跳ぶベース（ド→ラ→ファ→ソ）',seq:['C','Am','F','G']},
+     {l:'C/B を挟んで階段に（ド→シ→ラ）',seq:['C','C/B','Am','F','G']},
+     {l:'さらに1か所だけ色を足す',mine:1,seq:['C','C/B','Am',C('Fadd9','F2 A3 C4 G4'),'G']}],
+ src:[['おしゃれなコード進行の作り方｜ベースラインを階段にする','https://piano.hikikatari.com/blog/3c382609209781e092b8db2b9bf320b0']]},
+{id:'four',t:'IVから始める「4→3→2→1」',tag:'コード進行',
+ body:`<p><b>IV△7 → IIIm7 → IIm7 → I△7</b>（F△7 Em7 Dm7 C△7）。ダイアトニックだけなのに大人っぽくなる。</p>
+ <ul><li>Iから始めると最初から「家」が分かって予想通りになる。IVから始めると<b>家がどこか分からないまま</b>降りていき、最後の I△7 で着地した時に満足感が出る。</li>
+ <li>ボイシング：左手はルート、右手は<b>コードの3度上のトライアド</b>（F△7→Am、Em7→G、Dm7→F、C△7→Em）。厚くしすぎない方が浮遊感が残る。</li></ul>`,
+ ex:[{l:'Iから始める（比較用）',seq:['C△7','F△7','Em7','Dm7']},
+     {l:'4→3→2→1（右手＝3度上のトライアド）',seq:[C('F△7','F2 A3 C4 E4','右手 Am'),C('Em7','E2 G3 B3 D4','右手 G'),C('Dm7','D2 F3 A3 C4','右手 F'),C('C△7','C2 E3 G3 B3','右手 Em')]}],
+ src:[['4→3→2→1｜「IVから始める」だけで曲が大人っぽくなる','https://piano.hikikatari.com/blog/3c3826092097816ca7a9c6ec4d9c4b81']]},
+{id:'rootless',t:'ルートレス・ヴォイシング（3度と7度の2音）',tag:'ヴォイシング',
+ body:`<p>ルートは左手（ベース）に任せ、右手は<b>3rd（明暗）と7th（種類）</b>の2音だけ。ルートと5thはどのコードでも共通なので、性格を決めない。空いた指でテンションを足せる。</p>
+ <table><tr><th>コード</th><th>右手の2音</th><th>印象</th></tr><tr><td>C△7</td><td>E・B</td><td>明るく浮遊</td></tr><tr><td>C7</td><td>E・B♭</td><td>明るいが解決したがる</td></tr><tr><td>Cm7</td><td>E♭・B♭</td><td>暗く落ち着く</td></tr></table>
+ <ul><li>Dm7→G7→C△7 では、片方の音が残り、もう片方が半音下がるだけ（F・C → F・B → E・B）。手の形がほぼ変わらない。</li>
+ <li>C△7 の2音に D を足せば C△9。「テンションが押さえられない」のではなく「抜く音を決めていない」だけ。</li></ul>`,
+ ex:[{l:'2音で種類が決まる',seq:[C('C△7','C2 E4 B4'),C('C7','C2 E4 B♭4'),C('Cm7','C2 E♭4 B♭4')]},
+     {l:'Dm7 → G7 → C△7 → C△9',seq:[C('Dm7','D2 F4 C5'),C('G7','G2 F4 B4'),C('C△7','C2 E4 B4'),C('C△9','C2 E4 B4 D5')]}],
+ src:[['ルートレスヴォイシングとは？','https://piano.hikikatari.com/blog/3c382609209781fa8852ffab0069ad5f']]},
+{id:'f7',t:'ドミナント1発は「骨格2つ＋色3つ」',tag:'ヴォイシング',
+ body:`<p>F7 一発の曲で使う5音を役割で分ける。<b>骨格＝E♭（7th）・A（3rd）</b>の2音で「F7らしさ」が決まり、<b>色＝D（13th）・G（9th）・C（5th）</b>を上に乗せる。</p>
+ <ul><li>左手：下から E♭・A・D、右手：G・C。ルートの F はベースとぶつかるので入れない（足すと重心が下がる）。</li>
+ <li>コードが変わらない曲では、<b>骨格（左手）を固定して色（右手）だけ動かす</b>と、土台を崩さずに変化が作れる。右手は F マイナーペンタで短いフレーズを入れるのも◎。</li></ul>`,
+ ex:[{l:'骨格だけ → 骨格＋色 → Fを足すと',seq:[C('F7','E♭3 A3','骨格だけ'),C('F7(9,13)','E♭3 A3 D4 G4 C5','骨格＋色'),C('F7(9,13)','F2 E♭3 A3 D4 G4 C5','ルートあり')]}],
+ src:[['F7一発で何を弾くか｜骨格2つ＋色3つ','https://piano.hikikatari.com/blog/3c982609209781168313fbbdb143536c']]},
+{id:'m9',t:'m9・m11 を「知ってる形」の組み合わせで作る',tag:'テンション',
+ body:`<p><b>Xm9 ＝ X ＋ 短3度上のメジャーセブンス</b>。左手はルートと全音下の音（=7th、5thは省略）、右手は短3度上の△7。</p>
+ <table><tr><th>コード</th><th>左手</th><th>右手</th></tr><tr><td>Cm9</td><td>C・B♭</td><td>E♭△7（E♭ G B♭ D）</td></tr><tr><td>Fm9</td><td>F・E♭</td><td>A♭△7</td></tr><tr><td>Gm9</td><td>G・F</td><td>B♭△7</td></tr><tr><td>Dm9</td><td>D・C</td><td>F△7</td></tr></table>
+ <p>同じ発想で <b>Xm11 ＝ X ＋ 全音下のメジャートライアド</b>（Dm11 ＝ D ＋ C）。R&B・ネオソウルの浮遊感。Dm と Fm の2つだけでも「三和音 → 7th → m11 → トップ固定の広いボイシング」と弾き方で劇的に変わる。</p>`,
+ ex:[{l:'m9 ＝ ルート＋短3度上の△7',seq:[C('Cm9','C2 B♭2 E♭4 G4 B♭4 D5'),C('Fm9','F2 E♭3 A♭3 C4 E♭4 G4'),C('Gm9','G2 F3 B♭3 D4 F4 A4'),C('Dm9','D2 C3 F3 A3 C4 E4')]},
+     {l:'Dm と Fm の2つで：三和音 → 7th → m11',seq:[C('Dm','D2 D4 F4 A4'),C('Fm','F2 C4 F4 A♭4'),C('Dm7','D2 C4 F4 A4'),C('Fm7','F2 E♭4 A♭4 C5'),C('Dm11','D2 C4 E4 G4','右手 C'),C('Fm11','F2 E♭4 G4 B♭4','右手 E♭')]}],
+ src:[['Cm9 は「C ＋ E♭M7」','https://piano.hikikatari.com/blog/3d0826092097815b9145d1d5dd9d272e'],['たった２つのコードで音楽が劇的に変わる','https://piano.hikikatari.com/blog/1a482609209780388cc6e053763ca2e2']]},
+{id:'frame',t:'3音で洒落る「枠と色」',tag:'ヴォイシング',
+ body:`<p>一番上と一番下を<b>同じ音（オクターブ）</b>にして「枠」を作り、間の1音を「色」にする。人は最高音と最低音を一番よく聴くので、輪郭がはっきりして、中の音を変えても崩れない。音を増やさずに洒落て聴こえる（John Legend「Ordinary People」で使われる考え方）。</p>
+ <ul><li>作り方：コードを決める → 同じ音を上下に置く → 間の音をいろいろ試して一番いいものを残す。</li></ul>`,
+ ex:[{l:'Fキーで（ベース＋枠＋色）',mine:1,seq:[C('B♭△7','B♭1 D4 A4 D5','枠 D／色 A'),C('E♭△9','E♭2 F4 D5 F5','枠 F／色 D'),C('F△7','F2 A3 E4 A4','枠 A／色 E')]}],
+ src:[['John Legend『Ordinary People』の3音ボイシング｜枠と色','https://piano.hikikatari.com/blog/3c88260920978128a141f2e55695c60d']]},
+{id:'251',t:'2-5-1 は12キー覚えなくていい（1つの形＝72進行）',tag:'コード進行',
+ body:`<p>D・G・C という<b>同じ手の形</b>でも、「どこを家と見るか」で別の進行になる。Cから見れば 2-5-1、B♭から見れば 3-6-2、Gから見れば 5-1-4。</p>
+ <ul><li>1つの形を6方向から見る × 12キー ＝ <b>72進行</b>。手は同じで、ラベル（度数）だけが変わる。</li>
+ <li>練習：Cだけで6方向を覚える → 弾きながら度数を声に出す（例「B♭の3-6-2」）→ 知っている曲の中で形を探す。</li></ul>
+ <table><tr><th>家（キー）</th><th>度数</th><th>ダイアトニックで付けると</th></tr><tr><td>C</td><td>2-5-1</td><td>Dm7 G7 C△7</td></tr><tr><td>B♭</td><td>3-6-2</td><td>Dm7 Gm7 Cm7</td></tr><tr><td>G</td><td>5-1-4</td><td>D7 G△7 C△7</td></tr></table>`,
+ ex:[{l:'Cの 2-5-1',seq:['Dm7','G7','C△7']},{l:'B♭の 3-6-2',seq:['Dm7','Gm7','Cm7']},{l:'Gの 5-1-4',seq:['D7','G△7','C△7']}],
+ note:'表の「ダイアトニックで付けると」の列は、各キーの音階から自分で当てはめたものです。',
+ src:[['2-5-1は12キー覚えなくていい｜1つの形が72進行になる','https://piano.hikikatari.com/blog/3c282609209781b89850d63a583c841c']]},
+{id:'next',t:'ジャズっぽいコード付け＝「次を予告する」',tag:'コード付け',
+ body:`<p>3つの技は全部「次に行くコードを先に匂わせる」ためのもの。</p>
+ <ul><li><b>セカンダリードミナント</b>：次のコードを一瞬「主役」と見なして、その V7 を前に置く。例：C のあとに <b>A7</b> → Dm へ。</li>
+ <li><b>ディミニッシュ</b>：半音下から押し上げる。IV のあとに #IVdim を挟んで次へ。</li>
+ <li><b>分数コード</b>：上はそのままでベースだけ先に次へ動かし、行き先をベースで見せる。</li></ul>`,
+ ex:[{l:'セカンダリードミナント（A7 で Dm を予告）',seq:['C','A7','Dm7','G7','C']},
+     {l:'パッシングディミニッシュ（F → F♯dim7 → C/G）',mine:1,seq:['C','F','F#dim7','C/G','G7','C']},
+     {l:'分数コードでベースだけ先に動かす',mine:1,seq:['C','C/E','F','F/G','C']}],
+ src:[['メロディがジャズっぽくなるコード付け3つの技','https://piano.hikikatari.com/blog/3c482609209781b08bc2fc79b20cb437'],['セカンダリードミナントの全知識','https://piano.hikikatari.com/blog/196826092097803bbe72cd6c578b8bdb']]},
+{id:'gospel',t:'ゴスペル風は全部「あいだ」の処理',tag:'アレンジ',
+ body:`<p>パッシング・分数コード・ペダルノートは、どれも<b>主要なコードとコードの「あいだ」</b>を埋める道具。</p>
+ <ul><li><b>パッシングコード</b>：2つのコードの間に通り道を1つ（まずは半音の通り道を1つだけ）。例：<b>A♭7</b>（G へ半音上から）。</li>
+ <li><b>分数コード</b>：和音はそのまま、ベースだけ別の音に → 上が同じでも進行が続いて聴こえる。</li>
+ <li><b>ペダルノート</b>：トップの1音を固定して下だけ動かす。固定音が軸になって変化が際立つ。</li>
+ <li><b>セカンダリードミナントは目的地を指す矢印</b>（E7 → Am など）。マイナーの 2-5-1：C♯m7(♭5) → F♯7 → Bm7。</li></ul>`,
+ ex:[{l:'半音上からのパッシング（A♭7 → G7）',mine:1,seq:['Dm7','A♭7','G7','C']},
+     {l:'トップを G に固定して下だけ動かす',mine:1,seq:[C('C','C2 C4 E4 G4'),C('Am7','A1 C4 E4 G4'),C('F△9','F2 A3 E4 G4'),C('G7sus4','G2 C4 F4 G4')]},
+     {l:'矢印としての E7 ／ マイナー2-5-1',seq:['C','E7','Am7','C#m7(b5)','F#7','Bm7']}],
+ src:[['ゴスペル風コード進行の作り方｜「あいだ」の処理','https://piano.hikikatari.com/blog/3c382609209781728679dcdd10af2e8d']]},
+{id:'borrow',t:'外のコードを1か所だけ借りる／リハモ',tag:'リハーモナイズ',
+ body:`<p>原則：<b>メロディの音さえ含まれていれば、下に置くコードはかなり自由</b>。メロディが「ド」なら C・Am7・A♭△7 のどれでも置ける。外から借りたコードほど予想外の色になる。</p>
+ <ul><li>手順：ダイアトニックだけで付ける → 通して弾いて<b>平坦に聴こえる所</b>を探す（ここが一番大事）→ その1か所だけ差し替え → 元と聴き比べる。</li>
+ <li>リハモ（メロディはそのままコードだけ差し替え）の狙い目：<b>繰り返しの2回目</b>、<b>サビの直前</b>、<b>最後の和音</b>。1コーラスで2〜3か所まで（全部変えると別の曲になる）。</li></ul>`,
+ ex:[{l:'メロディ「ド」(C5) の下に置けるコード',seq:[C('C','C2 E4 G4 C5','安定'),C('Am7','A1 E4 G4 C5','陰り'),C('F','F2 A4 C5','余韻'),C('A♭△7','A♭1 E♭4 G4 C5','借用：予想外の色')]}],
+ src:[['おしゃれなコードの作り方完全マスター','https://piano.hikikatari.com/blog/18f826092097802fb37ded5846ab9b17'],['リハモの使い方徹底解説','https://piano.hikikatari.com/blog/19682609209780f5b4aad5274aa23716']]},
+{id:'jtt',t:'一生使える「Just the Two of Us 進行」',tag:'コード進行',
+ body:`<p>J-POP・洋楽で非常によく使われる進行。キーの外のコードを含むのが「色気」の正体。コード名ではなく<b>度数で覚える</b>と、キーを変えても同じ形で使える。</p>
+ <ul><li>記事の例：<b>D♭△7 → C7 → Fm7</b> …（このあと E♭m7 → A♭7 と続けて D♭△7 に戻る形が定番）。</li>
+ <li>Cキーで弾くなら <b>F△7 → E7 → Am7 → Gm7 → C7</b>（いわゆる丸サ進行と同じ形）。</li></ul>`,
+ ex:[{l:'記事のキー（Fm／A♭）',seq:['D♭△7','C7','Fm7','E♭m7','A♭7']},{l:'Cキーで',seq:['F△7','E7','Am7','Gm7','C7']}],
+ note:'E♭m7 → A♭7 の部分と Cキー版は、定番の形から補ったものです。',
+ src:[['一度覚えたら一生使える最強コード進行','https://piano.hikikatari.com/blog/1fb8260920978076baafe400cf65dee6']]},
+{id:'fourth',t:'4度進行（ルートが4度ずつ上がる）',tag:'コード進行',
+ body:`<p>ルートが4度ずつ上がる（＝5度ずつ下がる）進行。<b>G7 → C</b> のドミナント解決も同じ動き。規則的に続くので、次が予想しやすく気持ちいい。</p>`,
+ ex:[{l:'基本形',seq:['C','F','B♭','E♭']},{l:'7thで連鎖させる',mine:1,seq:['Em7','A7','Dm7','G7','C△7']}],
+ src:[['定番コード進行 4度進行','https://piano.hikikatari.com/blog/19082609209780e88232d7792c91cb7e']]},
+];
+/* ---------- 描画 ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=x=>typeof x==='string'?{s:x}:x;
+const dtmSym=s=>s.replace(/△/g,'M');
+function render(){
+  document.getElementById('toc').innerHTML=SECTIONS.map((s,i)=>`<a href="#${s.id}">${i+1}. ${esc(s.t.replace(/（.*$/,''))}</a>`).join('');
+  document.getElementById('list').innerHTML=SECTIONS.map((s,i)=>`<section class="card" id="${s.id}">
+    <h2><span class="no">${String(i+1).padStart(2,'0')}</span>${esc(s.t)}<span class="tag">${s.tag}</span></h2>
+    ${s.body}
+    ${s.ex.map((e,j)=>{const seq=e.seq.map(norm);return `<div class="ex"><div class="exlabel"><b>♪</b> ${esc(e.l)}${e.mine?'<span class="mine">例</span>':''}</div>
+      <div class="row">${seq.length>1?`<button class="play" data-s="${i}" data-e="${j}" data-dtm="${esc(seq.map(c=>dtmSym(c.s)).join(' '))}" data-dtm-name="${esc(s.t.replace(/（.*$/,''))}">▶ 再生</button>`:''}
+      ${seq.map((c,k)=>`${k?'<span class="arrow">→</span>':''}<button class="chip" data-s="${i}" data-e="${j}" data-k="${k}" data-dtm="${esc(dtmSym(c.s))}">${esc(c.s)}${c.m?`<small>${esc(c.m)}</small>`:''}</button>`).join('')}</div></div>`}).join('')}
+    ${s.note?`<div class="note">${esc(s.note)}</div>`:''}
+    <div class="src">参考：${s.src.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join(' ／ ')}</div>
+  </section>`).join('');
+}
+function voiceOf(c){return c.v?V(c.v):autoVoice(c.s)}
+let SEQ=null;
+function stopSeq(){if(SEQ){SEQ.timers.forEach(clearTimeout);SEQ.btn.classList.remove('on');SEQ.btn.textContent='▶ 再生';document.querySelectorAll('.chip.now').forEach(x=>x.classList.remove('now'));SEQ=null}}
+document.getElementById('list').addEventListener('click',e=>{
+  const ch=e.target.closest('.chip');
+  if(ch){stopSeq();const c=norm(SECTIONS[ch.dataset.s].ex[ch.dataset.e].seq[ch.dataset.k]);const ns=voiceOf(c);playNotes(ns);showNow(c.s,ns,c.m||'');
+    document.querySelectorAll('.chip.now').forEach(x=>x.classList.remove('now'));ch.classList.add('now');return}
+  const pb=e.target.closest('.play');
+  if(pb){const same=SEQ&&SEQ.btn===pb;stopSeq();if(same)return;
+    const seq=SECTIONS[pb.dataset.s].ex[pb.dataset.e].seq.map(norm);const chips=pb.parentElement.querySelectorAll('.chip');
+    SEQ={btn:pb,timers:[]};pb.classList.add('on');pb.textContent='■ 停止';const step=1250;
+    seq.forEach((c,k)=>SEQ.timers.push(setTimeout(()=>{const ns=voiceOf(c);playNotes(ns,1.15);showNow(c.s,ns,c.m||'');chips.forEach((x,j)=>x.classList.toggle('now',j===k))},k*step)));
+    SEQ.timers.push(setTimeout(stopSeq,seq.length*step+300));}
+});
+buildKb();render();
+</script>
+</body>
+</html>

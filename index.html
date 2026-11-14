@@ -7,16 +7,25 @@
 <style>
 html,body{margin:0;height:100%;background:#16131c;overflow:hidden;font-family:system-ui,sans-serif}
 .bar{position:fixed;top:0;left:0;right:0;height:44px;display:flex;align-items:center;gap:6px;padding:0 10px;background:#0f0d14;border-bottom:1px solid #3a3248;z-index:5}
-.bar b{color:#f3eef8;font-size:13px;margin-right:auto;white-space:nowrap}
+.bar{overflow-x:auto;scrollbar-width:none}.bar::-webkit-scrollbar{display:none}
+.bar b{color:#f3eef8;font-size:13px;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.bar button{flex:none;white-space:nowrap}
+.bar button.send{background:#ff52bc;color:#fff;border-color:#ff52bc;max-width:46vw;overflow:hidden;text-overflow:ellipsis}
+.bar button.send.ok{background:#5fd3b0;border-color:#5fd3b0;color:#16131c}
+#dtmToast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#2a2335;color:#f3eef8;border:1px solid #ff52bc;border-radius:12px;padding:8px 14px;font-size:13px;z-index:9;opacity:0;pointer-events:none;transition:.2s;max-width:92vw;text-align:center}
+#dtmToast.show{opacity:1;transform:translateX(-50%)}
 .bar button{border:1px solid #3a3248;background:#211c2a;color:#a99fb8;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .bar button.on{background:#f3eef8;color:#16131c;border-color:#f3eef8}
 iframe{position:fixed;top:44px;left:0;width:100%;height:calc(100% - 44px);border:0;background:#16131c}
 iframe.off{visibility:hidden;pointer-events:none}
+@media (max-width:640px){.bar b{display:none}.bar{gap:4px;padding:0 6px}.bar button{padding:5px 7px;font-size:11px}.bar button.send{flex:1 1 auto;min-width:64px;max-width:32vw;margin-left:auto}}
 </style>
 </head>
 <body>
 <div class="bar"><b>🎵 音楽理論ノート</b>
-  <button data-a="theory">理論ノート</button><button data-a="progress">コード進行100</button></div>
+  <button data-a="theory">理論ノート</button><button data-a="progress">コード進行100</button><button data-a="tech">表現テク</button><button data-a="tension">テンション</button>
+  <button class="send" id="toDtm" title="最後にタップしたコード／進行をポケットDTMへ送ります（パソコンではドラッグでもOK）">🎹 DTMへ送る</button></div>
+<div id="dtmToast"></div>
 <iframe id="theory" allow="autoplay; midi" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
@@ -1934,16 +1943,18 @@ buildPiano();renderFilters();renderList();renderIndex();renderDict();
 &lt;/body&gt;
 &lt;/html&gt;
 " title="コード進行100" class="off"></iframe>
+<iframe id="tech" allow="autoplay; midi" src="chord-tech.html" title="コード表現テク" class="off"></iframe>
+<iframe id="tension" allow="autoplay; midi" src="tension.html" title="テンションコード一覧" class="off"></iframe>
 <script>
-const F={theory:document.getElementById('theory'),progress:document.getElementById('progress')};
+const F={theory:document.getElementById('theory'),progress:document.getElementById('progress'),tech:document.getElementById('tech'),tension:document.getElementById('tension')};
 let cur='theory';
 try{const s=localStorage.getItem('mtn-app');if(s&&F[s])cur=s;}catch(e){}
-if(location.hash=='#progress'||location.hash=='#theory')cur=location.hash.slice(1);
-function keyOf(a){try{return a=='theory'?F.theory.contentWindow.getKey():+F.progress.contentWindow.document.getElementById('key').value}catch(e){return null}}
+if(location.hash=='#progress'||location.hash=='#theory'||location.hash=='#tech'||location.hash=='#tension')cur=location.hash.slice(1);
+function keyOf(a){if(a=='tech'||a=='tension')return null;try{return a=='theory'?F.theory.contentWindow.getKey():+F.progress.contentWindow.document.getElementById('key').value}catch(e){return null}}
 function show(a,sync=true){
   const prev=cur;
   if(sync&&prev!==a){const k=keyOf(prev);try{
-    if(k!=null){if(a=='theory')F.theory.contentWindow.setKeyExt(k);else if(keyOf('progress')!==k)F.progress.contentWindow.setKey(k);}}catch(e){}}
+    if(k!=null&&a!='tech'&&a!='tension'){if(a=='theory')F.theory.contentWindow.setKeyExt(k);else if(keyOf('progress')!==k)F.progress.contentWindow.setKey(k);}}catch(e){}}
   if(a=='theory'){try{const w=F.progress.contentWindow;if(w.document.readyState=='complete'&&!/native code/.test(String(w.stop)))w.stop();}catch(e){}}
   cur=a;for(const k in F)F[k].classList.toggle('off',k!==a);
   document.querySelectorAll('.bar button').forEach(b=>b.classList.toggle('on',b.dataset.a==a));
@@ -1960,6 +1971,72 @@ window.openProg=(term,mode)=>{
   }
 };
 show(cur,false);
+// ======================================================================
+// ポケットDTMへ送る：コード・コード進行をドラッグ＆ドロップ／「DTMへ送る」ボタン
+// ======================================================================
+(function(){
+const TAG='POCKETDTM_CHORDS:', MIME='application/x-pocketdtm-chords';
+const TOK=/^[A-G][#♯b♭]?[^\s\/]{0,14}(\/[A-G][#♯b♭]?)?$/;
+const SEL='[data-dtm],.ch,.dch,article.card,.irow,[data-ch],[data-cseq],[data-pseq],[data-mp],.ex,[data-cl],[data-sym],.pch';
+let last=null;
+const clean=s=>String(s||'').replace(/[▶♪■☆★]/g,'').replace(/\s+/g,' ').trim();
+const split=s=>clean(s).split(/\s*(?:→|->|\||｜)\s*|\s+/).filter(Boolean);
+const okList=a=>a.length&&a.length<=64&&a.every(x=>TOK.test(x))?a:null;
+function txt(el){const c=el.cloneNode(true);c.querySelectorAll('small,.sub,.notes,.tag').forEach(x=>x.remove());return c.textContent;}
+function one(el){const c=okList([clean(txt(el))]);return c?{chords:c}:null;}
+function payload(t){
+  const el=t&&(t.nodeType===3?t.parentElement:t); if(!el||!el.closest) return null; let e;
+  if(e=el.closest('[data-dtm]')){const c=okList(e.dataset.dtm.split(/\s+/).filter(Boolean));return c&&{chords:c,name:e.dataset.dtmName||''};}
+  // コード進行100
+  if(e=el.closest('.ch,.dch')) return one(e);
+  if(e=el.closest('article.card')){const c=okList([...e.querySelectorAll('.chords .ch')].map(b=>clean(b.textContent)));const nm=e.querySelector('.name');return c&&{chords:c,name:(nm?nm.textContent+' ':'')+'No.'+e.dataset.n};}
+  if(e=el.closest('.irow')){const ic=e.querySelector('.ic');const c=ic&&okList(split(ic.textContent));return c&&{chords:c,name:'No.'+e.dataset.n};}
+  // 理論ノート
+  if(e=el.closest('[data-ch]')){for(const s of [e.querySelector('.nm'),e.querySelector('b'),e]){if(!s)continue;const p=one(s);if(p)return p;}return null;}
+  if(e=el.closest('[data-cseq],[data-pseq],[data-mp],.ex')){const c=okList(split(txt(e)));return c&&{chords:c};}
+  if(e=el.closest('[data-cl]')){const c=okList([e.dataset.cl]);return c&&{chords:c};}
+  if(e=el.closest('[data-sym],.pch')) return one(e);
+  return null;
+}
+const enc=p=>TAG+JSON.stringify({v:1,chords:p.chords,name:p.name||'',from:'theory'});
+const label=p=>p.chords.length>6?p.chords.slice(0,6).join('→')+' …':p.chords.join('→');
+const btn=document.getElementById('toDtm'), toastEl=document.getElementById('dtmToast');
+let toastT=null;
+function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2600);}
+function setLast(p){last=p;btn.textContent='🎹 DTMへ: '+label(p);btn.title='ポケットDTMへ送る：'+p.chords.join(' ');}
+let bc=null;try{bc=new BroadcastChannel('pocketdtm');}catch(e){}
+let waitAck=null;
+if(bc)bc.addEventListener('message',e=>{if(e.data==='POCKETDTM_ACK'&&waitAck){clearTimeout(waitAck);waitAck=null;try{localStorage.removeItem('pocketdtm-inbox')}catch(_){}
+  btn.classList.add('ok');setTimeout(()=>btn.classList.remove('ok'),900);toast('ポケットDTMに置きました');}});
+btn.onclick=()=>{
+  if(!last) return toast('先にコードか進行をタップしてから押してください（パソコンはDTMへドラッグでもOK）');
+  const s=enc(last);
+  try{localStorage.setItem('pocketdtm-inbox',Date.now()+'|'+s);}catch(e){}
+  try{bc&&bc.postMessage(s);}catch(e){}
+  clearTimeout(waitAck);
+  waitAck=setTimeout(()=>{waitAck=null;toast('ポケットDTMを開いて置きます');try{window.open('dtm.html','pocketdtm');}catch(e){}},800);
+};
+function install(doc){
+  if(!doc||doc.__dtmLink) return; doc.__dtmLink=true;
+  const st=doc.createElement('style');
+  st.textContent='[data-dtm-drag]{cursor:grab;-webkit-user-drag:element}[data-dtm-drag]:active{cursor:grabbing}.dtm-dragimg{position:fixed;left:-1000px;top:0;padding:6px 12px;border-radius:12px;background:#ff52bc;color:#fff;font:700 13px system-ui,sans-serif;white-space:nowrap;box-shadow:0 4px 14px #0006}';
+  (doc.head||doc.documentElement).appendChild(st);
+  const mark=()=>{doc.querySelectorAll(SEL).forEach(el=>{if(el.hasAttribute('data-dtm-drag')||el.hasAttribute('data-dtm-no'))return;
+    if(payload(el)){el.setAttribute('draggable','true');el.setAttribute('data-dtm-drag','');}else el.setAttribute('data-dtm-no','');});};
+  let pend=false;const sched=()=>{if(pend)return;pend=true;(doc.defaultView||window).requestAnimationFrame(()=>{pend=false;mark();});};
+  mark(); new (doc.defaultView||window).MutationObserver(sched).observe(doc.body||doc.documentElement,{childList:true,subtree:true});
+  doc.addEventListener('dragstart',e=>{
+    const p=payload(e.target); if(!p||!e.dataTransfer) return;
+    const s=enc(p); e.dataTransfer.setData('text/plain',s); e.dataTransfer.setData(MIME,s); e.dataTransfer.effectAllowed='copy';
+    try{const g=doc.createElement('div');g.className='dtm-dragimg';g.textContent='🎹 '+label(p);doc.body.appendChild(g);e.dataTransfer.setDragImage(g,16,16);setTimeout(()=>g.remove(),0);}catch(_){}
+    setLast(p);
+  },true);
+  doc.addEventListener('click',e=>{const p=payload(e.target);if(p)setLast(p);},true);
+}
+function hook(f){const go=()=>{try{install(f.contentDocument);}catch(e){}};f.addEventListener('load',()=>{try{f.contentDocument.__dtmLink=false;}catch(e){}go();});
+  if(f.contentDocument&&f.contentDocument.readyState==='complete'&&f.contentDocument.body&&f.contentDocument.body.childElementCount)go();}
+Object.values(F).forEach(hook);
+})();
 </script>
 </body>
 </html>

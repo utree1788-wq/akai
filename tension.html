@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>綺麗に聞こえるテンションコード一覧</title>
+<style>
+:root{--bg:#16131c;--panel:#201b29;--panel2:#2a2335;--line:#3a3248;--text:#f3eef8;--sub:#a99fb8;--acc:#ffd34d;--mint:#5fd3b0;--pink:#ff6fae;--blue:#7fb8ff}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"M PLUS Rounded 1c",system-ui,sans-serif;line-height:1.65}
+header{position:sticky;top:0;z-index:4;background:#120f17ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:8px 12px 6px}
+.hrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+h1{margin:0;font-size:17px;margin-right:auto}
+h1 small{display:block;font-size:11px;color:var(--sub);font-weight:400}
+select,input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font:inherit;font-size:13px}
+.toc{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:6px}
+.toc::-webkit-scrollbar{display:none}
+.toc button{flex:none;font:inherit;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--panel);cursor:pointer}
+.toc button.on{background:var(--acc);color:#16131c;border-color:var(--acc);font-weight:700}
+main{max-width:980px;margin:0 auto;padding:12px 12px 150px}
+.lead{color:var(--sub);font-size:13px;margin:4px 0 12px}
+.lead b{color:var(--acc)}
+h2{font-size:15px;margin:18px 0 4px;display:flex;align-items:baseline;gap:8px}
+h2 small{font-size:11px;color:var(--sub);font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.cc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;position:relative;transition:.12s}
+.cc:hover{border-color:#6a5590}
+.cc.now{border-color:var(--acc);box-shadow:0 0 0 2px #ffd34d55}
+.cc .nm{font-size:19px;font-weight:800;line-height:1.2}
+.cc .ro{font-size:11px;color:var(--mint);font-weight:700;margin-left:6px}
+.cc .stars{position:absolute;right:10px;top:9px;font-size:11px;color:var(--acc);letter-spacing:-1px}
+.cc .mood{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0}
+.cc .mood span{font-size:10px;border-radius:999px;padding:0 7px;background:#3a2c52;color:#d8c8ff}
+.cc .vo{font-size:11.5px;color:var(--sub);font-family:ui-monospace,Menlo,monospace}
+.cc .vo b{color:var(--mint);font-weight:700}
+.cc .vo i{color:var(--acc);font-style:normal;font-weight:700}
+.cc p{margin:4px 0 0;font-size:12.5px}
+.cc .use{font-size:11.5px;color:#ffcf9e;margin-top:3px}
+.cc .use::before{content:"▸ "}
+.prog{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px}
+.prog .t{font-weight:800;font-size:14px}
+.prog .t small{font-weight:400;color:var(--sub);font-size:11px;margin-left:6px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.chip{border:1px solid #5a4a72;background:var(--panel2);color:var(--text);border-radius:10px;padding:4px 10px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
+.chip.now{background:var(--acc);color:#16131c;border-color:var(--acc)}
+.arrow{color:var(--sub);font-size:12px}
+.play{border:0;background:var(--pink);color:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.play.on{background:#7a2c58}
+.tips{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px}
+.tips li{margin:4px 0}
+.tips b{color:var(--acc)}
+table{border-collapse:collapse;font-size:12.5px;margin:6px 0;width:100%}
+td,th{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+th{background:#251f2f;color:var(--sub)}
+.ng{color:#ff8a8a;font-weight:700}
+.ok{color:var(--mint);font-weight:700}
+#dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#120f17f2;border-top:1px solid var(--line);padding:6px 10px 8px}
+#now{font-size:13px;min-height:20px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+#now b{color:var(--acc);font-size:15px}
+#now span{color:var(--sub);font-size:12px}
+.dk{display:flex;gap:6px;align-items:center;margin-left:auto}
+.dk button{font:inherit;font-size:11px;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:2px 9px;cursor:pointer}
+.dk button.on{background:var(--mint);color:#16131c;border-color:var(--mint)}
+#kb{position:relative;height:54px;margin-top:4px;user-select:none}
+.wk,.bk{position:absolute;top:0;border-radius:0 0 4px 4px}
+.wk{height:54px;background:#efe9f6;border:1px solid #9a8fb0}
+.bk{height:32px;background:#2a2335;z-index:2;border:1px solid #000}
+.wk.on{background:var(--acc)}.bk.on{background:#e0a800}
+.wk.bass{background:var(--mint)}.bk.bass{background:#2f9e8f}
+.wk.top{background:var(--pink)}.bk.top{background:#c2407f}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>綺麗に聞こえるテンションコード<small>ボイシング（押さえ方）つき。タップで試聴・DTMへドラッグ可</small></h1>
+    <label style="font-size:12px;color:var(--sub)">キー <select id="key"></select></label>
+    <input id="q" type="search" placeholder="検索（例：浮遊感、IV、9）" style="width:150px">
+  </div>
+  <nav class="toc" id="toc"></nav>
+</header>
+<main>
+  <p class="lead">カードをタップすると、<b>綺麗に響く押さえ方</b>で鳴ります（緑＝ベース、黄＝中の音、ピンク＝一番上の音）。カードや▶ボタンは<b>ポケットDTMへドラッグ</b>できます（スマホは上の「🎹 DTMへ送る」）。★は響きの綺麗さ・使いやすさの目安です。</p>
+  <div id="list"></div>
+</main>
+<div id="dock">
+  <div id="now"><b>—</b><span>カードをタップすると構成音が出ます</span>
+    <span class="dk"><button id="arp" title="分散和音で鳴らす">分散</button></span></div>
+  <div id="kb"></div>
+</div>
+<script>
+/* ---------- 音名・移調 ---------- */
+const PC={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const SH=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'], FL=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+const KEYS=['C','D♭','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
+const flatKey=k=>[0,1,3,5,8,10].includes(k);
+function midi(s){const m=s.match(/^([A-G])([#♯b♭]?)(-?\d)$/);if(!m)return null;return 12*(+m[3]+1)+PC[m[1]]+(/[#♯]/.test(m[2])?1:/[b♭]/.test(m[2])?-1:0);}
+function tpName(sym,k){ // 記号の根音・ベース音を移調
+  if(!k) return sym;
+  return sym.replace(/(^|\/)([A-G])([#♯b♭]?)/g,(m,pre,l,a)=>{const pc=(PC[l]+(/[#♯]/.test(a)?1:/[b♭]/.test(a)?-1:0)+k+120)%12;return pre+(flatKey(k)?FL:SH)[pc];});
+}
+const toDtm=s=>s.replace(/♯/g,'#').replace(/♭/g,'b');
+/* ---------- データ（Cキー基準） ----------
+ n:表示名 d:DTM用の名前 r:度数 v:ボイシング（左手 | 右手） s:★ m:雰囲気 t:説明 u:使いどころ */
+const CH=[
+{g:'major',n:'C△9',d:'Cmaj9',r:'I',v:'C2 G2 | E4 G4 B4 D5',s:5,m:['透明感','都会的'],t:'△7に9th（レ）。ルートと9thを離して、9thを一番上に置くとキラッと響く。',u:'曲の始まり・終わり、サビ頭のI'},
+{g:'major',n:'C6/9',d:'C69',r:'I',v:'C2 G2 | E4 A4 D5',s:5,m:['明るい','開放的'],t:'7thを使わず6th＋9th。△7より素朴で明るい。4度の積み重ね（E-A-D）が開放感の正体。',u:'エンディング、ボサノヴァ・ジャズの終止'},
+{g:'major',n:'C(add9)',d:'Cadd9',r:'I',v:'C2 G2 | E4 G4 D5',s:4,m:['キラキラ','ポップ'],t:'三和音に9thを足しただけ。7thがない分クセがなく、J-POPで一番使いやすいテンション。',u:'バラード・弾き語りのIやIV'},
+{g:'major',n:'F△7(♯11)',d:'Fmaj7#11',r:'IV',v:'F2 C3 | E4 A4 B4',s:5,m:['浮遊感','映画的'],t:'IVの△7に♯11（シ）。リディアンの響きで、地面から浮くような透明さ。IVで使うとダイアトニックのまま鳴る。',u:'IV△7の代わり、エンディングの余韻'},
+{g:'major',n:'F△9',d:'Fmaj9',r:'IV',v:'F2 C3 | A3 E4 G4',s:5,m:['優しい','都会的'],t:'IV△7に9th（ソ）。左手F-C、右手はAm（A-C-E）の上にGを足すイメージ。',u:'4→3→2→1進行の頭、サビ前'},
+{g:'major',n:'C△13',d:'Cmaj13',r:'I',v:'C2 B2 | E4 A4 D5',s:4,m:['豪華','ジャズ'],t:'左手でルートと7th、右手で3rd・13th・9th。シティポップの「エンディング感」。',u:'曲の最後の一発'},
+{g:'major',n:'C△7/E',d:'Cmaj7/E',r:'I/III',v:'E2 B2 | G4 C5 D5',s:3,m:['柔らか','浮遊感'],t:'3rdをベースに。ベースが上がっていく途中に置くと滑らか（C→C/E→F）。',u:'ベースラインを階段にしたい時'},
+
+{g:'minor',n:'Am9',d:'Am9',r:'VIm',v:'A1 E2 | C4 G4 B4',s:5,m:['切ない','ネオソウル'],t:'m7に9th（シ）。右手は「C△7からルートを抜いた形」＝C-G-B。切なさに透明感が加わる。',u:'サビのVIm、静かなイントロ'},
+{g:'minor',n:'Am11',d:'Am11',r:'VIm',v:'A1 E2 | D4 G4 C5',s:5,m:['浮遊感','R&B'],t:'右手を4度積み（D-G-C）に。3rdが上にあるので暗くなりすぎず、ふわっと広がる。',u:'ループ一発、R&B・Lo-fi'},
+{g:'minor',n:'Dm9',d:'Dm9',r:'IIm',v:'D2 C3 | F3 A3 E4',s:5,m:['都会的','滑らか'],t:'左手D-C（ルートと7th）、右手F-A-E。ツーファイブ（Dm9→G13→C△9）の入口に最適。',u:'IIm7の代わり'},
+{g:'minor',n:'Dm11',d:'Dm11',r:'IIm',v:'D2 A2 | C4 E4 G4',s:4,m:['クール','モーダル'],t:'Dの上にCメジャー（C-E-G）を乗せるだけ。「ルート＋全音下のメジャー」で作れる。',u:'ドリアンの一発、Gへ行く前'},
+{g:'minor',n:'Em7(11)',d:'Em11',r:'IIIm',v:'E2 B2 | D4 G4 A4',s:4,m:['爽やか','透明感'],t:'IIImは9thが♯F（キー外）になるので、11th（ラ）を足すのが綺麗。',u:'IIIm7の代わり、王道進行の3つ目'},
+{g:'minor',n:'Cm9',d:'Cm9',r:'Im',v:'C2 B♭2 | E♭4 G4 B♭4 D5',s:5,m:['大人っぽい','切ない'],t:'左手C-B♭、右手E♭△7。「ルート＋短3度上の△7」で作れる。',u:'マイナーキーの主和音'},
+{g:'minor',n:'Am(add9)',d:'Amadd9',r:'VIm',v:'A1 E2 | C4 E4 B4',s:4,m:['切ない','キラキラ'],t:'マイナー三和音に9th。7thなしで切なさがストレートに出る。',u:'バラードのVIm'},
+{g:'minor',n:'Am6/9',d:'Am6',r:'VIm',v:'A1 E2 | C4 F♯4 B4',s:3,m:['ジャズ','妖しい'],t:'マイナーに6th（♯F）と9th。少し明るく、洒落た短調の終わり方。',u:'マイナー曲のエンディング'},
+{g:'minor',n:'Cm(△9)',d:'CmM7',r:'Im',v:'C2 G2 | E♭4 B4 D5',s:3,m:['ミステリアス','映画的'],t:'マイナーに△7と9th。サスペンス映画のような不穏な美しさ。',u:'クリシェ（Cm→Cm△7→Cm7）の途中'},
+
+{g:'dom',n:'G13',d:'G13',r:'V',v:'G2 F3 | B3 E4 A4',s:5,m:['豪華','解決感'],t:'左手G-F、右手B-E-A（3rd・13th・9th）。ドミナントの中で一番「綺麗」に聞こえる形。',u:'V7の代わり（→I△9へ）'},
+{g:'dom',n:'G9sus4',d:'G9sus4',r:'V',v:'G2 F3 | A3 C4 D4 F4',s:5,m:['都会的','ゴスペル'],t:'＝F/G に近い響き。3rdがないので緊張がやわらかく、シティポップ・ゴスペルの定番。',u:'Vの代わり、セクションの終わり'},
+{g:'dom',n:'F/G',d:'F/G',r:'V',v:'G2 | F4 A4 C5',s:5,m:['都会的','柔らか'],t:'Gの上にFメジャー。「ポップス・ドミナント」。V7の教科書っぽさを消せる。',u:'サビ前・Bメロの終わり'},
+{g:'dom',n:'G7(♭9)',d:'G7b9',r:'V',v:'G2 F3 | B3 D4 A♭4',s:4,m:['ドラマチック','切ない'],t:'9thを半音下げる。マイナーへ解決するときの定番（G7(♭9)→Cm）。',u:'短調へ解決するV、セカンダリードミナント'},
+{g:'dom',n:'E7(♭9)',d:'E7b9',r:'III',v:'E2 D3 | G♯3 C4 F4',s:5,m:['切ない','J-POP'],t:'Amへ向かうセカンダリードミナント。♭9（ファ）がメロディと馴染み、泣きの響きになる。',u:'E7→Am（丸サ進行・王道進行）'},
+{g:'dom',n:'E7(♭13)',d:'E7b13',r:'III',v:'E2 D3 | G♯3 C4',s:4,m:['暗い','切ない'],t:'♭13（ド）を入れたE7。Amキーの主音が混ざるので、ダークで哀愁がある。',u:'E7→Am を深く暗く'},
+{g:'dom',n:'A7(♭9)',d:'A7b9',r:'VI',v:'A1 G2 | C♯4 E4 B♭4',s:4,m:['歌謡曲','切ない'],t:'Dmへ向かうセカンダリードミナント。C→A7(♭9)→Dm7 で一気に洒落る。',u:'I→VI7→IIm'},
+{g:'dom',n:'G7(♯9)',d:'G7#9',r:'V',v:'G2 F3 | B3 B♭4',s:2,m:['ブルージー','攻撃的'],t:'長3度と短3度が同居。綺麗というより「ジミヘン」的な濁り。ロック・ファンクで。',u:'ブルース、ファンク'},
+{g:'dom',n:'D♭7(9)',d:'Db9',r:'♭II',v:'D♭2 C♭3 | F3 A♭3 E♭4',s:4,m:['滑らか','ジャズ'],t:'G7の裏コード。Dm7→D♭9→C△9 とベースが半音で下がって滑らか。',u:'V7の代わり'},
+
+{g:'us',n:'D/C',d:'D/C',r:'(C△7♯11)',v:'C2 | D4 F♯4 A4',s:5,m:['浮遊感','映画的'],t:'Cの上にDメジャー＝C△7(♯11)のアッパーストラクチャー。リディアンの輝き。',u:'エンディング、壮大な場面'},
+{g:'us',n:'B♭/C',d:'Bb/C',r:'(C9sus4)',v:'C2 | B♭3 D4 F4',s:5,m:['ゴスペル','柔らか'],t:'Cの上にB♭メジャー＝C9sus4。次のF（IV）へのつなぎに最高。',u:'I→IV に行く前（C→B♭/C→F）'},
+{g:'us',n:'E/C',d:'E/C',r:'(C△7♯5)',v:'C2 | E4 G♯4 B4',s:3,m:['幻想的','不思議'],t:'Cの上にEメジャー。△7(♯5)のミステリアスな響き。',u:'ファンタジー系・映画音楽'},
+{g:'us',n:'G/F',d:'G/F',r:'(F△7♯11)',v:'F2 | G4 B4 D5',s:4,m:['浮遊感','壮大'],t:'Fの上にGメジャー＝F△9(♯11)。IVで使うと綺麗に浮く。',u:'IV→V の前、サビ前の溜め'},
+{g:'us',n:'Em/C',d:'Em/C',r:'(C△7)',v:'C2 | E4 G4 B4',s:4,m:['優しい','透明感'],t:'Cの上にEm＝C△7。「上の三和音」で考えると押さえやすい。',u:'C△7をシンプルに鳴らしたい時'},
+];
+const GROUPS=[['major','メジャー系（I・IV）','明るい・透明感'],['minor','マイナー系（IIm・IIIm・VIm）','切ない・浮遊感'],['dom','ドミナント系（V・セカンダリー）','次へ進みたい緊張を綺麗に'],['us','分数・アッパーストラクチャー','「ベース＋知ってるコード」で作る']];
+const PROGS=[
+ {t:'王道ツーファイブワン',m:'都会的・シティポップ',c:['Dm9','G13','C△9']},
+ {t:'4→3→2→1 をテンションで',m:'大人っぽく降りる',c:['F△9','Em7(11)','Dm9','C△9']},
+ {t:'丸サ進行（Just the Two of Us）',m:'色気・切なさ',c:['F△9','E7(♭9)','Am9','Gm9','C13']},
+ {t:'王道進行をテンションで',m:'J-POPのサビ',c:['F△9','G13','Em7(11)','Am9']},
+ {t:'ポップス・ドミナント',m:'柔らかい解決',c:['C△9','Am11','Dm11','F/G']},
+ {t:'サブドミナントマイナーで泣く',m:'切ない・温かい',c:['F△7(♯11)','Fm6','C△9','C6/9']},
+ {t:'ゴスペル風',m:'IV へ大きく開く',c:['C△9','B♭/C','F△9','G9sus4']},
+ {t:'リディアンのエンディング',m:'壮大・映画的',c:['C△9','D/C','C6/9']},
+];
+const EXTRA={ // 進行用の追加ボイシング
+ 'Gm9':{d:'Gm9',v:'G2 F3 | B♭3 D4 A4'},'C13':{d:'C13',v:'C2 B♭2 | E4 A4 D5'},'Fm6':{d:'Fm6',v:'F2 C3 | A♭3 D4 F4'},
+};
+/* ---------- ボイシング ---------- */
+let KEY=0; try{KEY=+(localStorage.getItem('tension-key')||0)||0}catch(e){}
+function shiftOf(k){return k>6?k-12:k}
+function voicing(v,k){const [L,R]=v.split('|');const s=shiftOf(k);return {lo:L.trim().split(/\s+/).map(midi).map(n=>n+s),hi:(R||'').trim().split(/\s+/).filter(Boolean).map(midi).map(n=>n+s)}}
+function chordByName(n){return CH.find(c=>c.n===n)||(EXTRA[n]&&{n,...EXTRA[n]})}
+/* ---------- 音 ---------- */
+let ac=null,master=null,ARP=false;
+function audio(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.5;const c=ac.createDynamicsCompressor();master.connect(c);c.connect(ac.destination)}if(ac.state==='suspended')ac.resume();return ac}
+function tone(n,t,dur,vel,low){const a=ac,g=a.createGain(),f=a.createBiquadFilter(),o1=a.createOscillator(),o2=a.createOscillator(),g2=a.createGain();
+  f.type='lowpass';f.frequency.value=low?900:3000;o1.type='triangle';o2.type=low?'sine':'sawtooth';const hz=440*Math.pow(2,(n-69)/12);o1.frequency.value=hz;o2.frequency.value=hz*(low?1:1.003);g2.gain.value=low?.5:.08;
+  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(f);f.connect(master);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel,t+.012);g.gain.exponentialRampToValueAtTime(vel*.5,t+Math.min(dur,.7));g.gain.setValueAtTime(vel*.5,t+dur);g.gain.exponentialRampToValueAtTime(.0001,t+dur+.5);
+  [o1,o2].forEach(o=>{o.start(t);o.stop(t+dur+.6)})}
+function sound(vo,dur=1.8){audio();const t=ac.currentTime+.02;vo.lo.forEach(n=>tone(n,t,dur,.2,true));vo.hi.forEach((n,i)=>tone(n,t+(ARP?.12*(i+1):i*.01),dur-(ARP?.12*i:0),.12,false))}
+/* ---------- 鍵盤 ---------- */
+const KLO=29,KHI=84;
+function buildKb(){const el=document.getElementById('kb');const wh=[];for(let n=KLO;n<=KHI;n++)if(![1,3,6,8,10].includes(n%12))wh.push(n);const W=100/wh.length;
+  wh.forEach((n,i)=>{const d=document.createElement('div');d.className='wk';d.dataset.n=n;d.style.left=i*W+'%';d.style.width=W+'%';el.appendChild(d)});
+  for(let n=KLO;n<=KHI;n++)if([1,3,6,8,10].includes(n%12)){const wi=wh.indexOf(n-1);const d=document.createElement('div');d.className='bk';d.dataset.n=n;d.style.left=((wi+1)*W-W*.3)+'%';d.style.width=W*.6+'%';el.appendChild(d)}}
+function showKb(vo){document.querySelectorAll('#kb .on,#kb .bass,#kb .top').forEach(e=>e.classList.remove('on','bass','top'));const top=Math.max(...vo.hi);
+  const mark=(n,c)=>{let m=n;while(m>KHI)m-=12;while(m<KLO)m+=12;const e=document.querySelector(`#kb [data-n="${m}"]`);e&&e.classList.add(c)};
+  vo.lo.forEach(n=>mark(n,'bass'));vo.hi.forEach(n=>mark(n,n===top?'top':'on'))}
+const nn=(n,k)=>(flatKey(k)?FL:SH)[(n%12+12)%12]+(Math.floor(n/12)-1);
+function showNow(c){const vo=voicing(c.v,KEY);document.querySelector('#now b').textContent=tpName(c.n,KEY);
+  document.querySelector('#now span').textContent='左手 '+vo.lo.map(n=>nn(n,KEY)).join(' ')+'　｜　右手 '+vo.hi.map(n=>nn(n,KEY)).join(' ');
+  showKb(vo);return vo}
+/* ---------- 描画 ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let TAB='all',Q='';
+function voText(v){const vo=voicing(v,KEY),top=Math.max(...vo.hi);return '左 <b>'+vo.lo.map(n=>nn(n,KEY)).join(' ')+'</b>　右 '+vo.hi.map(n=>n===top?'<i>'+nn(n,KEY)+'</i>':nn(n,KEY)).join(' ')}
+function card(c,i){return `<div class="cc" data-i="${i}" data-dtm="${esc(toDtm(tpName(c.d,KEY)))}" title="タップで試聴／DTMへドラッグ">
+  <span class="stars">${'★'.repeat(c.s)}${'☆'.repeat(5-c.s)}</span>
+  <div class="nm">${esc(tpName(c.n,KEY))}<span class="ro">${esc(c.r)}</span></div>
+  <div class="mood">${c.m.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  <div class="vo">${voText(c.v)}</div><p>${esc(c.t)}</p><div class="use">${esc(c.u)}</div></div>`}
+function match(c){if(!Q)return true;const h=(c.n+' '+c.d+' '+c.r+' '+c.m.join(' ')+' '+c.t+' '+c.u).toLowerCase();return Q.toLowerCase().split(/\s+/).every(w=>h.includes(w))}
+function render(){
+  document.getElementById('toc').innerHTML=[['all','すべて'],...GROUPS.map(g=>[g[0],g[1].replace(/（.*$/,'')]),['prog','綺麗な進行'],['tips','綺麗に鳴らすコツ']].map(([k,l])=>`<button data-t="${k}" class="${TAB===k?'on':''}">${l}</button>`).join('');
+  let h='';
+  GROUPS.forEach(([k,t,s])=>{if(TAB!=='all'&&TAB!==k)return;const L=CH.map((c,i)=>[c,i]).filter(([c])=>c.g===k&&match(c));if(!L.length)return;
+    h+=`<h2>${esc(t)}<small>${esc(s)}</small></h2><div class="grid">${L.map(([c,i])=>card(c,i)).join('')}</div>`});
+  if(TAB==='all'||TAB==='prog'){h+=`<h2>綺麗な進行で使う<small>▶で再生、ボタンごとDTMへドラッグ可</small></h2>`+PROGS.map((p,i)=>{const names=p.c.map(n=>tpName(n,KEY));
+    return `<div class="prog"><div class="t">${esc(p.t)}<small>${esc(p.m)}</small></div><div class="row"><button class="play" data-p="${i}" data-dtm="${esc(p.c.map(n=>toDtm(tpName(chordByName(n).d,KEY))).join(' '))}" data-dtm-name="${esc(p.t)}">▶ 再生</button>${names.map((n,j)=>`${j?'<span class="arrow">→</span>':''}<button class="chip" data-p="${i}" data-j="${j}" data-dtm="${esc(toDtm(tpName(chordByName(p.c[j]).d,KEY)))}">${esc(n)}</button>`).join('')}</div></div>`}).join('')}
+  if(TAB==='all'||TAB==='tips')h+=`<h2>綺麗に鳴らすコツ<small>同じコード名でも押さえ方で響きが変わる</small></h2><div class="tips"><ul>
+   <li><b>左手は「ルート＋5th」か「ルート＋7th」</b>だけ。低い音域に3rdやテンションを入れると濁る（だいたいE3より下は2音まで）。</li>
+   <li><b>9thはルートから離す。</b>ルートのすぐ上（長2度）に置くとぶつかって聞こえる。オクターブ上に置けば「キラッ」に変わる。</li>
+   <li><b>一番上の音（トップノート）にテンションを置く</b>と、テンションの色が一番よく聞こえる（9th・13th・♯11）。</li>
+   <li><b>3rdと7thは必須、ルートと5thは省略OK。</b>右手は3rd・7th・テンションの3〜4音で十分（ルートレス）。</li>
+   <li><b>テンションは「ダイアトニックの音」を選ぶ</b>と外れない。迷ったら下の表の「OK」から。</li>
+   <li><b>全部のコードに付けない。</b>長く伸ばすコードや、最後のコードに1〜2か所だけ足すのがいちばん綺麗。</li></ul>
+   <table><tr><th>コードの種類</th><th>綺麗に乗るテンション</th><th>避けたい音（アボイド）</th></tr>
+   <tr><td>I△7（C△7）</td><td class="ok">9, 13（6）</td><td class="ng">11（ファ）※3rdと短9度でぶつかる</td></tr>
+   <tr><td>IV△7（F△7）</td><td class="ok">9, ♯11, 13</td><td>―（一番自由）</td></tr>
+   <tr><td>IIm7（Dm7）</td><td class="ok">9, 11</td><td class="ng">13（シ）は濁りやすい</td></tr>
+   <tr><td>IIIm7（Em7）</td><td class="ok">11</td><td class="ng">♭9（ファ）, ♭13（ド）</td></tr>
+   <tr><td>VIm7（Am7）</td><td class="ok">9, 11</td><td class="ng">♭13（ファ）</td></tr>
+   <tr><td>V7（G7）</td><td class="ok">9, 13（明るく）／♭9, ♭13（短調へ）</td><td class="ng">11（ド）※sus4にするならOK</td></tr>
+   <tr><td>VIIm7(♭5)（Bm7♭5）</td><td class="ok">11, ♭13</td><td class="ng">♭9（ド）</td></tr></table></div>`;
+  document.getElementById('list').innerHTML=h||'<p class="lead">該当するコードがありません</p>';
+}
+/* ---------- 操作 ---------- */
+const ks=document.getElementById('key');ks.innerHTML=KEYS.map((n,i)=>`<option value="${i}">${n}</option>`).join('');ks.value=KEY;
+ks.onchange=()=>{KEY=+ks.value;try{localStorage.setItem('tension-key',KEY)}catch(e){}stopSeq();render()};
+document.getElementById('q').addEventListener('input',e=>{Q=e.target.value.trim();render()});
+document.getElementById('toc').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;TAB=b.dataset.t;render();window.scrollTo(0,0)});
+document.getElementById('arp').onclick=e=>{ARP=!ARP;e.target.classList.toggle('on',ARP)};
+let SEQ=null;
+function stopSeq(){if(SEQ){SEQ.timers.forEach(clearTimeout);SEQ.btn.classList.remove('on');SEQ.btn.textContent='▶ 再生';document.querySelectorAll('.chip.now').forEach(x=>x.classList.remove('now'));SEQ=null}}
+document.getElementById('list').addEventListener('click',e=>{
+  const cc=e.target.closest('.cc');
+  if(cc){stopSeq();const c=CH[cc.dataset.i];sound(showNow(c));document.querySelectorAll('.cc.now').forEach(x=>x.classList.remove('now'));cc.classList.add('now');return}
+  const ch=e.target.closest('.chip');
+  if(ch){stopSeq();const c=chordByName(PROGS[ch.dataset.p].c[ch.dataset.j]);sound(showNow(c));document.querySelectorAll('.chip.now').forEach(x=>x.classList.remove('now'));ch.classList.add('now');return}
+  const pb=e.target.closest('.play');
+  if(pb){const same=SEQ&&SEQ.btn===pb;stopSeq();if(same)return;const p=PROGS[pb.dataset.p],chips=pb.parentElement.querySelectorAll('.chip'),step=1500;
+    SEQ={btn:pb,timers:[]};pb.classList.add('on');pb.textContent='■ 停止';
+    p.c.forEach((n,k)=>SEQ.timers.push(setTimeout(()=>{sound(showNow(chordByName(n)),1.45);chips.forEach((x,j)=>x.classList.toggle('now',j===k))},k*step)));
+    SEQ.timers.push(setTimeout(stopSeq,p.c.length*step+300))}
+});
+buildKb();render();
+</script>
+</body>
+</html>
