@@ -90,9 +90,11 @@ const PAGES = [
   {id:'haiku', group:'app', name:'俳句の手帖', origin:'元のアプリ：俳句の手帖', icon:'🖌', color:'#15803d', src:'apps/haiku/index.html', desc:'書き方・五七五チェック・季語辞典・句帳・助詞・テクニック'},
   {id:'akapen', group:'app', name:'赤ペン俳句道場', origin:'元のアプリ：赤ペン俳句道場（プレバト流テクニック帖）', icon:'✒', color:'#dc2626', src:'apps/akapen-haiku.html', desc:'プレバト流の添削テクニック帖'},
   {id:'phil', group:'app', name:'哲学用語ノート', origin:'元のアプリ：哲学用語ノート', icon:'📚', color:'#0e7490', src:'apps/philosophy-glossary.html', desc:'哲学用語のノート'},
-  {id:'hiyu', group:'app', name:'比喩ノート', origin:'元のアプリ：比喩ノート（鬱・感情・不快回避）', icon:'🌫', color:'#475569', src:'apps/hiyu-note.html', desc:'歌詞・物語用の比喩アイデア集'}
+  {id:'hiyu', group:'app', name:'比喩ノート', origin:'元のアプリ：比喩ノート（鬱・感情・不快回避）', icon:'🌫', color:'#475569', src:'apps/hiyu-note.html', desc:'歌詞・物語用の比喩アイデア集'},
+  {id:'kokoro', group:'tool', name:'心を詠む工房', origin:'新しいページ：哲学・心理・感情の俳句と詩', icon:'🕯', color:'#9d174d', src:'tools/kokoro.html', desc:'お題・具体物・合う季語・型から、心を詠む俳句と詩を作る'},
+  {id:'katsuyou', group:'tool', name:'動詞の活用（文語）', origin:'新しいページ：俳句のための文語文法', icon:'🔤', color:'#1d4ed8', src:'tools/katsuyou.html', desc:'九種の活用・活用表・助動詞や切れ字のつなぎ方・練習問題'}
 ];
-const GROUPS = [['pdf','まとめノート（PDF 6冊）'],['app','これまでのアプリ']];
+const GROUPS = [['pdf','まとめノート（PDF 6冊）'],['tool','作るためのページ'],['app','これまでのアプリ']];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* サイドバー */
@@ -109,7 +111,7 @@ home.innerHTML = `<div class="wrap">
   <input class="search" id="gq" type="search" placeholder="6冊のまとめノートをまとめて検索（例：嫉妬、伏線、もののあはれ、ペルソナ）" aria-label="まとめノートを横断検索">
   <div class="hint" id="ghint">キーワードを入れると、該当する項目にジャンプできます。</div>
   <div class="results" id="gres"></div>
-  ${GROUPS.map(g => `<h2>${g[1]}</h2><p class="sub">${g[0]==='pdf' ? '送ってくれた6つのPDFを、それぞれ別のページにまとめました。原本ページ（手書きの書き込みつき）も見られます。' : '元のアプリをそのままの形で、それぞれ別のページに入れています。'}</p>
+  ${GROUPS.map(g => `<h2>${g[1]}</h2><p class="sub">${g[0]==='pdf' ? '送ってくれた6つのPDFを、それぞれ別のページにまとめました。原本ページ（手書きの書き込みつき）も見られます。' : g[0]==='tool' ? 'まとめノートの知識を使って、実際に句や詩を作るためのページです。' : '元のアプリをそのままの形で、それぞれ別のページに入れています。'}</p>
     <div class="cards">${PAGES.filter(p => p.group === g[0]).map(p => `<button class="pc" style="--c:${p.color}" data-go="${p.id}"><span class="ic">${p.icon}</span><b>${esc(p.name)}</b><span>${esc(p.desc)}</span><em>${esc(p.origin)}</em></button>`).join('')}</div>`).join('')}
 </div>`;
 
@@ -164,6 +166,7 @@ document.getElementById('scrim').onclick = () => document.body.classList.remove(
 function fromHash(){ const st = location.hash.replace(/^#\/?/, ''); go(PAGES.some(p => p.id === st) ? st : 'home'); }
 const START_HASH = location.hash;
 window.addEventListener('hashchange', fromHash);
+window.addEventListener('message', e => { if (e.data && e.data.souzouGo && PAGES.some(p => p.id === e.data.souzouGo)) go(e.data.souzouGo, e.data.anchor); });
 fromHash();
 /* 検索URL：?q=キーワード（または #q=キーワード）で開くと、ホームの横断検索に入った状態で開く */
 (function(){
