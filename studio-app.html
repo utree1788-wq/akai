@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14161c">
+<title>AKAI STUDIO</title>
+<link rel="manifest" href="studio-manifest.json">
+<link rel="icon" href="studio-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="studio-icon-192.png">
+<style>
+  :root{
+    --bg:#14161c; --panel:#1c1f27; --line:#2a2e39; --text:#e9ebf0; --sub:#8a90a0;
+    --c1:#ff7a59; --c2:#5aa9ff; --c3:#ffc94d; --c4:#5fd39a;
+    --accent:var(--c1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--text);
+    font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif}
+  body{display:flex;flex-direction:column;overflow:hidden}
+
+  header{display:flex;align-items:center;gap:14px;padding:8px 14px;
+    background:var(--panel);border-bottom:1px solid var(--line);flex-shrink:0}
+  .brand{font-weight:800;letter-spacing:.08em;font-size:15px;white-space:nowrap}
+  .brand span{color:var(--accent);transition:color .2s}
+
+  nav{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;
+    border:1px solid var(--line);background:transparent;color:var(--sub);
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:all .15s}
+  nav button:hover{color:var(--text);border-color:#3a3f4d}
+  nav button .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+  nav button[aria-selected="true"]{color:#111;background:var(--c);border-color:var(--c)}
+  nav button[aria-selected="true"] .dot{background:#111}
+  nav button kbd{font:inherit;font-size:10px;opacity:.55}
+
+  .tools{display:flex;gap:6px}
+  .tools button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);
+    background:transparent;color:var(--sub);cursor:pointer;font-size:15px}
+  .tools button:hover{color:var(--text);border-color:#3a3f4d}
+
+  main{flex:1;position:relative;background:#fff}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+    visibility:hidden;background:#fff}
+  iframe.active{visibility:visible}
+  .loading{position:absolute;inset:0;display:grid;place-items:center;
+    background:var(--bg);color:var(--sub);font-size:13px;pointer-events:none;transition:opacity .3s}
+  .loading.hide{opacity:0}
+
+  /* スマホでは下にタブ */
+  @media (max-width:640px){
+    header{padding:8px 10px}
+    nav{position:fixed;left:0;right:0;bottom:0;z-index:5;justify-content:space-around;
+      background:var(--panel);border-top:1px solid var(--line);
+      padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+    nav button{flex-direction:column;gap:3px;padding:6px 8px;border:none;border-radius:10px;font-size:11px}
+    nav button kbd{display:none}
+    main{margin-bottom:calc(58px + env(safe-area-inset-bottom))}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">AKAI <span>STUDIO</span></div>
+  <nav role="tablist" id="tabs"></nav>
+  <div class="tools">
+    <button id="reload" title="このページを再読み込み">↻</button>
+    <button id="popout" title="このページだけ別ウィンドウで開く">↗</button>
+  </div>
+</header>
+<main id="stage"><div class="loading" id="loading">読み込み中…</div></main>
+
+<script>
+// 元のアプリの場所（同じ akai フォルダに置けば相対パスで動きます）
+const BASE = location.hostname === "utree1788-wq.github.io"
+  ? "./" : "https://utree1788-wq.github.io/akai/";
+
+const PAGES = [
+  { id:"sfx",    label:"SFX LAB",      file:"sfx.html",        color:"var(--c1)" },
+  { id:"score",  label:"譜面ノート",    file:"scorenote.html",      color:"var(--c2)" },
+  { id:"drums",  label:"ドラム音色図鑑", file:"drumsounds.html", color:"var(--c3)" },
+  { id:"rhythm", label:"律動一覧表",   file:"律動一覧表.html",     color:"var(--c4)" },
+];
+
+const tabs = document.getElementById("tabs");
+const stage = document.getElementById("stage");
+const loading = document.getElementById("loading");
+const frames = {};
+let current = null;
+
+PAGES.forEach((p, i) => {
+  const b = document.createElement("button");
+  b.role = "tab"; b.dataset.id = p.id; b.style.setProperty("--c", p.color);
+  b.innerHTML = `<span class="dot"></span>${p.label}<kbd>${i+1}</kbd>`;
+  b.onclick = () => show(p.id);
+  tabs.appendChild(b);
+});
+
+function show(id){
+  const p = PAGES.find(x => x.id === id) || PAGES[0];
+  current = p;
+  // 初めて開くときだけ読み込み。一度開いたページは裏で残すので、音や入力が消えません
+  if(!frames[p.id]){
+    const f = document.createElement("iframe");
+    f.src = BASE + encodeURI(p.file);
+    f.title = p.label;
+    f.allow = "autoplay; microphone; midi; fullscreen; clipboard-read; clipboard-write";
+    loading.classList.remove("hide");
+    f.onload = () => { if(current.id === p.id) loading.classList.add("hide"); };
+    stage.appendChild(f);
+    frames[p.id] = f;
+  } else {
+    loading.classList.add("hide");
+  }
+  Object.entries(frames).forEach(([k,f]) => f.classList.toggle("active", k === p.id));
+  tabs.querySelectorAll("button").forEach(b =>
+    b.setAttribute("aria-selected", b.dataset.id === p.id));
+  document.documentElement.style.setProperty("--accent", p.color);
+  document.title = p.label + " ｜ AKAI STUDIO";
+  history.replaceState(null, "", "#" + p.id);
+  try{ localStorage.setItem("akaiHubLast", p.id); }catch(e){}
+  frames[p.id].focus();
+}
+
+document.getElementById("reload").onclick = () => {
+  const f = frames[current.id]; loading.classList.remove("hide"); f.src = f.src;
+};
+document.getElementById("popout").onclick = () => window.open(BASE + encodeURI(current.file), "_blank");
+
+// 数字キー 1〜4 で切り替え（ページの外にフォーカスがあるとき）
+addEventListener("keydown", e => {
+  if(e.altKey && /^[1-4]$/.test(e.key)) show(PAGES[+e.key-1].id);
+});
+addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+let start = location.hash.slice(1);
+if(!start){ try{ start = localStorage.getItem("akaiHubLast"); }catch(e){} }
+show(start || "sfx");
+</script>
+</body>
+</html>
