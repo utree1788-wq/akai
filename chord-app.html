@@ -238,6 +238,8 @@ header h1{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .hcard.art .ht{font-size:17px}
 .hcard.pend{opacity:.5;cursor:default;--ca:#6a6f88;border-style:dashed}
 .hcard.pend .hm span{font-family:inherit}
+.chord.jumphit,.bar.jumphit{outline:3px solid #ffd166;outline-offset:2px;border-radius:8px;animation:jhit .7s ease-in-out 4;position:relative;z-index:2}
+@keyframes jhit{0%,100%{box-shadow:0 0 0 0 rgba(255,209,102,.0)}50%{box-shadow:0 0 0 8px rgba(255,209,102,.45)}}
 .sec.jumpflash{outline:3px solid var(--accent,#ffd166);outline-offset:4px;border-radius:12px;transition:outline-color .4s}
 </style>
 </head>
@@ -2175,11 +2177,17 @@ function showArtist(aid){
   $('hgrid').querySelectorAll('.hcard[data-id]').forEach(b=>b.addEventListener('click',()=>{location.hash=b.dataset.id;}));
   window.scrollTo(0,0);
 }
+function jumpTo(si,bi,ci){const el=songEl.children[si];if(!el)return;let t=null;
+  if(bi!=null){const bar=el.querySelectorAll('.bars .bar')[bi];if(bar)t=bar.querySelectorAll('.chord')[ci||0]||bar;}
+  document.querySelectorAll('.jumphit').forEach(x=>x.classList.remove('jumphit'));
+  (t||el).scrollIntoView({behavior:'smooth',block:t?'center':'start'});
+  el.classList.add('jumpflash');setTimeout(()=>el.classList.remove('jumpflash'),2600);
+  if(t){t.classList.add('jumphit');setTimeout(()=>t.classList.remove('jumphit'),6000);}}
 function route(){
-  let h=location.hash.slice(1),si=null;const mm=h.match(/^(.+)-s(\d+)$/);if(mm&&SONGS[mm[1]]){h=mm[1];si=+mm[2];}
+  let h=location.hash.slice(1),si=null,bi=null,ci=null;const mm=h.match(/^(.+?)-s(\d+)(?:-b(\d+)-c(\d+))?$/);if(mm&&SONGS[mm[1]]){h=mm[1];si=+mm[2];if(mm[3]!=null){bi=+mm[3];ci=+mm[4];}}
   if(SONGS[h]){document.body.classList.remove('home');loadSong(h);const a=artistOf(h);$('backBtn').textContent='‹ '+(a?a.name:'一覧');
-    if(si==null){try{const j=JSON.parse(localStorage.getItem('mtn-jump')||'null');if(j&&j.id==h&&Date.now()-j.t<20000&&j.si!=null){si=j.si;localStorage.removeItem('mtn-jump')}}catch(_){}}
-    if(si!=null)setTimeout(()=>{const el=songEl.children[si];if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});el.classList.add('jumpflash');setTimeout(()=>el.classList.remove('jumpflash'),2600);},250);}
+    if(si==null){try{const j=JSON.parse(localStorage.getItem('mtn-jump')||'null');if(j&&j.id==h&&Date.now()-j.t<20000&&j.si!=null){si=j.si;bi=j.b;ci=j.c;localStorage.removeItem('mtn-jump')}}catch(_){}}
+    if(si!=null)setTimeout(()=>jumpTo(si,bi,ci),300);}
   else if(h.startsWith('a-'))showArtist(h.slice(2));
   else showHome();
 }
