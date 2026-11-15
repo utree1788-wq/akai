@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>わたしの命盤 解説帖｜紫微斗数</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff0f5; --bg2:#ffe6ef; --card:#ffffff; --card2:#fff7fa; --line:#f5c6d8;
+  --gold:#d9467e; --gold2:#e985ab; --text:#4a2a38; --sub:#8a5a6e; --dim:#b38a9b;
+  --lu:#2e9e66; --quan:#9b5bd6; --ke:#3a86d6; --ji:#e0464e;
+  --sha:#e0663f; --luck:#1f9e8a;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:"Noto Sans JP",system-ui,sans-serif; color:var(--text);
+  background:radial-gradient(1200px 600px at 70% -10%,#ffd1e2 0%,transparent 60%),
+             radial-gradient(900px 500px at -10% 30%,#ffe0ec 0%,transparent 60%), var(--bg);
+  min-height:100vh; line-height:1.75; font-size:15px;
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(1px 1px at 20px 30px,#f7a8c4,transparent),radial-gradient(1px 1px at 120px 80px,#f7a8c4,transparent),radial-gradient(1.5px 1.5px at 200px 150px,#f7a8c4,transparent),radial-gradient(1px 1px at 300px 40px,#f7a8c4,transparent);
+  background-size:340px 220px}
+.wrap{max-width:980px;margin:0 auto;padding:18px 14px 80px;position:relative}
+header{text-align:center;padding:10px 0 6px}
+header .eyebrow{color:var(--gold2);letter-spacing:.3em;font-size:12px}
+h1{font-family:"Shippori Mincho",serif;color:var(--gold);font-size:26px;margin:4px 0 2px;letter-spacing:.08em}
+header p{color:var(--sub);font-size:13px;margin:0}
+nav{position:sticky;top:0;z-index:20;margin:14px -14px 16px;padding:8px 10px;
+  background:rgba(255,240,245,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--sub);
+  border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}
+section{display:none} section.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2{font-family:"Shippori Mincho",serif;color:var(--gold);font-size:21px;margin:8px 0 10px;letter-spacing:.05em}
+h3{font-family:"Shippori Mincho",serif;color:var(--gold);font-size:17px;margin:20px 0 8px;border-left:3px solid var(--gold);padding-left:10px}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.lead{color:var(--sub);font-size:13.5px}
+b,strong{color:#3a1d2b}
+.gold{color:var(--gold)}
+.tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--sub);margin:2px 3px 2px 0}
+.good{color:var(--lu)} .bad{color:var(--ji)} .mid{color:var(--gold)}
+
+/* chart grid */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,minmax(118px,auto));
+  border:1px solid var(--gold2);border-radius:10px;overflow:hidden;background:#fffafc}
+.cell{border:1px solid #f6d3e0;padding:5px 5px 22px;position:relative;cursor:pointer;transition:background .15s;min-width:0}
+.cell:hover{background:#ffeef5}
+.cell.sel{background:#ffe0ec;outline:2px solid var(--gold);outline-offset:-2px;z-index:2}
+.cell.tri{background:#e9f0ff}
+.cell.opp{background:#f1e8ff}
+.cell .maj{font-size:13px;font-weight:700;line-height:1.35;display:flex;flex-wrap:wrap;gap:0 6px}
+.cell .maj span{white-space:nowrap}
+.cell .br{font-size:9.5px;color:var(--dim);font-weight:400;margin-left:1px}
+.cell .aux{font-size:10.5px;line-height:1.35;margin-top:2px}
+.cell .aux .l{color:var(--luck)} .cell .aux .s{color:var(--sha)}
+.cell .mn{font-size:9.5px;color:var(--dim);line-height:1.3;margin-top:2px;word-break:keep-all;overflow-wrap:anywhere}
+.cell .foot{position:absolute;left:4px;right:4px;bottom:3px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--sub)}
+.cell .pn{background:#f3a6c3;color:#fff;padding:0 5px;border-radius:4px;font-size:10.5px}
+.cell .pn.me{background:var(--gold);color:#fff;font-weight:700}
+.cell .body{color:var(--gold);font-size:9.5px}
+.hua{display:inline-block;font-size:9.5px;line-height:1;padding:2px 2px;border-radius:3px;margin-left:1px;vertical-align:2px;font-weight:700}
+.hua.birth{color:#fff}
+.hua.self{background:transparent!important;border:1px solid}
+.h0{background:var(--lu);border-color:var(--lu);} .h1{background:var(--quan);border-color:var(--quan)} .h2{background:var(--ke);border-color:var(--ke)} .h3{background:var(--ji);border-color:var(--ji)}
+.hua.self.h0{color:var(--lu)} .hua.self.h1{color:var(--quan)} .hua.self.h2{color:var(--ke)} .hua.self.h3{color:var(--ji)}
+.center{grid-column:2/4;grid-row:2/4;border:1px solid #f6d3e0;padding:12px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at 50% 40%,#ffe3ee,#fffafc)}
+.center .t{font-family:"Shippori Mincho",serif;color:var(--gold);font-size:17px;margin-bottom:6px}
+.center .i{font-size:11.5px;color:var(--sub);line-height:1.7}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:11.5px;color:var(--sub);margin:8px 2px}
+.legend i{font-style:normal}
+@media (max-width:560px){
+  .grid{grid-template-rows:repeat(4,minmax(112px,auto))}
+  .cell{padding:3px 3px 20px}
+  .cell .maj{font-size:11.5px;gap:0 3px}
+  .cell .aux{font-size:9.5px}
+  .cell .mn{font-size:8.5px}
+  .center .i{font-size:10px}
+  .center .t{font-size:14px}
+}
+
+/* detail */
+#detail{scroll-margin-top:60px}
+.dhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.dhead .big{font-family:"Shippori Mincho",serif;font-size:22px;color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{border:1px solid var(--line);background:#fff5f9;border-radius:8px;padding:3px 9px;font-size:13px;cursor:pointer}
+.chip.M{border-color:var(--gold2);color:var(--gold);font-weight:700}
+.chip.L{color:var(--luck)} .chip.S{color:var(--sha)} .chip.m{color:var(--sub)}
+.chip small{color:var(--dim);margin-left:2px}
+.fly{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px;align-items:center}
+.fly .k{font-weight:700}
+.read p{margin:.5em 0}
+.read ul{margin:.4em 0;padding-left:1.2em}
+.read li{margin:.25em 0}
+.box2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:620px){.box2{grid-template-columns:1fr}}
+.mini{background:#fff5f9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.mini .h{font-weight:700;color:var(--gold);font-size:13px;margin-bottom:2px}
+
+/* luck */
+.dlist{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.dbtn{flex:none;border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:10px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;text-align:center;line-height:1.4}
+.dbtn b{display:block;font-size:13px;color:var(--text)}
+.dbtn.on{border-color:var(--gold);background:#ffe0ec}
+.dbtn.now{box-shadow:0 0 0 2px var(--lu) inset}
+select{background:#fff5f9;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:inherit}
+.now-badge{display:inline-block;background:var(--lu);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:0 8px;margin-left:6px;vertical-align:2px}
+
+/* stars dict */
+.search{width:100%;background:#fff5f9;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;margin-bottom:10px}
+.sd{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.sd .it{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.sd .nm{font-weight:700;font-size:15px}
+.sd .where{font-size:11.5px;color:var(--gold2);margin-left:6px}
+.sd .ds{font-size:13px;color:var(--sub);margin-top:2px}
+
+/* modal */
+#pop{position:fixed;inset:0;background:rgba(90,30,55,.35);display:none;align-items:flex-end;justify-content:center;z-index:50}
+#pop.on{display:flex}
+#pop .in{background:var(--card2);border:1px solid var(--gold2);border-radius:16px 16px 0 0;max-width:560px;width:100%;padding:18px 18px 28px;animation:up .2s}
+@media(min-width:600px){#pop{align-items:center}#pop .in{border-radius:16px}}
+@keyframes up{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+#pop .x{float:right;background:none;border:none;color:var(--sub);font-size:22px;cursor:pointer}
+.foot-note{color:var(--dim);font-size:12px;text-align:center;margin-top:30px}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t td,table.t th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+table.t th{color:var(--gold);font-weight:500;white-space:nowrap}
+.step{display:flex;gap:10px;margin:10px 0}
+.step .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">紫 微 斗 数</div>
+  <h1>わたしの命盤 解説帖</h1>
+  <p>1998年12月15日 酉時 ／ 女命 ／ 水二局 ／ 命宮：寅（紫微・天府）</p>
+</header>
+
+<nav id="nav">
+  <button data-t="chart">命盤</button>
+  <button data-t="career">官禄宮を深読み</button>
+  <button data-t="patterns">格局</button>
+  <button data-t="luck">運の流れ</button>
+  <button data-t="composer">作曲家として</button>
+  <button data-t="stars">星の辞典</button>
+  <button data-t="basics">読み方の基本</button>
+</nav>
+
+<!-- ============ 命盤 ============ -->
+<section id="chart">
+  <p class="lead">マスをタップすると、その宮の解説が下に出ます。<span style="color:#5b84d6">青</span>は三合宮、<span style="color:#9b6bd6">紫</span>は対宮（合わせて三方四正）です。</p>
+  <div class="grid" id="grid"></div>
+  <div class="legend">
+    <span><span class="hua birth h0">禄</span><span class="hua birth h1">権</span><span class="hua birth h2">科</span><span class="hua birth h3">忌</span> 生年四化（戊）</span>
+    <span><span class="hua self h0">禄</span><span class="hua self h3">忌</span> 自化</span>
+    <span><i style="color:var(--luck)">■</i> 吉星</span><span><i style="color:var(--sha)">■</i> 煞星</span>
+  </div>
+  <div class="card" id="detail"></div>
+</section>
+
+<!-- ============ 官禄 ============ -->
+<section id="career">
+  <h2>官禄宮（午）を深読み</h2>
+  <p class="lead">仕事・学業・キャリア・「何に打ち込むか」を表す宮。あなたの官禄宮は午宮、宮干は戊です。</p>
+
+  <div class="card">
+    <div class="chips" id="careerChips"></div>
+    <p><b>ひとことで：</b><span class="gold">「こだわりの職人気質（廉貞）」を「誠実な調整力（天相）」が支え、鋭い刃（擎羊・天刑）で技を研ぎ、才芸（龍池）で勝負する仕事運。</span></p>
+  </div>
+
+  <h3>① 主星：廉貞（平）＋天相（廟）</h3>
+  <div class="card read">
+    <p><b>廉貞</b>は「囚の星」。規律・型・こだわりを持ち、決めた道を突き詰める力があります。芸術性・美意識も強く、「次桃花」とも呼ばれ人を惹きつける魅力も持ちます。明るさは<b>平</b>なので、強すぎず弱すぎず、努力の量がそのまま結果になるタイプ。</p>
+    <p><b>天相</b>は「印（はんこ）の星」。信用・調整・誠実さ・サポート力。<b>廟</b>で最高の輝きなので、仕事上の信頼の土台はとても強い。</p>
+    <p>二つが同宮する<b>「廉相」</b>は、廉貞の頑固さや激しさを天相がなだめる組み合わせ。<b>ルールのある世界で信頼を積み、専門性で評価される</b>働き方が合います。一方、天相は周りの星の影響を強く受ける星なので、「誰と組むか」「どの環境にいるか」で運が大きく変わります。</p>
+  </div>
+
+  <h3>② 刑囚夾印 と 財蔭夾印 ― 二つの格がせめぎ合う</h3>
+  <div class="box2">
+    <div class="mini"><div class="h bad">刑囚夾印（同宮）</div>廉貞（囚）＋天相（印）＋擎羊（刑）がそろう形。さらに天刑もあり「刑」が二重。伝統的には、<b>職場の摩擦・争い・契約や書類のトラブル</b>、プレッシャーを抱えやすい配置とされます。</div>
+    <div class="mini"><div class="h good">財蔭夾印（両隣）</div>天相を<b>禄存（巳）</b>と<b>天梁（未）</b>が両側から挟む形。天相にとって最も良い挟まれ方で、<b>お金と守り（年長者・保護）</b>が仕事を支えます。刑囚夾印の凶意をかなり和らげます。</div>
+  </div>
+  <div class="card read">
+    <p><b>まとめ：</b>トラブルが起きにくいわけではないけれど、<b>起きても守られて立て直せる</b>配置。ただし、巳宮の巨門が自化忌なので、禄存側の守りには「口論・誤解」というひびも少し入っています。言った・言わないを防ぐ<b>書面化</b>が最高のお守りです。</p>
+  </div>
+
+  <h3>③ 三方四正 ― 官禄宮を支える4つの宮</h3>
+  <div class="card">
+    <table class="t">
+      <tr><th>官禄（午）</th><td>廉貞・天相・<span class="bad">擎羊</span>・龍池・天刑…</td></tr>
+      <tr><th>命宮（寅）</th><td><b>紫微・天府</b>（紫府同宮）・<span class="bad">地空</span>・恩光・天貴</td></tr>
+      <tr><th>財帛（戌）</th><td>武曲<span class="hua self h3">忌</span>・<span class="bad">火星</span>・天姚・華蓋</td></tr>
+      <tr><th>対宮 夫妻（子）</th><td>破軍<span class="hua self h1">権</span>・<span class="bad">鈴星</span></td></tr>
+    </table>
+    <div class="read">
+      <p>命宮の<b>天府</b>と官禄の<b>天相</b>が三方で呼応する<b class="good">「府相朝垣」</b>の吉格。さらに紫微が加わり、仕事の器は大きいです。</p>
+      <p>一方で<b class="bad">擎羊・火星・鈴星・地空</b>と煞星が4つ入ります。これは「楽に成功」ではなく<b>「揉まれて鍛えられる」</b>サイン。厳しい現場や競争の中で、逆に実力が伸びます。</p>
+    </div>
+  </div>
+
+  <h3>④ 四化の流れ（飛星）― 仕事に何が流れ込み、仕事が何を生むか</h3>
+  <div class="card read">
+    <p><b>官禄宮に「入ってくる」もの</b></p>
+    <ul>
+      <li><span class="hua birth h0">禄</span> <b>命宮（甲）→ 廉貞化禄</b>：自分の情熱が自然と仕事に向かう。「好きなことを仕事に」が叶いやすい。</li>
+      <li><span class="hua birth h0">禄</span> <b>夫妻宮（甲）→ 廉貞化禄</b>：パートナーや身近な相棒が仕事を後押ししてくれる。</li>
+      <li><span class="hua birth h3">忌</span> <b>福徳宮（丙）→ 廉貞化忌</b>：心の奥の欲求やこだわりも仕事に集まる。<b>好きだからこそ悩む・執着する</b>。完璧主義で疲れやすい。</li>
+    </ul>
+    <p><b>官禄宮（戊）から「出ていく」もの</b></p>
+    <ul>
+      <li><span class="hua birth h0">禄</span> <b>貪狼化禄 → 福徳宮</b>：仕事がそのまま心の満足・楽しみになる。創作を仕事にする人の典型的な良い流れ。</li>
+      <li><span class="hua birth h1">権</span> <b>太陰化権 → 父母宮</b>：目上・評価する側・書類の世界に影響力。審査や選考の場で存在感が出る。</li>
+      <li><span class="hua birth h2">科</span> <b>右弼化科 → 兄弟宮</b>：仕事を通じて良い仲間・協力者に恵まれ、評判が広がる。</li>
+      <li><span class="hua birth h3">忌</span> <b>天機化忌 → 兄弟宮（対宮の僕役宮を沖）</b>：仲間・共同制作者との間で、計画の食い違いや取り分の問題が起きやすい。<b>役割・クレジット・報酬は最初に決める</b>こと。</li>
+    </ul>
+  </div>
+
+  <h3>⑤ 副星が語ること</h3>
+  <div class="card read">
+    <ul>
+      <li><b>龍池</b>：才芸・工芸の星。<b>音楽・デザインなど「腕」で勝負する仕事</b>の追い風。対になる鳳閣は遷移宮にあり、作品を外に出すほど評価される形。</li>
+      <li><b>天刑</b>：規律・自律・専門性。自分を厳しく律して技を磨ける。法律や医療など「刑」に関わる分野とも縁。</li>
+      <li><b>天廚</b>：技能で食べていける暗示。好きな技を生活の糧にできる。</li>
+      <li><b>天月</b>：体調の星。締め切り前の無理、生活リズムの乱れに注意。</li>
+    </ul>
+  </div>
+
+  <h3>⑥ 向いている働き方</h3>
+  <div class="card read">
+    <ul>
+      <li>専門技術を磨き、<b>「この分野ならこの人」</b>と言われるポジション</li>
+      <li>大きな組織・チームの中の<b>職人</b>（紫府の器＋廉相の誠実さ）</li>
+      <li>コンペ・選考・審査がある世界（太陰化権→父母宮）</li>
+      <li>契約・権利がはっきりした仕事（刑と印の配置を活かす）</li>
+    </ul>
+  </div>
+
+  <h3>⑦ 今年（2026年 丙午）の官禄宮</h3>
+  <div class="card read">
+    <p>2026年は午年。<b>流年の命宮が、あなたの官禄宮（午）に重なる年</b>です。今年は人生の中心テーマが「仕事・打ち込むもの」になります。</p>
+    <p>流年干の丙で<b>廉貞化忌</b>が官禄宮に入ります。これはこだわりが強まり、仕事に気持ちが集中しすぎる年のサイン。悪い意味だけではなく、<b>「本気になる年」</b>とも読めます。焦りや自分責めに注意しながら、作品数を積み上げると良い年です。（旧暦の年は2027年2月上旬頃まで続きます）</p>
+  </div>
+</section>
+
+<!-- ============ 格局 ============ -->
+<section id="patterns">
+  <h2>あなたの命盤の格局</h2>
+  <p class="lead">格局とは、星の組み合わせが作る「型」のこと。命盤全体の性格をつかむ手がかりになります。</p>
+  <div id="patList"></div>
+</section>
+
+<!-- ============ 運の流れ ============ -->
+<section id="luck">
+  <h2>運の流れ</h2>
+  <p class="lead">大限（10年ごとの運）と流年（1年ごとの運）です。年齢は数え年です。2026年は数え29歳です。</p>
+  <h3>大限（10年運）</h3>
+  <div class="dlist" id="dlist"></div>
+  <div class="card" id="dview"></div>
+  <h3>流年（1年運）</h3>
+  <div class="card">
+    <label>年を選ぶ：<select id="ysel"></select></label>
+    <div id="yview" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<!-- ============ 作曲家 ============ -->
+<section id="composer">
+  <h2>作曲家として、この命盤をどう活かすか</h2>
+  <p class="lead">命盤の中から「創作」「仕事」「認められること」に関わるサインを集めました。</p>
+  <div class="card read">
+    <h3 style="margin-top:0">才能のサイン</h3>
+    <ul>
+      <li><b>龍池（官禄）＋鳳閣（遷移）</b>：才芸の星が仕事と外の世界に分かれて入る。<b>作品を公開・発表するほど才能が評価される</b>形。</li>
+      <li><b>福徳宮の貪狼（廟・生年化禄）＋天才</b>：貪狼は芸術・音楽・遊び心の星。化禄で<b>創作そのものを楽しむ才能</b>が人生の福になる。</li>
+      <li><b>兄弟宮の文昌・文曲（ともに廟）</b>：特に文曲は音楽・芸能の星。<b>身近な仲間・学びの場に才能が集まる</b>。同業者とのつながりが財産。</li>
+      <li><b>財帛宮の華蓋・天姚</b>：華蓋は芸術性と孤高、天姚は魅力・芸能。<b>独自の世界観がお金につながる</b>。</li>
+      <li><b>命宮と遷移宮の地空・地劫</b>：常識にとらわれない発想。現実面では浮き沈みもあるが、<b>独創性</b>は創作では大きな武器。</li>
+    </ul>
+  </div>
+  <div class="card read">
+    <h3 style="margin-top:0">「見つけてもらう」ためのサイン</h3>
+    <ul>
+      <li><b>身宮が遷移宮（七殺・天馬）</b>：人生は外で動いてこそ開く。部屋にこもって完成を待つより、<b>出す・応募する・会いに行く</b>。</li>
+      <li><b>官禄宮の太陰化権 → 父母宮</b>：父母宮は「評価する側・審査・書類」。<b>コンペ・オーディション・持ち込み</b>で存在感を出せる配置。父母宮には三台・台輔・天官・天福と地位の星も多い。</li>
+      <li><b>命宮の恩光・天貴</b>：目上からの引き立ての星。<b>スカウトされる・推薦される</b>運の素地。</li>
+      <li><b>僕役宮の天梁（自化科）＋天鉞</b>：面倒見の良い年長者・女性の貴人がファンや後ろ盾になりやすい。</li>
+    </ul>
+  </div>
+  <div class="card read">
+    <h3 style="margin-top:0">気をつけたいこと</h3>
+    <ul>
+      <li><b>完璧主義で出せなくなる</b>：命宮の太陽化忌が子女宮（＝作品）へ、福徳の廉貞化忌が官禄へ。こだわりが強いぶん、<b>「8割で出す」ルール</b>が効きます。</li>
+      <li><b>共作・契約のトラブル</b>：刑囚夾印と官禄の天機化忌（兄弟→僕役を沖）。<b>クレジット表記・著作権・報酬は書面で</b>。</li>
+      <li><b>お金の波</b>：財帛の武曲が自化忌。案件ごとの収入差が出やすいので、機材投資は計画的に。</li>
+      <li><b>体調</b>：官禄の天月。締め切り前の徹夜続きは避けて。</li>
+    </ul>
+  </div>
+  <div class="card read">
+    <h3 style="margin-top:0">今の10年（数え22〜31歳）の作戦</h3>
+    <div class="step"><div class="n">1</div><div><b>壊して作り直す時期</b>：大限命宮は破軍（廟・自化権）。スタイルを何度も更新してOK。挑戦の量が武器になる10年。</div></div>
+    <div class="step"><div class="n">2</div><div><b>外に出す</b>：大限の甲で廉貞化禄が本命官禄（＝大限の遷移宮）に入る。外での仕事・発表に縁が生まれる。</div></div>
+    <div class="step"><div class="n">3</div><div><b>創作を仕事の中心に</b>：大限官禄は辰宮（貪狼化禄・天才）。芸術・音楽の仕事がまさに運のテーマ。</div></div>
+    <div class="step"><div class="n">4</div><div><b>2026年は本気の年</b>：流年命宮が官禄宮に重なる年。作品数を積む・ポートフォリオを整えるのに最適。</div></div>
+  </div>
+</section>
+
+<!-- ============ 星の辞典 ============ -->
+<section id="stars">
+  <h2>星の辞典</h2>
+  <p class="lead">この命盤に出てくる星の意味です。タップすると、その星がある宮に移動します。</p>
+  <input class="search" id="sq" placeholder="星の名前・キーワードで検索（例：芸術、貴人、煞）">
+  <div class="sd" id="sd"></div>
+</section>
+
+<!-- ============ 基本 ============ -->
+<section id="basics">
+  <h2>読み方の基本</h2>
+  <div class="card read">
+    <h3 style="margin-top:0">十二宮</h3>
+    <table class="t" id="palaceTable"></table>
+  </div>
+  <div class="card read">
+    <h3 style="margin-top:0">明るさ（廟旺平陥）</h3>
+    <p>星の力の強さです。<b>廟</b>＞<b>旺</b>＞<b>平</b>＞<b>陥</b>の順に、星本来の良さが出やすくなります。陥は「悪い」ではなく、「その星の良さが出るまでに工夫や時間がかかる」と読みます。</p>
+    <h3>四化（禄・権・科・忌）</h3>
+    <ul>
+      <li><span class="hua birth h0">禄</span> <b>化禄</b>：恵み・縁・楽しさ・お金の入口</li>
+      <li><span class="hua birth h1">権</span> <b>化権</b>：力・主導権・実行力・こだわり</li>
+      <li><span class="hua birth h2">科</span> <b>化科</b>：評判・名声・学び・穏やかな助け</li>
+      <li><span class="hua birth h3">忌</span> <b>化忌</b>：執着・課題・欠け・本気で向き合うべきテーマ</li>
+    </ul>
+    <p><b>生年四化</b>は生まれ年（戊）で決まる一生のテーマです。戊年は貪狼禄・太陰権・右弼科・天機忌。<b>自化</b>は宮の干がその宮の中の星を化すもので、「自分で出して自分で手放す」ような動きです。<b>飛化</b>は、ある宮の干が別の宮の星を化すもの。宮どうしのエネルギーの流れを表します。</p>
+    <h3>三方四正</h3>
+    <p>ある宮を読むときは、その宮と、向かい（対宮）、そして120度ずつ離れた2宮（三合）をセットで見ます。命盤のマスをタップすると、色で表示されます。</p>
+    <h3>身宮</h3>
+    <p>人生の後半に重みを増す「もう一つの自分」です。あなたの身宮は遷移宮（申）です。</p>
+  </div>
+  <p class="foot-note">※紫微斗数は流派によって四化の配当（とくに庚・壬・戊年）や星の解釈が異なります。ここではよく使われる説で読んでいます。占いは自分を知るためのヒントとして楽しんでください。</p>
+</section>
+
+<p class="foot-note">命盤データ：1998年12月15日 酉時生まれ・女命（画像から読み取り）</p>
+</div>
+
+<div id="pop"><div class="in"><button class="x" onclick="closePop()">×</button><div id="popc"></div></div></div>
+
+<script>
+const BR=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const STEMS=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const SIHUA={甲:['廉貞','破軍','武曲','太陽'],乙:['天機','天梁','紫微','太陰'],丙:['天同','天機','文昌','廉貞'],丁:['太陰','天同','天機','巨門'],戊:['貪狼','太陰','右弼','天機'],己:['武曲','貪狼','天梁','文曲'],庚:['太陽','武曲','太陰','天同'],辛:['巨門','太陽','文曲','文昌'],壬:['天梁','紫微','左輔','武曲'],癸:['破軍','巨門','太陰','貪狼']};
+const HUA=['禄','権','科','忌'];
+const BIRTH='戊';
+const PN12=['命宮','兄弟宮','夫妻宮','子女宮','財帛宮','疾厄宮','遷移宮','僕役宮','官禄宮','田宅宮','福徳宮','父母宮'];
+const PMEAN={命宮:'本人の性質・人生の器',兄弟宮:'兄弟・身近な仲間・協力者',夫妻宮:'恋愛・結婚・パートナー',子女宮:'子ども・後輩・作品',財帛宮:'お金の稼ぎ方と使い方',疾厄宮:'体質・健康・心身の癖',遷移宮:'外での活動・社会での顔・移動',僕役宮:'友人・ファン・部下・人脈',官禄宮:'仕事・学業・打ち込むもの',田宅宮:'家・作業環境・拠点・財産',福徳宮:'心の満足・趣味・楽しむ力',父母宮:'親・目上・評価・書類'};
+
+// 命盤データ（M=主星 L=吉星 S=煞星 m=副星）
+const P={
+'寅':{n:'命宮',st:'甲',age:[2,11],stars:[['紫微','旺','M'],['天府','廟','M'],['地空','','S'],['恩光','','m'],['天貴','','m']]},
+'丑':{n:'兄弟宮',st:'乙',age:[12,21],stars:[['天機','陥','M'],['左輔','','L'],['右弼','','L'],['文昌','廟','L'],['文曲','廟','L'],['天魁','','L'],['紅鸞','','m'],['空亡','','m'],['寡宿','','m']]},
+'子':{n:'夫妻宮',st:'甲',age:[22,31],stars:[['破軍','廟','M'],['鈴星','陥','S'],['截路','','m']]},
+'亥':{n:'子女宮',st:'癸',age:[32,41],stars:[['太陽','陥','M'],['八座','','m'],['封誥','','m'],['天徳','','m']]},
+'戌':{n:'財帛宮',st:'壬',age:[42,51],stars:[['武曲','廟','M'],['火星','廟','S'],['天姚','','m'],['天寿','','m'],['華蓋','','m'],['蜚廉','','m']]},
+'酉':{n:'疾厄宮',st:'辛',age:[52,61],stars:[['天同','平','M'],['破碎','','m'],['天使','','m']]},
+'申':{n:'遷移宮',st:'庚',age:[62,71],body:true,stars:[['七殺','廟','M'],['天馬','','L'],['地劫','','S'],['鳳閣','','m'],['天巫','','m'],['旬空','','m'],['陰煞','','m'],['天虚','','m'],['年解','','m']]},
+'未':{n:'僕役宮',st:'己',age:[72,81],stars:[['天梁','旺','M'],['天鉞','','L'],['天喜','','m'],['月徳','','m'],['天傷','','m']]},
+'午':{n:'官禄宮',st:'戊',age:[82,91],stars:[['廉貞','平','M'],['天相','廟','M'],['擎羊','陥','S'],['龍池','','m'],['天廚','','m'],['天月','','m'],['天刑','','m']]},
+'巳':{n:'田宅宮',st:'丁',age:[92,101],stars:[['巨門','旺','M'],['禄存','','L'],['孤辰','','m']]},
+'辰':{n:'福徳宮',st:'丙',age:[102,111],stars:[['貪狼','廟','M'],['陀羅','廟','S'],['解神','','m'],['天才','','m'],['天哭','','m']]},
+'卯':{n:'父母宮',st:'乙',age:[112,121],stars:[['太陰','陥','M'],['咸池','','m'],['三台','','m'],['台輔','','m'],['天官','','m'],['天福','','m'],['天空','','m']]}
+};
+const POS={'巳':[1,1],'午':[1,2],'未':[1,3],'申':[1,4],'辰':[2,1],'酉':[2,4],'卯':[3,1],'戌':[3,4],'寅':[4,1],'丑':[4,2],'子':[4,3],'亥':[4,4]};
+
+const starWhere={};
+for(const b in P) for(const s of P[b].stars) starWhere[s[0]]=b;
+const bi=b=>BR.indexOf(b);
+const rel=(b,k)=>BR[(bi(b)+k+12)%12];
+const pname=b=>P[b].n;
+function birthHua(star){const i=SIHUA[BIRTH].indexOf(star);return i}
+function selfHua(b,star){return SIHUA[P[b].st].indexOf(star)}
+function huaBadges(b,star){
+  let h='';const x=birthHua(star);if(x>=0)h+=`<span class="hua birth h${x}">${HUA[x]}</span>`;
+  const y=selfHua(b,star);if(y>=0)h+=`<span class="hua self h${y}">${HUA[y]}</span>`;return h;
+}
+function flyFrom(stem){ // returns [{h,star,b}]
+  return SIHUA[stem].map((s,i)=>({h:i,star:s,b:starWhere[s]}));
+}
+
+// ---------- 宮の解説 ----------
+const R={
+'寅':`<p><b>紫微（旺）＋天府（廟）の「紫府同宮」</b>。帝王の星と財庫の星が並ぶ、命宮として最も格の高い組み合わせのひとつです。器が大きく、品があり、自然と人の上に立つ・任される場面が増えます。</p>
+<p>紫微の理想の高さ・プライドと、天府の安定志向・包容力が同居するため、<b>「高い理想を持ちながら、地に足のついたやり方で積み上げる」</b>のが本領。人に弱みを見せにくく、一人で抱え込みがちな面もあります。</p>
+<ul><li><b>地空</b>：発想が独創的で精神性が高い。現実面では計画が空回りしたり、お金がすり抜けたりしやすい。芸術・創作ではむしろ強み。</li>
+<li><b>恩光・天貴</b>：目上からの引き立て・名誉。推薦やスカウトに縁。</li></ul>
+<p>宮干の<b>甲</b>から、廉貞化禄が官禄宮へ（情熱が仕事へ）、破軍化権が夫妻宮へ、武曲化科が財帛宮へ、太陽化忌が子女宮へ（作品・後輩への強いこだわり）流れます。</p>
+<p>命主は<b>禄存</b>（田宅宮）、身主は<b>天梁</b>（僕役宮）。</p>`,
+'丑':`<p>主星は<b>天機（陥）</b>。生年の化忌と、宮干乙による自化禄が同時についています。考えすぎたり迷ったりしやすい一方、ひらめきで切り抜ける力もある、<b>知恵が揺れ動く場所</b>です。</p>
+<p>注目は吉星の多さ。<b>左輔・右弼（生年化科）・文昌（廟）・文曲（廟）・天魁</b>が集まり、この命盤の吉星がここに集中しています。兄弟姉妹や<b>身近な仲間・同業者・先生</b>に才能ある人が多く、学びの場から運が開きます。</p>
+<p>ただし天機化忌があるため、仲間とは<b>意見の食い違い・計画の変更</b>が起きやすい。官禄宮の天機化忌もここに入るので、仕事仲間とのやりとりは丁寧に。</p>
+<ul><li><b>紅鸞</b>：恋愛・慶事。仲間内からのご縁も。</li><li><b>空亡・寡宿</b>：にぎやかでも、心のどこかで独りを感じやすい。</li></ul>
+<p>12〜21歳の大限宮でもあり、この時期は学び・仲間との出会いが大きなテーマでした。</p>`,
+'子':`<p><b>破軍（廟）</b>に宮干甲による<b>自化権</b>。パートナーは個性が強く、主導権を握るタイプ、または関係そのものに変化・刺激が多い配置です。破軍は「壊して作り直す」星なので、関係は形を変えながら続いていきます。</p>
+<ul><li><b>鈴星（陥）</b>：表に出にくいイライラや、こじれやすい感情。言葉にして伝えることが大切。</li><li><b>截路</b>：進もうとすると一時的に道がふさがる。焦らないこと。</li></ul>
+<p>宮干甲から<b>廉貞化禄が官禄宮へ</b>。パートナーや身近な相棒が仕事を後押ししてくれる流れです。</p>
+<p>官禄宮の対宮でもあり、<b>仕事のスタイルにも破軍の「改革・挑戦」が反映</b>されます。そして今まさに、数え22〜31歳の大限がこの宮です。</p>`,
+'亥':`<p><b>太陽（陥）</b>。亥は夜の位置なので、太陽の光が控えめです。子ども・後輩・<b>作品</b>に対しては「与えるばかりで報われにくい」「評価がじわじわ来る」傾向。夜型の創作スタイルとも縁があります。</p>
+<ul><li><b>八座・封誥</b>：肩書き・名誉。作品が評価されて「格」がつく。</li><li><b>天徳</b>：災いを和らげる守りの星。</li></ul>
+<p>命宮甲の<b>太陽化忌がここに入ります</b>。自分の作品や後進への<b>こだわり・執着</b>が強い印。作品を大切にする反面、完璧を求めて手放せなくなりやすいので「出して育てる」意識を。</p>
+<p>数え32〜41歳の大限宮。表に立つより、積み上げて信用を得る10年になります。</p>`,
+'戌':`<p><b>武曲（廟）</b>は財星。決断力・実行力でお金を稼ぐ力は強いです。ただし宮干壬により<b>自化忌</b>。入ったお金が出ていきやすく、収入にも波が出ます。</p>
+<ul><li><b>火星（廟）</b>：武曲と火星で、急な収入・急な出費。勢いで大きく動くお金。</li><li><b>天姚</b>：魅力・芸能。人を惹きつける力がお金になる。</li><li><b>華蓋</b>：芸術・宗教・孤高。<b>独自の世界観</b>が収入源に。</li><li><b>天寿</b>：落ち着き・長続き。<b>蜚廉</b>：お金にまつわる噂・小さなトラブル。</li></ul>
+<p>命宮甲の<b>武曲化科</b>もここに入り、お金の評判・信用は良好。財帛宮干壬からは天梁化禄が僕役宮（人脈から恵み）、紫微化権が命宮へ流れます。</p>
+<p>数え42〜51歳の大限宮。実力が収入に直結しやすい10年です。</p>`,
+'酉':`<p><b>天同（平）</b>は福星。基本はのんびりした体質ですが、ストレスや楽しみすぎ（食べすぎ・夜ふかし）で崩れやすい面も。心の状態が体に出やすいタイプです。</p>
+<ul><li><b>破碎</b>：消耗・小さなケガ。<b>天使</b>：疾厄宮に入る固定の小星。</li></ul>
+<p>遷移宮干庚から<b>天同化忌</b>がここに入ります。外で動き回りすぎると疲れが体に出やすいサイン。<b>休むことも仕事のうち</b>。</p>
+<p>※健康面の具体的な判断は医療機関へ。ここでは傾向として読んでください。</p>`,
+'申':`<p><b>身宮</b>がここにあります。人生、特に後半は<b>「外でどう生きるか」</b>が自分そのものになっていく、という意味です。</p>
+<p><b>七殺（廟）＋天馬</b>。七殺は独立・開拓・決断の将星、天馬は移動・活動。外に出て自分の足で道を切り開くほど運が動きます。命宮の紫府と向き合う<b>「紫府＋七殺」</b>の構図で、外の世界で実力を示して権威を得る力があります。</p>
+<ul><li><b>地劫</b>：外での予想外の損失・空回り。命宮の地空と向き合い<b>「空劫」</b>が命遷にそろう形。型破りな発想と浮き沈み。</li><li><b>鳳閣</b>：才芸・美の星。官禄宮の龍池と対になる。</li><li><b>天巫</b>：昇進・ひらめき。<b>年解</b>：トラブル解消。</li><li><b>旬空・陰煞・天虚</b>：空回り・見えない妨害・虚しさ。外での疲れには注意。</li></ul>`,
+'未':`<p><b>天梁（旺）</b>に宮干己による<b>自化科</b>。面倒見の良い年長者・守ってくれる人・相談相手に恵まれる配置です。友人やファンのあいだで<b>評判が自然に広がる</b>のも自化科の良さ。</p>
+<ul><li><b>天鉞</b>：女性の貴人・私的な場での助け。</li><li><b>天喜</b>：慶事・楽しい付き合い。<b>月徳</b>：守り。</li><li><b>天傷</b>：僕役宮に入る固定の小星。人間関係での小さな消耗。</li></ul>
+<p>官禄宮の天相を禄存と一緒に挟む<b>「財蔭夾印」</b>の片側を担っています。人脈が仕事を守ってくれる形です。</p>
+<p>ただし対宮の兄弟宮に天機化忌（生年・官禄宮から）が入り、ここを沖します。仲間うちでの<b>取り分・役割の食い違い</b>には注意。身主の天梁がここにあります。</p>`,
+'午':`<p><b>廉貞（平）＋天相（廟）</b>の「廉相」。こだわりの職人気質を、誠実な調整力が支える組み合わせ。ルールのある世界で信頼を積み、専門性で評価されます。</p>
+<p><b>擎羊（陥）＋天刑</b>で「刑」が重なり、廉貞（囚）・天相（印）とそろう<b>「刑囚夾印」</b>。一方で両隣の禄存・天梁が<b>「財蔭夾印」</b>を作り、凶意を和らげています。</p>
+<ul><li><b>龍池</b>：才芸・工芸。腕で勝負する仕事の追い風。</li><li><b>天廚</b>：技能で食べていける。</li><li><b>天月</b>：働きすぎによる体調の乱れに注意。</li></ul>
+<p>三方四正には紫府（命）・武曲（財）・破軍（対宮）。<b>府相朝垣</b>の吉格です。詳しくは「官禄宮を深読み」タブへ。</p>`,
+'巳':`<p><b>巨門（旺）＋禄存</b>。巨門は言葉・研究の星、禄存は財と保守。<b>家や自分の拠点で稼ぐ・研究する</b>のに向いた配置。自宅スタジオで作業するのにも合っています。命主の禄存がここにあり、<b>拠点を持つことが人生の安定</b>につながります。</p>
+<p>宮干丁により<b>巨門が自化忌</b>。住まいでの小さな口論や、住環境への不満が出やすい面も。</p>
+<ul><li><b>孤辰</b>：一人の空間を好む。集中できる個室・作業部屋が運気を支える。</li></ul>
+<p>官禄宮の天相を挟む「財蔭夾印」の片側を担っています。</p>`,
+'辰':`<p><b>貪狼（廟）に生年化禄</b>。貪狼は欲望・多才・芸術・音楽・社交の星。それが心の宮で化禄するのは、<b>楽しむ才能そのものが人生の福</b>になる、という意味です。好きなことに没頭できる力が人生を豊かにします。</p>
+<ul><li><b>陀羅（廟）</b>：粘り強さと執着。一度ハマると深く掘り下げる反面、考えがぐるぐる回りやすい。</li><li><b>天才</b>：才能の星。</li><li><b>解神</b>：悩みをほどく力。<b>天哭</b>：感傷・涙もろさ。感受性の強さは創作の源。</li></ul>
+<p>官禄宮干戊の<b>貪狼化禄もここに入ります</b>（生年禄と同じ星）。仕事がそのまま心の満足になる流れ。一方、宮干丙からは<b>廉貞化忌が官禄宮へ</b>。心の欲求が仕事への執着になりやすいので、オンとオフの切り替えを。</p>`,
+'卯':`<p><b>太陰（陥）に生年化権＋自化忌</b>。母親や目上との関係は、影響力が強い一方で、気持ちのすれ違いも起こりやすい配置。太陰は繊細さ・内省・美の星なので、感受性の豊かさは親から受け継いだものかもしれません。</p>
+<p>父母宮は<b>「評価する側・審査・書類・公的な場」</b>も表します。<b>三台・台輔・天官・天福</b>と地位・名誉の星が多く、官禄宮から太陰化権が入るので、<b>審査・選考・公的な評価の場で力を発揮</b>しやすいです。</p>
+<ul><li><b>咸池</b>：桃花・魅力。<b>天空</b>：空想・理想。</li></ul>`
+};
+
+// ---------- 星の辞典 ----------
+const SD={
+'紫微':['主星','帝王の星。品格・統率・プライド・理想の高さ。'],
+'天府':['主星','財庫の星。安定・包容力・保守・管理能力。'],
+'天機':['主星','知恵の星。企画・分析・変化・考えすぎ。'],
+'太陽':['主星','博愛の星。発信・名誉・与える力。昼に強く夜に弱い。'],
+'武曲':['主星','財星。決断・実行・お金・まっすぐさ。'],
+'天同':['主星','福星。穏やかさ・楽しむ心・感性・のんびり。'],
+'廉貞':['主星','囚星・次桃花。規律・こだわり・芸術性・情熱。'],
+'太陰':['主星','富と母性の星。繊細・内省・美・蓄え。'],
+'貪狼':['主星','欲望と才芸の星。多才・社交・芸術・音楽・遊び。'],
+'巨門':['主星','言葉の星。研究・弁舌・疑い・口論。'],
+'天相':['主星','印星。信用・調整・誠実・サポート。周囲の影響を受けやすい。'],
+'天梁':['主星','蔭星。守り・年長者・解決力・面倒見。'],
+'七殺':['主星','将星。独立・開拓・決断・勝負。'],
+'破軍':['主星','耗星。変革・破壊と創造・挑戦・消耗。'],
+'左輔':['吉星','補佐の星（左）。協力者・支援・チームワーク。'],
+'右弼':['吉星','補佐の星（右）。陰からの助け・柔軟な協力。'],
+'文昌':['吉星','文才の星。学問・試験・文章・正統派の表現。'],
+'文曲':['吉星','才芸の星。音楽・芸能・話術・感性の表現。'],
+'天魁':['吉星','貴人の星（陽）。目上・公的な場での引き立て。'],
+'天鉞':['吉星','貴人の星（陰）。女性・私的な場での助け。'],
+'禄存':['吉星','財と保守の星。安定収入・守り。両隣に擎羊・陀羅を伴う。'],
+'天馬':['吉星','移動・活動の星。動くほど運が開く。'],
+'擎羊':['煞星','刃の星。鋭さ・競争・衝突・ケガ。勝負強さにも。'],
+'陀羅':['煞星','遅延の星。粘り・停滞・執着・ぐるぐる思考。'],
+'火星':['煞星','急変の星（表）。爆発力・急な出来事・短気。'],
+'鈴星':['煞星','急変の星（裏）。内にこもる焦り・じわじわ型のトラブル。'],
+'地空':['煞星','空の星。独創的な発想・精神性／空回り・計画倒れ。'],
+'地劫':['煞星','劫の星。型破り／予想外の損失・浮き沈み。'],
+'龍池':['副星','才芸・工芸の星。鳳閣と対で芸術的才能。'],
+'鳳閣':['副星','才芸・美の星。龍池と対で芸術的才能・見た目の美しさ。'],
+'天廚':['副星','食禄の星。技能で食べていく・料理。'],
+'天月':['副星','病の星。体調・疲れ・持病。'],
+'天刑':['副星','刑の星。規律・自律・孤高・専門性・法や医療。'],
+'恩光':['副星','恩を受ける星。引き立て・推薦。'],
+'天貴':['副星','貴の星。名誉・目上からの評価。'],
+'天才':['副星','才能の星。ひらめき・素質。'],
+'天寿':['副星','寿の星。落ち着き・長続き・年長者。'],
+'天姚':['副星','桃花の星。魅力・芸能・色気・人気。'],
+'華蓋':['副星','芸術と孤高の星。宗教・哲学・独自の世界観。'],
+'蜚廉':['副星','噂の星。陰口・小さなトラブル。'],
+'咸池':['副星','桃花の星。恋愛・色気・魅力。'],
+'三台':['副星','地位の星（八座と対）。格・ステータス。'],
+'八座':['副星','地位の星（三台と対）。格・ステータス。'],
+'台輔':['副星','名誉の星（封誥と対）。肩書き・表彰。'],
+'封誥':['副星','名誉の星（台輔と対）。肩書き・表彰。'],
+'天官':['副星','官の星。地位・昇進。'],
+'天福':['副星','福の星。福分・恵み。'],
+'天空':['副星','空の星。空想・理想・空回り。'],
+'紅鸞':['副星','恋愛・慶事の星（天喜と対）。'],
+'天喜':['副星','慶事の星（紅鸞と対）。喜び・お祝い。'],
+'天哭':['副星','哭の星。悲しみ・感傷・涙もろさ。'],
+'天虚':['副星','虚の星。虚しさ・中身のなさ。'],
+'孤辰':['副星','孤の星。独立・一人を好む。'],
+'寡宿':['副星','寡の星。孤独感・自立。'],
+'解神':['副星','解の星。トラブル・悩みをほどく。'],
+'年解':['副星','解の星。年ごとの災いをほどく。'],
+'天巫':['副星','巫の星。昇進・霊感・ひらめき。'],
+'天徳':['副星','徳の星。守護・災いを和らげる。'],
+'月徳':['副星','徳の星。守護・穏やかさ。'],
+'陰煞':['副星','陰の煞。見えない妨害・気の重さ。'],
+'旬空':['副星','空亡の一種。力が弱まる・空回り。'],
+'空亡':['副星','空亡。力が弱まる・実を結びにくい。'],
+'截路':['副星','空亡の一種。道がふさがる・中断。'],
+'破碎':['副星','破の星。壊れる・消耗。'],
+'天傷':['副星','僕役宮に固定の小星。人間関係の消耗。'],
+'天使':['副星','疾厄宮に固定の小星。体調の消耗。']
+};
+
+// ---------- 格局 ----------
+const PAT=[
+{n:'紫府同宮（命宮・寅）',t:'good',d:'命宮に紫微と天府が並ぶ格。器が大きく、品格と安定感を兼ね備える。リーダー・任される人。プライドが高く、人に頼るのが苦手な面も。',b:'寅'},
+{n:'府相朝垣',t:'good',d:'天府（命宮）と天相（官禄宮）が三方でつながる吉格。衣食に困らず、地位と信用を得やすい。官禄宮を強く支えている格。',b:'午'},
+{n:'刑囚夾印（官禄宮）',t:'bad',d:'廉貞（囚）＋天相（印）＋擎羊（刑）が同宮。仕事上の摩擦・争い・契約トラブルに注意とされる。天刑もあり「刑」が強い。厳しい修練・専門職では力にもなる。',b:'午'},
+{n:'財蔭夾印（官禄宮）',t:'good',d:'天相を禄存（巳）と天梁（未）が挟む、天相にとって最良の挟まれ方。お金と守りが仕事を支え、刑囚夾印の凶意を和らげる。',b:'午'},
+{n:'空劫 命遷対照',t:'mid',d:'命宮に地空、遷移宮に地劫が向かい合う。常識にとらわれない発想・精神性・芸術性。現実面では浮き沈みや空回りも。創作では大きな武器。',b:'申'},
+{n:'龍池・鳳閣（官禄と遷移）',t:'good',d:'才芸のペア星が仕事と外の世界に分かれて入る。腕で勝負し、作品を外に出すほど評価される。',b:'午'},
+{n:'吉星の兄弟宮集中',t:'good',d:'左輔・右弼・文昌・文曲・天魁が兄弟宮に集中。身近な仲間・同業者・学びの場が財産。ただし生年天機化忌も同宮し、科と忌が同居する。',b:'丑'},
+{n:'貪狼化禄 in 福徳宮',t:'good',d:'生年化禄が心の宮に。楽しむこと・没頭すること自体が福になる。官禄宮の化禄も同じ貪狼に飛ぶ。',b:'辰'},
+{n:'身宮 在 遷移（七殺・天馬）',t:'mid',d:'人生後半ほど「外で動く自分」が本質に。独立・移動・開拓で運が開く。命宮の紫府と七殺が向き合う構図。',b:'申'},
+{n:'自化の多い命盤',t:'mid',d:'兄弟（天機禄）・夫妻（破軍権）・財帛（武曲忌）・僕役（天梁科）・田宅（巨門忌）・父母（太陰忌）の6宮に自化。自分で得て自分で手放す、出入りの多い流動的な運。',b:'子'}
+];
+
+// ---------- 大限のテーマ ----------
+const DL={
+'寅':'紫府の大限。守られた環境でプライドと自立心が育つ時期。甲の廉貞化禄が官禄宮へ入り、早くから「何かを極めたい」気持ちの芽がある。',
+'丑':'昌曲・左右・天魁が集まる学びの10年。才能ある仲間や先生との出会い。天機の化忌と自化禄で迷いとひらめきが交差。乙の太陰化忌が父母宮へ入り、親・目上との気持ちのすれ違い。',
+'子':'<b>現在の大限。</b>破軍（廟・自化権）の「壊して作り直す」挑戦と変化の10年。甲の廉貞化禄が本命官禄（＝大限の遷移宮）に入り、外での仕事・発表に縁。大限官禄は辰宮（貪狼生年禄・天才）で、創作・芸術が仕事運のテーマ。太陽化忌が子女宮（作品）に入るので完璧主義に注意。鈴星で焦りやイライラが内にこもりやすい。',
+'亥':'太陽（陥）の大限。表に立つより、裏で照らして積み上げる時期。八座・封誥・天徳で肩書きと信用がつく。癸の巨門化権が田宅宮へ（拠点・スタジオづくり）、太陰化科が父母宮へ（目上からの評価）。貪狼化忌が福徳宮へ入るので、欲や心のバランスのケアを。大限官禄は卯宮（太陰・天官・三台）で肩書きのある仕事。',
+'戌':'武曲・火星の大限。実力が収入に直結する10年。壬の天梁化禄が僕役宮へ（人脈から恵み）、紫微化権が本命命宮へ（主導権・地位）。武曲化忌が大限命宮に重なり、お金の出入りは激しい。大限官禄は寅宮の紫府で、キャリアの最盛期候補。',
+'酉':'天同の大限。ゆとりと楽しみの時期。辛の巨門化禄が田宅宮へ、太陽化権が子女宮へ（作品・後進に力）。文昌化忌が兄弟宮へ入り、書類や仲間との行き違いに注意。大限官禄は丑宮（昌曲左右魁）で、教える・まとめる仕事に縁。',
+'申':'身宮・七殺天馬の大限。年を重ねても外で動き、開拓する。庚の太陽化禄が子女宮へ（作品や後進から喜び）、武曲化権が財帛宮へ。天同化忌が疾厄宮へ入るので健康管理を。',
+'未':'天梁の大限。長老・相談役として頼られる。己の武曲化禄が財帛宮へ、貪狼化権が福徳宮へ（趣味を極める）。文曲化忌が兄弟宮へ。',
+'午':'官禄宮に大限が巡る。生涯現役、打ち込むものが人生の中心に。',
+'巳':'田宅宮の大限。拠点・家での穏やかな暮らし。',
+'辰':'福徳宮の大限。心の満足と楽しみの時期。',
+'卯':'父母宮の大限。'
+};
+
+// ========== 描画 ==========
+let selB='午';
+function renderGrid(){
+  const g=document.getElementById('grid');let h='';
+  const tri=[rel(selB,4),rel(selB,8)],opp=rel(selB,6);
+  for(const b in POS){
+    const p=P[b],[r,c]=POS[b];
+    const cls=['cell'];if(b===selB)cls.push('sel');else if(tri.includes(b))cls.push('tri');else if(b===opp)cls.push('opp');
+    const maj=p.stars.filter(s=>s[2]==='M').map(s=>`<span>${s[0]}<span class="br">${s[1]}</span>${huaBadges(b,s[0])}</span>`).join('');
+    const aux=p.stars.filter(s=>s[2]==='L'||s[2]==='S').map(s=>`<span class="${s[2]==='L'?'l':'s'}">${s[0]}${huaBadges(b,s[0])}</span>`).join(' ');
+    const mn=p.stars.filter(s=>s[2]==='m').map(s=>s[0]).join('・');
+    h+=`<div class="${cls.join(' ')}" style="grid-row:${r};grid-column:${c}" data-b="${b}">
+      <div class="maj">${maj}</div><div class="aux">${aux}</div><div class="mn">${mn}</div>
+      <div class="foot"><span>${p.age[0]}-${p.age[1]}</span>${p.body?'<span class="body">身</span>':''}<span><span class="pn ${b==='寅'?'me':''}">${p.n.replace('宮','')}</span> ${p.st}${b}</span></div></div>`;
+  }
+  h+=`<div class="center"><div class="t">命 盤</div><div class="i">1998.12.15 酉時 ／ 女<br>水二局<br>命主：禄存 ／ 身主：天梁<br>生年四化（戊）<br>貪狼禄・太陰権<br>右弼科・天機忌</div></div>`;
+  g.innerHTML=h;
+  g.querySelectorAll('.cell').forEach(el=>el.onclick=()=>{selB=el.dataset.b;renderGrid();renderDetail();document.getElementById('detail').scrollIntoView({behavior:'smooth',block:'start'})});
+}
+function chipHTML(b,s){const lab={M:'',L:'',S:'',m:''};return `<span class="chip ${s[2]}" onclick="showStar('${s[0]}')">${s[0]}${s[1]?`<small>${s[1]}</small>`:''}${huaBadges(b,s[0])}</span>`}
+function incoming(b){
+  const out=[];
+  for(const src in P){
+    SIHUA[P[src].st].forEach((star,i)=>{if(starWhere[star]===b)out.push({src,i,star})});
+  }
+  return out;
+}
+function renderDetail(){
+  const b=selB,p=P[b];
+  const fly=flyFrom(p.st).map(f=>`<span class="k"><span class="hua birth h${f.h}">${HUA[f.h]}</span> ${f.star}</span><span>→ ${pname(f.b)}（${f.b}）<span style="color:var(--dim)">：${PMEAN[pname(f.b)]}</span>${f.b===b?' ＝自化':''}</span>`).join('');
+  const inc=incoming(b).filter(x=>x.src!==b).map(x=>`<span class="k"><span class="hua birth h${x.i}">${HUA[x.i]}</span> ${x.star}</span><span>← ${pname(x.src)}（${P[x.src].st}${x.src}）から</span>`).join('');
+  const tri=[rel(b,4),rel(b,8)],opp=rel(b,6);
+  const sfs=x=>P[x].stars.filter(s=>s[2]==='M').map(s=>s[0]).join('・')||'（主星なし）';
+  document.getElementById('detail').innerHTML=`
+   <div class="dhead"><span class="big">${p.n}</span><span class="tag">${p.st}${b}</span><span class="tag">大限 ${p.age[0]}〜${p.age[1]}歳</span>${p.body?'<span class="tag" style="color:var(--gold)">身宮</span>':''}</div>
+   <div class="lead">${PMEAN[p.n]}</div>
+   <div class="chips">${p.stars.map(s=>chipHTML(b,s)).join('')}</div>
+   <div class="read">${R[b]}</div>
+   <h3>三方四正</h3>
+   <div class="box2">
+     <div class="mini"><div class="h">対宮：${pname(opp)}（${opp}）</div>${sfs(opp)}</div>
+     <div class="mini"><div class="h">三合：${pname(tri[0])}（${tri[0]}）・${pname(tri[1])}（${tri[1]}）</div>${sfs(tri[0])} ／ ${sfs(tri[1])}</div>
+   </div>
+   <h3>宮干「${p.st}」の飛化（この宮から出ていく）</h3>
+   <div class="fly">${fly}</div>
+   ${inc?`<h3>ほかの宮から飛んでくる四化</h3><div class="fly">${inc}</div>`:''}`;
+}
+function showStar(n){
+  const d=SD[n]||['','（説明なし）'];const b=starWhere[n];
+  let extra='';const x=birthHua(n);if(x>=0)extra+=`<p>生年四化で<b>化${HUA[x]}</b>がついています。</p>`;
+  const y=b?selfHua(b,n):-1;if(y>=0)extra+=`<p>宮干${P[b].st}による<b>自化${HUA[y]}</b>がついています。</p>`;
+  document.getElementById('popc').innerHTML=`<h2 style="margin-top:0">${n} <span class="tag">${d[0]}</span></h2><p>${d[1]}</p>${b?`<p class="lead">あなたの命盤では <b class="gold">${pname(b)}（${b}）</b> にあります。</p>`:''}${extra}${b?`<button class="dbtn" onclick="goPalace('${b}')">この宮を見る →</button>`:''}`;
+  document.getElementById('pop').classList.add('on');
+}
+function closePop(){document.getElementById('pop').classList.remove('on')}
+document.getElementById('pop').onclick=e=>{if(e.target.id==='pop')closePop()};
+function goPalace(b){closePop();selB=b;show('chart');renderGrid();renderDetail();setTimeout(()=>document.getElementById('detail').scrollIntoView({behavior:'smooth'}),50)}
+
+// 官禄 chips
+document.getElementById('careerChips').innerHTML=P['午'].stars.map(s=>chipHTML('午',s)).join('');
+
+// 格局
+document.getElementById('patList').innerHTML=PAT.map(x=>`<div class="card"><div class="dhead"><span style="font-family:'Shippori Mincho',serif;font-size:17px" class="${x.t}">${x.t==='good'?'◎':x.t==='bad'?'△':'○'} ${x.n}</span></div><p style="margin:.4em 0">${x.d}</p><button class="dbtn" onclick="goPalace('${x.b}')">${pname(x.b)}を見る →</button></div>`).join('');
+
+// 大限
+const NOW_YEAR=2026, BIRTH_YEAR=1998;
+const kazoe=y=>y-BIRTH_YEAR+1;
+const nowAge=kazoe(NOW_YEAR);
+const order=Object.keys(P).sort((a,b)=>P[a].age[0]-P[b].age[0]);
+let selD=order.find(b=>nowAge>=P[b].age[0]&&nowAge<=P[b].age[1]);
+function renderD(){
+  document.getElementById('dlist').innerHTML=order.map(b=>{const p=P[b];const now=nowAge>=p.age[0]&&nowAge<=p.age[1];return `<button class="dbtn ${b===selD?'on':''} ${now?'now':''}" data-b="${b}"><b>${p.age[0]}〜${p.age[1]}</b>${p.st}${b}・${p.n.replace('宮','')}</button>`}).join('');
+  document.querySelectorAll('#dlist .dbtn').forEach(el=>el.onclick=()=>{selD=el.dataset.b;renderD()});
+  const b=selD,p=P[b];const now=nowAge>=p.age[0]&&nowAge<=p.age[1];
+  const y0=BIRTH_YEAR+p.age[0]-1,y1=BIRTH_YEAR+p.age[1]-1;
+  const fly=flyFrom(p.st).map(f=>`<span class="k"><span class="hua birth h${f.h}">${HUA[f.h]}</span> ${f.star}</span><span>→ 本命${pname(f.b)}（${f.b}）</span>`).join('');
+  const relRow=(lbl,k)=>{const x=rel(b,-k);return `<tr><th>大限${lbl}</th><td>${x}宮（本命${pname(x)}）：${P[x].stars.filter(s=>s[2]!=='m').map(s=>s[0]+huaBadges(x,s[0])).join('・')}</td></tr>`};
+  document.getElementById('dview').innerHTML=`
+   <div class="dhead"><span class="big">${p.age[0]}〜${p.age[1]}歳</span><span class="tag">${p.st}${b}・本命${p.n}</span><span class="tag">${y0}〜${y1}年頃</span>${now?'<span class="now-badge">いまここ</span>':''}</div>
+   <div class="read"><p>${DL[b]||''}</p></div>
+   <table class="t">${relRow('命宮',0)}${relRow('財帛',4)}${relRow('遷移',6)}${relRow('官禄',8)}</table>
+   <h3>大限干「${p.st}」の四化</h3><div class="fly">${fly}</div>`;
+}
+// 流年
+function yearGZ(y){return [STEMS[(y-4)%10],BR[(y-4)%12]]}
+function renderY(y){
+  const [st,br]=yearGZ(y);const age=kazoe(y);
+  const dB=order.find(b=>age>=P[b].age[0]&&age<=P[b].age[1]);
+  const fly=flyFrom(st).map(f=>`<span class="k"><span class="hua birth h${f.h}">${HUA[f.h]}</span> ${f.star}</span><span>→ 本命${pname(f.b)}（${f.b}）<span style="color:var(--dim)">：${PMEAN[pname(f.b)]}</span></span>`).join('');
+  const lu=starWhere[SIHUA[st][0]],ji=starWhere[SIHUA[st][3]];
+  document.getElementById('yview').innerHTML=`
+   <div class="dhead"><span class="big">${y}年 ${st}${br}</span><span class="tag">数え${age}歳</span>${y===NOW_YEAR?'<span class="now-badge">今年</span>':''}</div>
+   <div class="read">
+   <p>流年命宮は <b class="gold">${br}宮＝本命の${pname(br)}</b>。この年は<b>「${PMEAN[pname(br)]}」</b>が一年の中心テーマになります。</p>
+   <p>化禄（恵み）は<b class="good">${pname(lu)}</b>に、化忌（課題・こだわり）は<b class="bad">${pname(ji)}</b>に入ります。</p>
+   <p class="lead">この年は大限 ${P[dB].age[0]}〜${P[dB].age[1]}歳（${P[dB].st}${dB}・本命${P[dB].n}）の中にあります。</p></div>
+   <div class="fly">${fly}</div>
+   <p class="lead" style="margin-top:8px">※流年は旧正月（2月頃）で切り替わります。</p>`;
+}
+const ysel=document.getElementById('ysel');
+for(let y=2020;y<=2045;y++){const [s,b]=yearGZ(y);ysel.innerHTML+=`<option value="${y}" ${y===NOW_YEAR?'selected':''}>${y}年（${s}${b}）数え${kazoe(y)}</option>`}
+ysel.onchange=()=>renderY(+ysel.value);
+
+// 星辞典
+function renderSD(q=''){
+  const list=Object.keys(SD).filter(n=>!q||n.includes(q)||SD[n][0].includes(q)||SD[n][1].includes(q));
+  document.getElementById('sd').innerHTML=list.map(n=>{const b=starWhere[n];const col=SD[n][0]==='吉星'?'var(--luck)':SD[n][0]==='煞星'?'var(--sha)':SD[n][0]==='主星'?'var(--gold)':'var(--text)';
+   return `<div class="it" style="cursor:pointer" onclick="${b?`goPalace('${b}')`:''}"><span class="nm" style="color:${col}">${n}</span>${b?huaBadges(b,n):''}<span class="where">${b?pname(b)+'・'+b:''}</span><div class="ds">${SD[n][0]}｜${SD[n][1]}</div></div>`}).join('')||'<p class="lead">見つかりません</p>';
+}
+document.getElementById('sq').oninput=e=>renderSD(e.target.value.trim());
+
+// 十二宮テーブル
+document.getElementById('palaceTable').innerHTML=PN12.map(n=>{const b=Object.keys(P).find(k=>P[k].n===n);return `<tr><th>${n}</th><td>${PMEAN[n]}<br><span style="color:var(--dim);font-size:12px">あなた：${b}宮・${P[b].stars.filter(s=>s[2]==='M').map(s=>s[0]).join('・')}</span></td></tr>`}).join('');
+
+// タブ
+const TABS=['chart','career','patterns','luck','composer','stars','basics'];
+function show(t){
+  if(!TABS.includes(t))t='chart';
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  if(location.hash!=='#'+t)history.replaceState(null,'','#'+t);
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+
+renderGrid();renderDetail();renderD();renderY(NOW_YEAR);renderSD();
+show(location.hash.slice(1)||'chart');
+</script>
+</body>
+</html>
