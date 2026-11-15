@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2140"/><stop offset="1" stop-color="#120d1d"/>
+    </linearGradient>
+    <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f1ff"/><stop offset="1" stop-color="#e2d9f3"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- 開いたノート -->
+  <g transform="translate(256 270)">
+    <path d="M-196,-150 Q-100,-176 -6,-146 L-6,166 Q-100,138 -196,162 Z" fill="url(#pg)"/>
+    <path d="M196,-150 Q100,-176 6,-146 L6,166 Q100,138 196,162 Z" fill="url(#pg)"/>
+    <rect x="-8" y="-150" width="16" height="318" rx="8" fill="#a78bfa"/>
+    <!-- 左ページ：五線と音符 -->
+    <g stroke="#7b6aa3" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M-172,-88 Q-100,-104 -30,-84"/><path d="M-172,-62 Q-100,-78 -30,-58"/><path d="M-172,-36 Q-100,-52 -30,-32"/>
+      <path d="M-172,-10 Q-100,-26 -30,-6"/><path d="M-172,16 Q-100,0 -30,20"/>
+    </g>
+    <g fill="#ff5fa2">
+      <ellipse cx="-128" cy="2" rx="17" ry="13" transform="rotate(-20 -128 2)"/>
+      <ellipse cx="-68" cy="-24" rx="17" ry="13" transform="rotate(-20 -68 -24)"/>
+      <rect x="-114" y="-100" width="7" height="104"/><rect x="-54" y="-126" width="7" height="104"/>
+      <path d="M-114,-100 L-47,-126 L-47,-104 L-114,-78 Z"/>
+    </g>
+    <!-- 右ページ：度数のメモ -->
+    <g font-family="Arial Black, Arial, sans-serif" font-weight="900" text-anchor="middle">
+      <text x="100" y="-74" font-size="50" fill="#a78bfa">IV</text>
+      <text x="100" y="-14" font-size="34" fill="#9b8fb8">↓</text>
+      <text x="100" y="44" font-size="50" fill="#ff5fa2">V</text>
+      <text x="100" y="104" font-size="34" fill="#9b8fb8">↓</text>
+    </g>
+    <g stroke="#cfc4e6" stroke-width="4" stroke-linecap="round">
+      <line x1="-160" y1="70" x2="-50" y2="62"/><line x1="-160" y1="100" x2="-70" y2="93"/><line x1="-160" y1="130" x2="-60" y2="124"/>
+    </g>
+  </g>
+  <!-- ネオンのアクセント -->
+  <g filter="url(#glow)">
+    <circle cx="406" cy="98" r="30" fill="#3ef2e0"/>
+  </g>
+  <text x="406" y="110" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="34" text-anchor="middle" fill="#120d1d">I</text>
+  <rect x="0.5" y="0.5" width="511" height="511" rx="111.5" fill="none" stroke="#a78bfa" stroke-opacity=".4"/>
+</svg>
