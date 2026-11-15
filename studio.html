@@ -136,6 +136,10 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 .drop-ext{outline:2px dashed var(--gold);outline-offset:-2px}
 .armbar{position:fixed;left:10px;right:10px;bottom:12px;z-index:120;display:none;align-items:center;gap:8px;background:#2a1f42;border:1px solid var(--gold);border-radius:14px;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.6);font-size:13px;font-weight:800}
 .armbar.on{display:flex}.armbar span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mixrow{display:grid;grid-template-columns:62px 1fr 40px auto 34px;gap:6px;align-items:center;margin:3px 0}
+.mixrow .mn{font-weight:900;font-size:13px;line-height:1.1}.mixrow .mn em{display:block;font-style:normal;font-size:10px;color:var(--mute)}
+.mixrow input[type=range]{width:100%;accent-color:var(--pink)}.mixrow .mv{font-size:11px;color:var(--mute);text-align:right}
+@media(max-width:420px){.mixrow{grid-template-columns:52px 1fr 36px;}.mixrow select{grid-column:1/3}.mixrow .tb{grid-column:3}}
 .midiline{font-size:12px;color:var(--cyan);min-height:0}
 </style>
 </head>
@@ -386,10 +390,18 @@ function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();
   if(AC.state=='suspended')AC.resume();return AC}
 function applyMix(){if(!AC)return;['c','b','d'].forEach(k=>BUS[k].gain.value=P.mute[k]?0:P.vol[k])}
 const hz=m=>440*Math.pow(2,(m-69)/12);
-function note(m,t,d,vel=.8,bus='c',snd){const a=ac();snd=snd||P.sound;const g=a.createGain(),out=BUS[bus]||MASTER;g.connect(out);const f=hz(m);const os=[];
+const SOUNDS={ep:'エレピ',piano:'ピアノ',pad:'パッド',organ:'オルガン',strings:'ストリングス',brass:'ブラス',bell:'ベル',pluck:'ギター（プラック）',sine:'サイン',square:'チップチューン',bass:'シンセベース'};
+const PROG={ep:4,piano:0,pad:89,organ:16,strings:48,brass:61,bell:14,pluck:25,sine:80,square:80,bass:38};
+function note(m,t,d,vel=.8,bus='c',snd){const a=ac();snd=snd||(bus=='b'?'bass':P.sound);if(vel<=0)return;const g=a.createGain(),out=BUS[bus]||MASTER;g.connect(out);const f=hz(m);const os=[];
   const env=(att,dec,sus,rel,peak)=>{g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+att);g.gain.setTargetAtTime(peak*sus,t+att,dec);g.gain.setTargetAtTime(0,t+d,rel);};
-  if(bus=='b'){const o=a.createOscillator(),o2=a.createOscillator(),lp=a.createBiquadFilter();o.type='sawtooth';o2.type='sine';o.frequency.value=f;o2.frequency.value=f;lp.type='lowpass';lp.frequency.setValueAtTime(900,t);lp.frequency.exponentialRampToValueAtTime(260,t+.25);
-    o.connect(lp);lp.connect(g);o2.connect(g);os.push(o,o2);env(.005,.2,.6,.06,.32*vel);}
+  if(snd=='strings'){const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;lp.connect(g);const lfo=a.createOscillator(),lg=a.createGain();lfo.frequency.value=5.2;lg.gain.value=6;lfo.connect(lg);[-9,-3,4,10].forEach(dt=>{const o=a.createOscillator();o.type='sawtooth';o.frequency.value=f;o.detune.value=dt;lg.connect(o.detune);o.connect(lp);os.push(o)});os.push(lfo);env(.25,.8,.85,.4,.045*vel);}
+  else if(snd=='brass'){const lp=a.createBiquadFilter();lp.type='lowpass';lp.Q.value=2;lp.frequency.setValueAtTime(400,t);lp.frequency.linearRampToValueAtTime(2800,t+.08);lp.frequency.setTargetAtTime(1500,t+.1,.2);lp.connect(g);[-4,4].forEach(dt=>{const o=a.createOscillator();o.type='sawtooth';o.frequency.value=f;o.detune.value=dt;o.connect(lp);os.push(o)});env(.04,.3,.8,.12,.08*vel);}
+  else if(snd=='bell'){const o=a.createOscillator(),mod=a.createOscillator(),mg=a.createGain();o.type='sine';mod.frequency.value=f*3.5;mg.gain.setValueAtTime(f*2,t);mg.gain.exponentialRampToValueAtTime(f*.1,t+1.5);mod.connect(mg);mg.connect(o.frequency);o.frequency.value=f;o.connect(g);os.push(o,mod);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.13*vel,t+.003);g.gain.exponentialRampToValueAtTime(.001,t+Math.max(1.8,d));}
+  else if(snd=='pluck'){const o=a.createOscillator(),o2=a.createOscillator(),lp=a.createBiquadFilter();o.type='sawtooth';o2.type='square';o.frequency.value=f;o2.frequency.value=f*1.003;const g2=a.createGain();g2.gain.value=.4;o2.connect(g2);lp.type='lowpass';lp.Q.value=3;lp.frequency.setValueAtTime(5000,t);lp.frequency.exponentialRampToValueAtTime(500,t+.35);o.connect(lp);g2.connect(lp);lp.connect(g);os.push(o,o2);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.12*vel,t+.002);g.gain.exponentialRampToValueAtTime(.001,t+Math.min(1.6,d+.6));}
+  else if(snd=='sine'){const o=a.createOscillator();o.type='sine';o.frequency.value=f;o.connect(g);os.push(o);env(.02,.4,.8,.15,.13*vel);}
+  else if(snd=='square'){const o=a.createOscillator(),lp=a.createBiquadFilter();o.type='square';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=3500;o.connect(lp);lp.connect(g);os.push(o);env(.003,.2,.7,.05,.045*vel);}
+  else if(snd=='bass'){const o=a.createOscillator(),o2=a.createOscillator(),lp=a.createBiquadFilter();o.type='sawtooth';o2.type='sine';o.frequency.value=f;o2.frequency.value=f;lp.type='lowpass';lp.frequency.setValueAtTime(900,t);lp.frequency.exponentialRampToValueAtTime(260,t+.25);
+    o.connect(lp);lp.connect(g);o2.connect(g);os.push(o,o2);env(.005,.2,.6,.06,(m<50?.32:.18)*vel);}
   else if(snd=='pad'){const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1500;lp.Q.value=.6;lp.connect(g);[-7,7,0].forEach((dt,i)=>{const o=a.createOscillator();o.type=i<2?'sawtooth':'triangle';o.frequency.value=f;o.detune.value=dt;o.connect(lp);os.push(o)});env(.12,.6,.75,.35,.06*vel);}
   else if(snd=='piano'){const o=a.createOscillator(),o2=a.createOscillator(),lp=a.createBiquadFilter();o.type='triangle';o2.type='sawtooth';o.frequency.value=f;o2.frequency.value=f*2;const g2=a.createGain();g2.gain.value=.15;o2.connect(g2);lp.type='lowpass';lp.frequency.setValueAtTime(4200,t);lp.frequency.exponentialRampToValueAtTime(900,t+.8);o.connect(lp);g2.connect(lp);lp.connect(g);os.push(o,o2);env(.004,.5,.25,.18,.17*vel);}
   else if(snd=='organ'){[1,2,3,4].forEach((h,i)=>{const o=a.createOscillator();o.type='sine';o.frequency.value=f*h;const gg=a.createGain();gg.gain.value=[1,.55,.3,.18][i];o.connect(gg);gg.connect(g);os.push(o)});env(.01,.1,.95,.06,.07*vel);}
@@ -404,8 +416,12 @@ function drum(kind,t,vel=1){const a=ac(),out=BUS.d;const g=a.createGain();g.conn
   else if(kind=='h'||kind=='o'){f.type='highpass';f.frequency.value=7500;const d=kind=='h'?.05:.28;g.gain.setValueAtTime(.22*vel,t);g.gain.exponentialRampToValueAtTime(.001,t+d);n.start(t);n.stop(t+d+.02);}
   else if(kind=='c'){f.type='highpass';f.frequency.value=4500;g.gain.setValueAtTime(.3*vel,t);g.gain.exponentialRampToValueAtTime(.001,t+1.4);n.start(t);n.stop(t+1.5);}
 }
-function audition(sp,arp){const a=ac(),t=a.currentTime+.03;const v=voiceFor(sp,null);note(bassMidi(sp),t,1.6,.9,'b');
-  if(arp)v.forEach((m,i)=>note(m,t+i*.14,1.6-i*.1,.8));else v.forEach(m=>note(m,t,1.6,.75));}
+/* 音ごとのミックス：キー 'B'=ベース, 'i'+半音=コードトーン/テンション */
+function mixOf(sp,k){const x=sp.mix&&sp.mix[k];return {vol:x&&x.vol!=null?x.vol:1,snd:x&&x.snd||''}}
+function keyOfNote(sp,m){const pc=(m-sp.r+1200)%12;const iv=ivs(sp).find(x=>x%12==pc);return 'i'+(iv==null?pc:iv)}
+function hasMix(sp){return !!(sp.mix&&Object.values(sp.mix).some(x=>(x.vol!=null&&x.vol!=1)||x.snd))}
+function audition(sp,arp,voice){const a=ac(),t=a.currentTime+.03;const v=voice||voiceFor(sp,null);const mb=mixOf(sp,'B');note(bassMidi(sp),t,1.6,.9*mb.vol,'b',mb.snd);
+  v.forEach((m,i)=>{const mx=mixOf(sp,keyOfNote(sp,m));if(arp)note(m,t+i*.14,1.6-i*.1,.8*mx.vol,'c',mx.snd);else note(m,t,1.6,.75*mx.vol,'c',mx.snd)});}
 
 /* ================= パターン → イベント ================= */
 const COMP={pad:'白玉（伸ばす）',stab4:'4分刻み',stab8:'8ビート刻み',arp:'アルペジオ',arp16:'16分アルペジオ',ballad:'2分（バラード）',off:'なし'};
@@ -415,13 +431,13 @@ function secOffsets(){let o=0;P.sections.forEach(s=>{s.off=o;o+=s.bars*4});retur
 function buildEvents(){computeVoices();const ev=[];secOffsets();
   P.sections.forEach(s=>{const cs=s.chords.slice().sort((a,b)=>a.start-b.start);
     cs.forEach((c,ci)=>{const t0=s.off+c.start,L=c.len,v=VOX[c.id],sp=c.spec;
-      const add=(t,d,m,vel)=>ev.push({t,d,m,vel,k:'c'});
+      const add=(t,d,m,vel)=>{const mx=mixOf(sp,keyOfNote(sp,m));ev.push({t,d,m,vel:vel*mx.vol,k:'c',snd:mx.snd})};
       if(s.comp=='pad')v.forEach(m=>add(t0,L-.05,m,.75));
       else if(s.comp=='stab4')for(let b=0;b<L;b++)v.forEach(m=>add(t0+b,.85,m,b%2?.6:.75));
       else if(s.comp=='stab8')for(let b=0;b<L;b+=.5)v.forEach(m=>add(t0+b,.42,m,(b%1)?.55:.75));
       else if(s.comp=='ballad')for(let b=0;b<L;b+=2)v.forEach(m=>add(t0+b,Math.min(2,L-b)-.05,m,.7));
       else if(s.comp=='arp'||s.comp=='arp16'){const st=s.comp=='arp'?.5:.25;const seq=v.concat(v.slice(1,-1).reverse());let i=0;for(let b=0;b<L-1e-6;b+=st){add(t0+b,st*1.8,seq[i%seq.length],.7);i++}}
-      if(s.bass!='off'){const bm=bassMidi(sp),fifth=bm+7>47?bm-5:bm+7;const nxt=cs[ci+1]?bassMidi(cs[ci+1].spec):null;const B=(t,d,m,vel=.9)=>ev.push({t,d,m,vel,k:'b'});
+      if(s.bass!='off'){const bm=bassMidi(sp),fifth=bm+7>47?bm-5:bm+7;const nxt=cs[ci+1]?bassMidi(cs[ci+1].spec):null;const mb=mixOf(sp,'B');const B=(t,d,m,vel=.9)=>ev.push({t,d,m,vel:vel*mb.vol,k:'b',snd:mb.snd});
         if(s.bass=='whole')B(t0,L-.05,bm);
         else if(s.bass=='root4')for(let b=0;b<L;b++)B(t0+b,.9,bm,b%2?.75:.9);
         else if(s.bass=='root8')for(let b=0;b<L;b+=.5)B(t0+b,.42,bm,(b%1)?.7:.9);
@@ -461,7 +477,7 @@ function tick(){if(!PL)return;const a=AC,now=a.currentTime,hor=now+.15,len=(PL.t
     const e=PL.ev[PL.idx];
     if(!e){if(PL.loop&&PL.ev.length){PL.iter++;PL.idx=0;continue}if(now>PL.start+len){stop();}break}
     const at=PL.start+PL.iter*len+(e.t-PL.from)*spb();if(at>hor)break;
-    if(at>=now-.05){if(e.k=='d')drum(e.dk,Math.max(at,now),e.vel);else note(e.m,Math.max(at,now),e.d*spb(),e.vel,e.k);}
+    if(at>=now-.05){if(e.k=='d')drum(e.dk,Math.max(at,now),e.vel);else note(e.m,Math.max(at,now),e.d*spb(),e.vel,e.k,e.snd);}
     PL.idx++;}
 }
 function stop(silent){if(PL){clearInterval(PL.timer);PL=null}document.getElementById('playBtn').textContent='▶';const ph=document.getElementById('ph');if(ph)ph.style.display='none';
@@ -485,9 +501,13 @@ function songMidi(onlySec){const PPQ=480;let ev=buildEvents();let from=0;
   const us=Math.round(60000000/P.bpm);const t0=[0,0xff,0x51,3,(us>>16)&255,(us>>8)&255,us&255,0,0xff,0x58,4,4,2,24,8];
   let o=0;const marks=[];secOffsets();P.sections.forEach(s=>{if(onlySec&&s.id!=UI.sec)return;const nm=new TextEncoder().encode(s.name);const t=T(s.off);marks.push(...vlq(t-o),0xff,6,nm.length,...nm);o=t;});
   const tempo=[...t0,...marks,0,0xff,0x2f,0];const tempoTr=[0x4d,0x54,0x72,0x6b,0,0,(tempo.length>>8)&255,tempo.length&255,...tempo];
-  const mk=k=>ev.filter(e=>e.k==k).map(e=>({on:T(e.t),off:T(e.t+(k=='d'?.1:e.d)),m:k=='d'?DK[e.dk]:e.m,vel:e.vel}));
-  const progs={ep:4,pad:89,piano:0,organ:16};
-  const trs=[tempoTr,track(mk('c'),'Chords',0,progs[P.sound]??0),track(mk('b'),'Bass',1,33),track(mk('d'),'Drums',9,null)];
+  const mk=(k,f)=>ev.filter(e=>e.k==k&&e.vel>0&&(!f||f(e))).map(e=>({on:T(e.t),off:T(e.t+(k=='d'?.1:e.d)),m:k=='d'?DK[e.dk]:e.m,vel:e.vel}));
+  const trs=[tempoTr];let ch=0;const nextCh=()=>{const c=ch++;if(c==9){ch++;return 10}return c};
+  const cs=[...new Set(ev.filter(e=>e.k=='c').map(e=>e.snd||P.sound))];
+  cs.forEach(sn=>{const n=mk('c',e=>(e.snd||P.sound)==sn);if(n.length)trs.push(track(n,cs.length>1?'Chords '+SOUNDS[sn]:'Chords',nextCh(),PROG[sn]??0))});
+  const bs=[...new Set(ev.filter(e=>e.k=='b').map(e=>e.snd||'bass'))];
+  bs.forEach(sn=>{const n=mk('b',e=>(e.snd||'bass')==sn);if(n.length)trs.push(track(n,bs.length>1?'Bass '+SOUNDS[sn]:'Bass',nextCh(),sn=='bass'?33:(PROG[sn]??0)))});
+  trs.push(track(mk('d'),'Drums',9,null));
   const head=[0x4d,0x54,0x68,0x64,0,0,0,6,0,1,0,trs.length,(PPQ>>8)&255,PPQ&255];
   return new Uint8Array(head.concat(...trs));}
 function fname(onlySec){return ((P.title||'song')+(onlySec?'_'+(secById(UI.sec)||{}).name:'')).replace(/[\\/:*?"<>|]/g,'_')+'.mid'}
@@ -511,7 +531,7 @@ function renderTL(){
   const secBg=P.sections.map(s=>`<div class="secbg" style="left:${s.off*BW}px;width:${s.bars*4*BW}px;background:${secColor(s.name)}"></div>`).join('');
   let bars='';for(let b=0;b<total/4+2;b++)bars+=`<div class="bn${UI.from==b*4?' from':''}" data-bar="${b}" style="left:${b*4*BW}px;width:${4*BW}px">${UI.from==b*4?'▶':''}${b+1}</div>`;
   const secs=P.sections.map(s=>`<div class="sec${s.id==UI.sec?' cur':''}" data-sec="${s.id}" style="left:${s.off*BW+1}px;width:${s.bars*4*BW-2}px;background:${secColor(s.name)}">${esc(s.name)}<span style="opacity:.6;font-weight:600"> ${s.bars}小節</span></div>`).join('');
-  const clips=P.sections.map(s=>s.chords.map(c=>{const g=funcOf(c.spec);return `<div class="clip${c.id==UI.clip?' cur':''}" data-clip="${c.id}" style="left:${(s.off+c.start)*BW+1}px;width:${c.len*BW-2}px;border-top-color:${fcol(g)}"><b>${esc(symOf(c.spec))}</b><small>${esc(romOf(c.spec))}</small><div class="rs" data-rs="${c.id}"></div></div>`}).join('')).join('');
+  const clips=P.sections.map(s=>s.chords.map(c=>{const g=funcOf(c.spec);return `<div class="clip${c.id==UI.clip?' cur':''}" data-clip="${c.id}" style="left:${(s.off+c.start)*BW+1}px;width:${c.len*BW-2}px;border-top-color:${fcol(g)}"><b>${esc(symOf(c.spec))}</b><small>${hasMix(c.spec)?'🎚':''}${esc(romOf(c.spec))}</small><div class="rs" data-rs="${c.id}"></div></div>`}).join('')).join('');
   const LO=48,HI=86,H=72;
   const roll=P.sections.map(s=>s.chords.map(c=>{const v=VOX[c.id]||[];const g=funcOf(c.spec);return v.map(m=>{const y=Math.max(0,Math.min(H-2,(HI-m)*(H/(HI-LO))));const isT=ivs(c.spec).filter(x=>x>=12).some(x=>(c.spec.r+x)%12==m%12)&&!QUAL[c.spec.q].iv.some(x=>(c.spec.r+x)%12==m%12);
     return `<div class="nb" style="left:${(s.off+c.start)*BW+2}px;width:${c.len*BW-4}px;top:${y}px;background:${isT?'var(--gold)':fcol(g)}"></div>`}).join('')}).join('')).join('');
@@ -557,6 +577,8 @@ function renderPal(){
   const groups=['T','SD','D','PD','SDm','SEC','SUB','DIM','SL','TEN','TPL','MY'];
   $('palKey').textContent=`Key ${nn(P.key)} ${P.minor?'マイナー':'メジャー'}`;
   $('palF').innerHTML=[['all','すべて'],...groups.map(g=>[g,FN[g][0].replace('（綺麗な響き）','').replace('・ドミナント','D').replace('サブドミナント・マイナー','SDm').replace('パッシング・','')])].map(([g,n])=>`<button class="pill${UI.palF==g?' on':''}" data-pf="${g}">${g=='all'?n:`<span style="color:${fcol(g)}">●</span> ${n}`}</button>`).join('');
+  $('palF').innerHTML=`<button class="pill${UI.palF=='BASS'?' on':''}" data-pf="BASS" style="${UI.palF=='BASS'?'':'border-color:var(--cyan);color:var(--cyan)'}">🎸 ベースから決める</button>`+$('palF').innerHTML;
+  if(UI.palF=='BASS'){$('pal').innerHTML=renderBassMode();return}
   const L=palItems();let h='';
   groups.filter(g=>UI.palF=='all'||UI.palF==g).forEach(g=>{
     let chips='';
@@ -571,8 +593,59 @@ function renderPal(){
 function chipSpecs(el){
   if(el.dataset.pi!=null){const x=curPal()[+el.dataset.pi];return [{spec:relSpec(x.s,x.q,x.t,x.b,x.alt,x.ba),len:UI.defLen}]}
   if(el.dataset.my!=null){const m=MY[+el.dataset.my];return [{spec:relSpec(m.s,m.q,m.t,m.b,m.alt,m.ba),len:UI.defLen}]}
+  if(el.dataset.bc!=null){const k=el.dataset.bc,arr=BC[k[0]]||[],sp=arr[+k.slice(1)];return sp?[{spec:JSON.parse(JSON.stringify(sp)),len:UI.defLen}]:[]}
   if(el.dataset.tpl!=null){const t=(P.minor?TPL_MIN:TPL_MAJ)[+el.dataset.tpl];return t[1].map(a=>({spec:relSpec(a[0],a[1],a[2],a[3],a[4],a[4]),len:a[5]||4}))}
   return [];
+}
+
+/* ================= ベースから決める ================= */
+const BQ=['maj','m','7','maj7','m7','m7b5','dim7','sus4','7sus4','6','m6','mM7','aug'];
+function scalePcs(){const sc=P.minor?[0,2,3,5,7,8,10,11]:[0,2,4,5,7,9,11];return new Set(sc.map(x=>(x+P.key)%12))}
+const DEGPREF_MAJ={0:0,5:.1,7:.1,9:.2,2:.3,4:.5,11:1.2},DEGPREF_MIN={0:0,5:.15,7:.1,8:.2,10:.2,3:.3,2:.6,11:1};
+function bassCands(bass,style){style=style||UI.bstyle||'simple';const SC=scalePcs(),out=[];const pref=P.minor?DEGPREF_MIN:DEGPREF_MAJ;
+  for(let s=0;s<12;s++)for(const q of BQ){const r=(P.key+s)%12;const pcs=QUAL[q].iv.map(x=>(r+x)%12);
+    const dia=pcs.every(x=>SC.has(x));const known=curPal().some(x=>x.s==s&&x.q==q&&x.g!='TEN');if(!dia&&!known)continue;
+    const bi=(bass-r+120)%12;let kind,label,score;
+    if(bi==0){kind='root';label='ルート';score=0}
+    else if(pcs.includes(bass)){kind='inv';const iv=QUAL[q].iv.find(x=>x%12==bi);const dn=degName(spec(r,q),iv);label='ベース＝'+dn+({'3':'（第1転回）','m3':'（第1転回）','5':'（第2転回）','m7':'（第3転回）','△7':'（第3転回）'}[dn]||'');score=dn=='5'?1.6:dn.includes('7')?1.3:1}
+    else{if(pcs.some(x=>(x-bass+12)%12==1))continue;if(QUAL[q].iv.length>4||/aug|dim7|m7b5|6/.test(q))continue;if(!SC.has(bass)&&!dia)continue;kind='hyb';label='分数（コード外のベース）';score=2.2}
+    score+=dia&&SC.has(bass)?0:1.5;
+    if(kind=='root')score+=pref[s]!=null?pref[s]:.8;
+    const is7=QUAL[q].iv.length==4;if(style=='simple'){if(is7&&!(q=='7'&&s==(P.minor?7:7)))score+=.4}else{if(!is7&&q!='sus4')score+=.4}
+    if(/sus|aug|dim7|mM7|6/.test(q))score+=.7;
+    const sp=spec(r,q,[],bi==0?null:bass);
+    if(kind=='hyb'){const id=identify(pcs.concat([bass]),bass).find(o=>o.sp.r==bass);if(id)label='≒ '+symOf(id.sp)+(id.omit5?'（5th省略）':'');}
+    out.push({sp,kind,label,score,g:funcOf(sp)});}
+  return out.sort((a,b)=>a.score-b.score);}
+const BLPRE_MAJ=[['下降ライン',[0,11,9,7,5,4,2,7]],['カノン',[0,7,9,4,5,0,5,7]],['半音下降',[0,11,10,9]],['クリシェ下降',[9,8,7,6]],['ペダル（I）',[0,0,0,0]],['上昇',[0,2,4,5]],['王道のベース',[5,7,4,9]],['IV→V→VI',[5,7,9,9]]];
+const BLPRE_MIN=[['エオリアン',[0,8,10,0]],['半音下降',[0,11,10,9]],['アンダルシア',[0,10,8,7]],['ペダル（Im）',[0,0,0,0]],['上昇',[0,2,3,5]],['下降',[0,10,8,7,5,3,2,7]]];
+function harmonize(line){const res=[];let prev=null,used=new Set();
+  line.forEach((b,i)=>{const pc=(P.key+b)%12;let c=bassCands(pc);
+    if(prev&&prev.pc==pc){c=c.filter(x=>!used.has(symOf(x.sp))).map(x=>({...x,score:x.score+(x.kind=='root'?1.5:-.6)})).sort((a,b)=>a.score-b.score);}else used=new Set();
+    const pick=c[0];if(!pick)return;res.push(pick.sp);used.add(symOf(pick.sp));prev={pc};});
+  return res;}
+function bassChip(o,i,pre){return `<button class="chip${UI.armed&&UI.armed.k==pre+i?' armed':''}" data-bc="${pre}${i}" style="border-bottom-color:${fcol(o.g)}" title="${esc(FN[o.g][0])}">${esc(symOf(o.sp))}<small>${esc(romOf(o.sp))}・${esc(o.label)}</small></button>`}
+let BC={};
+function renderBassMode(){
+  const sel=UI.bassSel==null?P.key:UI.bassSel,SC=scalePcs();
+  const bb=[];for(let i=0;i<12;i++){const pc=(P.key+i)%12;bb.push(`<button class="tb${pc==sel?' on':''}" data-bsel="${pc}" style="${SC.has(pc)?'':'opacity:.6'}">${nn(pc)}<br><small style="font-size:9px;opacity:.7">${rn(pc)}</small></button>`)}
+  const c=bassCands(sel);BC.b=c.map(o=>o.sp);
+  const grp=(kind,title,desc)=>{const L=c.map((o,i)=>[o,i]).filter(([o])=>o.kind==kind);if(!L.length)return '';
+    return `<div class="gh"><i style="background:${kind=='root'?'var(--T)':kind=='inv'?'var(--SL)':'var(--TEN)'}"></i>${title}<small>${desc}</small></div><div class="chips">${L.slice(0,kind=='hyb'?10:14).map(([o,i])=>bassChip(o,i,'b')).join('')}</div>`};
+  const line=UI.bline||[];
+  return `<div class="bl">① ベースの音を選ぶ <small style="font-weight:600">（薄い音＝スケール外）</small></div><div class="brow">${bb.join('')}</div>
+   <div class="acts" style="margin:0 0 4px"><button class="btn sm" data-bplay="1">▶ ベース音</button><button class="btn sm" data-bladd="${sel}">＋ ベースラインに追加</button>
+    <span class="grp"><span class="lab">響き</span><button class="tb${(UI.bstyle||'simple')=='simple'?' on':''}" data-bstyle="simple">シンプル（3和音）</button><button class="tb${UI.bstyle=='jazzy'?' on':''}" data-bstyle="jazzy">おしゃれ（7th）</button></span></div>
+   <div class="bl">② ${nn(sel)} の上に乗せられるコード（おすすめ順）</div>
+   ${grp('root','ルートとして','いちばん素直・機能がはっきり')}
+   ${grp('inv','転回形','コードの3度・5度・7度がベース → ベースラインが滑らか')}
+   ${grp('hyb','分数・ハイブリッド','ベースがコードの外 → 浮遊感・sus・都会的')}
+   <hr><div class="bl">③ ベースラインからまとめてコード付け</div>
+   <div class="chips" style="margin:4px 0">${(P.minor?BLPRE_MIN:BLPRE_MAJ).map((x,i)=>`<button class="pill" data-blpre="${i}">${x[0]}</button>`).join('')}</div>
+   <div class="notes" style="min-height:22px">${line.length?line.map((b,i)=>`<span style="color:var(--cyan);cursor:pointer" data-bldel="${i}" title="タップで削除">${nn((P.key+b)%12)}<em>✕</em></span>`).join(' → '):'<span class="hint">①で音を選んで「＋ ベースラインに追加」、または上のプリセットをタップ</span>'}</div>
+   ${line.length?(()=>{const h=harmonize(line);BC.h=h;return `<div class="bl">自動で付けたコード（タップで試聴・個別に入れ替えはタイムラインで選択→「同じベースで」）</div><div class="chips">${h.map((sp,i)=>`<button class="chip" data-bc="h${i}" style="border-bottom-color:${fcol(funcOf(sp))}">${esc(symOf(sp))}<small>${esc(romOf(sp))}</small></button>`).join('')}</div>
+     <div class="acts"><button class="btn sm" data-blplay="1">▶ 通して聴く</button><button class="btn pri sm" data-blput="1">選択中のセクションに配置（1音＝${UI.defLen}拍）</button><button class="btn sm" data-blclr="1">クリア</button></div>`})():''}
+   <p class="hint" style="margin-top:10px">コードをタップ＝試聴＆「コード設計」に読み込み → 空き小節タップ／「＋ 末尾に追加」で配置。長押し（PCはドラッグ）でもOK。</p>`;
 }
 
 /* ================= 描画：コード設計 ================= */
@@ -599,6 +672,9 @@ function renderBld(){
    <div class="notes">${notes}</div>
    ${warns.length?`<div class="warn">⚠ ${warns.join('<br>⚠ ')}</div>`:sp.t.length?`<div class="ok">✓ テンションはきれいに乗っています</div>`:''}
    ${oks.length?`<div class="ok">${oks.join('<br>')}</div>`:''}
+   ${(()=>{const bp=sp.b!=null?sp.b:sp.r;const alt=bassCands(bp).filter(o=>symOf(o.sp)!==symOf(sp)).slice(0,12);BC.a=alt.map(o=>o.sp);
+     return `<div class="bl">🎸 同じベース（${nn(bp)}）で使える他のコード <small style="font-weight:600">タップで入れ替え</small></div><div class="chips" style="margin:3px 0 8px">${alt.map((o,i)=>`<button class="chip" data-swap="${i}" style="border-bottom-color:${fcol(o.g)};font-size:12.5px">${esc(symOf(o.sp))}<small>${esc(o.label)}</small></button>`).join('')}</div>`})()}
+   ${mixerHtml(sp)}
    <div class="bl">ルート</div><div class="brow">${rb.join('')}</div>
    <div class="bl">コードの種類</div><div class="brow">${qb}</div>
    <div class="bl">テンション <small style="font-weight:600">（<span style="color:var(--gold)">●</span>＝この種類で綺麗に使えるもの）</small></div><div class="brow">${tb}</div>
@@ -625,6 +701,17 @@ function drawKb(sp){const LO=36,HI=84;const v=UI.clip&&VOX[UI.clip]?VOX[UI.clip]
     if(black)h+=`<div class="bk${cls}" style="left:${wi*W-W*.32}px;width:${W*.64}px">${lab}</div>`;else{h+=`<div class="wk${cls}" style="left:${wi*W}px;width:${W}px">${lab}</div>`;wi++}}
   $('kb').innerHTML=`<div class="kbin" style="width:${wi*W}px">${h}</div>`;}
 
+function mixerHtml(sp){
+  const rows=[['B',nn(sp.b!=null?sp.b:sp.r),'ベース','var(--cyan)']].concat(ivs(sp).map(x=>['i'+x,nn((sp.r+x)%12),degName(sp,x),x>=12?'var(--gold)':'var(--pink)']));
+  const sel=(k,v)=>`<select class="sel" data-msnd="${k}" style="padding:3px 4px;font-size:12px;max-width:128px"><option value="">${k=='B'?'ベース（標準）':'曲の音色（'+SOUNDS[P.sound]+'）'}</option>${Object.entries(SOUNDS).map(([a,n])=>`<option value="${a}"${a==v?' selected':''}>${n}</option>`).join('')}</select>`;
+  return `<details class="mixer"${UI.mixOpen?' open':''}><summary class="bl" style="cursor:pointer;margin:2px 0 6px">🎚 音ごとの音量・音色 ${hasMix(sp)?'<span style="color:var(--gold)">（調整あり）</span>':''} <small style="font-weight:600">タップで開く</small></summary>
+   <div class="mixrows">${rows.map(([k,n,dg,c])=>{const mx=mixOf(sp,k);return `<div class="mixrow"><span class="mn" style="color:${c}">${esc(n)}<em>${esc(dg)}</em></span>
+     <input type="range" min="0" max="1.5" step=".05" value="${mx.vol}" data-mvol="${k}"><span class="mv" id="mv-${k}">${Math.round(mx.vol*100)}%</span>
+     ${sel(k,mx.snd)}<button class="tb" data-msolo="${k}" title="この音だけ鳴らす">▶</button></div>`}).join('')}</div>
+   <div class="acts" style="margin-top:4px"><button class="btn sm" data-mreset="1">リセット</button><button class="btn sm" data-mpre="top">トップを強調</button><button class="btn sm" data-mpre="soft">テンション控えめ</button><button class="btn sm" data-mpre="nobass">ベース無し</button>${UI.clip?`<button class="btn sm" data-mapply="sec">この設定をセクション全体に</button><button class="btn sm" data-mapply="all">曲全体に</button>`:''}</div>
+   <p class="hint" style="margin:4px 0 0">音量0%でその音を消せます。MIDI書き出しでは音色ごとに別トラックになり、音量はベロシティに反映されます。</p></details>`;
+}
+
 /* ================= 描画：曲・セクション ================= */
 function renderSec(){const s=secById(UI.sec)||P.sections[0];if(s)UI.sec=s.id;
   const opt=(map,v)=>Object.entries(map).map(([k,n])=>`<option value="${k}"${k==v?' selected':''}>${n}</option>`).join('');
@@ -649,7 +736,7 @@ function renderSec(){const s=secById(UI.sec)||P.sections[0];if(s)UI.sec=s.id;
    <hr>
    <div class="bl">音色・ミキサー</div>
    <div class="f">
-    <label>コード音色</label><select id="sound">${opt({ep:'エレピ',piano:'ピアノ',pad:'パッド（シンセ）',organ:'オルガン'},P.sound)}</select>
+    <label>コード音色</label><select id="sound">${opt(Object.fromEntries(Object.entries(SOUNDS).filter(([k])=>k!='bass')),P.sound)}</select>
     <label>コード</label><input type="range" min="0" max="1" step=".05" value="${P.vol.c}" data-vol="c">
     <label>ベース</label><input type="range" min="0" max="1" step=".05" value="${P.vol.b}" data-vol="b">
     <label>ドラム</label><input type="range" min="0" max="1" step=".05" value="${P.vol.d}" data-vol="d">
@@ -755,10 +842,22 @@ $('tl').addEventListener('drop',e=>{if(!e.target.closest('#chLane'))return;e.pre
 function showDropMark(b){let m=$('dropmark');if(!m){m=document.createElement('div');m.id='dropmark';m.className='dropmark';lane().appendChild(m)}b=Math.max(0,Math.floor(b));m.style.left=(b*UI.zoom)+'px';m.style.width=(UI.defLen*UI.zoom)+'px'}
 function hideDropMark(){const m=$('dropmark');m&&m.remove()}
 
+/* パレット：ベースモードのボタン */
+$('pal').addEventListener('click',e=>{let el;
+  if(el=e.target.closest('[data-bsel]')){UI.bassSel=+el.dataset.bsel;UI.armed=null;armBar();const a=ac();note(36+UI.bassSel>44?24+UI.bassSel:36+UI.bassSel,a.currentTime+.02,1.2,.95,'b');renderPal();return}
+  if(el=e.target.closest('[data-bplay]')){const b=UI.bassSel==null?P.key:UI.bassSel;note(36+b>44?24+b:36+b,ac().currentTime+.02,1.2,.95,'b');return}
+  if(el=e.target.closest('[data-bstyle]')){UI.bstyle=el.dataset.bstyle;renderPal();return}
+  if(el=e.target.closest('[data-bladd]')){UI.bline=(UI.bline||[]).concat([(+el.dataset.bladd-P.key+12)%12]);renderPal();return}
+  if(el=e.target.closest('[data-bldel]')){UI.bline.splice(+el.dataset.bldel,1);renderPal();return}
+  if(el=e.target.closest('[data-blpre]')){UI.bline=(P.minor?BLPRE_MIN:BLPRE_MAJ)[+el.dataset.blpre][1].slice();renderPal();return}
+  if(el=e.target.closest('[data-blclr]')){UI.bline=[];renderPal();return}
+  if(el=e.target.closest('[data-blplay]')){const h=harmonize(UI.bline);let t=ac().currentTime+.05;const d=UI.defLen*spb();let prev=null;h.forEach(sp=>{const v=voiceFor(sp,prev);prev=v;v.forEach(m=>note(m,t,d*.95,.7));note(bassMidi(sp),t,d*.95,.9,'b');t+=d});return}
+  if(el=e.target.closest('[data-blput]')){const h=harmonize(UI.bline);const s=secById(UI.sec)||P.sections[0];snap();s.chords=h.map((sp,i)=>clipOf(JSON.parse(JSON.stringify(sp)),i*UI.defLen,UI.defLen));s.bars=Math.max(1,Math.ceil(h.length*UI.defLen/4));UI.clip=null;saveP();renderAll();toast(s.name+' に '+h.length+'コードを配置');return}
+});
 /* パレット：タップ／ドラッグ */
 $('palF').onclick=e=>{const b=e.target.closest('[data-pf]');if(!b)return;UI.palF=b.dataset.pf;saveP();renderPal()};
 $('pal').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c||PDR.justDragged)return;const items=chipSpecs(c);if(!items.length)return;
-  const k=c.dataset.pi!=null?'p'+c.dataset.pi:c.dataset.my!=null?'my'+c.dataset.my:'tpl'+c.dataset.tpl;
+  const k=c.dataset.pi!=null?'p'+c.dataset.pi:c.dataset.my!=null?'my'+c.dataset.my:c.dataset.bc!=null?c.dataset.bc:'tpl'+c.dataset.tpl;
   if(UI.armed&&UI.armed.k===k){UI.armed=null;c.classList.remove('armed');armBar();toast('配置モードを解除');return}
   UI.armed={items,k};
   if(items.length==1){UI.clip=null;UI.bld=JSON.parse(JSON.stringify(items[0].spec));audition(items[0].spec);renderBld();}
@@ -793,6 +892,20 @@ $('bld').addEventListener('click',e=>{let el;
   if(el=e.target.closest('[data-vt]'))return editSpec(sp=>{sp.v=el.dataset.vt;});
   if(el=e.target.closest('[data-inv]'))return editSpec(sp=>{sp.inv=+el.dataset.inv;});
   if(el=e.target.closest('[data-oct]'))return editSpec(sp=>{sp.oct=Math.max(-2,Math.min(2,(sp.oct||0)+ +el.dataset.oct));});
+  if(el=e.target.closest('.mixer summary')){setTimeout(()=>{UI.mixOpen=el.parentElement.open},0);return}
+  if(el=e.target.closest('[data-msolo]')){const sp=bldSpec(),k=el.dataset.msolo,mx=mixOf(sp,k),a=ac(),t=a.currentTime+.03;
+    if(k=='B')note(bassMidi(sp),t,1.4,.9*Math.max(mx.vol,.3),'b',mx.snd);else{const v=(UI.clip&&VOX[UI.clip])||voiceFor(sp,null);v.filter(m=>keyOfNote(sp,m)==k).forEach(m=>note(m,t,1.4,.8*Math.max(mx.vol,.3),'c',mx.snd))}return}
+  if(el=e.target.closest('[data-mreset]'))return editSpec(sp=>{delete sp.mix});
+  if(el=e.target.closest('[data-mpre]')){const pr=el.dataset.mpre;return editSpec(sp=>{sp.mix=sp.mix||{};const iv=ivs(sp);
+    if(pr=='top'){const v=(UI.clip&&VOX[UI.clip])||voiceFor(sp,null);const top=keyOfNote(sp,v[v.length-1]);iv.forEach(x=>{const k='i'+x;sp.mix[k]=Object.assign(sp.mix[k]||{},{vol:k==top?1.35:.75})})}
+    if(pr=='soft')iv.filter(x=>x>=12).forEach(x=>{sp.mix['i'+x]=Object.assign(sp.mix['i'+x]||{},{vol:.55})});
+    if(pr=='nobass')sp.mix.B=Object.assign(sp.mix.B||{},{vol:0});})}
+  if(el=e.target.closest('[data-mapply]')){const sp=bldSpec(),f=findClip(UI.clip);snap();const list=el.dataset.mapply=='sec'?f.s.chords:P.sections.flatMap(x=>x.chords);
+    const m=sp.mix||{};list.forEach(c=>{c.spec.mix={};if(m.B)c.spec.mix.B={...m.B};const def=Object.entries(m).filter(([k])=>k!='B');
+      /* 度数の役割（3度・7度・テンション等）ごとに写す */
+      def.forEach(([k,v])=>{const x=+k.slice(1);const iv=ivs(c.spec);const tgt=iv.find(y=>y==x)??iv.find(y=>y%12==x%12)??(x>=12?null:iv.find(y=>Math.abs(y-x)==1&&y<12));if(tgt!=null)c.spec.mix['i'+tgt]={...v}})});
+    saveP();renderTL();renderBld();toast(el.dataset.mapply=='sec'?'セクション全体に適用':'曲全体に適用');return}
+  if(el=e.target.closest('[data-swap]')){const a=BC.a[+el.dataset.swap];return editSpec(sp=>{Object.assign(sp,{r:a.r,q:a.q,t:[],b:a.b,alt:'',ba:''})});}
   if(el=e.target.closest('[data-alias]')){const a=JSON.parse(decodeURIComponent(el.dataset.alias));return editSpec(sp=>{Object.assign(sp,{r:a.r,q:a.q,t:a.t,b:a.b,alt:'',ba:''})});}
   if(el=e.target.closest('[data-len]')){const f=findClip(UI.clip);snap();placeInSec(f.s,f.c.start,+el.dataset.len,f.c.spec,f.c.id);saveP();renderAll();return}
   if(el=e.target.closest('[data-deflen]')){UI.defLen=+el.dataset.deflen;renderBld();return}
@@ -808,6 +921,11 @@ $('bld').addEventListener('click',e=>{let el;
     if(a=='my'){const rel=x=>x==null?null:(x-P.key+120)%12;MY.push({s:rel(sp.r),q:sp.q,t:sp.t.slice(),b:rel(sp.b),alt:sp.alt,ba:sp.ba});try{localStorage.setItem('cds-my',JSON.stringify(MY))}catch(_){}renderPal();toast('マイコードに保存：'+symOf(sp));}
     if(a=='chordmid')saveFile(asciiSym(sp).replace(/[\/]/g,'on')+'.mid',MTNsmf([{v:voiceFor(sp,null),b:bassMidi(sp),len:4}]),'mid');
   }});
+let mixT;
+$('bld').addEventListener('input',e=>{const k=e.target.dataset.mvol;if(k==null)return;const sp=bldSpec();if(UI.clip&&!mixT)snap();sp.mix=sp.mix||{};sp.mix[k]=Object.assign(sp.mix[k]||{},{vol:+e.target.value});
+  const lab=document.getElementById('mv-'+k);if(lab)lab.textContent=Math.round(e.target.value*100)+'%';clearTimeout(mixT);mixT=setTimeout(()=>{mixT=null;saveP();if(UI.clip)renderTL();audition(sp,false,UI.clip&&VOX[UI.clip])},250);});
+$('bld').addEventListener('change',e=>{const k=e.target.dataset.msnd;if(k==null)return;const sp=bldSpec();if(UI.clip)snap();sp.mix=sp.mix||{};sp.mix[k]=Object.assign(sp.mix[k]||{},{snd:e.target.value});saveP();if(UI.clip)renderTL();renderBld();
+  const mx=mixOf(sp,k),a=ac(),t=a.currentTime+.03;if(k=='B')note(bassMidi(sp),t,1.4,.9,'b',mx.snd);else{const v=(UI.clip&&VOX[UI.clip])||voiceFor(sp,null);v.filter(m=>keyOfNote(sp,m)==k).forEach(m=>note(m,t,1.4,.8,'c',mx.snd))}});
 $('bld').addEventListener('dragstart',e=>{const el=e.target.closest('[data-a=chordmid]');if(!el)return;const sp=bldSpec();const u8=MTNsmf([{v:voiceFor(sp,null),b:bassMidi(sp),len:4}]);
   e.dataTransfer.setData('DownloadURL','audio/midi:'+asciiSym(sp).replace(/[\/]/g,'on')+'.mid:data:audio/midi;base64,'+b64(u8));e.dataTransfer.setData('text/plain',asciiSym(sp));});
 function MTNsmf(items){const PPQ=480;const ev=[];let t=0;items.forEach(it=>{const d=it.len*PPQ;[it.b,...it.v].forEach(m=>ev.push({on:t,off:t+d-10,m,vel:.8}));t+=d});
