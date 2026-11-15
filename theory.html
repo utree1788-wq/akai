@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音楽理論ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#16131c; --panel:#211c2a; --panel2:#2a2435; --line:#3a3248; --text:#f3eef8; --mute:#a99fb8;
+  --T:#ff7eb6; --SD:#4fd1c5; --D:#a78bfa; --SDm:#60a5fa; --acc:#ffd166;
+  --wk:22px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"M PLUS Rounded 1c",system-ui,sans-serif;font-size:15px;line-height:1.6}
+button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:rgba(22,19,28,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}
+.top h1{font-size:17px;margin:0;font-weight:800;flex:1;white-space:nowrap}
+.top h1 small{color:var(--mute);font-weight:400;font-size:11px;margin-left:6px}
+select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;font-weight:700}
+.midi{font-size:11px;padding:5px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
+.midi.ok{border-color:var(--SD);color:var(--SD)}
+nav{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 10px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:1px solid var(--line);background:var(--panel);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--mute)}
+nav button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+main{padding:14px 12px 230px;max-width:820px;margin:0 auto}
+h2{font-size:20px;margin:4px 0 4px;font-weight:800}
+h3{font-size:15px;margin:22px 0 8px;font-weight:800;color:var(--acc)}
+p.lead{color:var(--mute);margin:0 0 12px;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:active,.row.sel{background:var(--panel2)}
+.list{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:8px 0}
+.nm{font-weight:800;min-width:74px}
+.sub{color:var(--mute);font-size:12px}
+.grow{flex:1;min-width:0}
+.notes{font-weight:700;letter-spacing:.02em}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;border:1.5px solid currentColor;margin-right:4px;white-space:nowrap}
+.T{color:var(--T)} .SD{color:var(--SD)} .D{color:var(--D)} .SDm{color:var(--SDm)}
+.hl{background:linear-gradient(transparent 55%,rgba(255,126,182,.35) 55%);padding:0 2px}
+.hl2{background:linear-gradient(transparent 55%,rgba(79,209,197,.35) 55%);padding:0 2px}
+.steps{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.steps span{font-size:11px;padding:0 6px;border-radius:6px;background:var(--panel2);color:var(--mute)}
+.steps span.h{background:rgba(255,126,182,.25);color:var(--T)}
+.steps span.w3{background:rgba(255,209,102,.2);color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;text-align:left}
+.chip:active,.chip.sel{background:var(--panel2);border-color:var(--mute)}
+.chip b{display:block;font-size:17px}
+.note{font-size:12px;color:var(--mute);border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;background:rgba(255,209,102,.06);border-radius:0 8px 8px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mute);font-size:12px;font-weight:700}
+tr.click{cursor:pointer} tr.click:active{background:var(--panel2)}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;margin:4px 0 8px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:5px 10px;border-radius:8px;font-size:13px;font-weight:700;color:var(--mute)}
+.seg button.on{background:var(--panel2);color:var(--text)}
+.dict{border-radius:14px;background:var(--panel);border:1px solid var(--line);margin:10px 0;overflow:hidden}
+.dict .hd{padding:10px 12px 4px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.dict .hd b{font-size:17px}
+.dict .bd{padding:0 12px 12px;font-size:14px}
+.vars{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.vars button{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:4px 10px;font-weight:800}
+.vars button:active{border-color:var(--T)}
+.to{font-size:12px;color:var(--mute)}
+.keymap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
+.keymap .k{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 4px;cursor:pointer}
+.keymap .k b{display:block;font-size:18px}
+.keymap .k.main{border-color:var(--acc);background:rgba(255,209,102,.08)}
+.quiz .q{font-size:18px;font-weight:800;margin:6px 0 12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts button{background:var(--panel2);border:1.5px solid var(--line);border-radius:12px;padding:12px 6px;font-weight:800;font-size:15px}
+.opts button.ok{border-color:var(--SD);background:rgba(79,209,197,.15)}
+.opts button.ng{border-color:var(--T);background:rgba(255,126,182,.12)}
+.btn{background:var(--text);color:var(--bg);border:0;border-radius:10px;padding:8px 14px;font-weight:800}
+.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+/* bottom dock */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(22,19,28,.97);border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+.dinfo{display:flex;align-items:center;gap:8px;padding:0 12px 6px;max-width:820px;margin:0 auto}
+.dinfo .t{flex:1;min-width:0}
+.dinfo .t b{font-size:16px}
+.dinfo .t div{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dinfo button{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800}
+.kbwrap{overflow-x:auto;padding:0 8px;scrollbar-width:thin}
+.kb{position:relative;height:118px;margin:0 auto;touch-action:manipulation}
+.wk,.bk{position:absolute;top:0;border-radius:0 0 6px 6px;display:flex;align-items:flex-end;justify-content:center;font-size:10px;font-weight:800;padding-bottom:5px;user-select:none}
+.wk{width:var(--wk);height:118px;background:#f7f3fb;border:1px solid #6b6178;color:#2a2435}
+.bk{width:calc(var(--wk)*.62);height:72px;background:#251f2e;border:1px solid #000;z-index:2;color:#fff}
+.wk.on{background:var(--T);color:#fff}
+.bk.on{background:#d9478f}
+.wk.on.r{background:var(--acc);color:#2a2435}
+.bk.on.r{background:#d1a019}
+.wk.m{box-shadow:inset 0 -8px 0 var(--SD)} .bk.m{box-shadow:inset 0 -8px 0 var(--SD)}
+.wk.c::before{content:attr(data-o);position:absolute;top:4px;font-size:9px;color:#9a8fab;font-weight:400}
+.wl{display:flex;flex-wrap:wrap;gap:6px}
+.wl button{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;font-weight:700}
+.wl button:active{border-color:var(--acc)}
+#wq{width:100%;font:inherit;font-size:16px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);outline:none;margin:4px 0 4px}
+#wq:focus{border-color:var(--acc)}
+.cl{color:var(--acc);font-weight:800;border-bottom:1.5px dotted var(--acc);cursor:pointer;padding:0 1px;white-space:nowrap}
+.cl:active,.cl.sel{background:rgba(255,209,102,.2);border-radius:4px}
+.pgrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.pch{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:5px 9px;font-weight:800;font-size:14px;display:inline-flex;flex-direction:column;align-items:center;line-height:1.25}
+.pch small{font-size:10px;color:var(--mute);font-weight:700}
+.pch.sel,.pch:active{border-color:var(--T);background:rgba(255,126,182,.15)}
+.uses{display:flex;flex-direction:column;gap:2px;margin-top:4px;font-size:12px;color:var(--mute)}
+.uses .use b{font-weight:800;margin-right:2px}
+.uses small{font-size:10.5px}
+details.song{padding:10px 12px;border-bottom:1px solid var(--line)}
+details.song:last-child{border-bottom:0}
+details.song summary{cursor:pointer;line-height:1.5}
+.midiline{font-size:12px;color:var(--SD);padding:0 12px 4px;max-width:820px;margin:0 auto;min-height:0}
+@media(min-width:700px){:root{--wk:30px}}
+[draggable=true]{-webkit-user-drag:element}.dragging{opacity:.45}
+</style>
+<script src="drag.js"></script>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>音楽理論ノート<small>手書きノートまとめ</small></h1>
+    <select id="keySel" aria-label="キー"></select>
+    <button class="midi" id="midiBtn">MIDI</button>
+  </div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<div class="dock">
+  <div class="midiline" id="midiLine"></div>
+  <div class="dinfo">
+    <div class="t"><b id="selName">鍵盤をタップ / 項目を選択</b><div id="selNotes">選ぶと音が鳴ります</div></div>
+    <button id="playBlock">▶ 和音</button>
+    <button id="playArp">▶ 分散</button>
+  </div>
+  <div class="kbwrap"><div class="kb" id="kb"></div></div>
+</div>
+<script>
+/* ============ 基本データ ============ */
+const LET='CDEFGAB', NAT=[0,2,4,5,7,9,11];
+const IV={ // token: [半音, 度数, 日本語]
+ P1:[0,1,'完全1度'],m2:[1,2,'短2度'],M2:[2,2,'長2度'],A2:[3,2,'増2度'],m3:[3,3,'短3度'],M3:[4,3,'長3度'],
+ P4:[5,4,'完全4度'],A4:[6,4,'増4度'],d5:[6,5,'減5度'],P5:[7,5,'完全5度'],A5:[8,5,'増5度'],m6:[8,6,'短6度'],
+ M6:[9,6,'長6度'],d7:[9,7,'減7度'],m7:[10,7,'短7度'],M7:[11,7,'長7度'],P8:[12,8,'完全8度']};
+const SHORT={P1:'完1',m2:'短2',M2:'長2',A2:'増2',m3:'短3',M3:'長3',P4:'完4',A4:'増4',d5:'減5',P5:'完5',A5:'増5',m6:'短6',M6:'長6',d7:'減7',m7:'短7',M7:'長7'};
+const MAJ_NAMES=['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+const MIN_NAMES=['C','C#','D','Eb','E','F','F#','G','G#','A','Bb','B'];
+function parse(n){const l=LET.indexOf(n[0]);let a=0;for(const c of n.slice(1)){if(c=='#')a++;if(c=='b')a--;}return{l,pc:(NAT[l]+a+12)%12};}
+function pcOf(n){return parse(n).pc}
+function spell(root,tok){
+  const r=parse(root),[semi,deg]=IV[tok];const tp=(r.pc+semi)%12, l=(r.l+deg-1)%7;
+  let d=(tp-NAT[l]+12)%12;if(d>6)d-=12;
+  return LET[l]+(d>0?'#'.repeat(d):'b'.repeat(-d));
+}
+function pn(s){ // pretty note name (letters + accidentals only)
+  return s.replace(/^([A-G])(#+|b+)?/,(m,l,a)=>l+(a?(a[0]=='#'?(a.length==2?'𝄪':'♯'):'♭'.repeat(a.length)):''));
+}
+/* ============ コード ============ */
+const CT={
+ maj:{s:'',t:['P1','M3','P5'],n:'メジャー・トライアド',f:'ルート＋長3度＋完全5度'},
+ m:{s:'m',t:['P1','m3','P5'],n:'マイナー・トライアド',f:'ルート＋短3度＋完全5度'},
+ aug:{s:'aug',t:['P1','M3','A5'],n:'オーギュメント・トライアド',f:'ルート＋長3度＋増5度（長3度を2つ重ねる）'},
+ dim:{s:'dim',t:['P1','m3','d5'],n:'ディミニッシュ・トライアド',f:'ルート＋短3度＋減5度（短3度を2つ重ねる）'},
+ maj7:{s:'M7',t:['P1','M3','P5','M7'],n:'メジャー・セブンス',f:'メジャー△＋長7度'},
+ '7':{s:'7',t:['P1','M3','P5','m7'],n:'（ドミナント）セブンス',f:'メジャー△＋短7度'},
+ mM7:{s:'mM7',t:['P1','m3','P5','M7'],n:'マイナー・メジャー・セブンス',f:'マイナー△＋長7度'},
+ m7:{s:'m7',t:['P1','m3','P5','m7'],n:'マイナー・セブンス',f:'マイナー△＋短7度'},
+ m7b5:{s:'m7(♭5)',t:['P1','m3','d5','m7'],n:'（ハーフ）ディミニッシュ / m7♭5',f:'dim△＋短7度'},
+ dim7:{s:'dim7',t:['P1','m3','d5','d7'],n:'（フル）ディミニッシュ・セブンス',f:'dim△＋減7度'},
+ m6:{s:'m6',t:['P1','m3','P5','M6'],n:'マイナー・シックス',f:'マイナー△＋長6度'},
+ augM7:{s:'augM7',t:['P1','M3','A5','M7'],n:'オーギュメント・メジャー・セブンス',f:'aug△＋長7度'},
+};
+function chordName(root,type,bass){return pn(root)+CT[type].s+(bass?'/'+pn(bass):'')}
+function chordNotes(root,type){return CT[type].t.map(t=>spell(root,t))}
+function chordMidi(root,type,bass){
+  const r=pcOf(root);
+  if(bass){const b=48+pcOf(bass);return [b,...CT[type].t.map(t=>60+r+IV[t][0])];}
+  return CT[type].t.map(t=>48+r+IV[t][0]);
+}
+function roman(tok){const d=IV[tok][1];const R=['I','II','III','IV','V','VI','VII'][d-1];
+  const pre={m2:'♭',m3:'♭',m6:'♭',m7:'♭',A4:'♯',A5:'♯',d5:'♭'}[tok]||'';return pre+R;}
+
+/* ============ スケール ============ */
+const MODES=[
+ {k:'ionian',n:'イオニアン',en:'Ionian',from:'C',t:['P1','M2','M3','P4','P5','M6','M7'],mood:'明るい・完成形',memo:'完全＋長だけ。最も安定。（＝メジャー・スケール）'},
+ {k:'dorian',n:'ドリアン',en:'Dorian',from:'D',t:['P1','M2','m3','P4','P5','M6','m7'],mood:'クール・中庸',memo:'短3・短7の「陰」と、長6の「光」が同居。'},
+ {k:'phrygian',n:'フリジアン',en:'Phrygian',from:'E',t:['P1','m2','m3','P4','P5','m6','m7'],mood:'闇・緊張',memo:'完全＋短だけ。短の集合体。'},
+ {k:'lydian',n:'リディアン',en:'Lydian',from:'F',t:['P1','M2','M3','A4','P5','M6','M7'],mood:'浮遊・神秘',memo:'増4が特徴。導音あり。'},
+ {k:'mixolydian',n:'ミクソリディアン',en:'Mixolydian',from:'G',t:['P1','M2','M3','P4','P5','M6','m7'],mood:'開放・土臭い',memo:'明るいが終わらない（短7で導音がない）。'},
+ {k:'aeolian',n:'エオリアン',en:'Aeolian',from:'A',t:['P1','M2','m3','P4','P5','m6','m7'],mood:'哀愁・内省',memo:'＝ナチュラル・マイナー（自然的短音階）。'},
+ {k:'locrian',n:'ロクリアン',en:'Locrian',from:'B',t:['P1','m2','m3','P4','d5','m6','m7'],mood:'不安定・禁忌',memo:'減5。安定点ゼロ。崩壊、ノイズ。'},
+];
+const MINORS=[
+ {n:'自然的短音階',en:'Natural minor',t:['P1','M2','m3','P4','P5','m6','m7'],memo:'平行長調（同じ調号）の<b>第6音</b>から始めた音階。'},
+ {n:'和声的短音階',en:'Harmonic minor',t:['P1','M2','m3','P4','P5','m6','M7'],memo:'7番目の音を半音上げる → <span class="hl">導音</span>が生まれる。導音はドミナント・モーション（強い終止感）を生み出す役割がある。<br>※6・7音の間が増2度（1全半）になり、メロディーラインが不自然になりやすい。'},
+ {n:'旋律的短音階',en:'Melodic minor',t:['P1','M2','m3','P4','P5','M6','M7'],memo:'旋律を成り立たせるために6番目の音も半音上げる。<br>※長調のような響きになるので、<b>下降するときは全てナチュラルにして</b>自然的短音階に戻す。'},
+];
+const EXTRA=[
+ {n:'メジャー・ペンタトニック',t:['P1','M2','M3','P5','M6'],memo:'長音階の4・7番目を抜いた5音。ヨナ抜き長音階とも。'},
+ {n:'マイナー・ペンタトニック',t:['P1','m3','P4','P5','m7'],memo:'自然的短音階の2・6番目を抜いた5音。'},
+ {n:'ブルース・スケール',t:['P1','m3','P4','d5','P5','m7'],memo:'マイナー・ペンタに♭5（ブルーノート）を足したもの。'},
+ {n:'ホールトーン・スケール',t:['P1','M2','M3','A4','A5','m7'],memo:'全音だけで並ぶ6音。浮遊感・夢見心地。'},
+ {n:'コンビネーション・オブ・ディミニッシュ',t:['P1','m2','m3','M3','A4','P5','M6','m7'],memo:'半音・全音を交互に繰り返す8音（半全ディミニッシュ）。'},
+];
+const JP=[
+ {n:'陽音階（ヨ音階）',t:['P1','M2','M3','P5','M6'],use:'童謡、沖縄音楽など'},
+ {n:'陰音階（イン音階）',t:['P1','m2','P4','P5','m6'],use:'演歌、尺八、箏'},
+ {n:'都節音階（みやこぶし）',t:['P1','m2','P4','P5','m7'],use:'いかにも日本'},
+ {n:'律音階',t:['P1','M2','M3','P5','M6'],use:'陽音階と同じだが → 表現より秩序。雅楽由来、神事向け',alt:{t:['P1','M2','P4','P5','M6'],l:'一般的な形'}},
+ {n:'琉音階（りゅう）',t:['P1','m2','m3','P5','m6'],use:'',alt:{t:['P1','M3','P4','P5','M7'],l:'一般的な琉球音階'}},
+];
+function stepStr(toks){
+  const s=toks.map(t=>IV[t][0]).concat(12);let out=[];
+  for(let i=1;i<s.length;i++){const d=s[i]-s[i-1];out.push(d==1?['半','h']:d==2?['全','']:d==3?['1全半','w3']:[d+'半','w3']);}
+  return out.map(([a,c])=>`<span class="${c}">${a}</span>`).join('');
+}
+function scaleRoot(toks){const pc=KEY;return toks.includes('m3')&&!toks.includes('M3')?MIN_NAMES[pc]:MAJ_NAMES[pc];}
+function scaleNotes(root,toks){return toks.map(t=>spell(root,t))}
+function scaleMidi(root,toks){const r=48+pcOf(root);return toks.map(t=>r+IV[t][0]).concat(r+12);}
+
+/* ============ ダイアトニック ============ */
+const DIA={
+ major:{label:'長調（メジャー）',rows:[
+  ['P1','maj','maj7','T','主和音'],['M2','m','m7','SD','IVの代理'],['M3','m','m7','T','Iの代理'],
+  ['P4','maj','maj7','SD',''],['P5','maj','7','D',''],['M6','m','m7','T','Iの代理'],['M7','dim','m7b5','D','Vの代理']],
+  note:'機能別：<span class="T">トニック</span> I（代理 VIm, IIIm）／<span class="SD">サブドミナント</span> IV（代理 IIm）／<span class="D">ドミナント</span> V（代理 VIIm(♭5)）'},
+ natural:{label:'自然的短音階',rows:[
+  ['P1','m','m7','T','主和音。安定の中心'],['M2','dim','m7b5','SD','プレドミナント。不安定'],['m3','maj','maj7','T','トニック代理。平行調メジャー由来'],
+  ['P4','m','m7','SD','典型的サブドミナント'],['P5','m','m7','D','ドミナント（弱）。導音がなく解決力が弱い'],['m6','maj','maj7','SD','下行感・哀愁'],['m7','maj','7','D','ドミナント（弱）。次のコードへ流す役']],
+  note:'機能が曖昧・弱いのが特徴（特にドミナント）。Vがマイナー → 導音なし → 機能和声として「未完成」。'},
+ harmonic:{label:'和声的短音階',rows:[
+  ['P1','m','mM7','T','主和音'],['M2','dim','m7b5','SD','プレドミナント'],['m3','aug','augM7','T','トニック代理（特殊）。増三和音、色付け用'],
+  ['P4','m','m7','SD',''],['P5','maj','7','D','ドミナント（強）'],['m6','maj','maj7','SD','ナチュラル由来'],['M7','dim','dim7','D','導音和音']],
+  note:'Vを強化するための音階。<b>V → Im が成立</b>。例 Am：Em → E（E G♯ B）／E7 は G♯–D がトライトーン。'},
+ melodic:{label:'旋律的短音階',rows:[
+  ['P1','m','mM7','T','主和音'],['M2','m','m7','SD','ジャズ的'],['m3','aug','augM7','T','トニック代理（特殊）。色彩'],
+  ['P4','maj','7','SD','メジャー化'],['P5','maj','7','D','強ドミナント'],['M6','dim','m7b5','D','ドミナント的。次へ進める'],['M7','dim','m7b5','D','導音']],
+  note:'IVがメジャーになる。ジャズ、ポップスで多用。例 Am：Dm → D（D F♯ A）／D7、Bdim → Bm／Bm7。'},
+};
+const FN={T:'トニック',SD:'サブドミナント',D:'ドミナント',SDm:'サブドミナント・マイナー'};
+const tag=(f,txt)=>`<span class="tag ${f}">${txt||FN[f]}</span>`;
+
+/* ============ コード事典（Cメジャー基準 → キーで移調） ============ */
+const DICT=[
+ {l:'IΔ7',v:[['P1','maj7']],f:[['T']],to:'全てのコードへ移動できる',d:'大人びた、都会的な響き。'},
+ {l:'I7',v:[['P1','7']],f:[['D']],to:'IV, IVΔ7',d:'IやIΔ7を変化させて作り出す<b>セカンダリー・ドミナント</b>。IVやIVΔ7に移動することが多い。Aメロ・Bメロの終わりなど、セクションの終わりに使うことが多い。'},
+ {l:'IIm / IIm7',v:[['M2','m'],['M2','m7']],f:[['SD']],to:'I, IΔ7, IIIm, IIIm7, V, V7, VIm, VIm7',d:'<b>ツーファイブワン</b>（IIm7・V7・I）という形で使われることが多い。IVやIVΔ7と構成音が近く、これらの代理として使われることもある。'},
+ {l:'II / II7',v:[['M2','maj'],['M2','7']],f:[['D']],to:'V, V7',d:'IIm・IIm7を変化させて作り出すセカンダリー・ドミナント。II7・V7とドミナントセブンスが2連続する進行は<b>ダブルドミナント</b>と呼ばれ、ポジティブな緊張感を与える。'},
+ {l:'IIIm / IIIm7',v:[['M3','m'],['M3','m7']],f:[['T','major scale'],['D','minor scale']],to:'IIm, IIm7, IV, IVΔ7, VIm, VIm7',d:'暗く主張の弱い響き。I・IΔ7の代理として使ったり、IIIm→VImなどの形でドミナントとして使ったりと、万能なコード。'},
+ {l:'III / III7',v:[['M3','maj'],['M3','7']],f:[['D']],to:'VIm, VIm7',d:'IIImやIIIm7を変化させて作り出すセカンダリー・ドミナント。強い切なさを感じさせる響きで、暗い雰囲気の曲で使われる。'},
+ {l:'IV / IVΔ7',v:[['P4','maj'],['P4','maj7']],f:[['SD','major scale'],['T','minor scale']],to:'全てのダイアトニックコードへ',d:'安定感と緊張感をあわせもつ不思議な響き。深みはあるが主張は強くない。ストレートな感情を表現するのには向いていない。'},
+ {l:'IVm / IVm6 / IVm7 / IVmΔ7',v:[['P4','m'],['P4','m6'],['P4','m7'],['P4','mM7']],f:[['SDm']],to:'I, IΔ7, IIIm, IIIm7, V, V7',d:'IVやIVΔ7を変化させて作り出す<b>サブドミナント・マイナー</b>。切なさがあり、温かみのある独特な響き。解決の手段として、トニック前やドミナント前に置かれる。'},
+ {l:'V / V7',v:[['P5','maj'],['P5','7']],f:[['D']],to:'I, IΔ7, IIIm, IIIm7, VIm, VIm7',d:'明るく緊張感のある響き。V→I、V7→Iは<b>完全終止</b>。IIImやVImなどの代理トニックに進行する場合は「<b>偽終止</b>」となり、まだ続きの展開があるように聴こえる。'},
+ {l:'IIm7/V・IV/V・IVΔ7/V',v:[['M2','m7','P5'],['P4','maj','P5'],['P4','maj7','P5']],f:[['D']],to:'I, IΔ7, IIIm, IIIm7, VIm, VIm7',d:'ドミナント系の分数コード。<b>ポップス・ドミナント</b>と呼ばれ、都会的な解決感のある響き。VやV7のもつ、いかにも教科書的な雰囲気を解消するために使われる。'},
+ {l:'Vm / Vm7',v:[['P5','m'],['P5','m7']],f:[['SD']],to:'I, I7, IV, IVΔ7',d:'VやV7を変化させて作り出すサブドミナントコード。独特な開放感のある響きを持つ。Vm7・I7・IV、Vm7・IVΔ7という形で、IVに移動するきっかけを作り出すことができる。'},
+ {l:'VIm / VIm7',v:[['M6','m'],['M6','m7']],f:[['T']],to:'全てのダイアトニックコードへ',d:'素直な暗さ、マイナーな暗さ。暗く安定感のある響き。暗い曲では最も基本的な響きとなり、曲の最初と最後に使うことが多い。'},
+ {l:'VI / VI7',v:[['M6','maj'],['M6','7']],f:[['D']],to:'IIm, IIm7',d:'VIm・VIm7を変化させて作り出すセカンダリー・ドミナント。IImやIIm7に移動することが多い。歌謡曲らしい雰囲気が漂う響きで、少しクサい感じになるので注意。'},
+ {l:'VI（ピカルディ終止の場合）',v:[['M6','maj']],f:[['T']],to:'全てのダイアトニックコードへ',d:'マイナーコードVImをメジャーコードVIに置き換えて終止させることを<b>ピカルディ終止</b>と呼ぶ。本来暗かったコードが明るく変化することで、神聖で華やかな印象になる。転調の手段としても使われる。'},
+ {l:'VIIm(♭5) / VIIm7(♭5)',v:[['M7','dim'],['M7','m7b5']],f:[['D','major scale'],['SD','minor scale']],to:'III, III7',d:'暗い展開を予感させる陰鬱な響きを持つ。IIIやIII7に移動し、切ない展開に進むことが多い。癖が強め。'},
+ {l:'VIIm / VIIm7',v:[['M7','m'],['M7','m7']],f:[['SD']],to:'III, III7',d:'VIIm(♭5)やVIIm7(♭5)を変化させて作り出すサブドミナント。もとの形より少し鋭く、切れ味を上げたような響き。ダイアトニックコードでもセカンダリー・ドミナントでもない。'},
+ {l:'VII / VII7',v:[['M7','maj'],['M7','7']],f:[['D']],to:'IIIm, IIIm7',d:'VIIm(♭5)やVIIm7(♭5)を変化させて作り出すセカンダリー・ドミナント。ダークで妖しさが漂ってくるような癖の強い響き。クラシカルな雰囲気になってしまうことも多い。'},
+ {l:'♯IVm(♭5) / ♯IVm7(♭5)',v:[['A4','dim'],['A4','m7b5']],f:[['T'],['D','IIの代理と見なす場合']],to:'IV, IVΔ7, V, V7',d:'VImなどと構成音が似ているため、トニックの代理コードとして使うことができる。また、II7の代理コードとして使うこともできる。緊張と不安が混じり合ったような複雑な響き。ルートが半音下がってIVやIVΔ7などに移動するか、ルートが半音上がってVやV7などに移動する。'},
+ {l:'♯Vdim / ♯Vdim7',v:[['A5','dim'],['A5','dim7']],f:[['D']],to:'VIm, VIm7',d:'IIIやIII7の代理コード。強い切なさを感じる響きもほぼ同様。V・♯Vdim・VImという流れで使う。'},
+ {l:'♭VI / ♭VIΔ7',v:[['m6','maj'],['m6','maj7']],f:[['SDm']],to:'V, V7, ♭VII, ♭VII7',d:'IVmなどのサブドミナント・マイナーの代理コード。転調感が強く、浮遊感のある響き。♭VI・♭VII・Iという流れで使う。ルートが半音下がってVなどのドミナントに進行もする。'},
+ {l:'♭VII / ♭VII7',v:[['m7','maj'],['m7','7']],f:[['D','同主調'],['SD','IVmの代理と見なす場合']],to:'I, IΔ7, ♭III, ♭IIIΔ7, V, V7',d:'同主調のドミナントコードで、「<b>別解のドミナント</b>」（Iに移動することができるもう一つのドミナント）のような意外性があるものの、不思議と納得させられてしまう力強さがある。♭VI・♭VII・I、IVm7・♭VII7 など。'},
+ {l:'♭II / ♭IIΔ7',v:[['m2','maj'],['m2','maj7']],f:[['SD']],to:'',d:'下属調のサブドミナントコード。唐突に使用することで、ありきたりな流れを変える。'},
+];
+
+/* ============ 調 ============ */
+const SIG={0:'調号なし',7:'♯1',2:'♯2',9:'♯3',4:'♯4',11:'♯5',6:'♯6',1:'♭5',8:'♭4',3:'♭3',10:'♭2',5:'♭1'};
+const RELTAB=[['','C','Am'],['♯','G','Em'],['♯2','D','Bm'],['♯3','A','F♯m'],['♯4','E','C♯m'],['♯5','B','G♯m'],['♯6','F♯','D♯m'],['♯7','C♯','A♯m'],
+ ['♭','F','Dm'],['♭2','B♭','Gm'],['♭3','E♭','Cm'],['♭4','A♭','Fm'],['♭5','D♭','B♭m'],['♭6','G♭','E♭m'],['♭7','C♭','A♭m']];
+
+const MT1 = [
+{t:"ピカルディ終止", tag:"終止", b:`短調の曲なのに、終わりの主和音をメジャーコードにする手法。Aマイナースケールのときに Aコードで終わる。
+例：Am → Asus4 → A`, play:[["Am","Asus4","A"]]},
+{t:"ブルースの特徴", tag:"スタイル", b:`① ブルース形式：ドミナントセブンスのみで構成された12小節のコード進行
+  C7 | C7 | C7 | C7 | F7 | F7 | C7 | C7 | G7 | F7 | C7 | G7
+② ブルーノートスケール：メジャースケール＋ブルーノートという3音
+  C, D, E♭, E, F, G♭, G, A, B♭, B, C
+偶発的に、オルタードテンションの響きが出るときがある。例）C7の部分で E♭ → C7(#9)`, play:[["C7","C7","C7","C7","F7","F7","C7","C7","G7","F7","C7","G7"]]},
+{t:"aug と 7sus4", tag:"コードの種類", b:`aug：全て長3度で堆積。Caug（C E G#）メジャー寄り、クリシェで使用。
+五度圏表で正三角形に3つむすぶと aug へ、正方形に4つむすぶと dim7 へ。
+7sus4：ドミナント7の3度を4度に上げたもの。
+G7sus4（G C D F）⇔ Dm7/G（G D E A）は似ている。ボイシング変更→ D G C F（4度堆積）`, play:[["Caug","G7sus4","Dm7/G"]]},
+{t:"トライアド・四和音・sus", tag:"コードの種類", b:`トライアド：メジャー＝長3度＋完全5度／マイナー＝短3度＋完全5度
+dim（m(♭5)）＝短3度＋減5度
+m7(♭5)＝短3度＋減5度＋短7度　／　dim7＝短3度＋減5度＋減7度
+四和音：7＝短7度、△7＝長7度
+　　　　　メジャー　　マイナー
+セブンス　　○7　　　○m7
+メジャー7　 ○△7　　 ○m△7
+sus：3度を長3度から半音上げる→完全4度（sus4）／短3度から半音下げる→長2度（sus2）。3度が無いので明るさがはっきりしない。`, play:[["C","Cm","Cdim","Cm7(b5)","Cdim7","C7","C△7","Cm7","Cm△7","Csus4","Csus2"]]},
+{t:"主要三和音と代理コード", tag:"機能", b:`C(T) Dm(SD) Em(T) F(SD) G(D) Am(T) Bm(♭5)(D / SD：minor ii)
+主要三和音：Tonic C／SubDominant F／Dominant G
+代理コード＝主要三和音以外のコード
+　Tonic：Em, Am　SubDominant：Dm, Bm(minor ii)　Dominant：G, Bm
+V7＝プライマリードミナント`},
+{t:"セカンダリードミナント一覧", tag:"機能", b:`本来ダイアトニックコードで m だったコードが、セカンダリードミナントとしてメジャー化したとき、Dominant として4度上行のコードへ行きたがる。
+・C7 Dominant → F
+・D7 Dominant → G
+・E7 Dominant → Am
+・A7 Dominant → Dm
+・B7 Dominant → Em
+☆ Fm：SubDominant minor／Dm/G：Dominant（G＋テンション）／Gm：SubDominant
+A で終止：Tonic／F#m：Tonic・Dominant／G#dim：Dominant（G#は導音、Aマイナーの）
+☆ A♭：SubDominant minor（Fmの代理コード）
+B♭：Dominant（同主調Cマイナー、弱）／☆ B♭：SubDominant minor（Fmの代理コード、IVm）`, play:[["C7","F"],["D7","G"],["E7","Am"],["A7","Dm"],["B7","Em"]]},
+{t:"ケーデンス（終止形）", tag:"機能", b:`ケーデンス＝コードの機能をどのように繋いで最後のトニックに戻るかを分類したもの。
+・ドミナント終止　T→D→T　C→G7→C
+・サブドミナント終止　T→SD→T　C→F→C
+・サブドミナント・ドミナント連結終止　T→SD→D→T　C→F→G7→C
+・ドミナント・サブドミナント連結終止　T→D→SD→T　C→G7→F→C
+偽終止＝Cメジャースケールの代表的なドミナント終止にはG7・Cなどがあるが、Cに代理コードを差し替えたもの。例）G7・Am、G7・Em`, play:[["C","G7","C"],["C","F","C"],["C","F","G7","C"],["C","G7","F","C"],["G7","Am"]]},
+{t:"強進行・ドミナントモーション・ツーファイブワン", tag:"機能", b:`強進行：根音が完全4度上（or 完全5度下）のコードに移動すること。I–IV、IIIm–VI（メジャー化 A7–Dm）、VIm–IIm、V7–I
+ドミナントセブンス：○7の形のコードで、トライトーン（三全音）を含む。緊張感の強い音程。これを解消するために特定のコードにスムーズに移動することができる → ドミナントモーション（V7–I、G7–C）
+ツーファイブワン：IIm7・V7・I（Dm G C）＝強進行×2＋SD・D・T並び。非常にスムーズで推進力が強い。
+セカンダリードミナント＝あるダイアトニックコードを強制的にドミナントセブンスに変形することによって、対応するコードへの移動をスムーズにしたコード。`, play:[["G7","C"],["Dm7","G7","C"]]},
+{t:"サブドミナントマイナー", tag:"機能", b:`IVをマイナーにしたIVmのこと。Fm（F・A♭・C）→ C（E・G・C）：半音下行だけで移動できる＝Iに移動しやすくなる。
+Fは元々SubDominantで終止感が弱い点が弱点であったが、これを克服した。転調感や変化を与えることができる響きで、明るい曲で使うことが多い。
+IVm以外に：IVm6・IVm7・IVm△7、VII♭(B♭)、VI♭(A♭)、VII♭7(B♭7)、IIm7(♭5)(Dm7(♭5))
+IVm6（F A♭ C D）とIIm7(♭5)（D F A♭ C）は同じ構成音。
+VII♭（B♭ D F）、VII♭7（B♭ D F A♭）、IVm7（F A♭ C E♭）、VI♭（A♭ C E♭）、IVm△7（F A♭ C E）`, play:[["F","Fm","C"],["Fm6","C"],["B♭7","C"],["A♭","C"]]},
+{t:"トライトーンとドミナントモーション", tag:"機能", b:`トライトーン＝濁った感じの響き、緊張感が出る。減5度の音程。Cメジャーでは Bm(♭5)・G7・Bm7(♭5)（ドミナントセブンス）。
+ドミナントモーション：コードが完全4度上（or 完全5度下）に動く強進行の中で、ドミナントセブンスからの強進行。Cメジャーでは G7→C。
+ドミナントセブンスはトライトーンを持つ代表のコードで、緊張感があり、解放されることにより安定したコードへ強進行するということ。
+ドミナント（dominant）＝支配する。ドミナントが支配し、否が応でもトニックを期待する。`, play:[["G7","C"]]},
+{t:"リレイテッドIIm7", tag:"機能", b:`セカンダリードミナントの前にマイナーセブンスを付けてツーファイブワンに。
+基準 → セカンダリードミナント → 解決先
+Gm7 → C7 → F, F△7
+Am7 → D7 → G, G7
+Bm7 → E7 → Am, Am7
+Em7 → A7 → Dm, Dm7
+F#m7 → B7 → Em, Em7`, play:[["Gm7","C7","F△7"],["Am7","D7","G7"],["Bm7","E7","Am7"],["Em7","A7","Dm7"],["F#m7","B7","Em7"]]},
+{t:"マイナースケールにおけるコードの機能", tag:"機能", b:`ナチュラルマイナー：Am(T) Bm(♭5)(SD) C(T) Dm(SD) Em(D) F(T) G(D)
+Em は Cメジャースケールではトニックだが、Aマイナースケールではドミナント。立ち位置が中途半端。
+Emに対して A は完全4度上の強進行だが、導音（Aの半音下 G#）を含まない為、機能が弱い。
+→ Em（E G B）を E（E G# B）へ（ハーモニックマイナー由来）
+＋ドミナントモーションも Em7 だと使用できない → ○7の形にする為、E7の形へ変換。
+ドミナント E／ドミナントセブンス E7／ドミナントモーション E7→A
+偽終止 E7→F、E7→C　例）Bメロを E7 で終わり、サビ頭の F や F△7 につなげるパターン。`, play:[["Em","Am"],["E7","Am"],["E7","F△7"]]},
+];
+
+const MT2 = [
+{t:"マイナースケールのツーファイブワン", tag:"機能", b:`Aマイナーver：Bm7(♭5)（ツー）・E7（ファイブ）・Am（ワン）
+　　　　　　　　　2　　　　5　　1
+Cメジャースケール　Dm7　　　G7　C（C△7）
+Cマイナースケール　Dm7(♭5)　G7　Cm（Cm7）
+☆G7を基点としているので、
+Dm7 → G7 → C（C△7）／Dm7(♭5) → G7 → C（C△7）／Dm7 → G7 → Cm（Cm7）
+Dm7＝短3・短7、Dm7(♭5)＝短3・減5・短7、Ddim7＝短3・減5・減7`, play:[["Bm7(b5)","E7","Am"],["Dm7(b5)","G7","Cm7"]]},
+{t:"パッシングディミニッシュ／クリシェ", tag:"テクニック", b:`パッシングディミニッシュ　例）G7 → G#dim7 → Am（ルートが半音ずつ上がる）
+なぜdimなのか？ G7から動くとして（Amへ）G#dim、G#dim7は Amに対するドミナントである E7に似ているから。
+E7（E G# B D）／G#dim（G# B D）／G#dim7（G# B D F）
+クリシェ＝コードの一部だけ音がじわじわ動く。
+ベースラインクリシェ＝低音が半音ずつ下がる。パッシングディミニッシュに似ている。
+クリシェはaugを用いて使われることが多い。例）C, Caug, C6, C7（ソ→ソ#→ラ→シ♭）
+aug（オーギュメント）＝ルートから長3度ずつ音を重ねた和音`, play:[["G7","G#dim7","Am"],["C","Caug","C6","C7"]]},
+{t:"ベースペダルポイント／sus4", tag:"テクニック", b:`ベースペダルポイント＝特定の位置で低音部を固定してコード進行の変化をゆったりさせる。
+例）C　G/C　F/C　C（Cをベースペダルポイントとして）
+クリシェと違い、さまざまなコード進行の低音部を固定することで無数のパターンを作れるところがベースペダルポイントの強み。固定するポイントは、トニックかドミナントの位置。
+ベースペダルポイントは雰囲気の変化が小さくなる ⇔ 曲のエンディングなどで壮大な感じにするテク 例）Dm7 G7 Csus4 C
+サスペンディッド4th（sus4）＝不安定で浮遊感。メジャーコードの長3度の音を半音上げた形。メジャーでもマイナーでもない。曲の流れで明るくも暗くもなる。4度は3度に進みたがる。ドミナント的。`, play:[["C","G/C","F/C","C"],["Dm7","G7","Csus4","C"]]},
+{t:"分数コード 3タイプ", tag:"コードの種類", b:`① 転回形＝ルート以外のコード構成音が最低音にあるコード形。例）C/E
+② ハイブリッドコード＝分子のコード構成音にない音が最低音にあるコード形。例）C/D（ドミナント系分数コード）
+③ ポリコード＝2つのコードを重ねて一つのコードとして扱う。例）Em/Dm
+　A／Em7 ＝ Em7(11,13) → ボイシングを固定できる（上：C# E A／下：E G B）`, play:[["C/E","C/D"]]},
+{t:"ドミナント系分数コード／sus4系分数コード", tag:"コードの種類", b:`サブドミナント終止 F→C（SD→T）は強進行ではない。強進行＝ドミナント終止 G→C（D→T）。
+F/G → C：ルート音は強進行できる。終止感がUP ＝ ドミナント系分数コード
+主なドミナント系分数コード：F/G、F△7/G、Dm7/G
+sus4系分数コード：例）F△7, Em7, Dm7, G/A（ハイブリッドコード）
+G/A（A, G・B・D）とAsus4（A・D・E）：Aを基準にしたとき3度にあたる音がなく、4thが共通。
+例）F△7, Em7, Dm7, G/A, A（A C# E）解決。明るさを曖昧にしたいときに sus4 と同じようにメジャーコード前に置かれる。
+F/G形＝全音下のメジャー／元のルート → G/A（元のコードAm）
+Dm7/G形＝完全4度下のm7／元のルート → Em7/A
+F△7/G形＝全音下の△7／元のルート → G△7/A`, play:[["F/G","C"],["F△7","Em7","Dm7","G/A","A"]]},
+{t:"五度圏と転調", tag:"スケール", b:`五度圏：時計回りで完全5度上（属調）→ #が1つ増える or ♭が1つ減る。反時計回りで完全4度上（下属調）→ ♭が1つ増える or #が1つ減る。
+内側は平行調のマイナーキー（C=Am, G=Em, D=Bm …）。
+属調への転調：音楽的に自然で力強い展開を生む。#が1つ増える → 音が明るく華やかに。
+下属調への転調：♭が1つ増え → 落ち着きや深い印象、安らぎを与える。メロディを優しく聞かせたいとき。`, circle:true},
+{t:"コードトーンとテンションノート", tag:"テンション", b:`コードトーン＝ルートからオクターブ内にある7度までの音。
+テンションノート＝オクターブよりも外にある9度以降の音。緊張感のある音が特徴。オクターブ上のルートの全音上が9度。15度は2オクターブ上のルートに戻ってくるので13度まで。
+呼び方省略：○7(9)→○9、○△7(9)→○△9、○7sus4(9)→○9sus4、○m7(9)→○m9、○m7(♭5,9)→○m9(♭5)
+☆ C△7(9), Dm7(9), F△7(9), G7(9), Am7(9)：長9度はOK
+1オクターブ上のルートとの距離が全音の関係＝ナインス（9／長9度）、半音の関係＝♭ナインス（♭9／短9度）
+※特別な場合を除き、♭9はアボイドノート ✕ Em7(♭9), Bm7(♭5,♭9)`, play:[["C△7(9)","Dm7(9)","F△7(9)","G7(9)","Am7(9)"]]},
+{t:"add9とオルタードテンション（♭9・#9）", tag:"テンション", b:`add9＝三和音にテンションコードを加えるとき。C(add9) ≠ C9（セブンスがない）
+☆ボイシングを気を付けよ！ルートと9が近づかないように、ルートを左手で、3・5・9を転回して右手で音を出す。
+オルタードテンション♭9ver：G7(♭9)。ドミナントセブンスはそもそも緊張感があるから。セカンダリードミナントも A7(♭9)、D♭7(♭9)。
+7(♭9)：ルート以外は dim7 と同じ。2つのトライトーンが組み合わさっていて強進行できる強力なドミナントコード。
+オルタードテンション#9ver（短3度）：Aマイナースケールのドミナント E7(#9)（長3と短3度）。マイナースケールのドミナントで使用する。明るいのに暗い。`, play:[["C(add9)","C9"],["G7(b9)","C"],["E7(#9)","Am"]]},
+{t:"イレブンス（11・#11）", tag:"テンション", b:`イレブンス（4度）：11と#11がある。
+(11) オクターブ上のルートから5半音＝完全4度
+(#11) オクターブ上のルートから6半音＝増4度
+※長3度とイレブンス(11)は短9度 → アボイドノート ✕ C△7(11), G7(11)
+オルタードテンション#11ver：D♭7 ⇔ G7（裏コード）。G7(#11) の #11 ＝ 裏コードのルート音＝D♭`, play:[["G7(#11)","C"],["D♭7","C"]]},
+{t:"サーティーンス（13・♭13）", tag:"テンション", b:`サーティーンス（6度）：13と♭13がある。
+(13) オクターブ上のルートから9半音＝長6度
+(♭13) オクターブ上のルートから8半音＝短6度
+※ Em7(♭13), Am7(♭13) は使えない。Bm7(♭5,♭13) はOK。
+オルタードテンション♭13ver：マイナースケールのドミナント。Aマイナードミナント E7(♭13)：非常にダーク。Aマイナードミナントの中に平行調（Cメジャー）の主音（C）が入っている → 不安定が安定してしまっている。`, play:[["G7(13)","C"],["E7(b13)","Am"]]},
+{t:"アボイドノート", tag:"テンション", b:`アボイドノート：ルートとの関係が悪く濁った響きになる。コードトーン（7thまでの音）に対して、短9度（13半音）の関係になる音。
+※隣り合ったらNG、どの音とも半音の距離。
+アボイドノートまとめ：♭9、Em7(♭9)、Bm7(♭5♭9)、C△7(11)、G7(11)、Em7(♭13)、Am7(♭13)
+同じ度数同士の複合は使えない：♭9と9、11と#11、♭13と13
+アボイドノートの回避方法（短かければOK）
+① アボイドノートを含むコードを変形する。C△7とF → Csus4
+② 短9度音程を半音下げる。G7とC → Gm7
+③ アボイドノート自体を半音上げる。Em7とF → F#`},
+{t:"裏コード（トライトーン・サブスティテューション）", tag:"機能", b:`G7（G B D F）と D♭7（D♭ F A♭ B）は同じトライトーン（B と F）を含んでいる。
+五度圏で正反対の位置にある。G7の代わりに D♭7 を使うと、ベースが半音で滑らかに I へ下がる。`, play:[["Dm7","G7","C"],["Dm7","D♭7","C"]]},
+{t:"プラガル終止", tag:"終止", b:`プラガル的空気感 例）♭VII→I（SD→T）：下から全音上昇、ドミナント感がない、包み込む帰還。
+プラガル終止（＝変格終止、アーメン終止）例）IV→I：V→Iに比べ緊張感が少ない。
+ドミナント：緊張→解決、半音解決、支配
+プラガル：拡張→収束、全音／四度関係、包容
+例）IVm→I（同主短調借用）Fm→C`, play:[["B♭","C"],["F","C"],["Fm","C"]]},
+{t:"音程と倍音", tag:"基礎", b:`音程の相関図：完全音程（一度・四度・五度・八度）と、長音程／短音程（二度・三度・六度・七度）。完全音程・長音程から半音広がると増音程、完全音程・短音程から半音狭まると減音程。
+基音と倍音：ひとつの音（基音）には、オクターブ・5度・オクターブ・長3度…と倍音が重なっている。
+トライトーン（増4度／減5度）はオクターブのちょうど半分。`},
+];
+const MEMO=[...MT1,...MT2];
+const PC={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const SHARP=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const FLAT=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+const PKEYS=[['C',0],['D♭',1],['D',2],['E♭',3],['E',4],['F',5],['F#',6],['G',7],['A♭',8],['A',9],['B♭',10],['B',11]];
+const QUAL={'5':[0,7],'':[0,4,7],'m':[0,3,7],'7':[0,4,7,10],'m7':[0,3,7,10],'maj7':[0,4,7,11],'mmaj7':[0,3,7,11],
+ '6':[0,4,7,9],'m6':[0,3,7,9],'aug':[0,4,8],'dim':[0,3,6],'dim7':[0,3,6,9],'sus4':[0,5,7],'sus2':[0,2,7],
+ '7sus4':[0,5,7,10],'9':[0,4,7,10,14],'maj9':[0,4,7,11,14],'m9':[0,3,7,10,14]};
+const TEN={'b5':null,'#5':null,'add9':14,'9':14,'b9':13,'#9':15,'11':17,'#11':18,'13':21,'b13':20};
+function norm(s){return s.replace(/♭/g,'b').replace(/♯/g,'#').replace(/△/g,'maj')}
+function parseRoot(s){const m=s.match(/^([A-G])([#b]?)/);if(!m)return null;let p=PC[m[1]]+(m[2]=='#'?1:m[2]=='b'?-1:0);return {pc:(p+12)%12,len:m[0].length}}
+function parseChord(sym){
+  let s=norm(sym), bass=null;
+  const sl=s.indexOf('/'); if(sl>0){bass=parseRoot(s.slice(sl+1)).pc; s=s.slice(0,sl);}
+  const r=parseRoot(s); let rest=s.slice(r.len);
+  let paren=''; const pi=rest.indexOf('('); if(pi>=0){paren=rest.slice(pi+1,rest.lastIndexOf(')'));rest=rest.slice(0,pi);}
+  let iv=(QUAL[rest]||QUAL['']).slice();
+  paren.split(/[,、 ]+/).filter(Boolean).forEach(t=>{
+    if(t=='b5'){iv=iv.map(x=>x==7?6:x)}
+    else if(t=='#5'){iv=iv.map(x=>x==7?8:x)}
+    else if(TEN[t]!=null){iv.push(TEN[t])}
+  });
+  return {root:r.pc,bass:bass==null?r.pc:bass,iv};
+}
+
+/* ============ 状態 ============ */
+let KEY=0, TAB='memo';
+try{const s=JSON.parse(localStorage.getItem('mtn')||'{}');if(s.k!=null)KEY=s.k;if(s.t)TAB=s.t;}catch(e){}
+const save=()=>{try{localStorage.setItem('mtn',JSON.stringify({k:KEY,t:TAB}))}catch(e){}};
+const KN=()=>MAJ_NAMES[KEY];
+
+/* ============ 音 ============ */
+let AC,MASTER;
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();const c=AC.createDynamicsCompressor();MASTER=AC.createGain();MASTER.gain.value=.5;MASTER.connect(c);c.connect(AC.destination);}if(AC.state=='suspended')AC.resume();return AC;}
+const f=m=>440*Math.pow(2,(m-69)/12);
+function voice(m,t0,dur,vel=.8){
+  const a=ac(),o1=a.createOscillator(),o2=a.createOscillator(),g=a.createGain(),lp=a.createBiquadFilter();
+  o1.type='triangle';o2.type='sine';o1.frequency.value=f(m);o2.frequency.value=f(m)*2;
+  const g2=a.createGain();g2.gain.value=.25;o2.connect(g2);g2.connect(g);o1.connect(g);
+  lp.type='lowpass';lp.frequency.value=2600;g.connect(lp);lp.connect(MASTER);
+  const pk=.22*vel;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(pk,t0+.01);g.gain.exponentialRampToValueAtTime(pk*.45,t0+.35);
+  o1.start(t0);o2.start(t0);
+  if(dur!=null){g.gain.setTargetAtTime(0,t0+dur,.18);o1.stop(t0+dur+1);o2.stop(t0+dur+1);}
+  return {stop(){const t=a.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.setTargetAtTime(0,t,.12);o1.stop(t+.8);o2.stop(t+.8);}};
+}
+function playBlock(ms){const a=ac(),t=a.currentTime+.02;ms.forEach(m=>voice(m,t,1.4,.75));}
+function playArp(ms){const a=ac();let t=a.currentTime+.02;ms.forEach(m=>{voice(m,t,.42,.8);t+=.24;});}
+
+/* ============ 選択と鍵盤 ============ */
+let CUR={midi:[],names:{},root:null,mode:'block'};
+function select(title,sub,midi,names,mode,rootMidi,noPlay){
+  CUR={midi,names,mode,root:rootMidi??midi[0]};
+  document.getElementById('selName').innerHTML=title;
+  document.getElementById('selNotes').innerHTML=sub;
+  drawKeys();
+  if(!noPlay)(mode=='arp'?playArp:playBlock)(midi);
+  document.querySelectorAll('.sel').forEach(e=>e.classList.remove('sel'));
+}
+const LOW=48,HIGH=84;
+function buildKb(){
+  const kb=document.getElementById('kb');kb.innerHTML='';
+  const wk=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--wk'));
+  let x=0;
+  for(let m=LOW;m<HIGH;m++){
+    const pc=m%12,black=[1,3,6,8,10].includes(pc);
+    const el=document.createElement('div');el.dataset.m=m;
+    if(black){el.className='bk';el.style.left=(x-wk*.31)+'px';}
+    else{el.className='wk'+(pc==0?' c':'');el.style.left=x+'px';if(pc==0)el.dataset.o='C'+(m/12-1);x+=wk;}
+    el.addEventListener('pointerdown',e=>{e.preventDefault();const v=voice(m,ac().currentTime+.005,null);el.classList.add('m');
+      const up=()=>{v.stop();el.classList.remove('m');window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up)};
+      window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);});
+    kb.appendChild(el);
+  }
+  kb.style.width=x+'px';
+}
+function drawKeys(){
+  document.querySelectorAll('#kb [data-m]').forEach(el=>{
+    const m=+el.dataset.m,on=CUR.midi.includes(m);
+    el.classList.toggle('on',on);el.classList.toggle('r',on&&m==CUR.root);
+    el.textContent=on?(pn(CUR.names[m]||'')):'';
+  });
+  const first=document.querySelector('#kb .on');
+  if(first){const w=document.querySelector('.kbwrap');const l=first.offsetLeft-20;if(l<w.scrollLeft||l>w.scrollLeft+w.clientWidth-60)w.scrollTo({left:l,behavior:'smooth'});}
+}
+document.getElementById('playBlock').onclick=()=>CUR.midi.length&&playBlock(CUR.midi);
+document.getElementById('playArp').onclick=()=>CUR.midi.length&&playArp(CUR.midi);
+function selChord(root,type,bass,el){
+  const ms=chordMidi(root,type,bass),ns=chordNotes(root,type),nm={};
+  if(bass){nm[ms[0]]=bass;ns.forEach((n,i)=>nm[ms[i+1]]=n);}else ns.forEach((n,i)=>nm[ms[i]]=n);
+  select(chordName(root,type,bass),(bass?pn(bass)+' ＋ ':'')+ns.map(pn).join(' ・ ')+'　<span style="opacity:.7">'+CT[type].n+'</span>',ms,nm,'block',bass?ms[1]:ms[0]);
+  if(el)el.classList.add('sel');
+}
+function selScale(title,root,toks,el){
+  const ms=scaleMidi(root,toks),ns=scaleNotes(root,toks),nm={};ns.forEach((n,i)=>nm[ms[i]]=n);nm[ms[ms.length-1]]=root;
+  select(title,ns.map(pn).join(' ・ '),ms,nm,'arp');if(el)el.classList.add('sel');
+}
+
+
+/* ---- 再生ヘルパー（スケール上行/下行・ドローン・コード進行） ---- */
+let SEQ=null;
+function stopSeq(){if(SEQ){SEQ.timers.forEach(clearTimeout);SEQ.btn&&SEQ.btn.classList.remove('sel');SEQ=null;}}
+function seqPlay(items,btn,step=1000){ // items:[{name,sub,ms,names}]
+  const same=SEQ&&SEQ.btn===btn;stopSeq();if(same)return;
+  SEQ={btn,timers:[]};btn&&btn.classList.add('sel');
+  items.forEach((it,i)=>SEQ.timers.push(setTimeout(()=>{select(it.name,it.sub||items.map((x,j)=>j==i?'<b style="color:var(--T)">'+x.name+'</b>':x.name).join(' → '),it.ms,it.names,'block',it.root);btn&&btn.classList.add('sel');},i*step)));
+  SEQ.timers.push(setTimeout(()=>stopSeq(),items.length*step+200));
+}
+function chordItem(root,type){const ms=chordMidi(root,type),ns=chordNotes(root,type),nm={};ns.forEach((n,i)=>nm[ms[i]]=n);return {name:chordName(root,type),ms,names:nm};}
+function scaleRun(root,toks,dir,btn,drone){
+  stopSeq();const ms=scaleMidi(root,toks),ns=scaleNotes(root,toks).concat(root),nm={};ms.forEach((m,i)=>nm[m]=ns[i]);
+  let seq=ms.map((m,i)=>[m,ns[i]]);if(dir=='down')seq=seq.reverse();if(dir=='both')seq=seq.concat(seq.slice(0,-1).reverse());
+  const a=ac(),t0=a.currentTime+.03,st=drone?.34:.26;
+  if(drone){const r=36+pcOf(root);[r,r+7,r+12].forEach(m=>voice(m,t0,seq.length*st+.6,.55));}
+  seq.forEach(([m],i)=>voice(m+(drone?12:0),t0+i*st,st*1.3,.8));
+  const shown=drone?ms.map(m=>m+12):ms,nm2={};shown.forEach((m,i)=>nm2[m]=ns[i]);
+  select(btn?btn.dataset.title:'',ns.map(pn).join(' ・ '),shown,nm2,'arp',shown[0],true);
+  SEQ={btn,timers:[setTimeout(()=>stopSeq(),seq.length*st*1000+300)]};btn&&btn.classList.add('sel');
+}
+function scaleBtns(title,root,toks,opts={}){
+  const p=encodeURIComponent(JSON.stringify([root,toks]));const ti=title.replace(/"/g,'');
+  return `<div class="vars">
+   <button data-run="up" data-p="${p}" data-title="${ti}（上行）">▶ 上行</button>
+   <button data-run="down" data-p="${p}" data-title="${ti}（下行）">▶ 下行</button>
+   <button data-run="both" data-p="${p}" data-title="${ti}（往復）">▶ 往復</button>
+   <button data-run="drone" data-p="${p}" data-title="${ti}（ドローン＋旋律）">♪ ドローン＋旋律</button></div>`;
+}
+const MODE_CH={
+ ionian:[['P1','maj'],['P4','maj'],['P5','maj'],['P1','maj'],'I・IV・V・I（王道の完全終止）'],
+ dorian:[['P1','m7'],['P4','7'],['P1','m7'],['P4','7'],'Im7・IV7（長6度＝IV7 の3度が「光」）'],
+ phrygian:[['P1','m'],['m2','maj'],['P1','m'],['m2','maj'],'Im・♭II（短2度の闇）'],
+ lydian:[['P1','maj'],['M2','maj'],['P1','maj'],['M2','maj'],'I・II（増4度が II の3度で浮く）'],
+ mixolydian:[['P1','maj'],['m7','maj'],['P4','maj'],['P1','maj'],'I・♭VII・IV・I（導音なしの開放感）'],
+ aeolian:[['P1','m'],['m6','maj'],['m7','maj'],['P1','m'],'Im・♭VI・♭VII・Im（哀愁の定番）'],
+ locrian:[['P1','m7b5'],['m2','maj7'],['P1','m7b5'],['m2','maj7'],'Im7(♭5)・♭IIΔ7（安定点ゼロ）'],
+};
+const JP_CH=[
+ [[['P1','maj'],['P5','maj'],['M6','m'],['P1','maj']],'I・V・VIm・I（明るい童謡風）'],
+ [[['P1','m'],['m2','maj'],['P4','m'],['P1','m']],'Im・♭II・IVm・Im（演歌風）'],
+ [[['P1','m'],['m2','maj7'],['m7','m'],['P1','m']],'Im・♭IIΔ7・♭VIIm・Im（都節の和）'],
+ [[['P1','maj'],['M2','m'],['P5','maj'],['P1','maj']],'I・IIm・V・I（雅やかに）'],
+ [[['P1','maj'],['P4','maj'],['M3','m'],['P1','maj']],'I・IV・IIIm・I（琉球の一般形で）'],
+];
+/* ============ 画面 ============ */
+const TABS=[
+ ['memo','理論メモ'],['palette','音階→コード'],['interval','音程'],['chord','コード'],['scale','スケール'],['mode','モード'],['japan','日本の音階'],
+ ['key','調'],['func','機能'],['diatonic','ダイアトニック'],['words','用語一覧'],['quiz','クイズ']];
+const V={};
+
+V.interval=()=>{
+  const r=MAJ_NAMES[KEY];
+  const rows=[
+   ['P1',0,'完全1度',''],['m2',1,'短2度',''],['M2',2,'長2度',''],['m3',3,'短3度',''],['M3',4,'長3度',''],['P4',5,'完全4度',''],
+   ['A4',6,'増4度 / 減5度','トライトーン'],['P5',7,'完全5度',''],['m6',8,'短6度',''],['M6',9,'長6度',''],['m7',10,'短7度',''],['M7',11,'長7度',''],['P1',12,'完全8度','オクターブ']];
+  const comp=[[13,'短9度','♭9'],[14,'長9度','9'],[15,'短10度',''],[16,'長10度',''],[17,'完全11度','11'],[18,'増11度 / 減12度','♯11'],[19,'完全12度',''],[20,'短13度','♭13'],[21,'長13度','13'],[22,'短14度',''],[23,'長14度',''],[24,'完全15度','']];
+  return `<h2>音程（インターバル）</h2><p class="lead">ルート ${pn(r)} からの距離。タップで2音を鳴らします。オクターブを超えると「＋7度」（9度＝2度＋オクターブ）。</p>
+  <div class="list">${rows.map(([t,s,n,x])=>{const nn=s==12?r:spell(r,t);return `<div class="row" data-iv="${s}" data-n="${nn}"><span class="nm">${s}半音</span><span class="grow"><b>${n}</b> <span class="sub">${x}</span></span><span class="notes">${pn(r)} → ${pn(nn)}</span></div>`}).join('')}</div>
+  <h3>オクターブ以上（テンション）</h3>
+  <div class="list">${comp.map(([s,n,x])=>`<div class="row" data-iv="${s}" data-n="${MIN_NAMES[(KEY+s)%12]}"><span class="nm">${s}半音</span><span class="grow"><b>${n}</b></span><span class="sub">${x?'テンション '+x:''}</span></div>`).join('')}</div>`;
+};
+V.chord=()=>{
+  const r=MAJ_NAMES[KEY];
+  const g=(title,ks)=>`<h3>${title}</h3><div class="list">${ks.map(k=>`<div class="row" data-ch="${r}|${k}"><span class="nm">${chordName(r,k)}</span><span class="grow"><b>${CT[k].n}</b><div class="sub">${CT[k].f}</div></span><span class="notes">${chordNotes(r,k).map(pn).join(' ')}</span></div>`).join('')}</div>`;
+  return `<h2>コードの成り立ち</h2><p class="lead">ルート ${pn(r)}（上のキーで変更）。△＝トライアド。</p>
+  ${g('トライアド（3和音）',['maj','m','aug','dim'])}
+  ${g('セブンス（4和音）',['maj7','7','mM7','m7','m7b5','dim7'])}
+  <div class="note">※ dim に長7度は存在しない（dim△＋減7度＝dim7、dim△＋短7度＝m7♭5）。</div>
+  <h3>セブンスの関係</h3>
+  <div class="card" style="font-size:14px">
+   <b>メジャー△</b> ＋ 長7 → <b>M7</b>　／ ＋ 短7 → <b>7</b><br>
+   <b>マイナー△</b> ＋ 長7 → <b>mM7</b>　／ ＋ 短7 → <b>m7</b><br>
+   <b>dim△</b> ＋ 短7 → <b>m7♭5</b>　／ ＋ 減7 → <b>dim7</b>
+  </div>`;
+};
+V.scale=()=>{
+  const mk=(list)=>`<div class="list">${list.map((s,i)=>{const r=scaleRoot(s.t);return `<div class="row" data-sc="${encodeURIComponent(JSON.stringify([pn(r)+' '+s.n,r,s.t]))}" style="align-items:flex-start"><span class="grow"><b>${pn(r)} ${s.n}</b> ${s.en?`<span class="sub">${s.en}</span>`:''}
+   <div class="notes">${scaleNotes(r,s.t).map(pn).join(' ')}</div><div class="sub">${s.t.map(t=>SHORT[t]).join(' ')}</div><div class="steps">${stepStr(s.t)}</div>${s.memo?`<div class="sub" style="margin-top:4px">${s.memo}</div>`:''}</span></div>`}).join('')}</div>`;
+  return `<h2>スケール</h2><p class="lead">タップで上行して鳴らします。全＝全音、半＝半音。</p>
+  <h3>長調（メジャー・スケール）</h3>${mk([{n:'メジャー・スケール',en:'Major',t:MODES[0].t,memo:'<b>全全半全全全半</b>'}])}
+  <h3>3種の短調</h3>
+  <div class="card" style="font-size:14px">平行長調（＝同じ調号を持つ長調）の<b>第6音から始めた音階</b>が自然的短音階。<br>例：C メジャー ↔ A マイナー</div>
+  ${mk(MINORS)}
+  <h3>その他のよく使うスケール</h3>${mk(EXTRA)}`;
+};
+V.mode=()=>{
+  return `<h2>モード（教会旋法）</h2><p class="lead">Cメジャー・スケールの白鍵を、どの音から始めるかで7つのモードになる。下は全て ${pn(KN())} 始まりに移調して比較。▶ で音階、コード名で特徴的な響きが鳴ります。</p>
+  ${MODES.map(s=>{const rr=s.t.includes('m3')?MIN_NAMES[KEY]:MAJ_NAMES[KEY];const ch=MODE_CH[s.k];const cs=ch.slice(0,4).map(([tok,ty])=>[spell(rr,tok),ty]);
+   return `<div class="dict"><div class="hd"><b>${s.n}</b><span class="sub">${s.en}・白鍵${s.from}〜</span><span class="tag T">${s.mood}</span></div><div class="bd">
+   <div class="notes">${scaleNotes(rr,s.t).map(pn).join(' ')}</div><div class="sub">${s.t.map(t=>SHORT[t]).join(' ')}</div><div class="steps">${stepStr(s.t)}</div>
+   <div class="sub" style="margin-top:4px">${s.memo}</div>
+   ${scaleBtns(pn(rr)+' '+s.n,rr,s.t)}
+   <div class="sub" style="margin-top:6px">特徴的なコード：${ch[4]}</div>
+   <div class="vars"><button data-cseq="${encodeURIComponent(JSON.stringify(cs))}">▶ ${cs.map(([r,t])=>chordName(r,t)).join(' → ')}</button>${[...new Map(cs.map(c=>[c.join(),c])).values()].map(([r,t])=>`<button data-ch="${r}|${t}">${chordName(r,t)}</button>`).join('')}</div>
+   </div></div>`}).join('')}
+  <h3>明るさの順</h3>
+  <div class="card" style="font-size:14px">リディアン ＞ イオニアン ＞ ミクソリディアン ＞ ドリアン ＞ エオリアン ＞ フリジアン ＞ ロクリアン<div class="sub">（隣同士は1音だけ違う）</div>
+  <div class="vars" style="margin-top:8px"><button id="modeTour">▶ 明るい順に7つ全部聴く</button></div></div>`;
+};
+V.japan=()=>{
+  const r=MAJ_NAMES[KEY];
+  return `<h2>日本の音階</h2><p class="lead">基本は5音音階（ペンタトニック）。ルート ${pn(r)}。「ドローン＋旋律」は低音を鳴らしたまま音階を弾くので、雰囲気がつかみやすいです。</p>
+  ${JP.map((s,i)=>{const cs=JP_CH[i][0].map(([tok,ty])=>[spell(r,tok),ty]);return `<div class="dict"><div class="hd"><b>${s.n}</b>${s.use?`<span class="tag SD">${s.use}</span>`:''}</div><div class="bd">
+   <div class="notes">${scaleNotes(r,s.t).map(pn).join(' ')}</div><div class="sub">${s.t.map(t=>SHORT[t]).join(' ')}</div>
+   ${scaleBtns(s.n,r,s.t)}
+   ${s.alt?`<div class="sub" style="margin-top:6px">${s.alt.l}：${scaleNotes(r,s.alt.t).map(pn).join(' ')}（${s.alt.t.map(t=>SHORT[t]).join(' ')}）</div>${scaleBtns(s.n+'・'+s.alt.l,r,s.alt.t)}`:''}
+   <div class="sub" style="margin-top:6px">合わせるコード例：${JP_CH[i][1]}</div>
+   <div class="vars"><button data-cseq="${encodeURIComponent(JSON.stringify(cs))}">▶ ${cs.map(([r,t])=>chordName(r,t)).join(' → ')}</button></div>
+   </div></div>`}).join('')}
+  <div class="note">構成音はノートの記述をそのまま載せています。律音階・琉音階は資料によって構成音が違うので、一般によく見る形も聴き比べられます。コード例は雰囲気をつかむための参考です。</div>`;
+};
+V.key=()=>{
+  const k=KN(),P5=spell(k,'P5'),P4=spell(k,'P4'),rel=spell(k,'M6');
+  const box=(cls,n,ttl,sig,sc)=>`<div class="k ${cls}" data-sc="${encodeURIComponent(JSON.stringify(sc))}"><div class="sub">${ttl}</div><b>${n}</b><div class="sub">${sig}</div></div>`;
+  const MJ=MODES[0].t,NM=MINORS[0].t;
+  return `<h2>調（キー）の関係</h2><p class="lead">主調 ${pn(k)} メジャーの場合。タップで音階を再生。</p>
+  <div class="keymap">
+   ${box('',pn(spell(P4,'M6'))+'m','下属調の平行調',SIG[pcOf(P4)],[pn(spell(P4,'M6'))+'m',spell(P4,'M6'),NM])}
+   ${box('',pn(rel)+'m','平行調',SIG[KEY],[pn(rel)+'m',rel,NM])}
+   ${box('',pn(spell(P5,'M6'))+'m','属調の平行調',SIG[pcOf(P5)],[pn(spell(P5,'M6'))+'m',spell(P5,'M6'),NM])}
+   ${box('',pn(P4),'下属調（♭+1）',SIG[pcOf(P4)],[pn(P4)+' メジャー',P4,MJ])}
+   ${box('main',pn(k),'主調',SIG[KEY],[pn(k)+' メジャー',k,MJ])}
+   ${box('',pn(P5),'属調（♯+1）',SIG[pcOf(P5)],[pn(P5)+' メジャー',P5,MJ])}
+   <div></div>${box('',pn(k)+'m','同主調',' ',[pn(k)+'m',k,NM])}<div></div>
+  </div>
+  <h3>近親調（主調と関係の近い調）</h3>
+  <div class="list">
+   <div class="row"><span class="nm">平行調</span><span class="grow">調号が同じ長調と短調。<b>音階の構成音が全て同じ</b>。<div class="sub">C メジャー ↔ A マイナー</div></span></div>
+   <div class="row"><span class="nm">同主調</span><span class="grow">主音が同じ長調と短調。<div class="sub">C メジャー ↔ C マイナー（E♭, A♭, B♭）</div></span></div>
+   <div class="row"><span class="nm">属調</span><span class="grow">完全5度上。<b>♯が1つ増える</b>（♭が1つ減る）。<div class="sub">C メジャー ↔ G メジャー（F♯）</div></span></div>
+   <div class="row"><span class="nm">下属調</span><span class="grow">完全5度下。<b>♭が1つ増える</b>（♯が1つ減る）。<div class="sub">C メジャー ↔ F メジャー（B♭）</div></span></div>
+  </div>
+  <p class="sub">これ以外の、関係の遠い調は「遠隔調」。</p>
+  <h3>転調の使い方</h3>
+  <div class="card" style="font-size:14px">
+   <b class="T">属調（Dominant key）</b>：高揚感・緊張感が大きくなる。転調（Modulation）によく使われる。サビ前、ブリッジ時。<br><br>
+   <b class="SD">下属調（Subdominant key）</b>：深い安らぎ、落ち着きを演出する。回想シーンなども。主調に戻る前や、エンディングの強調（サブドミナント的）。<br><br>
+   <span class="sub">古典派音楽では、提示部で第1主題を主調、第2主題を属調で提示し、緊張感の対比を作ることが一般的。</span>
+  </div>
+  <h3>平行調（Relative key）一覧</h3>
+  <p class="sub">見つけ方：長調のルート音から<b>3半音低い音</b>を探す。</p>
+  <div class="card" style="padding:4px 8px"><table><tr><th>調号</th><th>長調</th><th>短調</th></tr>
+  ${RELTAB.map(([s,M,m])=>`<tr><td>${s||'なし'}</td><td><b>${M}</b></td><td><b>${m}</b></td></tr>`).join('')}</table></div>`;
+};
+V.func=()=>`<h2>コード機能</h2><p class="lead">コードは3つの役割（機能）に分かれる。I・IV・V＝主要三和音。</p>
+  <div class="list">
+   <div class="row"><span class="nm">${tag('T','T')}</span><span class="grow"><b>トニック</b>（I）— 安定<div class="sub">中音・主音を含む。トニック機能は「緩和」。</div></span></div>
+   <div class="row"><span class="nm">${tag('SD','SD')}</span><span class="grow"><b>サブドミナント</b>（IV）— 半緊張</div>
+   <div class="row"><span class="nm">${tag('D','D')}</span><span class="grow"><b>ドミナント</b>（V）— 緊張<div class="sub">下属音（サブドミナント）と導音を含む。ドミナント機能は「緊張感」。</div></span></div>
+  </div>
+  <svg viewBox="0 0 340 200" style="width:100%;max-width:420px;display:block;margin:10px auto">
+   <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a99fb8"/></marker></defs>
+   <circle cx="170" cy="40" r="30" fill="none" stroke="#ff7eb6" stroke-width="2.5"/><text x="170" y="46" text-anchor="middle" fill="#ff7eb6" font-weight="800" font-size="18">T</text>
+   <circle cx="70" cy="155" r="30" fill="none" stroke="#a78bfa" stroke-width="2.5"/><text x="70" y="161" text-anchor="middle" fill="#a78bfa" font-weight="800" font-size="18">D</text>
+   <circle cx="270" cy="155" r="30" fill="none" stroke="#4fd1c5" stroke-width="2.5"/><text x="270" y="161" text-anchor="middle" fill="#4fd1c5" font-weight="800" font-size="18">SD</text>
+   <path d="M196 56 L250 128" stroke="#a99fb8" stroke-width="2" marker-end="url(#ar)"/>
+   <path d="M240 158 L104 158" stroke="#a99fb8" stroke-width="2" marker-end="url(#ar)"/>
+   <path d="M88 130 L146 58" stroke="#a99fb8" stroke-width="2" marker-end="url(#ar)"/>
+   <path d="M250 136 L196 64" stroke="#a99fb8" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#ar)"/>
+   <text x="62" y="90" fill="#f3eef8" font-size="11" text-anchor="middle">緊張から</text><text x="62" y="104" fill="#f3eef8" font-size="11" text-anchor="middle">戻ろうとする力</text>
+   <text x="282" y="90" fill="#f3eef8" font-size="11" text-anchor="middle">弱い緊張から</text><text x="282" y="104" fill="#f3eef8" font-size="11" text-anchor="middle">戻ろうとする力</text>
+   <text x="170" y="196" fill="#a99fb8" font-size="11" text-anchor="middle">D → SD はあまり使用されない</text>
+  </svg>
+  <div class="vars" style="justify-content:center">
+   <button data-prog="T,SD,D,T">▶ I → IV → V → I</button><button data-prog="T,D,T">▶ I → V → I</button><button data-prog="T,SD,T">▶ I → IV → I</button>
+  </div>
+  <h3>音度の名前と役割（長調）</h3>
+  <div class="card" style="padding:4px 8px"><table>
+   <tr><th></th><th>度</th><th>名前</th><th></th></tr>
+   <tr><td>${tag('T','T')}</td><td>I</td><td>トニック</td><td>主音</td></tr>
+   <tr><td>${tag('SD','SD')}</td><td>II</td><td>スーパートニック</td><td>上主音</td></tr>
+   <tr><td>${tag('T','T')}</td><td>III</td><td>ミディアント</td><td>中音</td></tr>
+   <tr><td>${tag('SD','SD')}</td><td>IV</td><td>サブドミナント</td><td>下属音</td></tr>
+   <tr><td>${tag('D','D')}</td><td>V</td><td>ドミナント</td><td>属音</td></tr>
+   <tr><td>${tag('T','T')}</td><td>VI</td><td>サブミディアント</td><td>下中音</td></tr>
+   <tr><td>${tag('D','D')}</td><td>VII</td><td>リーディングトーン</td><td>導音</td></tr>
+  </table></div>
+  <div class="note">VI はトニック代理だが、サブドミナント・マイナーとしても使われる。</div>
+  <div class="list">
+   <div class="row"><span class="nm">VII 強</span><span class="grow"><b>リーディングトーン＝導音</b><div class="sub">トニックに対して<b>半音下</b>にある。主音へ進む力が強い。</div></span></div>
+   <div class="row"><span class="nm">VII 弱</span><span class="grow"><b>サブトニック</b><div class="sub">自然的短音階の第7音。主音に対して全音で離れていて、導音と比べると主音へ進む傾向が強くない。</div></span></div>
+  </div>
+  <h3>3和音の種類（M＝メジャー、m＝マイナー）</h3>
+  <div class="card" style="padding:4px 8px;overflow-x:auto"><table style="text-align:center">
+   <tr><th></th><th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th><th>VII</th></tr>
+   <tr><td class="sub">長調</td><td>M</td><td>m</td><td>m</td><td>M</td><td>M</td><td>m</td><td>dim</td></tr>
+   <tr><td></td><td class="T">T</td><td class="SD">SD</td><td class="T">T</td><td class="SD">SD</td><td class="D">D</td><td class="T">T</td><td class="D">D</td></tr>
+   <tr><td class="sub">自然的短調</td><td>m</td><td>dim</td><td>M</td><td>m</td><td>m</td><td>M</td><td>M</td></tr>
+   <tr><td></td><td class="T">T</td><td class="SD">SD</td><td class="T">T</td><td class="SD">SD</td><td class="D">D</td><td class="SD">SD</td><td class="D">D</td></tr>
+  </table></div>`;
+let DMODE='major', DSEV=false;
+V.diatonic=()=>{
+  const d=DIA[DMODE],k=DMODE=='major'?MAJ_NAMES[KEY]:MIN_NAMES[KEY];
+  return `<h2>ダイアトニック・コード</h2><p class="lead">${pn(k)}${DMODE=='major'?'':'m'}・${d.label}。タップで和音を再生。</p>
+  <div class="seg" id="dmode">${Object.entries(DIA).map(([kk,v])=>`<button data-dm="${kk}" class="${kk==DMODE?'on':''}">${v.label.replace('（メジャー）','')}</button>`).join('')}</div>
+  <div class="seg"><button data-dsev="0" class="${!DSEV?'on':''}">3和音</button><button data-dsev="1" class="${DSEV?'on':''}">4和音（7th）</button></div>
+  <div class="list">${d.rows.map(([tok,t3,t4,fn,memo])=>{const r=spell(k,tok),ty=DSEV?t4:t3;return `<div class="row" data-ch="${r}|${ty}">
+   <span class="nm">${roman(tok)}<span class="sub">${CT[ty].s.replace('M7','Δ7').replace('m7(♭5)','ø')}</span></span>
+   <span class="grow"><b>${chordName(r,ty)}</b> ${tag(fn)}<div class="sub">${memo}</div></span><span class="notes">${chordNotes(r,ty).map(pn).join(' ')}</span></div>`}).join('')}</div>
+  <div class="note">${d.note}</div>
+  ${DMODE!='major'?`<h3>機能別まとめ（短調全体）</h3><div class="card" style="font-size:14px">${tag('T','Tonic系')} Im, ♭III, ♭III+<br>${tag('SD','SubDominant')} IIø, IVm / IV, ♭VI<br>${tag('D','Dominant')} V, VII°, ♭VII</div>`:''}`;
+};
+const DIATONIC_L=['IΔ7','IIm / IIm7','IIIm / IIIm7','IV / IVΔ7','V / V7','VIm / VIm7','VIIm(♭5) / VIIm7(♭5)'];
+DICT.forEach(e=>e.odd=!DIATONIC_L.includes(e.l));
+function dictCard(e,k){
+  return `<div class="dict" id="d-${DICT.indexOf(e)}"><div class="hd"><b>${e.l}</b>${e.f.map(([fn,n])=>tag(fn,n?FN[fn]+'（'+n+'）':null)).join('')}</div><div class="bd">
+   <div class="vars">${e.v.map(([tok,ty,b])=>{const r=spell(k,tok),bb=b?spell(k,b):'';return `<button data-ch="${r}|${ty}|${bb}">${chordName(r,ty,bb)}</button>`}).join('')}</div>
+   ${e.to?`<div class="to">→ ${e.to}</div>`:''}<div style="margin-top:4px">${e.d}</div></div></div>`;
+}
+V.dict=()=>{
+  const k=MAJ_NAMES[KEY];
+  return `<h2>コード事典</h2><p class="lead">ダイアトニック・コード（スケールの音だけでできる基本の7つ）。キー ${pn(k)} メジャーで表示（ノートは C 基準）。</p>
+  ${DICT.filter(e=>!e.odd).map(e=>dictCard(e,k)).join('')}
+  <div class="note">セカンダリー・ドミナントや借用和音などは「<a href="#" data-goto="odd" style="color:var(--acc)">変わり者コード</a>」へ。</div>`;
+};
+V.odd=()=>{
+  const k=MAJ_NAMES[KEY];
+  return `<h2>変わり者コード</h2><p class="lead">ダイアトニック以外のコード（セカンダリー・ドミナント、サブドミナント・マイナー、同主調からの借用、代理コードなど）。キー ${pn(k)} メジャーで表示。</p>
+  ${DICT.filter(e=>e.odd).map(e=>dictCard(e,k)).join('')}`;
+};
+
+/* ---- 理論メモ（コード進行100ノートから） ---- */
+let MTAG=null, MOPEN=new Set(), MSEQ=null;
+function symNotes(sym){
+  const c=parseChord(sym),fl=!/#/.test(sym);const nm=pc=>(fl?FLAT:SHARP)[(pc%12+12)%12].replace('♭','b');
+  const rp=c.root,base=55+((rp-7+12)%12);const ms=[],names={};
+  if(c.bass!==c.root){const b=48+c.bass;ms.push(b);names[b]=nm(c.bass);}
+  c.iv.forEach(i=>{const m=base+i;ms.push(m);names[m]=nm(rp+i);});
+  return {ms,names};
+}
+const TPF=[0,1,3,5,8,10];
+function tpSym(sym){if(!KEY)return sym;
+  return sym.replace(/(^|\/)([A-G])([#♯b♭]?)/g,(x,pre,l,a)=>{let pc=PC[l]+(a=='#'||a=='♯'?1:a?-1:0);pc=(pc+KEY+120)%12;return pre+(TPF.includes(KEY)?FLAT:SHARP)[pc];});}
+const prettyS=x=>x.replace(/b(?=[^a-z]|$)/g,'♭').replace(/\(b/g,'(♭').replace(/,b/g,',♭');
+function memoPlay(seq,btn){seq=seq.map(tpSym);
+  if(MSEQ){clearTimeout(MSEQ.t);MSEQ.btn&&MSEQ.btn.classList.remove('sel');const same=MSEQ.btn===btn;MSEQ=null;if(same)return;}
+  MSEQ={btn};btn.classList.add('sel');let i=0;
+  const step=()=>{if(!MSEQ||MSEQ.btn!==btn)return;if(i>=seq.length){btn.classList.remove('sel');MSEQ=null;return;}
+    const sym=seq[i],{ms,names}=symNotes(sym);
+    select(sym.replace(/b(?=[^a-z]|$)/g,'♭').replace(/\(b/g,'(♭').replace(/,b/g,',♭'),seq.map((s,j)=>j==i?'<b style="color:var(--T)">'+s+'</b>':s).join(' → '),ms,names,'block',null);
+    btn.classList.add('sel');i++;MSEQ.t=setTimeout(step,1000);};
+  step();
+}
+function memoCircle(){
+  const maj=['C','G','D','A','E','B','F♯','D♭','A♭','E♭','B♭','F'],kk=[0,7,2,9,4,11,6,1,8,3,10,5];
+  const min=['Am','Em','Bm','F♯m','C♯m','G♯m','D♯m','B♭m','Fm','Cm','Gm','Dm'];
+  let s='<svg viewBox="-170 -170 340 340" style="display:block;margin:10px auto 0;max-width:320px;width:100%"><circle r="150" fill="none" stroke="#3a3248"/><circle r="92" fill="none" stroke="#3a3248"/>';
+  maj.forEach((m,i)=>{const a=(i*30-90)*Math.PI/180,x=Math.cos(a)*128,y=Math.sin(a)*128,x2=Math.cos(a)*72,y2=Math.sin(a)*72,on=kk[i]===KEY;
+    s+=`<g data-ck="${kk[i]}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="21" fill="${on?'#ff7eb6':'#2a2435'}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="16" font-weight="800" fill="${on?'#16131c':'#ff7eb6'}">${m}</text>
+    <circle cx="${x2}" cy="${y2}" r="16" fill="#1d3532"/><text x="${x2}" y="${y2+4}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4fd1c5">${min[i]}</text></g>`;});
+  return s+'<text y="5" text-anchor="middle" font-size="10" fill="#a99fb8">タップでキー変更</text></svg>';
+}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const CH_RE=/(?<![A-Za-z0-9#♭○])([A-G](?:#|♭)?)((?:m(?:△|maj)?|△|maj|dim|aug)?\d*(?:sus[24])?(?:\((?:add9|[#♭+]?\d+)(?:,[#♭+]?\d+)*\))?)(\/[A-G](?:#|♭)?)?(?![A-Za-z0-9ァ-ヶー])/g;
+function linkChords(html,play){
+  const known=new Set((play||[]).flat().map(s=>s.replace(/b(?=[^a-z]|$)/g,'♭').replace(/\(b/g,'(♭').replace(/,b/g,',♭')));
+  return html.replace(CH_RE,(m,r,q,sl,off,all)=>{
+    if(!(q||sl)){if(!known.has(m))return m;const before=all.slice(Math.max(0,all.lastIndexOf('\n',off)),off);
+      const o=Math.max(before.lastIndexOf('（'),before.lastIndexOf('(')),c=Math.max(before.lastIndexOf('）'),before.lastIndexOf(')'));if(o>c)return m;}
+    const t=tpSym(m);return `<span class="cl" data-cl="${t}" draggable="true">${t}</span>`;});
+}
+V.memo=()=>{
+  const tags=['すべて',...new Set(MEMO.map(t=>t.tag))];
+  return `<h2>理論メモ</h2><p class="lead">コード進行100ノートの理論メモ。見出しをタップで開閉。<b style="color:var(--acc)">黄色の下線つきコード</b>はタップで鳴り、▶ で進行を再生します。<b style="color:var(--acc)">右上のキーを変えるとコードも移調</b>されます（現在：${pn(MAJ_NAMES[KEY])} メジャー）。PCではコードや▶ボタンをドラッグしてDAW／コード設計スタジオへ持っていけます（MIDI）。</p>
+  <div class="seg">${tags.map(t=>`<button data-mtag="${t}" class="${(MTAG||'すべて')==t?'on':''}">${t}</button>`).join('')}</div>
+  ${MEMO.map((t,i)=>({t,i})).filter(({t})=>!MTAG||t.tag==MTAG).map(({t,i})=>`<div class="dict memo" data-mi="${i}">
+   <div class="hd" data-mt="${i}" style="cursor:pointer;padding-bottom:10px"><span class="sub">${MOPEN.has(i)?'▼':'▶'}</span><b style="flex:1">${esc(t.t)}</b><span class="tag SD">${t.tag}</span></div>
+   ${MOPEN.has(i)?`<div class="bd" style="white-space:pre-wrap;line-height:1.85">${linkChords(esc(t.b),t.play)}${t.circle?memoCircle():''}${t.play?`<div class="vars" style="white-space:normal;margin-top:10px">${t.play.map((seq,j)=>`<button data-mp="${i}|${j}" data-drag="${encodeURIComponent(JSON.stringify(seq.map(tpSym)))}" draggable="true">▶ ${seq.map(x=>prettyS(tpSym(x))).join(' → ')}</button>`).join('')}</div>`:''}</div>`:''}
+  </div>`).join('')}`;
+};
+
+/* ---- 音階 → コード ---- */
+const PAL_SCALES=[
+ ['長調・短調',[['ionian','メジャー（イオニアン）',MODES[0].t],['aeolian','ナチュラル・マイナー',MINORS[0].t],['harmonic','ハーモニック・マイナー',MINORS[1].t],['melodic','メロディック・マイナー',MINORS[2].t]]],
+ ['モード',MODES.slice(1).filter(m=>m.k!='aeolian').map(m=>[m.k,m.n+'（'+m.en+'）',m.t])],
+ ['ペンタ・その他',EXTRA.map((e,i)=>['x'+i,e.n,e.t])],
+ ['日本の音階',JP.map((j,i)=>['j'+i,j.n,j.t])],
+];
+const PAL_FN={ionian:'major',aeolian:'natural',harmonic:'harmonic',melodic:'melodic'};
+const PAL_CHAR={dorian:'M6',phrygian:'m2',lydian:'A4',mixolydian:'m7',locrian:'d5'};
+let PALK='ionian';
+const TRI={'0,4,7':'maj','0,3,7':'m','0,3,6':'dim','0,4,8':'aug'};
+const SEV={'0,4,7,11':'maj7','0,4,7,10':'7','0,3,7,10':'m7','0,3,7,11':'mM7','0,3,6,10':'m7b5','0,3,6,9':'dim7','0,4,8,11':'augM7'};
+const SYMSUF={maj:'',m:'m',dim:'dim',aug:'aug',maj7:'maj7','7':'7',m7:'m7',mM7:'mmaj7',m7b5:'m7(b5)',dim7:'dim7',augM7:'aug(maj7)'};
+const showSym=s=>s.replace(/(^|\/)([A-G])(b+|#+)/g,(m,a,l,acc)=>a+l+(acc[0]=='b'?'♭'.repeat(acc.length):'♯'.repeat(acc.length))).replace(/mmaj7/g,'m△7').replace(/maj(\d+)/g,'△$1').replace(/b(?=[^a-z]|$)/g,'♭').replace(/\(b/g,'(♭').replace(/,b/g,',♭').replace(/aug\(△7\)/,'augM7');
+// 音階の音だけでできる追加コード
+const EXTRA_CH=[['sus2',[0,2,7],'sus2'],['sus4',[0,5,7],'sus4'],['6',[0,4,7,9],'6'],['m6',[0,3,7,9],'m6'],['(add9)',[0,4,7,14],'add9'],['m(add9)',[0,3,7,14],'madd9'],['7sus4',[0,5,7,10],'7sus4'],['5',[0,7],'パワー']];
+// テクニック：[ルートtoken, 種類サフィックス, ベースtoken]
+const TECH_MAJ=[
+ ['クリシェ（上声）',[['P1',''],['P1','aug'],['P1','6'],['P1','7']],'5度の音だけが半音ずつ上がる。I7 は IV へのセカンダリードミナント。'],
+ ['ベースラインクリシェ',[['P1',''],['P1','maj7','M7'],['P1','7','m7'],['M6','7']],'低音が半音ずつ下がる。バラード向き。'],
+ ['ベースペダルポイント',[['P1',''],['P5','','P1'],['P4','','P1'],['P1','']],'低音を主音に固定。変化がゆったり。'],
+ ['パッシングディミニッシュ',[['P5',''],['A5','dim7'],['M6','m']],'V→#Vdim7→VIm。ルートが半音ずつ上がる。'],
+ ['パッシングディミニッシュ（IV→V）',[['P4',''],['A4','dim7'],['P5','']],'サビ前にじわじわ上がる緊張感。'],
+ ['セカンダリードミナント',[['P1',''],['M3','7'],['M6','m']],'III7→VIm で一気に切なく。'],
+ ['ダブルドミナント',[['P1',''],['M2','7'],['P5','7'],['P1','']],'7th が2連続してポジティブな緊張。'],
+ ['リレイテッドIIm7',[['M7','m7'],['M3','7'],['M6','m7']],'セカンダリードミナントの前に m7 を置いてツーファイブに。'],
+ ['ツーファイブワン',[['M2','m7'],['P5','7'],['P1','maj7']],'SD→D→T、強進行×2。'],
+ ['偽終止',[['M2','m7'],['P5','7'],['M6','m']],'I に行くと見せかけて VIm へ。'],
+ ['サブドミナントマイナー',[['P4',''],['P4','m'],['P1','']],'IVm→I は半音下行で戻れる。寂しさと優しさ。'],
+ ['借用 ♭VI→♭VII→I',[['m6',''],['m7',''],['P1','']],'同主調から借用。強い希望、未来的。'],
+ ['別解のドミナント',[['P4','m7'],['m7','7'],['P1','']],'同主調のドミナント ♭VII7。意外だけど力強い。'],
+ ['裏コード',[['M2','m7'],['m2','7'],['P1','maj7']],'V7 の代わりに ♭II7。ベースが半音下降。'],
+ ['sus4 で溜める',[['P5','sus4'],['P5','7'],['P1','']],'4度は3度に進みたがる。'],
+ ['ポップス・ドミナント',[['P4','','P5'],['M2','m7','P5'],['P1','']],'V の教科書っぽさを消す都会的な解決。'],
+ ['プラガル終止',[['P4',''],['P1','']],'IV→I。包み込むような帰還（アーメン終止）。'],
+ ['テンションで彩る',[['P1','maj9'],['M2','m9'],['P5','7(13)'],['P1','6(9)']],'9th・13th で都会的に。'],
+];
+const TECH_MIN=[
+ ['ドミナントを強く（和声的短音階）',[['P1','m'],['P4','m'],['P5','7'],['P1','m']],'Vm を V7 にして導音で Im へ強く解決。'],
+ ['短調ツーファイブ',[['M2','m7(b5)'],['P5','7(b9)'],['P1','m7']],'IIm7(♭5)→V7(♭9)→Im7。オルタードで緊張を強める。'],
+ ['ラインクリシェ',[['P1','m'],['P1','mmaj7'],['P1','m7'],['P1','m6']],'内声が半音ずつ下がるスリリングな響き。'],
+ ['ベースラインクリシェ',[['P1','m'],['P1','mmaj7','M7'],['P1','m7','m7'],['P1','m6','M6']],'低音が半音ずつ下がる。強い暗さ。'],
+ ['ピカルディ終止',[['P1','m'],['P1','sus4'],['P1','']],'最後だけメジャーにして神聖に終わる。'],
+ ['パッシングディミニッシュ',[['P4','m'],['A4','dim7'],['P5','7']],'IVm→#IVdim7→V7。'],
+ ['セカンダリードミナント（→IVm）',[['P1','m'],['P1','7'],['P4','m']],'Im を I7 に変えて IVm へ。'],
+ ['ドリアンの IV（借用）',[['P1','m'],['P4',''],['P1','m']],'短調に明るい IV。おしゃれに。'],
+ ['ナポリの和音',[['P1','m'],['m2',''],['P5','7'],['P1','m']],'♭II は劇的で哀愁のある SD 代理。'],
+ ['アンダルシア進行',[['P1','m'],['m7',''],['m6',''],['P5','7']],'Im→♭VII→♭VI→V7。フラメンコ風の下降。'],
+ ['エモ進行',[['P1','m'],['m6',''],['m7',''],['P1','m']],'Im→♭VI→♭VII→Im。アニソン・ロックの盛り上げ。'],
+ ['ベースペダルポイント',[['P1','m'],['m7','','P1'],['m6','','P1'],['P1','m']],'低音を主音に固定して妖しく。'],
+ ['裏コード',[['M2','m7(b5)'],['m2','7'],['P1','m']],'V7 の代わりに ♭II7。'],
+ ['偽終止',[['P5','7'],['m6','']],'V7→♭VI。Im に行かずに裏切る。'],
+ ['ジミヘン・ドミナント',[['P5','7(#9)'],['P1','m']],'V7(#9)。明るいのに暗い、マイナーのドミナント。'],
+ ['テンションで彩る',[['P1','m9'],['P4','m7'],['m6','maj7'],['P5','7(b13)']],'Im9→IVm7→♭VI△7→V7(♭13)。ダークで都会的。'],
+];
+
+// 同主調・平行調から借りるコード [ルートtoken, サフィックス, ベースtoken|null, 借り元, 役割, 使用例]
+const BORROW_MAJ=[
+ ['P4','m',null,'same','サブドミナントマイナー。IV→IVm→I で切なく温かい',''],
+ ['P4','mmaj7',null,'same','IV△7 の3度だけが半音下がる。M7 を残すので切なさが際立つ','冬がはじまるよ（イントロ DM7→DmM7）'],
+ ['P4','m6',null,'same','IVmM7→IVm6 と内声が下がるクリシェに','冬がはじまるよ（DmM7→Dm6）'],
+ ['P4','m7',null,'same','同主調どうしで共通のコード。同主短調へ転調する「ピボット」に','冬がはじまるよ（Bメロ終わりの Dm7 でサビの Am へ）'],
+ ['m7','maj7','P1','same','♭VII△7 を主音ベースに乗せた形。9sus4 のような柔らかい浮遊感','冬がはじまるよ（GM7/A）'],
+ ['P5','m7',null,'same','Vm7。開放感があり、Vm7→I7→IV と IV へ向かうきっかけに','夜に駆ける（IV△7→III7→VIm7→Vm7→I7 の Vm7）'],
+ ['m6','maj7',null,'same','♭VI△7。転調感・浮遊感。♭VI→♭VII→I',''],
+ ['m7','7',null,'same','♭VII7。「別解のドミナント」。IVm7→♭VII7→I',''],
+ ['m3','maj7',null,'same','♭III△7。未来的・意外性のある借用',''],
+ ['M2','m7(b5)',null,'same','IIm7(♭5)。IVm6 と同じ構成音。切ないツーファイブに',''],
+ ['M3','7',null,'rel','平行短調のドミナント（和声的短音階の V7）。III7→VIm で一気に切なく','夜に駆ける（IV△7→III7→VIm7）'],
+ ['M6','m7',null,'rel','平行短調の主和音。I の代わりに置くと明るい中に哀愁','冬がはじまるよ（Aメロを F♯m7 から始める）'],
+ ['M7','m7(b5)',null,'rel','平行短調の IIm7(♭5)。VIIm7(♭5)→III7→VIm の短調ツーファイブ',''],
+ ['A5','dim7',null,'rel','平行短調の導音和音（III7 の代理）。V→♯Vdim→VIm',''],
+];
+const BORROW_MIN=[
+ ['P4','',null,'same','同主長調の IV（ドリアンの IV）。短調に明るさが差す',''],
+ ['P4','7',null,'same','IV7。ブルージーで明るい借用',''],
+ ['P5','7',null,'same','V7。導音を含み Im へ強く解決。同主長調とも共通なので転調の橋渡しにも','冬がはじまるよ（サビの E7 が Am と A の両方に共通）'],
+ ['P1','',null,'same','ピカルディ終止。最後だけメジャーにして光を差す',''],
+ ['P1','maj7',null,'same','同主長調の I△7 へ転調して視界が開ける','冬がはじまるよ（サビ後半 E7→AM7 で A メジャーに戻る）'],
+ ['M2','m7',null,'same','IIm7。ジャズ的な明るいツー',''],
+ ['M6','m7',null,'same','VIm7（同主長調の VIm7）。ドリアン的な明るさ',''],
+ ['m7','7',null,'rel','平行長調の V7（♭VII7）。♭VII7→♭III で平行長調へ',''],
+ ['m3','maj7',null,'rel','平行長調の I△7（♭III△7）。明るさが差し込むトニック代理','冬がはじまるよ（サビの C/E）'],
+ ['m6','maj7',null,'rel','平行長調の IV△7（♭VI△7）。浮遊感のあるサブドミナント','冬がはじまるよ（サビの FM7）'],
+ ['P4','m7',null,'rel','平行長調の IIm7（IVm7）。平行長調のツーファイブの起点に',''],
+];
+const BORROW_PROG_MAJ=[
+ ['夜に駆ける型（Just the Two of Us／丸サ進行）',[['P4','maj7'],['M3','7'],['M6','m7'],['P5','m7'],['P1','7']],'IV△7→III7→VIm7→Vm7→I7。平行短調の V7（III7）と同主短調の Vm7 を使ってループする。'],
+ ['冬がはじまるよ型（IV→IVm のクリシェ）',[['P4','maj7'],['P4','mmaj7'],['P4','m6'],['M6','m7']],'IV△7→IVmM7→IVm6→VIm7。3度と7度が半音ずつ下がる。'],
+ ['冬がはじまるよ型（同主調へ行って帰る）',[['P4','m7'],['m6','maj7'],['P5','7'],['P1','m7'],['m6','maj7'],['P5','7'],['P1','maj7']],'IVm7 をピボットに同主短調へ。同じ V7 で、最後は Im7 ではなく I△7 に着地して視界が開ける。'],
+];
+const BORROW_PROG_MIN=[
+ ['同主長調へ抜ける（冬がはじまるよのサビ後半）',[['P1','m7'],['m6','maj7'],['P5','7'],['P1','maj7']],'Im7→♭VI△7→V7→I△7。V7 は同主調どうしで共通なので、短調に行くと見せかけて長調へ。'],
+ ['平行長調へ寄り道',[['P1','m7'],['m7','7'],['m3','maj7'],['P5','7']],'Im7→♭VII7→♭III△7→V7。平行長調の V7→I を一瞬借りる。'],
+];
+
+/* ---- コード分析ノートの曲データ（同主調・平行調の使い方） ---- */
+const SONGREF=[{"id":"fuyu","title":"冬がはじまるよ","artist":"槇原敬之","items":[{"k":"A","c":"DmM7","d":"IVmM7","f":"SDm","t":"DM7の3度（F♯）だけが半音下がったサブドミナントマイナー。M7のC♯を残すので切なさが際立つ","src":"same","semi":5,"tri":"m","q":"mM7","b":null,"mn":0,"sec":["イントロ","エンディング"]},{"k":"A","c":"GM7/A","d":"♭VIIM7/I","f":"SDm","t":"同主短調から借りた♭VIIをAベースの上に。A9sus4のような柔らかい浮遊感","src":"same","semi":10,"tri":"maj","q":"M7","b":0,"mn":0,"sec":["イントロ","エンディング"]},{"k":"A","c":"G6/A","d":"♭VII6/I","f":"SDm","t":"GM7/Aのトップを動かした形。Aベースはそのまま","src":"same","semi":10,"tri":"maj","q":"6","b":0,"mn":0,"sec":["イントロ","エンディング"]},{"k":"A","c":"Dm6","d":"IVm6","f":"SDm","t":"DmM7→Dm6で内声がC♯→Bと下がるクリシェ","src":"same","semi":5,"tri":"m","q":"m6","b":null,"mn":0,"sec":["イントロ","エンディング"]},{"k":"A","c":"Dm7","d":"IVm7（A＝Am共通）","f":"SDm","t":"転調のピボット。AメジャーのIVm7（サブドミナントマイナー）であり、同主調AマイナーのIVm7でもある","src":"same","semi":5,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Bメロ"]}],"mods":[{"from":"A","to":"Am","type":"same","sec":"サビ"},{"from":"Am","to":"A","type":"same","sec":"エンディング"}]},{"id":"fall","title":"Fall","artist":"槇原敬之","items":[{"k":"Cm","c":"Dm9","d":"IIm9","f":"SD","t":"Cマイナーなら本来はDm7♭5になるところを、Aの音を含むDm9に。ドリアン的で明るい、都会的なツー","src":"same","semi":2,"tri":"m","q":"m9","b":null,"mn":1,"sec":["イントロ","Bメロ","間奏"]},{"k":"Cm","c":"Cm7/E","d":"Im7/III","f":"T","t":"ベースがEへ半音上がり、次のFm9（F）へ押し上げる","src":"same","semi":0,"tri":"m","q":"m7","b":4,"mn":1,"sec":["Aメロ"]},{"k":"Cm","c":"Cm6","d":"Im6","f":"T","t":"さらにA（6度）へ。C→B→B♭→Aと内声が半音ずつ「落ちて」いく","src":"same","semi":0,"tri":"m","q":"m6","b":null,"mn":1,"sec":["サビ"]}],"mods":[]},{"id":"automatic","title":"Automatic","artist":"宇多田ヒカル","items":[{"k":"Fm","c":"Bb9","d":"IV9","f":"SD","t":"マイナーなのにメジャーのIV（ドリアン）。9thが加わりR&Bらしい洒落た響き","src":"same","semi":5,"tri":"maj","q":"9","b":null,"mn":1,"sec":["Aメロ"]},{"k":"Ab","c":"GbM9","d":"♭VIIM9","f":"SDm","t":"同主調A♭マイナーから借りた♭VII。急に視界が開けるような浮遊感","src":"same","semi":10,"tri":"maj","q":"M9","b":null,"mn":0,"sec":["Bメロ"]},{"k":"Ab","c":"C7","d":"III7（V7/VIm）","f":"D","t":"Fmへ向かうセカンダリードミナント。ここからサビ（Fm）へ","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Bメロ"]}],"mods":[{"from":"Ab","to":"Fm","type":"rel","sec":"Aメロ"},{"from":"Fm","to":"Ab","type":"rel","sec":"Bメロ"},{"from":"Ab","to":"Fm","type":"rel","sec":"サビ"}]},{"id":"flavor","title":"Flavor Of Life","artist":"宇多田ヒカル","items":[],"mods":[{"from":"Cm","to":"Eb","type":"rel","sec":"Bメロ"},{"from":"Eb","to":"Cm","type":"rel","sec":"サビ"}]},{"id":"prisoner","title":"Prisoner Of Love","artist":"宇多田ヒカル","items":[{"k":"Ab","c":"C7","d":"III7（V7/VIm）","f":"D","t":"Fmへ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Cメロ"]}],"mods":[{"from":"Fm","to":"Ab","type":"rel","sec":"Bメロ"},{"from":"Ab","to":"Fm","type":"rel","sec":"間奏"},{"from":"Fm","to":"Ab","type":"rel","sec":"Cメロ"}]},{"id":"goodbye","title":"Goodbye Happiness","artist":"宇多田ヒカル","items":[{"k":"B","c":"Em6","d":"IVm6","f":"SDm","t":"同主調Bマイナーから借りたサブドミナントマイナー。「もう戻れない」切なさ","src":"same","semi":5,"tri":"m","q":"m6","b":null,"mn":0,"sec":["サビ"]}],"mods":[]},{"id":"abiba","title":"あびばのんのん","artist":"Tempalay","items":[{"k":"G","c":"B7","d":"III7（V/VIm）","f":"D","t":"セカンダリードミナント。Emへ強く引き戻す","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Bメロ","サビ"]},{"k":"G","c":"B/F#","d":"III/VII","f":"D","t":"Bの第2転回形。ベースF♯から次へつなぐ","src":"rel","semi":4,"tri":"maj","q":"","b":11,"mn":0,"sec":["サビ"]},{"k":"G","c":"Gm","d":"Im（同主調）","f":"SDm","t":"同主調Gマイナーの主和音。間奏で突然、暗く妖しい世界へ","src":"same","semi":0,"tri":"m","q":"m","b":null,"mn":0,"sec":["間奏"]},{"k":"G","c":"Dm","d":"Vm","f":"D","t":"ドミナントをマイナーに（同主調由来）","src":"same","semi":7,"tri":"m","q":"m","b":null,"mn":0,"sec":["間奏"]}],"mods":[]},{"id":"q","title":"Q","artist":"Tempalay","items":[{"k":"Am","c":"Gm7","d":"♭VIIm7","f":"SD","t":"半音下降の途中（同主調由来の響き）","src":"same","semi":10,"tri":"m","q":"m7","b":null,"mn":1,"sec":["Bメロ"]}],"mods":[]},{"id":"roomca","title":"Room California","artist":"Tempalay","items":[{"k":"Em","c":"G#m","d":"♯IIIm","f":"D","t":"半音下降の途中","src":"same","semi":4,"tri":"m","q":"m","b":null,"mn":1,"sec":["ブリッジ"]},{"k":"Em","c":"A","d":"IV","f":"SD","t":"ドリアンのIV","src":"same","semi":5,"tri":"maj","q":"","b":null,"mn":1,"sec":["ブリッジ"]},{"k":"Em","c":"A7","d":"IV7","f":"SD","t":"ブリッジの終わり。メジャーのIV7で、またAm9のループへ","src":"same","semi":5,"tri":"maj","q":"7","b":null,"mn":1,"sec":["ブリッジ"]}],"mods":[]},{"id":"magic","title":"Magic","artist":"Tempalay","items":[{"k":"Bm","c":"B","d":"I（同主調）","f":"T","t":"Bmが一瞬メジャーのBに変わる。明るくなったと思ったらすぐ次で裏切られる","src":"same","semi":0,"tri":"maj","q":"","b":null,"mn":1,"sec":["Aメロ","Aメロ2"]},{"k":"D","c":"Bb7","d":"♭VI7","f":"SDm","t":"同主調Dマイナーから借りた♭VIに7th。半音下のAへ滑り落ちる（裏コード的な動き）","src":"same","semi":8,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Bメロ","サビ2"]},{"k":"D","c":"Gm","d":"IVm","f":"SDm","t":"同主調Dマイナーから借りたサブドミナントマイナー。一瞬だけ切なく曇る","src":"same","semi":5,"tri":"m","q":"m","b":null,"mn":0,"sec":["サビ"]},{"k":"D","c":"F#7","d":"III7（V7/VIm）","f":"D","t":"Bmへ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ","サビ2","Cメロ","大サビ"]},{"k":"D","c":"Bb","d":"♭VI","f":"SDm","t":"同主調Dマイナーから借りた♭VI。Bmへ半音で降りる","src":"same","semi":8,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ","Cメロ"]},{"k":"Bm","c":"E7","d":"IV7","f":"SD","t":"Bドリアン（旋律的短音階）のIVに7th。マイナーなのに明るいIV","src":"same","semi":5,"tri":"maj","q":"7","b":null,"mn":1,"sec":["つなぎ","Aメロ2"]},{"k":"D","c":"F#","d":"III（V/VIm）","f":"D","t":"Bmへ向かうはずのメジャーのIII。最後はここで止まり、解決しないまま曲が終わる","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["Bメロ2","大サビ","アウトロ"]},{"k":"D","c":"FM7","d":"♭IIIM7","f":"SDm","t":"同主調Dマイナーから借りた♭IIIM7。間奏の不思議な浮遊感の中心","src":"same","semi":3,"tri":"maj","q":"M7","b":null,"mn":0,"sec":["間奏"]},{"k":"D","c":"Dm7","d":"Im7","f":"SDm","t":"同主調Dマイナーの主和音。Dメジャーのはずが一瞬だけ暗く","src":"same","semi":0,"tri":"m","q":"m7","b":null,"mn":0,"sec":["サビ2"]},{"k":"D","c":"C7","d":"♭VII7","f":"SDm","t":"同主調由来の♭VII7。C7→F♯7は増4度（裏の関係）","src":"same","semi":10,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ2"]},{"k":"D","c":"Dm","d":"Im（同主調）","f":"SDm","t":"同主調Dマイナー。明るいDが曇る","src":"same","semi":0,"tri":"m","q":"m","b":null,"mn":0,"sec":["Cメロ","アウトロ"]},{"k":"D","c":"Cm7","d":"♭VIIm7","f":"SDm","t":"同主調由来の♭VIIをマイナーに。Cm7→Fで一時的にB♭の調のツーファイブに","src":"same","semi":10,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Cメロ"]},{"k":"D","c":"F","d":"♭III","f":"SDm","t":"同主調由来の♭III。F→G→Aと全音で駆け上がる","src":"same","semi":3,"tri":"maj","q":"","b":null,"mn":0,"sec":["Cメロ"]},{"k":"D","c":"C","d":"♭VII","f":"SDm","t":"同主調由来の♭VII。C→Dで主和音へ（ロック的な♭VII→I）","src":"same","semi":10,"tri":"maj","q":"","b":null,"mn":0,"sec":["大サビ"]},{"k":"D","c":"F7","d":"♭III7","f":"SDm","t":"同主調由来の♭IIIに7th。Dに戻る前の寄り道","src":"same","semi":3,"tri":"maj","q":"7","b":null,"mn":0,"sec":["大サビ"]},{"k":"D","c":"Cm","d":"♭VIIm","f":"SDm","t":"同主調由来の♭VIIをマイナーに。Dの直後に置いてぐっと暗くする","src":"same","semi":10,"tri":"m","q":"m","b":null,"mn":0,"sec":["アウトロ"]}],"mods":[{"from":"Bm","to":"D","type":"rel","sec":"Bメロ"},{"from":"D","to":"Bm","type":"rel","sec":"つなぎ"},{"from":"Bm","to":"D","type":"rel","sec":"Bメロ2"}]},{"id":"drive","title":"ドライブ・マイ・イデア","artist":"Tempalay","items":[{"k":"E","c":"Cmaj7","d":"♭VIM7","f":"SDm","t":"同主調Eマイナーから借りた♭VI。急に景色が開ける","src":"same","semi":8,"tri":"maj","q":"maj7","b":null,"mn":0,"sec":["サビ"]},{"k":"E","c":"D","d":"♭VII","f":"SDm","t":"同主調から借りた♭VII。♭VI→♭VII→Iと駆け上がる","src":"same","semi":10,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]}],"mods":[]},{"id":"wakiagaru","title":"湧きあがる湧きあがるそれはもう","artist":"Tempalay","items":[{"k":"C","c":"Gm7","d":"Vm7","f":"SD","t":"Fへのツーファイブの「ツー」（同主調由来）","src":"same","semi":7,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Aメロ"]},{"k":"C","c":"Fm6","d":"IVm6","f":"SDm","t":"サブドミナントマイナー。こみ上げる切なさ","src":"same","semi":5,"tri":"m","q":"m6","b":null,"mn":0,"sec":["Aメロ"]},{"k":"C","c":"E7","d":"III7（V7/VIm）","f":"D","t":"Amへのセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ"]},{"k":"C","c":"Ab7","d":"♭VI7","f":"SDm","t":"同主調から借りた♭VIに7th。サビ最後で一気に盛り上げる","src":"same","semi":8,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ"]}],"mods":[]},{"id":"appare","title":"あっぱれ！","artist":"Tempalay","items":[{"k":"G","c":"Eb","d":"♭VI","f":"SDm","t":"同主調Gマイナーから借りた♭VI","src":"same","semi":8,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]},{"k":"G","c":"F","d":"♭VII","f":"SDm","t":"同主調から借りた♭VII。♭VI→♭VII→Iで祭りのクライマックスへ駆け上がる","src":"same","semi":10,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]}],"mods":[]},{"id":"yoru","title":"夜に駆ける","artist":"YOASOBI","items":[{"k":"Eb","c":"G7","d":"III7（V7/VIm）","f":"D","t":"セカンダリードミナント。IIIm7をメジャー化して、Cmへ強く引っぱる（丸サ進行の核）","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["イントロ","Aメロ","Bメロ","サビ","間奏"]},{"k":"Eb","c":"G7/B","d":"III7/♯V","f":"D","t":"G7をBベースで。ベースがB→Cと半音で上がり、Cm7へ吸い込まれる","src":"rel","semi":4,"tri":"maj","q":"7","b":8,"mn":0,"sec":["イントロ","Aメロ","Bメロ","サビ"]},{"k":"Eb","c":"Bbm7","d":"Vm7（IIm7/IV）","f":"SD","t":"A♭M7へ向かうツーファイブの「ツー」。次のE♭7と組んで、ループを頭に戻す","src":"same","semi":7,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Aメロ","Bメロ","サビ","間奏"]},{"k":"D","c":"F#7","d":"III7（V7/VIm）","f":"D","t":"丸サ進行のIII7","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["落ちサビ"]},{"k":"D","c":"Am7","d":"Vm7（IIm7/IV）","f":"SD","t":"GM7へのツーファイブの「ツー」","src":"same","semi":7,"tri":"m","q":"m7","b":null,"mn":0,"sec":["落ちサビ"]},{"k":"F","c":"Ab","d":"♭III","f":"SDm","t":"同主短調から借りた♭III。A♭→A→B♭と半音で駆け上がる転調の助走","src":"same","semi":3,"tri":"maj","q":"","b":null,"mn":0,"sec":["落ちサビ"]},{"k":"F","c":"A","d":"III（V/VIm）","f":"D","t":"A♭から半音上がったA。そのまま新しいキーFのIVM7（B♭M7）へ突き上げる","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["落ちサビ"]},{"k":"F","c":"A7","d":"III7（V7/VIm）","f":"D","t":"丸サ進行のIII7","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["ラスサビ","アウトロ"]},{"k":"F","c":"Cm7","d":"Vm7（IIm7/IV）","f":"SD","t":"B♭M7へのツーファイブの「ツー」","src":"same","semi":7,"tri":"m","q":"m7","b":null,"mn":0,"sec":["ラスサビ","アウトロ"]},{"k":"F","c":"A7/C#","d":"III7/♯V","f":"D","t":"ベースC♯→Dの半音上行でDm7へ","src":"rel","semi":4,"tri":"maj","q":"7","b":8,"mn":0,"sec":["ラスサビ","アウトロ"]}],"mods":[]},{"id":"lemon","title":"Lemon","artist":"米津玄師","items":[{"k":"B","c":"D#","d":"III（V/VIm）","f":"D","t":"セカンダリードミナント。G♯mへ強く引っぱる、この曲の「引き戻し」のコード","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["Aメロ","サビ","ラスサビ"]},{"k":"G#","c":"F#","d":"♭VII = B:V","f":"D","t":"転調のピボット。G♯メジャーでは♭VII、元のBメジャーではV。ここからラスサビのBへ戻る","src":"same","semi":10,"tri":"maj","q":"","b":null,"mn":0,"sec":["Cメロ"]}],"mods":[]},{"id":"sayonara","title":"さよーならまたいつか！","artist":"米津玄師","items":[{"k":"G","c":"B7","d":"III7（V7/VIm）","f":"D","t":"Emへ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["イントロ","Aメロ"]},{"k":"G","c":"Cm7","d":"IVm7","f":"SDm","t":"同主調Gマイナーから借りたサブドミナントマイナー。急に切なくなる","src":"same","semi":5,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Aメロ"]},{"k":"G","c":"B7(#9)","d":"III7(♯9)（V7/VIm）","f":"D","t":"♯9を足したとがったドミナント","src":"rel","semi":4,"tri":"maj","q":"7(#9)","b":null,"mn":0,"sec":["Bメロ"]},{"k":"G","c":"D#dim7","d":"♯Vdim7","f":"D","t":"D→D♯→Eと上がる経過ディミニッシュ","src":"rel","semi":8,"tri":"dim","q":"dim7","b":null,"mn":0,"sec":["Bメロ"]},{"k":"G","c":"D#m","d":"♯Vm","f":"D","t":"Em→D♯m→Dmと半音で下がる経過和音","src":"same","semi":8,"tri":"m","q":"m","b":null,"mn":0,"sec":["Bメロ","間奏"]},{"k":"G","c":"Dm","d":"Vm","f":"SDm","t":"同主調由来のVm","src":"same","semi":7,"tri":"m","q":"m","b":null,"mn":0,"sec":["Bメロ","間奏"]},{"k":"G","c":"D7(b9)","d":"V7(♭9)","f":"D","t":"♭9を足したドミナント","src":"same","semi":7,"tri":"maj","q":"7(b9)","b":null,"mn":0,"sec":["Bメロ"]},{"k":"G","c":"B7(b9)","d":"III7(♭9)（V7/VIm）","f":"D","t":"♭9を足したEmへのドミナント","src":"rel","semi":4,"tri":"maj","q":"7(b9)","b":null,"mn":0,"sec":["サビ"]},{"k":"G","c":"Cm9","d":"IVm9","f":"SDm","t":"サブドミナントマイナーに9th","src":"same","semi":5,"tri":"m","q":"m9","b":null,"mn":0,"sec":["サビ"]},{"k":"G","c":"B","d":"III（V/VIm）","f":"D","t":"Emへのドミナント","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["間奏"]},{"k":"G","c":"Cm","d":"IVm","f":"SDm","t":"サブドミナントマイナー","src":"same","semi":5,"tri":"m","q":"m","b":null,"mn":0,"sec":["間奏"]}],"mods":[]},{"id":"kickback","title":"KICK BACK","artist":"米津玄師","items":[{"k":"F","c":"A7","d":"III7（V7/VIm）","f":"D","t":"Dm7へ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Bメロ"]},{"k":"F","c":"EbM7","d":"♭VIIM7","f":"SDm","t":"同主調由来の♭VII","src":"same","semi":10,"tri":"maj","q":"M7","b":null,"mn":0,"sec":["Bメロ"]},{"k":"F","c":"Fm","d":"Im（同主調）","f":"SDm","t":"同主調Fマイナー","src":"same","semi":0,"tri":"m","q":"m","b":null,"mn":0,"sec":["Bメロ"]},{"k":"B","c":"A","d":"♭VII","f":"SDm","t":"同主調由来の♭VII","src":"same","semi":10,"tri":"maj","q":"","b":null,"mn":0,"sec":["プレサビ"]},{"k":"E","c":"G#","d":"III（V/VIm）","f":"D","t":"C♯mへのドミナント","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]},{"k":"E","c":"G#7","d":"III7（V7/VIm）","f":"D","t":"C♯mへのセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ","ラスサビ"]},{"k":"E","c":"G#/C","d":"III/♯V（V/VIm）","f":"D","t":"（G♯/B♯）ベースB♯→C♯と半音で上がってC♯mへ","src":"rel","semi":4,"tri":"maj","q":"","b":8,"mn":0,"sec":["サビ"]},{"k":"Ab","c":"C7","d":"III7（V7/VIm）","f":"D","t":"Fmへのドミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["間奏（オーケストラ）"]},{"k":"Ab","c":"Dbm","d":"IVm","f":"SDm","t":"サブドミナントマイナー","src":"same","semi":5,"tri":"m","q":"m","b":null,"mn":0,"sec":["間奏（オーケストラ）"]},{"k":"Ab","c":"Dbm/Eb","d":"IVm/V","f":"SDm","t":"D♭mをE♭ベースで","src":"same","semi":5,"tri":"m","q":"m","b":7,"mn":0,"sec":["間奏（オーケストラ）"]},{"k":"Ab","c":"Dbm/E","d":"IVm/♭VI","f":"SDm","t":"ベースがE（F♭）へ半音上がる","src":"same","semi":5,"tri":"m","q":"m","b":8,"mn":0,"sec":["間奏（オーケストラ）"]},{"k":"E","c":"C#m/C","d":"VIm/♯V","f":"T","t":"C♯mのベースだけB♯へ。ベースが半音ずつ下がるクリシェ","src":"same","semi":9,"tri":"m","q":"m","b":8,"mn":0,"sec":["ラスサビ"]}],"mods":[]},{"id":"kanden","title":"感電","artist":"米津玄師","items":[{"k":"G#m","c":"B9","d":"♭III9","f":"T","t":"平行調Bの主和音に9th","src":"rel","semi":3,"tri":"maj","q":"9","b":null,"mn":1,"sec":["イントロ","Bメロ"]},{"k":"G#m","c":"G#","d":"I（同主調）","f":"T","t":"一瞬だけメジャーのG♯で着地（ピカルディ風）","src":"same","semi":0,"tri":"maj","q":"","b":null,"mn":1,"sec":["Aメロ"]},{"k":"G#m","c":"C7(#9)","d":"♭III7(♯9)／III7(♯9)","f":"D","t":"C♯m9からB13へ半音ずつ下がる経過和音","src":"same","semi":4,"tri":"maj","q":"7(#9)","b":null,"mn":1,"sec":["Bメロ"]},{"k":"G#m","c":"B13","d":"♭III13","f":"T","t":"平行調Bの主和音に13th","src":"rel","semi":3,"tri":"maj","q":"13","b":null,"mn":1,"sec":["Bメロ"]},{"k":"G#m","c":"C#9","d":"IV9","f":"SD","t":"マイナーなのにメジャーのIV（ドリアン）。サビの明るさの源","src":"same","semi":5,"tri":"maj","q":"9","b":null,"mn":1,"sec":["サビ"]}],"mods":[]},{"id":"tokyo","title":"TOKYO","artist":"椎名林檎","items":[{"k":"Cm","c":"Ebm9","d":"♭IIIm9","f":"SDm","t":"Cm9と同じ形のまま短3度上へ平行移動。平行調E♭メジャーの主音の上に「マイナー」を置く、不穏で都会的な響き","src":"rel","semi":3,"tri":"m","q":"m9","b":null,"mn":1,"sec":["イントロ","間奏"]},{"k":"Cm","c":"C7","d":"I7","f":"D","t":"主和音をメジャー＋7thに。次のフレーズへ押し出す","src":"same","semi":0,"tri":"maj","q":"7","b":null,"mn":1,"sec":["Bメロ"]},{"k":"Eb","c":"Abm7","d":"IVm7","f":"SDm","t":"同主調E♭マイナーから借りたサブドミナントマイナー。明るくなった直後にすぐ影が差す","src":"same","semi":5,"tri":"m","q":"m7","b":null,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"Bbm/Db","d":"Vm/♭VII","f":"SDm","t":"同主調由来のVm。ベースはD♭","src":"same","semi":7,"tri":"m","q":"m","b":10,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"GbM7","d":"♭IIIM7","f":"SDm","t":"同主調E♭マイナーの♭III。根音がE♭→A♭→D♭→G♭と4度ずつ上がり、どんどん遠くへ","src":"same","semi":3,"tri":"maj","q":"M7","b":null,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"BM7","d":"♭VIM7（C♭M7）","f":"SDm","t":"同主調の♭VI（C♭）。4度の連鎖のいちばん遠いところ","src":"same","semi":8,"tri":"maj","q":"M7","b":null,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"Abm9","d":"IVm9","f":"SDm","t":"サブドミナントマイナーに戻る","src":"same","semi":5,"tri":"m","q":"m9","b":null,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"B","d":"♭VI（C♭）","f":"SDm","t":"同主調の♭VI","src":"same","semi":8,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]},{"k":"Eb","c":"Abm","d":"IVm","f":"SDm","t":"サブドミナントマイナー","src":"same","semi":5,"tri":"m","q":"m","b":null,"mn":0,"sec":["サビ"]}],"mods":[{"from":"Cm","to":"Eb","type":"rel","sec":"サビ"},{"from":"Eb","to":"Cm","type":"rel","sec":"間奏"}]},{"id":"tsumi","title":"罪と罰","artist":"椎名林檎","items":[{"k":"Fm","c":"Fm6/D","d":"Im6/VI","f":"T","t":"ベースがDへ。F→E→E♭→Dと半音ずつ下がる「刺す」ような下降","src":"same","semi":0,"tri":"m","q":"m6","b":9,"mn":1,"sec":["Aメロ"]},{"k":"Fm","c":"Bb7","d":"IV7","f":"SD","t":"マイナーなのにメジャーのIV7（ドリアン／ブルース的）","src":"same","semi":5,"tri":"maj","q":"7","b":null,"mn":1,"sec":["Aメロ"]},{"k":"F","c":"A7","d":"III7（V7/VIm）","f":"D","t":"Dm7へ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ"]},{"k":"F","c":"Db","d":"♭VI","f":"SDm","t":"同主調Fマイナーから借りた♭VI。明るいサビにFmの影が差す","src":"same","semi":8,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ"]},{"k":"Gm","c":"Bb7","d":"♭III7","f":"SD","t":"平行調B♭に7th。全音上のGへ転調する準備","src":"rel","semi":3,"tri":"maj","q":"7","b":null,"mn":1,"sec":["間奏"]},{"k":"G","c":"B7","d":"III7（V7/VIm）","f":"D","t":"Em7へ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["サビ2"]},{"k":"G","c":"Eb","d":"♭VI","f":"SDm","t":"同主調Gマイナーから借りた♭VI","src":"same","semi":8,"tri":"maj","q":"","b":null,"mn":0,"sec":["サビ2"]},{"k":"Gm","c":"C7","d":"IV7","f":"SD","t":"ドリアンのIV7","src":"same","semi":5,"tri":"maj","q":"7","b":null,"mn":1,"sec":["後奏〜Aメロ"]},{"k":"Gm","c":"Gm6/E","d":"Im6/VI","f":"T","t":"ベースがEへ","src":"same","semi":0,"tri":"m","q":"m6","b":9,"mn":1,"sec":["後奏〜Aメロ"]}],"mods":[{"from":"Fm","to":"F","type":"same","sec":"サビ"},{"from":"Gm","to":"G","type":"same","sec":"サビ2"},{"from":"G","to":"Gm","type":"same","sec":"後奏〜Aメロ"}]},{"id":"jinsei","title":"人生は夢だらけ","artist":"椎名林檎","items":[{"k":"Eb","c":"Bb7(b9)","d":"V7(♭9)","f":"D","t":"♭9を含むドミナント","src":"same","semi":7,"tri":"maj","q":"7(b9)","b":null,"mn":0,"sec":["Aメロ（序奏）"]},{"k":"Ebm","c":"Ebadd9","d":"Iadd9（同主調）","f":"T","t":"まだE♭メジャーの響きのままBメロに入る","src":"same","semi":0,"tri":"maj","q":"add9","b":null,"mn":1,"sec":["Bメロ"]},{"k":"Ebm","c":"Eb9","d":"I9（V9/IVm）","f":"D","t":"A♭m7へ向かうセカンダリードミナント。ここから同主調E♭mの循環へ","src":"same","semi":0,"tri":"maj","q":"9","b":null,"mn":1,"sec":["Bメロ"]},{"k":"Ebm","c":"DbM7","d":"♭VIIM7","f":"SD","t":"自然短音階の♭VII（平行調G♭で見るとV）","src":"rel","semi":10,"tri":"maj","q":"M7","b":null,"mn":1,"sec":["Bメロ"]},{"k":"Ebm","c":"Eb","d":"I（同主調）","f":"T","t":"マイナーの途中で一瞬メジャーのE♭に戻る（ピカルディ風）","src":"same","semi":0,"tri":"maj","q":"","b":null,"mn":1,"sec":["Bメロ","サビ"]}],"mods":[{"from":"Eb","to":"Ebm","type":"same","sec":"Bメロ"}]},{"id":"nippon","title":"NIPPON","artist":"椎名林檎","items":[{"k":"E","c":"G#7","d":"III7（V7/VIm）","f":"D","t":"C♯mへ向かうセカンダリードミナント","src":"rel","semi":4,"tri":"maj","q":"7","b":null,"mn":0,"sec":["Aメロ","サビ","Aメロ2","間奏（ギター・ソロ）"]},{"k":"E","c":"Bm7","d":"Vm7","f":"SDm","t":"ミクソリディアンのVm7（E7へのツー）。メジャーなのにぐっと渋くなる","src":"same","semi":7,"tri":"m","q":"m7","b":null,"mn":0,"sec":["Aメロ","Aメロ2","間奏（ギター・ソロ）"]},{"k":"E","c":"G#7/C","d":"III7/♯V","f":"D","t":"（G♯7/B♯）ベースB♯→C♯と半音で上がってC♯mへ","src":"rel","semi":4,"tri":"maj","q":"7","b":8,"mn":0,"sec":["Bメロ"]},{"k":"E","c":"Em/G","d":"Im/♭III（同主調）","f":"SDm","t":"同主調Eマイナーを借りる。一瞬だけ曇る","src":"same","semi":0,"tri":"m","q":"m","b":3,"mn":0,"sec":["サビ"]},{"k":"E","c":"G6","d":"♭III6","f":"SDm","t":"同主調由来の♭III","src":"same","semi":3,"tri":"maj","q":"6","b":null,"mn":0,"sec":["サビ"]}],"mods":[]},{"id":"matsuri","title":"長く短い祭","artist":"椎名林檎","items":[{"k":"D","c":"Gm9","d":"IVm9","f":"SDm","t":"同主調Dマイナー由来のサブドミナントマイナー。浮雲パートの不思議な浮遊感","src":"same","semi":5,"tri":"m","q":"m9","b":null,"mn":0,"sec":["間奏","Aメロ（浮雲）"]},{"k":"D","c":"BbM9","d":"♭VIM9","f":"SDm","t":"同主調由来の♭VI","src":"same","semi":8,"tri":"maj","q":"M9","b":null,"mn":0,"sec":["間奏","Aメロ（浮雲）"]},{"k":"F","c":"Bbm6","d":"IVm6","f":"SDm","t":"同主調Fマイナーから借りたサブドミナントマイナー","src":"same","semi":5,"tri":"m","q":"m6","b":null,"mn":0,"sec":["Bメロ"]}],"mods":[]},{"id":"fantasy","title":"Fantasy","artist":"Earth, Wind & Fire","items":[{"k":"Em","c":"A","d":"IV","f":"SD","t":"ドリアンの特徴音C♯を含むメジャーのIV。マイナーキーなのに明るく突き抜ける","src":"same","semi":5,"tri":"maj","q":"","b":null,"mn":1,"sec":["イントロ","Bメロ","間奏"]},{"k":"Em","c":"E","d":"I（同主長調）","f":"T","t":"本来マイナーのIをメジャーにした形（ピカルディ）。♭VI→♭VII→Iと上ってきて、ぱっと光が差す","src":"same","semi":0,"tri":"maj","q":"","b":null,"mn":1,"sec":["イントロ","Aメロ","間奏"]},{"k":"Em","c":"Bm9","d":"Vm9","f":"D","t":"Bmに9th（C♯）を足したテンション。ドリアンの色が出る","src":"same","semi":7,"tri":"m","q":"m9","b":null,"mn":1,"sec":["Aメロ"]},{"k":"Em","c":"F#m","d":"IIm","f":"SD","t":"ドリアンのIIm。自然短音階ならF♯dimになるところをマイナーにして、明るく浮遊させる","src":"same","semi":2,"tri":"m","q":"m","b":null,"mn":1,"sec":["Bメロ"]},{"k":"Em","c":"F#m7","d":"IIm7","f":"SD","t":"ドリアンのIIm7。柔らかいサブドミナント","src":"same","semi":2,"tri":"m","q":"m7","b":null,"mn":1,"sec":["間奏"]},{"k":"Gm","c":"G/C","d":"I/IV","f":"T","t":"メジャーのG（同主長調のI）をCベースに乗せた形。一瞬だけ光が差すターンアラウンド","src":"same","semi":0,"tri":"maj","q":"","b":5,"mn":1,"sec":["ラストサビ"]}],"mods":[]},{"id":"dq","title":"序曲","artist":"すぎやまこういち","items":[{"k":"C","c":"E","d":"III（V/VIm）","f":"D","t":"セカンダリードミナント。Amへ強く向かう","src":"rel","semi":4,"tri":"maj","q":"","b":null,"mn":0,"sec":["メインテーマ"]}],"mods":[]}];
+const SEMI_TOK=(s,tri)=>({0:'P1',1:'m2',2:'M2',3:'m3',4:'M3',5:'P4',6:'A4',7:'P5',8:tri=='dim'?'A5':'m6',9:'M6',10:'m7',11:'M7'})[s];
+const QCONV={'M7':'maj7','mM7':'mmaj7','m7b5':'m7(b5)','m7-5':'m7(b5)','7-5':'7(b5)','M9':'maj9','69':'6(9)','M13':'maj7(13)','13':'7(13)','m11':'m7(11)','add9':'(add9)','7+9':'7(#9)','7(#9.b13)':'7(#9,b13)','aug7(#9)':'7(#5,#9)','aug':'aug'};
+const conv=s=>{const m=s.match(/^([A-G][#b]?)([^/]*)(?:\/([A-G][#b]?))?$/);if(!m)return s;return m[1]+(QCONV[m[2]]??m[2])+(m[3]?'/'+m[3]:'');};
+const triOf=suf=>{const iv=parseChord('C'+suf).iv.map(x=>x%12);const s=new Set(iv);return s.has(4)?(s.has(8)&&!s.has(7)?'aug':'maj'):s.has(3)?(s.has(6)&&!s.has(7)?'dim':'m'):s.has(5)?'sus4':s.has(2)?'sus2':'5';};
+const songUses=(minor,semi,tri,src)=>SONGREF.flatMap(s=>s.items.filter(i=>i.mn==(minor?1:0)&&i.semi==semi&&i.tri==tri&&(!src||i.src==src)).map(i=>({s,i})));
+const useLine=({s,i})=>`<span class="use"><b data-sym="${conv(i.c)}" class="cl">${showSym(conv(i.c))}</b> ${s.title}<small>（${s.artist}／Key ${pn(i.k)}・${i.sec.slice(0,2).join('・')}）</small></span>`;
+
+let SQ='';
+function songSearch(){
+  const q=kana(SQ).replace(/♭/g,'b').replace(/♯/g,'#');
+  const norm=s=>kana(s).replace(/♭/g,'b').replace(/♯/g,'#');
+  let n=0;
+  const html=SONGREF.map(s=>{
+    const head=norm(s.title+s.artist);
+    const items=s.items.filter(i=>!q||head.includes(q)||norm(i.c+' '+i.d+' '+i.k+' '+(i.src=='same'?'同主調':'平行調')+' '+i.sec.join(' ')+' '+i.t).includes(q));
+    const mods=s.mods.filter(m=>!q||head.includes(q)||norm('転調 '+m.from+' '+m.to+' '+(m.type=='same'?'同主調':'平行調')+' '+m.sec).includes(q));
+    if(!items.length&&!mods.length)return '';n+=items.length+mods.length;
+    const keys=[...new Set(s.items.map(i=>i.k).concat(s.mods.flatMap(m=>[m.from,m.to])))].map(pn).join('・');
+    return `<details class="song" ${q?'open':''}><summary><b>${s.title}</b> <span class="sub">${s.artist}｜Key ${keys}｜${items.length+mods.length}件</span></summary>
+    ${mods.length?`<div class="sub" style="margin:4px 0">🔀 ${mods.map(m=>`${m.sec}：${pn(m.from)} → ${pn(m.to)}（${m.type=='same'?'同主調':'平行調'}へ転調）`).join('　')}</div>`:''}
+    ${['same','rel'].map(src=>{const its=items.filter(i=>i.src==src);return its.length?`<div class="sub" style="margin-top:6px"><b>${src=='same'?'同主調から':'平行調から'}</b></div>`+its.map(i=>`<div style="display:flex;gap:8px;align-items:flex-start;margin:5px 0">${chipSym(conv(i.c),pn(i.k)+'：'+i.d.split('（')[0].replace(/b/g,'♭'))}<span style="font-size:12.5px;line-height:1.55">${i.t}<br><span class="sub">${i.sec.join('・')}</span></span></div>`).join(''):''}).join('')}
+    </details>`;}).join('');
+  return `<div class="sub" style="margin:0 2px 4px">${q?n+' 件ヒット':'全 '+SONGREF.reduce((a,s)=>a+s.items.length+s.mods.length,0)+' 件'}</div>`+(html?`<div class="list">${html}</div>`:'<p class="sub">見つかりませんでした</p>');
+}
+function palScale(){for(const[,list]of PAL_SCALES){const f=list.find(x=>x[0]==PALK);if(f)return f;}return PAL_SCALES[0][1][0];}
+function chipSym(sym,extra){return `<button class="pch" data-sym="${sym}">${showSym(sym)}${extra?`<small>${extra}</small>`:''}</button>`;}
+V.palette=()=>{
+  const[k,name,toks]=palScale();const major=toks.includes('M3');const root=major?MAJ_NAMES[KEY]:MIN_NAMES[KEY];
+  const notes=scaleNotes(root,toks),pcs=new Set(toks.map(t=>(pcOf(root)+IV[t][0])%12));
+  const opts=PAL_SCALES.map(([g,l])=>`<optgroup label="${g}">${l.map(([kk,n])=>`<option value="${kk}" ${kk==PALK?'selected':''}>${n}</option>`).join('')}</optgroup>`).join('');
+  let html=`<h2>音階 → コード</h2><p class="lead">音階を選ぶと、使われやすいコードと、テクニックを使うときの具体的なコードが ${pn(root)} で一覧になります。コード名タップで再生、▶ で進行を再生。</p>
+  <div class="card" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>音階</b><select id="palSel" style="flex:1;min-width:200px">${opts}</select><span class="sub">キーは右上で変更</span></div>
+  <div class="dict"><div class="hd"><b>${pn(root)} ${name}</b></div><div class="bd"><div class="notes">${notes.map(pn).join(' ')}</div><div class="sub">${toks.map(t=>SHORT[t]).join(' ')}</div>${scaleBtns(pn(root)+' '+name,root,toks)}</div></div>`;
+  // ダイアトニック（7音音階）
+  if(toks.length==7){
+    const fn=PAL_FN[k]?DIA[PAL_FN[k]].rows:null,ch=PAL_CHAR[k];
+    const row=(sev)=>toks.map((t,i)=>{const iv=[0,2,4,6].slice(0,sev?4:3).map(j=>{const tt=toks[(i+j)%7];return ((IV[tt][0]-IV[t][0])+12)%12;});
+      const key=iv.join(','),ty=(sev?SEV:TRI)[key];if(!ty)return '';const sym=notes[i]+SYMSUF[ty];
+      const hasCh=ch&&[0,2,4,6].slice(0,sev?4:3).some(j=>toks[(i+j)%7]==ch);
+      const f=fn?fn[i][3]:null;return chipSym(sym,roman(t)+(f?' · '+f:'')+(hasCh?' ★':''));}).join('');
+    html+=`<h3>ダイアトニック・コード（この音階の音を3度ずつ重ねたもの）</h3>
+    <div class="card"><div class="sub">3和音</div><div class="pgrid">${row(false)}</div><div class="sub" style="margin-top:8px">4和音（7th）</div><div class="pgrid">${row(true)}</div>
+    ${fn?`<div class="sub" style="margin-top:6px">T＝トニック、SD＝サブドミナント、D＝ドミナント</div>`:''}${ch?`<div class="sub" style="margin-top:6px">★＝この音階らしさを決める特徴音（${SHORT[ch]}）を含むコード。積極的に使うと「らしく」なる。</div>`:''}</div>`;
+  }
+  // 音階の音だけでできるコード
+  const ext=[];toks.forEach((t,i)=>{const rp=(pcOf(root)+IV[t][0])%12;
+    const cands=toks.length==7?EXTRA_CH:[['',[0,4,7],''],['m',[0,3,7],''],['7',[0,4,7,10],''],['maj7',[0,4,7,11],''],['m7',[0,3,7,10],''],...EXTRA_CH];
+    cands.forEach(([suf,ivs,lab])=>{if(ivs.every(x=>pcs.has((rp+x)%12)))ext.push(chipSym(notes[i]+suf,roman(t)+(lab?' · '+lab:'')));});});
+  html+=`<h3>${toks.length==7?'この音階の音だけでできる sus・6th・add9 など':'この音階の音だけでできるコード'}</h3><div class="card"><div class="pgrid">${ext.join('')||'<span class="sub">該当なし</span>'}</div>
+   <div class="sub" style="margin-top:6px">メロディをこの音階で作るとき、伴奏に置いても音がぶつからないコードです。</div></div>`;
+  // この音階らしい進行
+  const mc=MODE_CH[k]||(k=='aeolian'?MODE_CH.aeolian:null)||(k[0]=='j'?[...JP_CH[+k.slice(1)][0],JP_CH[+k.slice(1)][1]]:null);
+  if(mc){const lab=mc.length==5?mc[4]:mc[mc.length-1];const cs=mc.slice(0,-1);const syms=cs.map(([tok,ty])=>spell(root,tok)+SYMSUF[ty]);
+    html+=`<h3>この音階らしい進行</h3><div class="card"><div class="sub">${lab}</div><div class="vars"><button data-pseq="${encodeURIComponent(JSON.stringify(syms))}">▶ ${syms.map(showSym).join(' → ')}</button></div></div>`;}
+
+  // 同主調・平行調
+  const sameK=major?pn(root)+'m':pn(root),relR=major?spell(root,'M6'):spell(root,'m3'),relK=major?pn(relR)+'m':pn(relR);
+  const BL=major?BORROW_MAJ:BORROW_MIN,BP=major?BORROW_PROG_MAJ:BORROW_PROG_MIN;
+  const bsym=([tok,suf,b])=>spell(root,tok)+suf+(b?'/'+spell(root,b):'');
+  const IVS=x=>IV[x][0];
+  const famOf=ivs=>{const s=new Set(ivs.map(x=>x%12));return s.has(10)?'7':s.has(11)?'M7':s.has(9)?'6':'';};
+  const rowInfo=BL.map(x=>({x,semi:IVS(x[0]),tri:triOf(x[1]),fam:famOf(parseChord('C'+x[1]).iv),bass:x[2]?IVS(x[2]):null,uses:[]}));
+  const used=new Set();const leftovers=[];
+  SONGREF.forEach(s=>s.items.forEach(i=>{if(i.mn!=(major?0:1))return;
+    const ivs=parseChord(conv(i.c).replace(/\/.*/,'')).iv;const fam=famOf(ivs);let best=null,bs=-1;
+    rowInfo.forEach(r=>{if(r.x[3]!=i.src||r.semi!=i.semi||r.tri!=i.tri)return;const sc=(r.fam==fam?2:0)+((r.bass??-1)==(i.b??-1)?1:0);if(sc>bs){bs=sc;best=r;}});
+    if(best)best.uses.push({s,i});else leftovers.push({s,i});}));
+  const brow=src=>{
+    const rows=rowInfo.filter(r=>r.x[3]==src).map(r=>{const x=r.x;const s=bsym(x);const uses=r.uses;
+      const rl=roman(x[0])+x[1].replace(/^mmaj7/,'m△7').replace(/^maj7/,'△7').replace(/\(b5\)/,'(♭5)');
+      return `<div class="row" style="align-items:flex-start;cursor:default">${chipSym(s,rl)}<span class="grow"><div style="font-size:13.5px">${x[4]}</div>${uses.length?`<div class="uses">🎵 ${uses.map(useLine).join('')}</div>`:''}</span></div>`;});
+    const extra={};leftovers.filter(u=>u.i.src==src).forEach(u=>{const sig=u.i.semi+'|'+u.i.tri+'|'+(u.i.b??'');(extra[sig]=extra[sig]||[]).push(u);});
+    Object.values(extra).sort((a,b)=>b.length-a.length).forEach(list=>{const i0=list[0].i;const m=i0.c.match(/^([A-G][#b]?)([^/]*)/);
+      const suf=QCONV[m[2]]??m[2];const sym=spell(root,SEMI_TOK(i0.semi,i0.tri))+suf+(i0.b!=null?'/'+spell(root,SEMI_TOK(i0.b,'')):'');
+      const rl=i0.d.split('（')[0].replace(/b/g,'♭');
+      rows.push(`<div class="row" style="align-items:flex-start;cursor:default">${chipSym(sym,rl)}<span class="grow"><div style="font-size:13.5px">${i0.t||rl}</div><div class="uses">🎵 ${list.map(useLine).join('')}</div></span></div>`);});
+    return rows.join('');
+  };
+  html+=`<h3>同主調・平行調から借りる／行き来するコード</h3>
+  <div class="note">同主調＝主音が同じで長短が逆（${pn(root)}${major?' → '+sameK:'m → '+sameK}）。平行調＝調号が同じ（${pn(root)}${major?'':'m'} ↔ ${relK}）。音階の外の音でも、この2つの調から借りたコードは自然に聞こえます。🎵 は「コード分析ノート」の曲で実際に使われている例（原曲のキー）で、コード名をタップすると鳴ります。</div>
+  <div class="sub" style="margin:8px 2px 4px"><b>同主調 ${sameK} から</b></div><div class="list">${brow('same')}</div>
+  <div class="sub" style="margin:12px 2px 4px"><b>平行調 ${relK} から</b></div><div class="list">${brow('rel')}</div>
+  <div class="sub" style="margin:12px 2px 4px"><b>曲で使われている形</b></div>
+  <div class="list">${BP.map(([n,cs,d])=>{const syms=cs.map(bsym);return `<div class="row" style="align-items:flex-start;cursor:default"><span class="grow"><b>${n}</b><div class="sub">${d}</div>
+   <div class="vars" style="margin:6px 0 0"><button data-pseq="${encodeURIComponent(JSON.stringify(syms))}">▶ 進行</button>${syms.map(s=>chipSym(s)).join('')}</div></span></div>`}).join('')}</div>`;
+  html+=`<div class="sub" style="margin:14px 2px 4px"><b>コード分析ノートの全曲で見る・検索（${SONGREF.length}曲）</b>　原曲のキーで表示。</div>
+  <input id="sq" type="search" placeholder="🔍 曲名・アーティスト・コード・度数で検索（例：米津、Fm、IVm、III7、転調）" value="${SQ.replace(/"/g,'&quot;')}" autocomplete="off" style="width:100%;font:inherit;font-size:16px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);outline:none;margin:2px 0 6px">
+  <div id="sres">${songSearch()}</div>`;
+  // テクニック
+  const TL=major?TECH_MAJ:TECH_MIN;
+  html+=`<h3>テクニックを使うときの具体的なコード（${pn(root)}${major?'':'m'} 基準）</h3>
+  <div class="note">${major?'長調系の音階なので、主音 '+pn(root)+' のメジャーキーとして計算しています。':'短調系の音階なので、主音 '+pn(root)+' のマイナーキーとして計算しています。'}音階の外の音（借用・セカンダリー等）も含みます。</div>
+  <div class="list">${TL.map(([n,cs,d])=>{const syms=cs.map(([tok,suf,b])=>spell(root,tok)+suf+(b?'/'+spell(root,b):''));
+    return `<div class="row" style="align-items:flex-start;cursor:default"><span class="grow"><b>${n}</b><div class="sub">${d}</div>
+    <div class="vars" style="margin:6px 0 0"><button data-pseq="${encodeURIComponent(JSON.stringify(syms))}">▶ 進行</button>${syms.map(s=>chipSym(s)).join('')}</div></span></div>`;}).join('')}</div>`;
+  return html;
+};
+/* ---- 用語一覧 ---- */
+const WORDS=[
+ ['interval',['音程','インターバル','半音','全音','完全1度','短2度','長2度','短3度','長3度','完全4度','増4度','減5度','トライトーン','完全5度','増5度','短6度','長6度','減7度','短7度','長7度','完全8度','オクターブ','短9度','長9度','完全11度','増11度','長13度','テンション']],
+ ['chord',['トライアド','3和音','4和音','メジャー・トライアド','マイナー・トライアド','オーギュメント','ディミニッシュ','メジャー・セブンス','セブンス','ドミナント・セブンス','マイナー・メジャー・セブンス','マイナー・セブンス','ハーフ・ディミニッシュ','m7♭5','ディミニッシュ・セブンス','ルート','分数コード']],
+ ['scale',['スケール','音階','メジャー・スケール','長音階','自然的短音階','ナチュラル・マイナー','和声的短音階','ハーモニック・マイナー','旋律的短音階','メロディック・マイナー','導音','増2度','メジャー・ペンタトニック','ヨナ抜き長音階','マイナー・ペンタトニック','ブルース・スケール','ブルーノート','ホールトーン・スケール','コンビネーション・オブ・ディミニッシュ']],
+ ['mode',['モード','教会旋法','イオニアン','ドリアン','フリジアン','リディアン','ミクソリディアン','エオリアン','ロクリアン']],
+ ['japan',['日本の音階','ペンタトニック','5音音階','陽音階','ヨ音階','陰音階','イン音階','都節音階','律音階','琉音階','琉球音階']],
+ ['key',['調','キー','調号','主調','平行調','レラティブ・キー','同主調','属調','ドミナント・キー','下属調','サブドミナント・キー','近親調','遠隔調','転調','モジュレーション','第1主題','第2主題']],
+ ['func',['コード機能','トニック','サブドミナント','ドミナント','主要三和音','緩和','緊張','主音','上主音','スーパートニック','中音','ミディアント','下属音','属音','下中音','サブミディアント','リーディングトーン','サブトニック','ドミナント・モーション','終止']],
+ ['diatonic',['ダイアトニック・コード','主和音','プレドミナント','トニック代理','増三和音','導音和音','ツーファイブ']],
+];
+const PWORDS=[
+ ['名前のついた進行',['カノン進行','王道進行','小室進行','丸サ進行','枯葉進行','Just The Two of Us進行','イチロクニーゴー','ブルース進行'],'l'],
+ ['単体のコード（コード事典）',['ツーファイブワン','完全終止','偽終止','セカンダリー・ドミナント','ダブルドミナント','サブドミナント・マイナー','ポップス・ドミナント','ピカルディ終止','別解のドミナント','変わり者コード'],'d'],
+ ['進行テクニック',['クリシェ','ベースラインクリシェ','ペダルポイント','パッシングディミニッシュ','借用コード','偽終止','sus4','セカンダリードミナント','サブドミナントマイナー'],'l'],
+ ['理論メモ',['ピカルディ終止','ブルースの特徴','aug と 7sus4','代理コード','ケーデンス','強進行','ドミナントモーション','リレイテッドIIm7','マイナースケールのツーファイブワン','分数コード','ドミナント系分数コード','五度圏','テンション','add9','オルタードテンション','イレブンス','サーティーンス','アボイドノート','裏コード','プラガル終止','倍音'],'m'],
+];
+const TABNAME=k=>(TABS.find(t=>t[0]==k)||[,''])[1];
+const kana=s=>s.toLowerCase().replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/[・\s\-ー（）()]/g,'');
+let WQ='';
+function wordsList(){
+  const q=kana(WQ);let n=0;
+  const html=WORDS.map(([tab,ws])=>{const hit=ws.filter(w=>!q||kana(w).includes(q)||kana(TABNAME(tab)).includes(q));n+=hit.length;
+    return hit.length?`<h3>${TABNAME(tab)}</h3><div class="wl">${hit.map(w=>`<button data-goto="${tab}">${w}</button>`).join('')}</div>`:''}).join('');
+  const inShell=window.parent!==window&&window.parent.openProg;
+  const ph=PWORDS.map(([g,ws,m])=>{const hit=ws.filter(w=>!q||kana(w).includes(q)||kana(g).includes(q));n+=hit.length;
+    if(!hit.length)return '';
+    if(m=='m')return `<h3>${g}</h3><div class="wl">${hit.map(w=>`<button data-memo="${w}">${w}</button>`).join('')}</div>`;
+    return inShell?`<h3>🎼 ${g}</h3><div class="wl">${hit.map(w=>`<button data-pq="${w}" data-pm="${m}">${w}</button>`).join('')}</div>`:''}).join('');
+  return ((html+ph)||'<p class="sub">見つかりませんでした</p>')+`<p class="sub" style="margin-top:14px">${n} 語${inShell?'（🎼 はコード進行100へ移動）':''}</p>`;
+}
+V.words=()=>`<h2>用語一覧</h2><p class="lead">ノートに出てくる言葉。タップでそのページへ移動。</p>
+  <input id="wq" type="search" placeholder="🔍 用語を検索（ひらがな・カタカナどちらでも）" value="${WQ.replace(/"/g,'&quot;')}" autocomplete="off">
+  <div id="wres">${wordsList()}</div>`;
+/* ---- クイズ ---- */
+let QZ={q:null,score:0,n:0};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function opts(ans,pool){const s=new Set([ans]);for(const p of shuffle(pool)){if(s.size>=4)break;s.add(p);}return shuffle([...s]);}
+function makeQ(){
+  const kind=rnd(['iv','ch','mode','rel','fn','near','iv','ch']);
+  if(kind=='iv'){const toks=['m2','M2','m3','M3','P4','A4','P5','m6','M6','m7','M7'];const t=rnd(toks),r=rnd(MAJ_NAMES),n=spell(r,t);
+    return {q:`${pn(r)} → ${pn(n)}（上行）は何度？`,a:IV[t][2],o:opts(IV[t][2],toks.map(x=>IV[x][2])),play:[48+pcOf(r),48+pcOf(r)+IV[t][0]],arp:1};}
+  if(kind=='ch'){const ks=['maj','m','aug','dim','maj7','7','m7','m7b5','dim7','mM7'];const ty=rnd(ks),r=rnd(MAJ_NAMES);const ans=chordNotes(r,ty).map(pn).join(' ');
+    return {q:`${chordName(r,ty)} の構成音は？`,a:ans,o:opts(ans,ks.map(x=>chordNotes(r,x).map(pn).join(' '))),play:chordMidi(r,ty)};}
+  if(kind=='mode'){const m=rnd(MODES);return {q:`「${m.mood}」なモードは？`,a:m.n,o:opts(m.n,MODES.map(x=>x.n))};}
+  if(kind=='rel'){const r=rnd(RELTAB);return {q:`${r[1]} メジャーの平行調は？`,a:r[2],o:opts(r[2],RELTAB.map(x=>x[2]))};}
+  if(kind=='fn'){const rows=[['I','T'],['IIm','SD'],['IIIm','T'],['IV','SD'],['V','D'],['VIm','T'],['VIIm(♭5)','D']];const r=rnd(rows);
+    return {q:`長調の ${r[0]} の機能は？`,a:FN[r[1]],o:[FN.T,FN.SD,FN.D]};}
+  const r=rnd(MAJ_NAMES),w=rnd([['属調','P5'],['下属調','P4']]);const ans=pn(spell(r,w[1]));
+  return {q:`${pn(r)} メジャーの${w[0]}は？`,a:ans,o:opts(ans,MAJ_NAMES.map(pn))};
+}
+V.quiz=()=>{
+  if(!QZ.q)QZ.q=makeQ();const q=QZ.q;
+  return `<h2>クイズ</h2><p class="lead">ノートの内容からランダムに出題。正解 ${QZ.score} / ${QZ.n}</p>
+  <div class="card quiz"><div class="q">${q.q}</div>
+  <div class="opts">${q.o.map(o=>`<button data-qa="${encodeURIComponent(o)}">${o}</button>`).join('')}</div>
+  <div style="display:flex;gap:8px;margin-top:12px">${q.play?`<button class="btn ghost" id="qplay">▶ 音を聴く</button>`:''}<span class="grow"></span><button class="btn" id="qnext">次の問題 →</button></div></div>`;
+};
+
+/* ============ 描画とイベント ============ */
+function render(){
+  document.getElementById('nav').innerHTML=TABS.map(([k,n])=>`<button data-tab="${k}" class="${k==TAB?'on':''}">${n}</button>`).join('');
+  document.getElementById('main').innerHTML=V[TAB]();
+  const on=document.querySelector('nav .on');on&&on.scrollIntoView({inline:'center',block:'nearest'});
+}
+const ks=document.getElementById('keySel');
+ks.innerHTML=MAJ_NAMES.map((n,i)=>`<option value="${i}">${pn(n)}</option>`).join('');
+ks.value=KEY;ks.onchange=()=>{KEY=+ks.value;save();render();};
+document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;stopSeq();TAB=b.dataset.tab;save();render();window.scrollTo(0,0);});
+document.getElementById('main').addEventListener('click',e=>{
+  let el;
+  if(el=e.target.closest('[data-sc2]')){e.stopPropagation();const[a,b,c]=JSON.parse(decodeURIComponent(el.dataset.sc2));selScale(a,b,c);return;}
+  if(el=e.target.closest('[data-ch]')){const[r,t,b]=el.dataset.ch.split('|');selChord(r,t,b||null,el);return;}
+  if(el=e.target.closest('[data-sc]')){const[a,b,c]=JSON.parse(decodeURIComponent(el.dataset.sc));selScale(a,b,c,el);return;}
+  if(el=e.target.closest('[data-iv]')){const s=+el.dataset.iv,r=48+KEY,nm={};nm[r]=MAJ_NAMES[KEY];nm[r+s]=el.dataset.n;
+    select(el.querySelector('b').textContent,pn(MAJ_NAMES[KEY])+' → '+pn(el.dataset.n)+'（'+s+'半音）',[r,r+s],nm,'arp',r);el.classList.add('sel');return;}
+  if(el=e.target.closest('[data-dm]')){DMODE=el.dataset.dm;render();return;}
+  if(el=e.target.closest('[data-dsev]')){DSEV=el.dataset.dsev=='1';render();return;}
+  if(el=e.target.closest('[data-prog]')){const k=MAJ_NAMES[KEY],map={T:['P1','maj'],SD:['P4','maj'],D:['P5','7']};const a=ac();let t=a.currentTime+.05;
+    el.dataset.prog.split(',').forEach(fn=>{const[tok,ty]=map[fn];const r=spell(k,tok);chordMidi(r,ty).forEach(m=>voice(m-(pcOf(r)>pcOf(k)+4?12:0),t,.75,.7));t+=.8;});return;}
+  if(el=e.target.closest('[data-qa]')){const q=QZ.q;if(q.done)return;q.done=1;QZ.n++;const pick=decodeURIComponent(el.dataset.qa);
+    if(pick==q.a)QZ.score++;document.querySelectorAll('[data-qa]').forEach(b=>{const v=decodeURIComponent(b.dataset.qa);if(v==q.a)b.classList.add('ok');else if(b==el)b.classList.add('ng');});
+    document.querySelector('.lead').textContent=`ノートの内容からランダムに出題。正解 ${QZ.score} / ${QZ.n}`;if(q.play)(q.arp?playArp:playBlock)(q.play);return;}
+  if(el=e.target.closest('[data-run]')){const[r,t]=JSON.parse(decodeURIComponent(el.dataset.p));const d=el.dataset.run;const same=SEQ&&SEQ.btn===el;stopSeq();if(!same)scaleRun(r,t,d=='drone'?'both':d,el,d=='drone');return;}
+  if(el=e.target.closest('[data-cseq]')){const cs=JSON.parse(decodeURIComponent(el.dataset.cseq));seqPlay(cs.map(([r,t])=>chordItem(r,t)),el,900);return;}
+  if(el=e.target.closest('#modeTour')){const order=['lydian','ionian','mixolydian','dorian','aeolian','phrygian','locrian'];stopSeq();let i=0;SEQ={btn:el,timers:[]};el.classList.add('sel');
+    order.forEach((k,j)=>{const s=MODES.find(m=>m.k==k),rr=s.t.includes('m3')?MIN_NAMES[KEY]:MAJ_NAMES[KEY];SEQ.timers.push(setTimeout(()=>{const fake={dataset:{title:pn(rr)+' '+s.n+'（'+s.mood+'）'},classList:{add(){},remove(){}}};const keep=SEQ;scaleRun(rr,s.t,'up',fake);SEQ=keep;},j*2600));});
+    SEQ.timers.push(setTimeout(()=>stopSeq(),7*2600));return;}
+  if(el=e.target.closest('[data-cl]')){const sym=el.dataset.cl;const{ms,names}=symNotes(sym);stopSeq();select(sym,'構成音：'+[...new Set(Object.values(names))].map(pn).join(' ・ '),ms,names,'block',null);el.classList.add('sel');return;}
+  if(el=e.target.closest('[data-sym]')){const sym=el.dataset.sym;const{ms,names}=symNotes(sym);stopSeq();select(showSym(sym),'構成音：'+[...new Set(ms.map(m=>names[m]))].map(pn).join(' ・ '),ms,names,'block',null);document.querySelectorAll('.pch.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');return;}
+  if(el=e.target.closest('[data-pseq]')){const syms=JSON.parse(decodeURIComponent(el.dataset.pseq));seqPlay(syms.map(s=>{const{ms,names}=symNotes(s);return{name:showSym(s),ms,names};}),el,950);return;}
+  if(el=e.target.closest('[data-memo]')){const k=el.dataset.memo.replace(/\s/g,'').toLowerCase();const i=MEMO.findIndex(t=>t.t.replace(/\s/g,'').toLowerCase().includes(k));
+    MTAG=null;if(i>=0)MOPEN.add(i);TAB='memo';save();render();const c=document.querySelector(`[data-mi="${i}"]`);c&&setTimeout(()=>{c.scrollIntoView({block:'start'});window.scrollBy(0,-110)},30);return;}
+  if(el=e.target.closest('[data-mtag]')){MTAG=el.dataset.mtag=='すべて'?null:el.dataset.mtag;render();return;}
+  if(el=e.target.closest('[data-mt]')){const i=+el.dataset.mt;MOPEN.has(i)?MOPEN.delete(i):MOPEN.add(i);render();return;}
+  if(el=e.target.closest('[data-mp]')){const[i,j]=el.dataset.mp.split('|').map(Number);memoPlay(MEMO[i].play[j],el);return;}
+  if(el=e.target.closest('[data-ck]')){KEY=+el.dataset.ck;ks.value=KEY;save();render();return;}
+  if(el=e.target.closest('[data-pq]')){try{window.parent.openProg(el.dataset.pq,el.dataset.pm)}catch(_){}return;}
+  if(el=e.target.closest('[data-goto]')){e.preventDefault();TAB=el.dataset.goto;save();render();window.scrollTo(0,0);return;}
+  if(e.target.id=='qnext'){QZ.q=makeQ();render();return;}
+  if(e.target.id=='qplay'){const q=QZ.q;(q.arp?playArp:playBlock)(q.play);return;}
+});
+
+document.getElementById('main').addEventListener('change',e=>{if(e.target.id=='palSel'){PALK=e.target.value;try{localStorage.setItem('mtn-pal',PALK)}catch(_){}render();}});
+try{const v=localStorage.getItem('mtn-pal');if(v)PALK=v;}catch(_){}
+document.getElementById('main').addEventListener('input',e=>{if(e.target.id=='sq'){SQ=e.target.value;document.getElementById('sres').innerHTML=songSearch();return;}if(e.target.id=='wq'){WQ=e.target.value;document.getElementById('wres').innerHTML=wordsList();}});
+/* ============ MIDI 入力 ============ */
+const held=new Map();
+function detect(notes){
+  if(notes.length<2)return '';
+  const pcs=[...new Set(notes.map(n=>n%12))],bass=Math.min(...notes)%12;
+  const cands=[];
+  for(const r of pcs)for(const[k,c]of Object.entries(CT)){
+    const set=c.t.map(t=>(r+IV[t][0])%12);
+    if(set.length==pcs.length&&set.every(x=>pcs.includes(x)))cands.push([r,k]);
+  }
+  if(!cands.length)return pcs.length==2?IV[Object.keys(IV).find(t=>IV[t][0]==((Math.max(...notes)-Math.min(...notes))%12))||'P1'][2]:'';
+  cands.sort((a,b)=>(b[0]==bass)-(a[0]==bass));
+  const[r,k]=cands[0];const rn=MAJ_NAMES[r];return chordName(rn,k)+(r!=bass?'/'+pn(MAJ_NAMES[bass]):'');
+}
+function midiUI(){
+  const ns=[...held.keys()].sort((a,b)=>a-b);
+  document.querySelectorAll('#kb [data-m]').forEach(el=>el.classList.toggle('m',held.has(+el.dataset.m)));
+  document.getElementById('midiLine').textContent=ns.length?'🎹 '+ns.map(n=>pn(MAJ_NAMES[n%12])).join(' ')+(detect(ns)?'　→ '+detect(ns):''):'';
+}
+document.getElementById('midiBtn').onclick=async()=>{
+  const b=document.getElementById('midiBtn');ac();
+  if(!navigator.requestMIDIAccess){b.textContent='MIDI非対応';return;}
+  try{const acc=await navigator.requestMIDIAccess();
+    const hook=()=>{let c=0;acc.inputs.forEach(inp=>{c++;inp.onmidimessage=ev=>{const[s,n,v]=ev.data,t=s&0xf0;
+      if(t==0x90&&v>0){held.get(n)?.stop();held.set(n,voice(n,ac().currentTime+.003,null,.4+v/200));midiUI();}
+      else if(t==0x80||(t==0x90&&v==0)){held.get(n)?.stop();held.delete(n);midiUI();}};});
+      b.textContent=c?'MIDI ✓ '+c:'MIDI 機器なし';b.classList.toggle('ok',c>0);};
+    hook();acc.onstatechange=hook;
+  }catch(err){b.textContent='MIDI 使用不可';document.getElementById('midiLine').textContent='この画面ではMIDIが許可されていません（GitHub Pages等で開くと使えます）';}
+};
+
+window.getKey=()=>KEY;window.setKeyExt=k=>{if(k===KEY)return;KEY=k;ks.value=k;save();render();};
+buildKb();render();
+try{MTNDrag.bind(document.getElementById('main'),'[data-cl],[data-drag],[data-sym],[data-pseq]',el=>el.dataset.drag?JSON.parse(decodeURIComponent(el.dataset.drag)):el.dataset.pseq?JSON.parse(decodeURIComponent(el.dataset.pseq)):[el.dataset.cl||el.dataset.sym]);}catch(_){}
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{buildKb();drawKeys();},200)});
+</script>
+</body>
+</html>
