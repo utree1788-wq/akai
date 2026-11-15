@@ -819,6 +819,7 @@ document.getElementById('itable').addEventListener('click',e=>{
 });
 try{const k=localStorage.getItem('cp100key');if(k!=null){S.key=+k;}}catch(e){}
 keySel.value=S.key;keySel2.value=S.key;
+window.MTN_KEY=()=>({tonic:S.key,minor:false,from:'コード進行100'});
 MTNDrag.bind(document.getElementById('list'),'.ch,[data-act=drag]',el=>{const p=PROG.find(x=>x.n==el.closest('.card').dataset.n);return el.classList.contains('ch')?[transpose(p.c[+el.dataset.i],S.key)]:p.c.map(c=>transpose(c,S.key))},()=>S.bpm);
 MTNDrag.bind(document.getElementById('itable'),'.irow',el=>PROG.find(x=>x.n==el.dataset.n).c.map(c=>transpose(c,S.key)),()=>S.bpm);
 MTNDrag.bind(document.getElementById('dictlist'),'[data-dc]',el=>[transpose(el.dataset.dc,S.key)]);

@@ -836,9 +836,10 @@ $('tl').addEventListener('dragleave',e=>{if(!e.relatedTarget||!$('tl').contains(
 $('tl').addEventListener('drop',e=>{if(!e.target.closest('#chLane'))return;e.preventDefault();hideDropMark();const b=Math.floor(beatAt(e.clientX));
   const dt=e.dataTransfer;let items=null;
   try{const j=dt.getData('application/x-cds-chips');if(j){items=JSON.parse(j)}}catch(_){}
-  if(!items){try{const j=dt.getData('application/x-mtn-chords');if(j){const p=JSON.parse(j);items=p.items.map(i=>({spec:parseSym(i.sym),len:i.beats||4})).filter(i=>i.spec)}}catch(_){}}
+  if(!items){try{const j=dt.getData('application/x-mtn-chords');if(j){const p=JSON.parse(j);items=p.items.map(i=>({spec:parseSym(i.sym),len:i.beats||4})).filter(i=>i.spec);
+    if(p.key&&p.key.tonic!=null&&(p.key.tonic!==P.key||!!p.key.minor!==P.minor)){snap();P.key=(+p.key.tonic+12)%12;P.minor=!!p.key.minor;UI.keyMsg='キーを '+nn(P.key)+(P.minor?'m':'')+' に合わせました（'+(p.key.from||'')+'の主音）・';}}}catch(_){}}
   if(!items){const t=dt.getData('text/plain');if(t)items=parseText(t)}
-  if(items&&items.length){dropSpecs(items,b);toast('ドロップ：'+items.map(i=>symOf(i.spec)).join(' '))}});
+  if(items&&items.length){dropSpecs(items,b);toast((UI.keyMsg||'')+'ドロップ：'+items.map(i=>symOf(i.spec)).join(' '));UI.keyMsg=''}});
 function showDropMark(b){let m=$('dropmark');if(!m){m=document.createElement('div');m.id='dropmark';m.className='dropmark';lane().appendChild(m)}b=Math.max(0,Math.floor(b));m.style.left=(b*UI.zoom)+'px';m.style.width=(UI.defLen*UI.zoom)+'px'}
 function hideDropMark(){const m=$('dropmark');m&&m.remove()}
 

@@ -56,7 +56,7 @@ function smf(items,bpm=100,withBass=true){
 }
 function b64(u8){let s='';for(let i=0;i<u8.length;i++)s+=String.fromCharCode(u8[i]);return btoa(s)}
 function fileName(chords){return (chords.slice(0,6).join('-').replace(/[\/\\:*?"<>|]/g,'on').replace(/♭/g,'b').replace(/♯/g,'#').replace(/[△Δ]/g,'M')||'chords')+'.mid'}
-function payload(chords,bpm){const items=chords.map(c=>typeof c=='string'?{sym:c,beats:4}:c);return{items,text:items.map(i=>i.sym).join(' '),bpm:bpm||100}}
+function payload(chords,bpm){const items=chords.map(c=>typeof c=='string'?{sym:c,beats:4}:c);let key=null;try{if(window.MTN_KEY)key=window.MTN_KEY()}catch(_){}return{items,text:items.map(i=>i.sym).join(' '),bpm:bpm||100,key}}
 function onDragStart(e,chords,bpm){
   const p=payload(chords,bpm);
   e.dataTransfer.effectAllowed='copy';
