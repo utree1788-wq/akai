@@ -60,7 +60,7 @@ function payload(chords,bpm){const items=chords.map(c=>typeof c=='string'?{sym:c
 function onDragStart(e,chords,bpm){
   const p=payload(chords,bpm);
   e.dataTransfer.effectAllowed='copy';
-  e.dataTransfer.setData('text/plain',p.text);
+  if(!e.dataTransfer.getData('text/plain'))e.dataTransfer.setData('text/plain',p.text);
   e.dataTransfer.setData('application/x-mtn-chords',JSON.stringify(p));
   try{const u8=smf(p.items,p.bpm);e.dataTransfer.setData('DownloadURL','audio/midi:'+fileName(p.items.map(i=>i.sym))+':data:audio/midi;base64,'+b64(u8));}catch(_){}
 }

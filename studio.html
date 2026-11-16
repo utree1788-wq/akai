@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>コード設計スタジオ</title>
-<link rel="manifest" href="studio.webmanifest">
-<link rel="icon" type="image/png" href="studio-icon-192.png">
-<link rel="apple-touch-icon" href="studio-icon-180.png">
+<link rel="manifest" href="codestudio-manifest.json">
+<link rel="icon" type="image/png" href="codestudio-icon-192.png">
+<link rel="apple-touch-icon" href="codestudio-icon-180.png">
 <meta name="theme-color" content="#120d1d">
 <style>
 :root{--bg:#120d1d;--bg2:#1a1428;--panel:#211a33;--panel2:#2a2240;--line:#3b3157;--text:#f4eefc;--mute:#a69cc0;
@@ -838,7 +838,7 @@ $('tl').addEventListener('drop',e=>{if(!e.target.closest('#chLane'))return;e.pre
   try{const j=dt.getData('application/x-cds-chips');if(j){items=JSON.parse(j)}}catch(_){}
   if(!items){try{const j=dt.getData('application/x-mtn-chords');if(j){const p=JSON.parse(j);items=p.items.map(i=>({spec:parseSym(i.sym),len:i.beats||4})).filter(i=>i.spec);
     if(p.key&&p.key.tonic!=null&&(p.key.tonic!==P.key||!!p.key.minor!==P.minor)){snap();P.key=(+p.key.tonic+12)%12;P.minor=!!p.key.minor;UI.keyMsg='キーを '+nn(P.key)+(P.minor?'m':'')+' に合わせました（'+(p.key.from||'')+'の主音）・';}}}catch(_){}}
-  if(!items){const t=dt.getData('text/plain');if(t)items=parseText(t)}
+  if(!items){let t=dt.getData('text/plain');if(t&&t.startsWith('POCKETDTM_CHORDS:')){try{t=JSON.parse(t.slice(17)).chords.join(' ')}catch(_){}}if(t)items=parseText(t)}
   if(items&&items.length){dropSpecs(items,b);toast((UI.keyMsg||'')+'ドロップ：'+items.map(i=>symOf(i.spec)).join(' '));UI.keyMsg=''}});
 function showDropMark(b){let m=$('dropmark');if(!m){m=document.createElement('div');m.id='dropmark';m.className='dropmark';lane().appendChild(m)}b=Math.max(0,Math.floor(b));m.style.left=(b*UI.zoom)+'px';m.style.width=(UI.defLen*UI.zoom)+'px'}
 function hideDropMark(){const m=$('dropmark');m&&m.remove()}
