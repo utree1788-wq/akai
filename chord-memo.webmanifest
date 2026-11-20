@@ -11,17 +11,17 @@
   "theme_color": "#e2703f",
   "icons": [
     {
-      "src": "icons/chord-memo-192.png",
+      "src": "chord-memo-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/chord-memo-512.png",
+      "src": "chord-memo-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "icons/chord-memo-maskable.png",
+      "src": "chord-memo-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
