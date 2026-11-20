@@ -1,0 +1,30 @@
+{
+  "id": "./voicing.html",
+  "name": "ボイシング帖",
+  "short_name": "ボイシング帖",
+  "description": "和音の積み方を、見て・聴いて・比べる",
+  "lang": "ja",
+  "start_url": "./voicing.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#13172a",
+  "theme_color": "#13172a",
+  "icons": [
+    {
+      "src": "icons/voicing-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/voicing-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/voicing-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
