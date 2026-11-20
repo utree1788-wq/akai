@@ -71,6 +71,12 @@ tr.click{cursor:pointer} tr.click:active{background:var(--panel2)}
 .keymap .k{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 4px;cursor:pointer}
 .keymap .k b{display:block;font-size:18px}
 .keymap .k.main{border-color:var(--acc);background:rgba(255,209,102,.08)}
+.keymap .k.ksel{outline:2px solid var(--T);outline-offset:1px}
+.kcard{margin-top:12px}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+.kc{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}
+.kc small{font-size:11px;color:var(--mute);font-weight:800}.kc b{font-size:15px}.kc .tag{font-size:10px;padding:0 6px;margin:0}
+.kc.sel,.kc:active{border-color:var(--T);background:rgba(255,126,182,.15)}
 .quiz .q{font-size:18px;font-weight:800;margin:6px 0 12px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .opts button{background:var(--panel2);border:1.5px solid var(--line);border-radius:12px;padding:12px 6px;font-weight:800;font-size:15px}
@@ -651,20 +657,53 @@ V.japan=()=>{
    </div></div>`}).join('')}
   <div class="note">構成音はノートの記述をそのまま載せています。律音階・琉音階は資料によって構成音が違うので、一般によく見る形も聴き比べられます。コード例は雰囲気をつかむための参考です。</div>`;
 };
+let KMODE='major',KSEL=null;
+try{const km=localStorage.getItem('mtn-kmode');if(km)KMODE=km}catch(_){}
+const sigOf=(r,minor)=>SIG[(pcOf(r)+(minor?3:0))%12];
+function keyChords(r,minor){
+  const rows=minor?DIA.natural.rows:DIA.major.rows;
+  const row=(tok,ty,fn,memo,extra)=>{const rr=spell(r,tok),nm=chordName(rr,ty),sym=nm.replace(/♭/g,'b').replace(/♯/g,'#');
+    return `<button class="kc" data-ch="${rr}|${ty}" data-sym="${sym}" draggable="true" title="${memo||''}"><small>${roman(tok)}${extra||''}</small><b>${nm}</b>${tag(fn,fn)}</button>`};
+  const tri=rows.map(([tok,t3,t4,fn,memo])=>row(tok,t3,fn,memo)).join('');
+  const sev=rows.map(([tok,t3,t4,fn,memo])=>row(tok,t4,fn,memo)).join('');
+  const harm=minor?row('P5','maj','D','和声的短音階の V。導音入りで Im へ強く解決')+row('P5','7','D','和声的短音階の V7')+row('M7','dim7','D','導音の減七'):'';
+  const P=(list)=>{const cs=list.map(([tok,ty])=>[spell(r,tok),ty]);const syms=cs.map(([a,t])=>chordName(a,t).replace(/♭/g,'b').replace(/♯/g,'#'));
+    return `<div class="vars"><span class="dh" data-drag="${encodeURIComponent(JSON.stringify(syms))}" draggable="true" title="PC：進行ごとドラッグ">⠿</span><button data-cseq="${encodeURIComponent(JSON.stringify(cs))}">▶ ${cs.map(([a,t])=>chordName(a,t)).join(' → ')}</button></div>`};
+  const progs=minor?[[['P1','m'],['P4','m'],['P5','7'],['P1','m']],[['P1','m'],['m6','maj'],['m7','maj'],['P1','m']],[['M2','m7b5'],['P5','7'],['P1','m7']]]
+                   :[[['P1','maj'],['P4','maj'],['P5','7'],['P1','maj']],[['P4','maj7'],['P5','7'],['M3','m7'],['M6','m7']],[['M2','m7'],['P5','7'],['P1','maj7']]];
+  return `<div class="card kcard"><div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><b style="font-size:17px">${pn(r)}${minor?'m（マイナー）':'（メジャー）'} のコード</b><span class="sub">${sigOf(r,minor)}・${minor?'自然的短音階':'メジャー・スケール'}</span></div>
+   <div class="sub" style="margin:6px 0 2px">3和音</div><div class="kgrid">${tri}</div>
+   <div class="sub" style="margin:8px 0 2px">4和音（7th）</div><div class="kgrid">${sev}</div>
+   ${minor?`<div class="sub" style="margin:8px 0 2px">和声的短音階から（強いドミナント）</div><div class="kgrid">${harm}</div>`:''}
+   <div class="sub" style="margin:10px 0 0">定番の進行</div>${progs.map(P).join('')}
+   <div class="sub" style="margin-top:6px">タップで鳴らす／PCはドラッグでDAW・コード設計スタジオ・ポケットDTMへ</div></div>`;
+}
 V.key=()=>{
-  const k=KN(),P5=spell(k,'P5'),P4=spell(k,'P4'),rel=spell(k,'M6');
-  const box=(cls,n,ttl,sig,sc)=>`<div class="k ${cls}" data-sc="${encodeURIComponent(JSON.stringify(sc))}"><div class="sub">${ttl}</div><b>${n}</b><div class="sub">${sig}</div></div>`;
-  const MJ=MODES[0].t,NM=MINORS[0].t;
-  return `<h2>調（キー）の関係</h2><p class="lead">主調 ${pn(k)} メジャーの場合。タップで音階を再生。</p>
-  <div class="keymap">
-   ${box('',pn(spell(P4,'M6'))+'m','下属調の平行調',SIG[pcOf(P4)],[pn(spell(P4,'M6'))+'m',spell(P4,'M6'),NM])}
-   ${box('',pn(rel)+'m','平行調',SIG[KEY],[pn(rel)+'m',rel,NM])}
-   ${box('',pn(spell(P5,'M6'))+'m','属調の平行調',SIG[pcOf(P5)],[pn(spell(P5,'M6'))+'m',spell(P5,'M6'),NM])}
-   ${box('',pn(P4),'下属調（♭+1）',SIG[pcOf(P4)],[pn(P4)+' メジャー',P4,MJ])}
-   ${box('main',pn(k),'主調',SIG[KEY],[pn(k)+' メジャー',k,MJ])}
-   ${box('',pn(P5),'属調（♯+1）',SIG[pcOf(P5)],[pn(P5)+' メジャー',P5,MJ])}
-   <div></div>${box('',pn(k)+'m','同主調',' ',[pn(k)+'m',k,NM])}<div></div>
-  </div>
+  const minor=KMODE=='minor';
+  const k=minor?MIN_NAMES[KEY]:KN(),P5=spell(k,'P5'),P4=spell(k,'P4');
+  const box=(cls,r,mi,ttl)=>{const n=pn(r)+(mi?'m':''),on=KSEL?(KSEL.r==r&&KSEL.minor==mi):cls=='main';
+    return `<div class="k ${cls}${on?' ksel':''}" data-kk="${r}|${mi?1:0}"><div class="sub">${ttl}</div><b>${n}</b><div class="sub">${sigOf(r,mi)||' '}</div></div>`};
+  const sel=KSEL||{r:k,minor};
+  const grid=minor?`
+   ${box('',spell(P4,'m3'),false,'下属調の平行調')}
+   ${box('',spell(k,'m3'),false,'平行調')}
+   ${box('',spell(P5,'m3'),false,'属調の平行調')}
+   ${box('',P4,true,'下属調（♭+1）')}
+   ${box('main',k,true,'主調')}
+   ${box('',P5,true,'属調（♯+1）')}
+   <div></div>${box('',MAJ_NAMES[KEY],false,'同主調')}<div></div>`:`
+   ${box('',spell(P4,'M6'),true,'下属調の平行調')}
+   ${box('',spell(k,'M6'),true,'平行調')}
+   ${box('',spell(P5,'M6'),true,'属調の平行調')}
+   ${box('',P4,false,'下属調（♭+1）')}
+   ${box('main',k,false,'主調')}
+   ${box('',P5,false,'属調（♯+1）')}
+   <div></div>${box('',k,true,'同主調')}<div></div>`;
+  return `<h2>調（キー）の関係</h2>
+  <div class="seg"><button data-kmode="major" class="${minor?'':'on'}">メジャーが主調</button><button data-kmode="minor" class="${minor?'on':''}">マイナーが主調</button></div>
+  <p class="lead">主調 ${pn(k)}${minor?'m（マイナー）':' メジャー'} の場合。<b style="color:var(--acc)">調をタップ</b>すると音階が鳴り、下にその調のコードが出ます。主音は右上のキーで変更。</p>
+  <div class="keymap">${grid}</div>
+  ${keyChords(sel.r,sel.minor)}
   <h3>近親調（主調と関係の近い調）</h3>
   <div class="list">
    <div class="row"><span class="nm">平行調</span><span class="grow">調号が同じ長調と短調。<b>音階の構成音が全て同じ</b>。<div class="sub">C メジャー ↔ A マイナー</div></span></div>
@@ -1109,6 +1148,10 @@ ks.value=KEY;ks.onchange=()=>{KEY=+ks.value;save();render();};
 document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;stopSeq();TAB=b.dataset.tab;save();render();window.scrollTo(0,0);});
 document.getElementById('main').addEventListener('click',e=>{
   let el;
+  if(el=e.target.closest('[data-kmode]')){KMODE=el.dataset.kmode;KSEL=null;try{localStorage.setItem('mtn-kmode',KMODE)}catch(_){}render();return;}
+  if(el=e.target.closest('[data-kk]')){const[r,mi]=el.dataset.kk.split('|');const minor=mi=='1';KSEL={r,minor};
+    const y=window.scrollY;render();window.scrollTo(0,y);selScale(pn(r)+(minor?'m 自然的短音階':' メジャー'),r,minor?MINORS[0].t:MODES[0].t);
+    const c=document.querySelector('.kcard');if(c){const rc=c.getBoundingClientRect();if(rc.top>innerHeight-120)c.scrollIntoView({behavior:'smooth',block:'start'})}return;}
   if(el=e.target.closest('[data-sc2]')){e.stopPropagation();const[a,b,c]=JSON.parse(decodeURIComponent(el.dataset.sc2));selScale(a,b,c);return;}
   if(el=e.target.closest('[data-ch]')){const[r,t,b]=el.dataset.ch.split('|');selChord(r,t,b||null,el);return;}
   if(el=e.target.closest('[data-sc]')){const[a,b,c]=JSON.parse(decodeURIComponent(el.dataset.sc));selScale(a,b,c,el);return;}
@@ -1177,7 +1220,7 @@ document.getElementById('midiBtn').onclick=async()=>{
   }catch(err){b.textContent='MIDI 使用不可';document.getElementById('midiLine').textContent='この画面ではMIDIが許可されていません（GitHub Pages等で開くと使えます）';}
 };
 
-window.MTN_KEY=()=>{let minor=false;try{if(TAB=='palette'){const t=palScale()[2];minor=!t.includes('M3')}}catch(_){}return{tonic:KEY,minor,from:'理論ノート'}};
+window.MTN_KEY=()=>{let minor=false,tonic=KEY;try{if(TAB=='palette'){const t=palScale()[2];minor=!t.includes('M3')}else if(TAB=='key'){if(KSEL){tonic=pcOf(KSEL.r);minor=KSEL.minor}else minor=KMODE=='minor'}}catch(_){}return{tonic,minor,from:'理論ノート'}};
 window.getKey=()=>KEY;window.setKeyExt=k=>{if(k===KEY)return;KEY=k;ks.value=k;save();render();};
 buildKb();render();
 try{MTNDrag.bind(document.getElementById('main'),'[data-cl],[data-drag],[data-sym],[data-pseq]',el=>el.dataset.drag?JSON.parse(decodeURIComponent(el.dataset.drag)):el.dataset.pseq?JSON.parse(decodeURIComponent(el.dataset.pseq)):[el.dataset.cl||el.dataset.sym]);}catch(_){}
