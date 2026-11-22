@@ -1,14 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="112" fill="#26215C"/>
-<circle cx="256" cy="256" r="170" fill="#3C3489"/>
-<g stroke-linecap="round" stroke-width="30">
-<line x1="136" y1="256" x2="136" y2="256" stroke="#F0997B"/>
-<line x1="136" y1="226" x2="136" y2="286" stroke="#F0997B"/>
-<line x1="176" y1="196" x2="176" y2="316" stroke="#AFA9EC"/>
-<line x1="216" y1="150" x2="216" y2="362" stroke="#85B7EB"/>
-<line x1="256" y1="118" x2="256" y2="394" stroke="#ED93B1"/>
-<line x1="296" y1="166" x2="296" y2="346" stroke="#97C459"/>
-<line x1="336" y1="206" x2="336" y2="306" stroke="#EF9F27"/>
-<line x1="376" y1="234" x2="376" y2="278" stroke="#5DCAA5"/>
-</g>
+ <rect width="512" height="512" fill="#23201b"/>
+ <rect x="40" y="40" width="432" height="432" rx="88" fill="#23201b"/>
+ <g transform="translate(76,150)">
+  <!-- 7 white keys -->
+  <g fill="#fffdf8" stroke="#23201b" stroke-width="4">
+   <rect x="0" y="0" width="51.4" height="230" rx="8"/><rect x="51.4" y="0" width="51.4" height="230" rx="8"/>
+   <rect x="102.8" y="0" width="51.4" height="230" rx="8"/><rect x="154.2" y="0" width="51.4" height="230" rx="8"/>
+   <rect x="205.6" y="0" width="51.4" height="230" rx="8"/><rect x="257" y="0" width="51.4" height="230" rx="8"/>
+   <rect x="308.4" y="0" width="51.4" height="230" rx="8"/>
+  </g>
+  <g fill="#23201b">
+   <rect x="35" y="0" width="33" height="135" rx="5"/><rect x="86.4" y="0" width="33" height="135" rx="5"/>
+   <rect x="189" y="0" width="33" height="135" rx="5"/><rect x="240.4" y="0" width="33" height="135" rx="5"/><rect x="291.8" y="0" width="33" height="135" rx="5"/>
+  </g>
+  <circle cx="25.7" cy="192" r="17" fill="#F28C28"/><circle cx="77.1" cy="192" r="17" fill="#F2CC1F"/>
+  <circle cx="128.5" cy="192" r="17" fill="#8CC63F"/><circle cx="179.9" cy="192" r="17" fill="#4FB8E6"/>
+  <circle cx="231.3" cy="192" r="17" fill="#2F5FC4"/><circle cx="282.7" cy="192" r="17" fill="#D93A3A"/>
+  <circle cx="334.1" cy="192" r="17" fill="#EE7FB3"/>
+ </g>
+ <text x="256" y="122" text-anchor="middle" font-family="Noto Sans CJK JP, sans-serif" font-weight="900" font-size="58" fill="#f7f3ea">コード帖</text>
 </svg>
