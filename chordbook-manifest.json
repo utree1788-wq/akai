@@ -1,0 +1,24 @@
+{
+ "name": "ピアノコード帖",
+ "short_name": "コード帖",
+ "start_url": "./chordbook.html",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f7f3ea",
+ "theme_color": "#23201b",
+ "lang": "ja",
+ "icons": [
+  {
+   "src": "chordbook-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "chordbook-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
