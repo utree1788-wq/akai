@@ -79,6 +79,43 @@ label.inline{display:inline-flex;gap:6px;align-items:center;font-size:13px;color
 .kbbar{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
 
 .log{font-family:ui-monospace,Menlo,monospace;font-size:12px;height:160px;overflow:auto;background:#eef0f3;border:1px solid var(--line);border-radius:8px;padding:8px;color:#3f4450;white-space:pre}
+.log.lk{padding:4px;white-space:normal;height:200px;resize:vertical}
+.log .ln{white-space:pre;padding:2px 6px;border-radius:5px;cursor:pointer;overflow:hidden;text-overflow:ellipsis}
+.log .ln:hover{background:#e2dcf5}
+.log .ln .lt{color:#9aa0ad;margin-right:8px}
+.log .ln .lh{color:#7c3aed;margin-left:10px}
+.log .ln.sel{background:#7c3aed;color:#fff}.log .ln.sel .lt,.log .ln.sel .lh{color:#e9ddff}
+.log .empty{color:#9aa0ad;padding:6px}
+.logbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 6px}
+.logbar select,.logbar input{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.logbar input{width:150px}
+.logbar input.num{width:58px}
+.dragh{cursor:grab;user-select:none;background:#f3eeff;border-color:#c9b5ff;color:#5b21b6}
+.dragh:active{cursor:grabbing}
+.log .ln[draggable=true]{cursor:pointer}
+.lkpaste{display:none;margin:0 0 6px}
+.lkpaste textarea{width:100%;box-sizing:border-box;height:120px;font:12px ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;padding:6px}
+.log.dropok{outline:3px dashed #7c3aed;outline-offset:-3px}
+.lkview .vchord[draggable=true]{cursor:grab;display:inline-block;padding:0 6px;border-radius:6px}
+.lkview .vchord[draggable=true]:hover{background:#ece4ff}
+.logmsg{font-size:12px;color:#7c3aed;min-height:16px;margin:2px 0 4px}
+.lkview{display:none;margin-top:8px;padding:8px 10px;border-radius:8px;background:#f6f2ff;border:1px solid #d9c9ff}
+.lkview .vh{display:flex;gap:8px;align-items:center;font-size:12px;color:#5b5f6b}
+.lkview .vh .x{margin-left:auto}
+.lkview .vchord{font-size:24px;font-weight:800;color:#5b21b6;margin:2px 0}
+.lkview .vnotes{font-size:13px;color:#3f4450}
+.mkb{position:relative;height:86px;margin-top:8px;user-select:none}
+.mkb .w,.mkb .b{position:absolute;top:0;border-radius:0 0 5px 5px}
+.mkb .w{height:100%;background:#fafafa;border:1px solid #9a9a9a;z-index:1}
+.mkb .b{height:60%;background:#1b1b1b;border:1px solid #000;z-index:2}
+.mkb .w.on{background:#b9a5fb}.mkb .b.on{background:#7c3aed}
+.mkb .tgt{box-shadow:inset 0 0 0 3px #f59e0b}
+.mkb .w.rel{background:repeating-linear-gradient(45deg,#fafafa 0 5px,#e9e3fb 5px 10px)}.mkb .b.rel{background:repeating-linear-gradient(45deg,#1b1b1b 0 4px,#4c3a7a 4px 8px)}
+.mkb .t{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;font-weight:700;color:#3b2a75}
+.mkb .b .t{color:#fff;bottom:2px;font-size:8px}
+.mkb .c{position:absolute;top:3px;left:0;right:0;text-align:center;font-size:8px;color:#999}
+.wk.replay{background:#c4b5fd}.bk.replay{background:#7c3aed}
+.wk.rtgt,.bk.rtgt{box-shadow:inset 0 0 0 3px #f59e0b}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:860px){.grid2{grid-template-columns:1fr}}
 .big{font-size:34px;font-weight:800}
@@ -293,8 +330,36 @@ body.land .hw{min-width:0}
       <p class="sub">このアプリでの割り当て：ノブ1 カットオフ / 2 レゾナンス / 3 アタック / 4 リリース / 5 デチューン / 6 ディレイ量 / 7 ベンド幅 / 8 音量。フェーダー：F1 シンセ / F2 キック / F3 スネア・クラップ / F4 ハット・シンバル / F5 タム・パーカス / F6 ディレイの繰り返し / F7 ディレイの間隔 / F8 メトロノーム / F9 マスター。</p>
   </div>
   <div class="card blk" data-b="log">
-      <h2>MIDIログ <button class="btn small" id="clearLog" style="float:right">クリア</button></h2>
-      <div class="log" id="log"></div>
+      <h2>MIDIログ</h2>
+      <div class="logbar">
+        <select id="logSel" title="表示するログ"></select>
+        <button class="btn small primary" id="logPlay">▶ 通して再生</button>
+        <button class="btn small" id="logStop">■ 停止</button>
+        <label class="inline sub">BPM <input class="num" type="number" id="logBpm" min="40" max="240" value="120"></label>
+        <span class="btn small dragh" id="logDrag" draggable="true" title="ポケットDTM・コードメモ・デスクトップ（.mid）へドラッグ">⠿ ログごとドラッグ</span>
+        <button class="btn small" id="logMid">⬇ .mid</button>
+      </div>
+      <div class="logbar" id="logLiveBar">
+        <input id="logName" placeholder="名前（空なら日時）">
+        <button class="btn small primary" id="saveLog">💾 保存</button>
+        <button class="btn small" id="clearLog">クリア</button>
+        <button class="btn small" id="logImport">⬆ 読み込み</button>
+        <button class="btn small" id="logPasteBtn">📋 貼り付け</button>
+        <input type="file" id="logFile" accept=".json,.txt,.log,application/json,text/plain" style="display:none">
+      </div>
+      <div class="lkpaste" id="lkPaste">
+        <textarea id="logPasteTx" placeholder="ch16 NoteOn  C5(72) vel 21&#10;ch16 NoteOff C5(72)&#10;… のようなMIDIログの文字をここに貼り付け"></textarea>
+        <div class="logbar" style="margin-top:4px"><button class="btn small primary" id="logPasteGo">読み込む</button><button class="btn small" id="logPasteClose">閉じる</button><span class="sub">時間の入っていないログは、等間隔に並べて鳴らします</span></div>
+      </div>
+      <div class="logbar" id="logSavedBar" style="display:none">
+        <input id="logRename" placeholder="新しい名前">
+        <button class="btn small" id="logRenameBtn">✎ 名前を変える</button>
+        <button class="btn small" id="logExport">⬇ 書き出し</button>
+        <button class="btn small" id="logDel">🗑 削除</button>
+      </div>
+      <div class="logmsg" id="logMsg">行をクリックすると、その瞬間に押さえていた鍵盤を表示して鳴らします</div>
+      <div class="log lk" id="log"></div>
+      <div class="lkview" id="lkView"></div>
       <div class="sub" style="margin-top:6px">割り当てのないCC：</div><div class="cclist" id="ccFree"><span>—</span></div>
   </div>
   <div class="card blk" data-b="diag" id="diagCard" style="border-color:#99f0e0">
@@ -695,7 +760,8 @@ $('#octDown').onclick=()=>{base=Math.max(0,base-12);store.set('base',base);build
 $('#octUp').onclick=()=>{base=Math.min(72,base+12);store.set('base',base);buildKb()};
 
 /* ---------- state ---------- */
-const held=new Set();
+const held=new Set(); const velMap=new Map();
+let replaySet=null, replayTgt=null;
 let scaleSet=null, scaleRootPc=null, hintSet=null;
 function refreshKeys(){
   for(const k in keyEls){
@@ -704,6 +770,8 @@ function refreshKeys(){
     el.classList.toggle('inscale',!!scaleSet&&scaleSet.has(pc));
     el.classList.toggle('root',scaleRootPc===pc&&!!scaleSet);
     el.classList.toggle('hint',!!hintSet&&hintSet.has(pc));
+    el.classList.toggle('replay',!!replaySet&&replaySet.has(n));
+    el.classList.toggle('rtgt',replayTgt===n);
   }
 }
 
@@ -747,13 +815,13 @@ let autoRange=true;
 $('#autoRange').onchange=e=>autoRange=e.target.checked;
 function handleNoteOn(n,vel,src){
   if(vel===0) return handleNoteOff(n);
-  held.add(n); noteOn(n,vel);
+  held.add(n); velMap.set(n,vel); noteOn(n,vel);
   if(autoRange && (n<base||n>base+KN)){base=Math.max(0,Math.min(72,Math.floor(n/12)*12-24));store.set('base',base);buildKb()}
   refreshKeys(); updateChord();
   $('#velInfo').textContent=`最後の音: ${nn(n)}  ベロシティ ${vel}`;
   practiceNote(n);
 }
-function handleNoteOff(n){ held.delete(n); noteOff(n); refreshKeys(); updateChord(); }
+function handleNoteOff(n){ held.delete(n); velMap.delete(n); noteOff(n); refreshKeys(); updateChord(); }
 let padLearn=-1; const PAD_LEARN_ORDER=[8,9,10,11,12,13,14,15,0,1,2,3,4,5,6,7];
 function padNote(note,vel){
   if(padLearn>=0){
@@ -770,9 +838,293 @@ function padNote(note,vel){
 const padHit=(i,vel)=>padNote(padNotes[8+i]??36+i,vel);
 
 /* ---------- MIDI ---------- */
-const logEl=$('#log'); const logLines=[];
-function log(s){logLines.push(s); if(logLines.length>200) logLines.shift(); logEl.textContent=logLines.join('\n'); logEl.scrollTop=1e9}
-$('#clearLog').onclick=()=>{logLines.length=0;logEl.textContent=''};
+/* --- MIDIログ：記録・保存・クリックで再現 --- */
+const logEl=$('#log'), LOGMAX=3000;
+let liveEv=[], viewId='live', selEl=null, logMsgT=null;
+let savedLogs=store.get('midilogs',[]); if(!Array.isArray(savedLogs)) savedLogs=[];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function logMsg(s,keep){const m=$('#logMsg'); m.textContent=s; clearTimeout(logMsgT); if(!keep) logMsgT=setTimeout(()=>m.textContent='行をクリックすると、その瞬間に押さえていた鍵盤を表示して鳴らします',4000)}
+function heldSnap(){return [...held].sort((a,b)=>a-b).map(n=>[n,velMap.get(n)||90])}
+function curEv(){if(viewId==='live') return liveEv; const L=savedLogs.find(x=>x.id===viewId); return L?L.ev:[]}
+function lineEl(e,t0){
+  const d=document.createElement('div'); d.className='ln'; d._e=e; d.draggable=true;
+  d.innerHTML=`<span class="lt">${((e.t-t0)/1000).toFixed(2)}s</span>${esc(e.s)}${e.h&&e.h.length?`<span class="lh">⌨ ${e.h.map(x=>nn(x[0])).join(' ')}</span>`:''}`;
+  return d;
+}
+function renderLog(){
+  const ev=curEv(); logEl.innerHTML=''; selEl=null;
+  if(!ev.length){logEl.innerHTML=`<div class="empty">${viewId==='live'?'本体を弾くと、ここにMIDIが記録されます':'このログは空です'}</div>`;return}
+  const t0=ev[0].t, fr=document.createDocumentFragment();
+  ev.forEach(e=>fr.appendChild(lineEl(e,t0))); logEl.appendChild(fr);
+  logEl.scrollTop=viewId==='live'?1e9:0;
+}
+function rec(k,ch,a,b,s){
+  const e={t:Math.round(performance.now()),k,ch,a,b,s,h:heldSnap()};
+  liveEv.push(e);
+  if(viewId!=='live') return;
+  if(liveEv.length===1) logEl.innerHTML='';
+  if(liveEv.length>LOGMAX){liveEv.shift(); const f=logEl.firstChild; if(f&&f!==selEl) f.remove()}
+  const atBottom=logEl.scrollTop+logEl.clientHeight>=logEl.scrollHeight-30;
+  logEl.appendChild(lineEl(e,liveEv[0].t));
+  if(atBottom) logEl.scrollTop=1e9;
+}
+// --- 音を鳴らす（プレビュー） ---
+const pvTok={}; let pvN=0;
+function relNote(n){ if(!held.has(n)&&voices.has(n)){killVoice(voices.get(n),rel());voices.delete(n)} }
+function previewNotes(pairs,ms=1100){
+  pairs.forEach(([n,v])=>{ noteOn(n,Math.max(30,v||90)); const tk=++pvN; pvTok[n]=tk; setTimeout(()=>{if(pvTok[n]===tk) relNote(n)},ms) });
+}
+// --- 鍵盤に表示 ---
+function setReplay(notes,tgt){
+  replaySet=notes&&notes.length?new Set(notes):null; replayTgt=tgt==null?null:tgt;
+  const all=[...(notes||[])]; if(tgt!=null) all.push(tgt);
+  if(all.length && autoRange){
+    const lo=Math.min(...all), hi=Math.max(...all);
+    if(lo<base||hi>base+KN){base=Math.max(0,Math.min(72,Math.floor(lo/12)*12-12)); if(hi>base+KN) base=Math.max(0,Math.min(72,Math.floor(lo/12)*12)); store.set('base',base); buildKb(); return}
+  }
+  refreshKeys();
+}
+function miniKb(notes,tgt,released){
+  const all=[...notes]; if(tgt!=null) all.push(tgt);
+  let lo=all.length?Math.floor(Math.min(...all)/12)*12:48, hi=all.length?Math.ceil((Math.max(...all)+1)/12)*12-1:71;
+  if(hi-lo<23) hi=lo+23;
+  const on=new Set(notes); let whites=0; for(let n=lo;n<=hi;n++) if(!isBlack(n%12)) whites++;
+  const w=100/whites; let wi=0, h='';
+  for(let n=lo;n<=hi;n++){
+    const pc=n%12, cls=(on.has(n)?' on':'')+(n===tgt?' tgt':'')+(released&&n===tgt?' rel':'');
+    const lab=on.has(n)||n===tgt?`<span class="t">${nn(n)}</span>`:'';
+    if(!isBlack(pc)){h+=`<div class="w${cls}" style="left:${wi*w}%;width:${w}%">${pc===0&&!lab?`<span class="c">${nn(n)}</span>`:''}${lab}</div>`; wi++}
+    else h+=`<div class="b${cls}" style="left:${wi*w-w*0.3}%;width:${w*0.6}%">${lab}</div>`;
+  }
+  return `<div class="mkb">${h}</div>`;
+}
+function showEvent(e,el){
+  ensure();
+  if(selEl) selEl.classList.remove('sel'); selEl=el; if(el) el.classList.add('sel');
+  const pairs=(e.h||[]).slice(), notes=pairs.map(x=>x[0]);
+  const isNote=e.k==='on'||e.k==='off'||e.k==='pat', tgt=isNote?e.a:null, released=e.k==='off';
+  // 音
+  if(e.k==='pad'||e.k==='padoff') drum(drumOf(e.a),e.k==='pad'?e.b:90);
+  if(pairs.length) previewNotes(pairs);
+  else if(released) previewNotes([[e.a,90]],700);
+  // 表示
+  setReplay(notes,tgt);
+  const ev=curEv(), t0=ev.length?ev[0].t:e.t;
+  const chordSrc=notes.length?notes:(released?[e.a]:[]);
+  const d=chordSrc.length?detect(new Set(chordSrc)):null;
+  let info;
+  if(notes.length) info=`<b>押さえていた鍵盤（${notes.length}音）</b>：`+pairs.map(([n,v])=>`${nn(n)}(${JP[n%12]})<span class="sub"> vel${v}</span>`).join('　');
+  else info='<span class="sub">この瞬間に押さえていた鍵盤はありません</span>';
+  if(released) info+=`<br>離した鍵盤：<b>${nn(e.a)}(${JP[e.a%12]})</b>`;
+  if(e.k==='pad'||e.k==='padoff') info+=`<br>パッド：<b>${DRUMS[drumOf(e.a)]}</b>（ノート${e.a}${e.k==='pad'?'・vel'+e.b:''}）`;
+  const v=$('#lkView'); v.style.display='block';
+  v.innerHTML=`<div class="vh"><b>${((e.t-t0)/1000).toFixed(2)}s</b><span>${esc(e.s)}</span><button class="btn small" id="lkReplay">🔊 もう一度</button><button class="btn small x" id="lkClose">✕</button></div>
+    <div class="vchord">${d&&notes.length?esc(d.name)+(d.desc?` <span class="sub" style="font-size:13px;font-weight:400">${esc(d.desc)}</span>`:''):'—'}</div>
+    <div class="vnotes">${info}</div>${miniKb(notes,tgt,released)}`;
+  $('#lkReplay').onclick=()=>showEvent(e,el);
+  const vc=v.querySelector('.vchord'); vc.draggable=true; vc.title='ドラッグしてほかのアプリへ'; vc.ondragstart=ev=>setLineDrag(ev.dataTransfer,e);
+  $('#lkClose').onclick=()=>{v.style.display='none'; if(selEl) selEl.classList.remove('sel'); selEl=null; setReplay(null,null)};
+}
+logEl.addEventListener('click',ev=>{const el=ev.target.closest('.ln'); if(el&&el._e){stopPlay();showEvent(el._e,el)}});
+// --- 通して再生 ---
+let playT=[], playOn=new Set();
+function stopPlay(){playT.forEach(clearTimeout); playT=[]; playOn.forEach(relNote); playOn.clear(); $('#logPlay').textContent='▶ 通して再生'}
+function playAll(){
+  stopPlay(); ensure(); const ev=curEv(); if(!ev.length){logMsg('再生するログがありません');return}
+  const els=[...logEl.querySelectorAll('.ln')]; let at=0, prev=ev[0].t;
+  ev.forEach((e,i)=>{
+    at+=Math.min(3000,Math.max(0,e.t-prev)); prev=e.t;
+    playT.push(setTimeout(()=>{
+      if(e.k==='on'){noteOn(e.a,e.b);playOn.add(e.a)}
+      else if(e.k==='off'){playOn.delete(e.a);relNote(e.a)}
+      else if(e.k==='pad') drum(drumOf(e.a),e.b);
+      setReplay((e.h||[]).map(x=>x[0]),null);
+      const el=els[i]; if(el){if(selEl) selEl.classList.remove('sel'); selEl=el; el.classList.add('sel'); logEl.scrollTop=el.offsetTop-logEl.offsetTop-logEl.clientHeight/2}
+    },at));
+  });
+  playT.push(setTimeout(()=>{stopPlay();setReplay(null,null);logMsg('再生が終わりました')},at+1200));
+  $('#logPlay').textContent='▶ 再生中…';
+}
+$('#logPlay').onclick=playAll; $('#logStop').onclick=()=>{stopPlay();setReplay(null,null)};
+// --- 保存・一覧 ---
+function persist(){try{localStorage.setItem('lk_midilogs',JSON.stringify(savedLogs));return true}catch(e){return false}}
+const fmtDate=ms=>{const d=new Date(ms),z=x=>String(x).padStart(2,'0');return `${d.getFullYear()}/${z(d.getMonth()+1)}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`};
+function fillSel(){
+  const s=$('#logSel');
+  s.innerHTML=`<option value="live">● いまのログ（${liveEv.length}件）</option>`+savedLogs.map(L=>`<option value="${L.id}">💾 ${esc(L.name)}（${L.ev.length}件）</option>`).join('');
+  if(viewId!=='live'&&!savedLogs.some(L=>L.id===viewId)) viewId='live';
+  s.value=viewId;
+  $('#logLiveBar').style.display=viewId==='live'?'flex':'none';
+  $('#logSavedBar').style.display=viewId==='live'?'none':'flex';
+}
+$('#logSel').onfocus=fillSel;
+$('#logSel').onchange=e=>{stopPlay();viewId=e.target.value;delArm=false;$('#logDel').textContent='🗑 削除';fillSel();renderLog();$('#lkView').style.display='none';setReplay(null,null);
+  const L=savedLogs.find(x=>x.id===viewId); if(L){$('#logRename').value=L.name; logMsg(`「${L.name}」を表示中（${fmtDate(L.date)}）— 行をクリックで再現`,true)} else logMsg('いまのログを表示中')};
+$('#saveLog').onclick=()=>{
+  if(!liveEv.length){logMsg('まだ記録がありません。本体を弾いてから保存してください');return}
+  const name=$('#logName').value.trim()||('ログ '+fmtDate(Date.now()));
+  const L={id:'L'+Date.now(),name,date:Date.now(),ev:liveEv.map(e=>({...e}))};
+  savedLogs.unshift(L);
+  if(!persist()){savedLogs.shift();logMsg('保存できませんでした（容量いっぱい）。古いログを削除するか、書き出してから消してください');return}
+  $('#logName').value=''; fillSel(); logMsg(`「${name}」を保存しました（${L.ev.length}件）。上の選択から開けます`);
+};
+$('#clearLog').onclick=()=>{stopPlay();liveEv=[];renderLog();fillSel();$('#lkView').style.display='none';setReplay(null,null)};
+$('#logRenameBtn').onclick=()=>{const L=savedLogs.find(x=>x.id===viewId),n=$('#logRename').value.trim(); if(!L||!n) return; L.name=n; persist(); fillSel(); logMsg('名前を変えました')};
+let delArm=false;
+$('#logDel').onclick=()=>{
+  const L=savedLogs.find(x=>x.id===viewId); if(!L) return;
+  if(!delArm){delArm=true;$('#logDel').textContent='もう一度押すと削除';setTimeout(()=>{delArm=false;$('#logDel').textContent='🗑 削除'},3000);return}
+  delArm=false; $('#logDel').textContent='🗑 削除';
+  savedLogs=savedLogs.filter(x=>x.id!==L.id); persist(); viewId='live'; fillSel(); renderLog(); $('#lkView').style.display='none'; setReplay(null,null); logMsg(`「${L.name}」を削除しました`);
+};
+$('#logExport').onclick=()=>{
+  const L=savedLogs.find(x=>x.id===viewId); if(!L) return;
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'launchkey-trainer',ver:1,logs:[L]})],{type:'application/json'}));
+  a.download=L.name.replace(/[\\/:*?"<>|]/g,'_')+'.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+$('#logImport').onclick=()=>$('#logFile').click();
+// --- 読み込み（JSON／文字のログ） ---
+const APPNAME='Launchkey トレーナー';
+function parseTextLog(text){
+  const ev=[], h=new Map(); let t=0, prev=null, any=false;
+  const re=/ch(\d+)\s+(NoteOn|NoteOff|CC|PitchBend|PolyAftertouch|Aftertouch|ProgramChange)\b\s*(.*)$/;
+  for(const raw of String(text).split(/\r?\n/)){
+    let line=raw.replace(/\s*⌨.*$/,'').trim(); if(!line) continue;
+    const tm=line.match(/^(\d+(?:\.\d+)?)s\s+/); if(tm) line=line.slice(tm[0].length);
+    const m=line.match(re); if(!m) continue;
+    const ch=Math.max(1,Math.min(16,+m[1])), kind=m[2], rest=m[3], s=line.slice(line.indexOf(m[0]));
+    let k, a=0, b=0;
+    if(kind==='NoteOn'||kind==='NoteOff'){
+      const nm=rest.match(/\((\d+)\)/), vm=rest.match(/vel\s*(\d+)/); if(!nm) continue;
+      a=+nm[1]; b=vm?+vm[1]:0; const pad=/\[PAD\]/i.test(rest), on=kind==='NoteOn'&&b>0;
+      k=pad?(on?'pad':'padoff'):(on?'on':'off');
+    }else if(kind==='CC'){const c=rest.match(/^(\d+)\s*=\s*(\d+)/); if(!c) continue; k='cc'; a=+c[1]; b=+c[2]}
+    else if(kind==='PitchBend'){const v=(parseInt(rest)||0)+8192; k='pb'; a=v&127; b=(v>>7)&127}
+    else if(kind==='PolyAftertouch'){const c=rest.match(/\((\d+)\)\s*=\s*(\d+)/); if(!c) continue; k='pat'; a=+c[1]; b=+c[2]}
+    else if(kind==='Aftertouch'){k='at'; a=+(rest.match(/(\d+)/)||[0,0])[1]}
+    else {k='pc'; a=+(rest.match(/(\d+)/)||[0,0])[1]}
+    if(tm){t=Math.round(+tm[1]*1000); any=true}
+    else if(prev){ const onish=x=>x==='on'||x==='pad', offish=x=>x==='off'||x==='padoff';
+      t+= (onish(k)&&onish(prev))||(offish(k)&&offish(prev)) ? 20 : 250; }
+    prev=k;
+    if(k==='on') h.set(a,b); else if(k==='off') h.delete(a);
+    ev.push({t,k,ch,a,b,s,h:[...h].sort((x,y)=>x[0]-y[0])});
+  }
+  return ev;
+}
+function addSaved(name,ev,date){
+  const L={id:'L'+Date.now()+'_'+Math.random().toString(36).slice(2,6),name,date:date||Date.now(),ev};
+  savedLogs.unshift(L); if(!persist()){savedLogs.shift();logMsg('容量がいっぱいで保存できませんでした。古いログを削除してください');return null}
+  return L;
+}
+function openSaved(L){stopPlay();viewId=L.id;fillSel();renderLog();$('#lkView').style.display='none';setReplay(null,null);$('#logRename').value=L.name}
+function importText(text,name){
+  const t=String(text||'').trim(); if(!t) return;
+  if(t[0]==='{'){ // JSON（このアプリの書き出し）
+    try{const j=JSON.parse(t); const arr=(j.logs||[j]).filter(L=>L&&Array.isArray(L.ev)); if(!arr.length) throw 0;
+      let last=null; arr.forEach(L=>{last=addSaved(String(L.name||name),L.ev,L.date)||last}); if(last){openSaved(last);logMsg(`${arr.length}件のログを読み込みました`)} return;
+    }catch(e){logMsg('このファイルはMIDIログとして読み込めませんでした');return}
+  }
+  const ev=parseTextLog(t);
+  if(!ev.length){logMsg('MIDIログの行（例：ch1 NoteOn C4(60) vel 100）が見つかりませんでした');return}
+  const L=addSaved(name||('貼り付けログ '+fmtDate(Date.now())),ev); if(!L) return;
+  openSaved(L); logMsg(`「${L.name}」を読み込みました（${ev.length}件）。行をクリックで再現・▶で通して再生`,true);
+}
+$('#logFile').onchange=async e=>{const f=e.target.files[0]; e.target.value=''; if(f) importText(await f.text(),f.name.replace(/\.(json|txt|log)$/i,''))};
+$('#logPasteBtn').onclick=()=>{const p=$('#lkPaste'); p.style.display=p.style.display==='block'?'none':'block'; if(p.style.display==='block') $('#logPasteTx').focus()};
+$('#logPasteClose').onclick=()=>$('#lkPaste').style.display='none';
+$('#logPasteGo').onclick=()=>{const tx=$('#logPasteTx').value; if(!tx.trim()){logMsg('ログの文字を貼り付けてください');return} importText(tx,$('#logName').value.trim()||''); $('#logPasteTx').value=''; $('#lkPaste').style.display='none'};
+// ファイルや文字をログ欄に落としても読み込める
+let selfDrag=false;
+logEl.addEventListener('dragover',e=>{if(selfDrag) return; e.preventDefault(); logEl.classList.add('dropok')});
+logEl.addEventListener('dragleave',()=>logEl.classList.remove('dropok'));
+logEl.addEventListener('drop',async e=>{
+  logEl.classList.remove('dropok'); if(selfDrag) return; e.preventDefault(); e.stopPropagation();
+  const f=e.dataTransfer.files&&e.dataTransfer.files[0];
+  if(f) return importText(await f.text(),f.name.replace(/\.(json|txt|log)$/i,''));
+  importText(e.dataTransfer.getData('text/plain'),'');
+});
+
+// --- ほかのアプリへドラッグ ---
+let logBpm=store.get('logbpm',120);
+$('#logBpm').value=logBpm; $('#logBpm').onchange=e=>{logBpm=Math.max(40,Math.min(240,+e.target.value||120));e.target.value=logBpm;store.set('logbpm',logBpm)};
+function curName(){const L=savedLogs.find(x=>x.id===viewId); return L?L.name:('Launchkeyログ '+fmtDate(Date.now()))}
+function evNotes(e){let n=(e.h||[]).map(x=>x[0]); if(!n.length&&(e.k==='on'||e.k==='off'||e.k==='pat')) n=[e.a]; return n}
+function setLineDrag(dt,e){
+  const notes=evNotes(e);
+  let p, txt;
+  if(e.k==='pad'||e.k==='padoff'){txt=DRUMS[drumOf(e.a)]; p={app:APPNAME,type:'clip',title:'パッド '+txt,text:e.s}}
+  else if(notes.length>=2){const d=detect(new Set(notes)); txt=d&&d.name&&d.name!=='?'?d.name:notes.map(nn).join(' ');
+    p=d&&d.name!=='?'?{app:APPNAME,type:'chord',name:d.name.replace(/♭/g,'b'),notes,title:d.name,text:notes.map(nn).join(' ')}:{app:APPNAME,type:'clip',title:txt,text:notes.map(n=>`${nn(n)}(${JP[n%12]})`).join(' ')}}
+  else if(notes.length===1){txt=nn(notes[0]); p={app:APPNAME,type:'clip',title:`${txt}（${JP[notes[0]%12]}）`,text:e.s}}
+  else {txt=e.s; p={app:APPNAME,type:'clip',title:'MIDI',text:e.s}}
+  try{
+    dt.setData('application/x-akai',JSON.stringify(p));
+    dt.setData('text/plain',txt);
+    if(notes.length){const v=Object.fromEntries((e.h||[]).map(x=>[x[0],x[1]]));
+      const bar=60000/logBpm*4, ons=notes.map(n=>({t:0,k:'on',ch:1,a:n,b:v[n]||90})), offs=notes.map(n=>({t:bar,k:'off',ch:1,a:n,b:0}));
+      dt.setData('DownloadURL','audio/midi:'+safeName(txt)+'.mid:data:audio/midi;base64,'+b64(midiBytes(ons.concat(offs),logBpm)))}
+    dt.effectAllowed='copy';
+  }catch(err){}
+}
+logEl.addEventListener('dragstart',ev=>{const el=ev.target.closest&&ev.target.closest('.ln'); if(!el||!el._e) return; selfDrag=true; setLineDrag(ev.dataTransfer,el._e)});
+document.addEventListener('dragend',()=>{selfDrag=false});
+const safeName=s=>String(s).replace(/[\\/:*?"<>|\s]/g,'_').slice(0,60)||'log';
+const b64=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
+// 標準MIDIファイル（そのままの時間で書き出し）
+function midiBytes(ev,bpm){
+  const ppq=480, t0=ev.length?ev[0].t:0, msPerTick=60000/bpm/ppq, us=Math.round(60e6/bpm);
+  const vlq=n=>{n=Math.max(0,Math.round(n));const b=[n&127];while(n>>=7)b.unshift((n&127)|128);return b};
+  const trk=[0,0xFF,0x51,3,(us>>16)&255,(us>>8)&255,us&255]; let last=0;
+  ev.forEach(e=>{
+    const c=(e.ch-1)&15; let m=null;
+    if(e.k==='on'||e.k==='pad') m=[0x90|c,e.a&127,Math.max(1,e.b&127)];
+    else if(e.k==='off'||e.k==='padoff') m=[0x80|c,e.a&127,0];
+    else if(e.k==='cc') m=[0xB0|c,e.a&127,e.b&127];
+    else if(e.k==='pb') m=[0xE0|c,e.a&127,e.b&127];
+    else if(e.k==='pat') m=[0xA0|c,e.a&127,e.b&127];
+    else if(e.k==='at') m=[0xD0|c,e.a&127];
+    else if(e.k==='pc') m=[0xC0|c,e.a&127];
+    if(!m) return; const tk=Math.round((e.t-t0)/msPerTick); trk.push(...vlq(tk-last),...m); last=tk;
+  });
+  trk.push(0,0xFF,0x2F,0);
+  const L=trk.length, head=[0x4D,0x54,0x68,0x64,0,0,0,6,0,0,0,1,(ppq>>8)&255,ppq&255,0x4D,0x54,0x72,0x6B,(L>>>24)&255,(L>>16)&255,(L>>8)&255,L&255];
+  return new Uint8Array(head.concat(trk));
+}
+// ポケットDTM用（16分音符に合わせたリフ）
+function riffOf(ev,bpm){
+  const step=60000/bpm/4, t0=ev[0].t, open=new Map(), notes=[];
+  const close=(n,t)=>{const o=open.get(n); if(!o) return; open.delete(n); const s=Math.round((o.t-t0)/step); notes.push([s,Math.max(1,Math.round((t-o.t)/step)),n,o.v])};
+  ev.forEach(e=>{ if(e.k==='on'){close(e.a,e.t);open.set(e.a,{t:e.t,v:e.b})} else if(e.k==='off') close(e.a,e.t) });
+  const tl=ev[ev.length-1].t+step; [...open.keys()].forEach(n=>close(n,tl));
+  if(!notes.length) return null;
+  notes.sort((a,b)=>a[0]-b[0]||a[2]-b[2]);
+  const total=Math.max(16,Math.ceil(Math.max(...notes.map(n=>n[0]+n[1]))/16)*16);
+  return {code:'',name:curName(),preset:'piano',spb:4,total,notes,bpm};
+}
+// コードの流れ（3音以上を押さえた瞬間のコード名）
+function progOf(ev){
+  const out=[]; ev.forEach(e=>{ if(e.k!=='on'||!e.h||e.h.length<3) return; const d=detect(new Set(e.h.map(x=>x[0])));
+    const nm=d&&d.name; if(nm&&nm!=='?'&&nm!=='—'&&out[out.length-1]!==nm.replace(/♭/g,'b')) out.push(nm.replace(/♭/g,'b')) });
+  return out.slice(0,64);
+}
+$('#logDrag').addEventListener('dragstart',e=>{
+  const ev=curEv(); if(!ev.length){e.preventDefault();logMsg('ドラッグするログがありません');return}
+  selfDrag=true; const dt=e.dataTransfer, name=curName(), rf=riffOf(ev,logBpm), prog=progOf(ev);
+  try{
+    dt.setData('application/x-akai',JSON.stringify(prog.length?{app:APPNAME,type:'chords',title:name,text:prog.join(' ')}:{app:APPNAME,type:'clip',title:name,text:ev.map(x=>x.s).join('\n').slice(0,4000)}));
+    dt.setData('text/plain',rf?'POCKETDTM_RIFF:'+JSON.stringify(rf):(prog.join(' ')||ev.map(x=>x.s).join('\n')));
+    dt.setData('DownloadURL','audio/midi:'+safeName(name)+'.mid:data:audio/midi;base64,'+b64(midiBytes(ev,logBpm)));
+    dt.effectAllowed='copy';
+  }catch(err){}
+});
+$('#logMid').onclick=()=>{
+  const ev=curEv(); if(!ev.length){logMsg('書き出すログがありません');return}
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([midiBytes(ev,logBpm)],{type:'audio/midi'})); a.download=safeName(curName())+'.mid';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+
+fillSel(); renderLog();
 let learning=-1; const learnSeen=[]; const freeCC={};
 let midiCount=0, midiErr=''; const portCount={};
 let relEnc=store.get('relenc',false);
@@ -786,11 +1138,12 @@ function onMidi(data){
   if(type===0x90||type===0x80){
     const on=type===0x90&&d2>0;
     const isPad = ch===10 || ($('#padAnyCh').checked && d1>=36 && d1<=51);
-    log(`ch${ch} ${on?'NoteOn ':'NoteOff'} ${nn(d1)}(${d1})${on?' vel '+d2:''}${isPad?'  [PAD]':''}`);
-    if(isPad){ if(on) padNote(d1,d2); return }
+    const txt=`ch${ch} ${on?'NoteOn ':'NoteOff'} ${nn(d1)}(${d1})${on?' vel '+d2:''}${isPad?'  [PAD]':''}`;
+    if(isPad){ if(on) padNote(d1,d2); rec(on?'pad':'padoff',ch,d1,d2,txt); return }
     on?handleNoteOn(d1,d2,'midi'):handleNoteOff(d1);
+    rec(on?'on':'off',ch,d1,d2,txt);
   }else if(type===0xb0){
-    log(`ch${ch} CC${d1} = ${d2}`);
+    rec('cc',ch,d1,d2,`ch${ch} CC${d1} = ${d2}${d1===64?(d2>=64?'（サステインON）':'（サステインOFF）'):d1===1?'（モジュレーション）':''}`);
     if(learning>=0 && d1!==1 && d1!==64 && !learnSeen.includes(d1)){
       learnSeen.push(d1);
       if(learning<8){knobCC[learning]=d1;drawKnob(learning)}else{faderCC[learning-8]=d1;drawFader(learning-8)}
@@ -813,12 +1166,12 @@ function onMidi(data){
     const f=$('#pbFill'), pct=Math.abs(bend)*50;
     if(bend>=0){f.style.bottom='50%';f.style.top='';f.style.height=pct+'%'}else{f.style.top='50%';f.style.bottom='';f.style.height=pct+'%'}
     $('#pbVal').textContent=v; voices.forEach(setVoicePitch); hwFlash('pitch');
-    log(`ch${ch} PitchBend ${v}`);
+    rec('pb',ch,d1,d2,`ch${ch} PitchBend ${v}`);
   }else if(type===0xa0){
-    log(`ch${ch} PolyAftertouch ${nn(d1)}(${d1}) = ${d2}`);
+    rec('pat',ch,d1,d2,`ch${ch} PolyAftertouch ${nn(d1)}(${d1}) = ${d2}`);
     const cell=padNotes.indexOf(d1); if(cell>=0) padEls[cell].style.filter=`brightness(${1-d2/127*.35})`;
-  }else if(type===0xd0){log(`ch${ch} Aftertouch = ${d1}`)}
-  else if(type===0xc0){log(`ch${ch} ProgramChange ${d1}`)}
+  }else if(type===0xd0){rec('at',ch,d1,0,`ch${ch} Aftertouch = ${d1}`)}
+  else if(type===0xc0){rec('pc',ch,d1,0,`ch${ch} ProgramChange ${d1}`)}
 }
 function flash(el){el.classList.add('flash');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('flash'),150)}
 window.__sim=onMidi;
