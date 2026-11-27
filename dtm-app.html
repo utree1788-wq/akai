@@ -1,12 +1,45 @@
 <!DOCTYPE html>
-<html lang="ja"><head><meta charset="utf-8">
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ポケットDTM Studio</title>
-<link rel="manifest" href="dtm-manifest.json">
-<link rel="icon" href="dtm-icon-192.png">
-<link rel="apple-touch-icon" href="dtm-icon-192.png">
 <meta name="theme-color" content="#140030">
-<style>html,body{margin:0;height:100%;background:#0b0218;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}</style>
-</head><body>
-<iframe src="dtm.html" title="ポケットDTM Studio" allow="midi; autoplay; fullscreen; clipboard-read; clipboard-write; microphone" allowfullscreen></iframe>
-</body></html>
+<title>ポケットDTM Studio</title>
+<style>
+  html,body{margin:0;height:100%;background:#0b0218;overflow:hidden}
+  #app{position:fixed;inset:0;width:100%;height:100%;border:0;display:block}
+  #fallback{position:fixed;left:0;right:0;bottom:0;padding:8px;text-align:center;font:12px system-ui,sans-serif;color:#b9a3d9;display:none}
+  #fallback a{color:#3ff3ff}
+</style>
+</head>
+<body>
+<!--
+  ポケットDTM Studio の入口ページ（Edgeのアプリはここを開きます）
+  中で dtm.html をそのまま表示し、「🎹 MIDIをドラッグ」ボタン（midi-drag.js）を自動で足します。
+  dtm.html 自体は書き換えません。
+-->
+<iframe id="app" src="dtm.html"
+  allow="midi *; autoplay *; microphone *; clipboard-read *; clipboard-write *; fullscreen *"></iframe>
+<div id="fallback">うまく表示されないときは <a href="dtm.html">こちら</a></div>
+<script>
+(function () {
+  var fr = document.getElementById('app');
+  fr.addEventListener('load', function () {
+    var d;
+    try { d = fr.contentDocument; } catch (e) { d = null; }
+    if (!d || !d.body) { document.getElementById('fallback').style.display = 'block'; return; }
+    try { fr.contentWindow.focus(); } catch (e) {}
+    // dtm.html にすでに入っていれば二重に足さない
+    if (d.getElementById('pocket-midi-drag') || d.querySelector('script[src*="midi-drag"]')) return;
+    var s = d.createElement('script');
+    s.src = 'midi-drag.js?v=' + Date.now();
+    d.body.appendChild(s);
+  });
+  // タイトルを中のページに合わせる
+  setInterval(function () {
+    try { var t = fr.contentDocument && fr.contentDocument.title; if (t && document.title !== t) document.title = t; } catch (e) {}
+  }, 2000);
+})();
+</script>
+</body>
+</html>
